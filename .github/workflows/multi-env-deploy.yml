@@ -1,0 +1,356 @@
+﻿name: Multi-ENV Clean, Build, Deploy, Migrate
+
+on:
+  push:
+    branches: [ "master", "develop" ]
+  pull_request:
+    branches: [ "master" , "develop" ]
+  workflow_dispatch: # Manually run this workflow
+
+jobs:
+  CLEANING-READY:
+    name: Clean Ready
+    runs-on: ubuntu-latest
+    environment: CLEAN
+    if: |
+      github.ref == 'refs/heads/master'
+    steps:
+      - name: Cleaning Permission okay
+        run: echo "Cleaning ready"
+  CLEANING:
+    name: Clean ${{ matrix.environment }}
+    runs-on: ubuntu-latest
+    environment: ${{ matrix.environment }}
+    needs: CLEANING-READY
+    strategy:
+      matrix:
+        environment:
+          - TEST
+          - QA
+          - PROD
+    steps:
+      - name: Cleaning ${{ matrix.environment }} ftp server
+        run: |
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no "${{ secrets.SSH_USER }}" << 'EOF'
+            cd "${{ secrets.FTP_SERVER }}"
+            [ "$(basename "$(pwd)")" = "${{ secrets.FTP_SERVER }}" ] && rm -rf ./*
+          EOF
+
+
+  BUILD:
+    name: Build code
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Setup PHP 8.0
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+
+      - uses: actions/setup-node@master
+
+      - name: Copy .env
+        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+
+      - name: Install Dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+      - name: Prepare .env file
+        run: |
+          sed -i "s/DB_DATABASE=.*/DB_DATABASE=${{ secrets.DB_DATABASE }}/" .env
+          sed -i "s/DB_USERNAME=.*/DB_USERNAME=${{ secrets.DB_USERNAME }}/" .env
+          sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=${{ secrets.DB_PASSWORD }}/" .env
+
+      - name: Move repofiles to it's Directory
+        run: |
+          cp -r -f public/uploads/repofiles/* "${{ secrets.REPO_PATH }}/"
+          rm -rf public/uploads/repofiles
+          
+      - name: Generate key
+        run: php artisan key:generate
+
+      - name: Generate storage link
+        run: php artisan storage:link
+
+      - name: Directory Permissions
+        run: chmod -R 777 storage bootstrap/cache
+
+      - name: Execute tests (Unit and Feature tests) via PHPUnit
+        run: vendor/bin/phpunit
+
+      - name: Zip Repository
+        run: |
+          zip -r release.zip .
+        working-directory: ${{ github.workspace }}
+
+      - name: Upload ZIP Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: release
+          path: release.zip
+          retention-days: 10
+
+
+  DEVELOPMENT:
+    name: Deploy in TEST
+    runs-on: ubuntu-latest
+    environment: TEST
+    needs: BUILD
+    steps:
+      - name: Download ZIP Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: release
+          path: release
+
+      - name: 📂 Sync files
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./release/
+          exclude: |
+            **/.git*
+            **/.git*/**
+
+      - name: SSH into the server and unzip release.zip
+        run: |
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no "${{ secrets.SSH_USER }}" << 'EOF'
+            cd "${{ secrets.FTP_SERVER }}"
+            yes | unzip release.zip -d release
+          EOF
+
+      - name: Copy .env.example and .env, .htaccess from release directory only for php
+        run: |
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no "${{ secrets.SSH_USER }}" << 'EOF'
+            cd "${{ secrets.FTP_SERVER }}"
+            cp release/.env.example .env.example
+            cp release/.env .env
+            cp release/.htaccess .htaccess
+            rsync -av release/ . #recursively copy files
+            #Prepare .env file
+            sed -i "s/DB_DATABASE=.*/DB_DATABASE=${{ secrets.DB_DATABASE }}/" .env
+            sed -i "s/DB_USERNAME=.*/DB_USERNAME=${{ secrets.DB_USERNAME }}/" .env
+            sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=${{ secrets.DB_PASSWORD }}/" .env
+
+          EOF
+          
+      - name: Remove the 'release' directory and .zip
+        run: |
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no "${{ secrets.SSH_USER }}" << 'EOF'
+            cd "${{ secrets.FTP_SERVER }}"
+            rm -rf release
+            rm -rf .git
+            rm release.zip
+          EOF
+
+  QUALITYANALYSIS:
+    name: Deploy in QA
+    runs-on: ubuntu-latest
+    environment: QA
+    needs: DEVELOPMENT
+    steps:
+      - name: Download ZIP Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: release
+          path: release
+
+      - name: 📂 Sync files
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./release/
+          exclude: |
+            **/.git*
+            **/.git*/**
+
+      - name: SSH into the server and unzip release.zip
+        run: |
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no "${{ secrets.SSH_USER }}" << 'EOF'
+            cd "${{ secrets.FTP_SERVER }}"
+            yes | unzip release.zip -d release
+          EOF
+
+      - name: Copy .env.example and .env, .htaccess from release directory only for php
+        run: |
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no "${{ secrets.SSH_USER }}" << 'EOF'
+            cd "${{ secrets.FTP_SERVER }}"
+            cp release/.env.example .env.example
+            cp release/.env .env
+            cp release/.htaccess .htaccess
+            rsync -av release/ . #recursively copy files
+            #Prepare .env file
+            sed -i "s/APP_ENV=.*/APP_ENV=${{ vars.APP_ENV }}/" .env
+            sed -i "s/APP_DEBUG=.*/APP_DEBUG=${{ vars.APP_DEBUG }}/" .env
+            sed -i "s/DB_DATABASE=.*/DB_DATABASE=${{ secrets.DB_DATABASE }}/" .env
+            sed -i "s/DB_USERNAME=.*/DB_USERNAME=${{ secrets.DB_USERNAME }}/" .env
+            sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=${{ secrets.DB_PASSWORD }}/" .env
+
+          EOF
+          
+      - name: Remove the 'release' directory and .zip
+        run: |
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no "${{ secrets.SSH_USER }}" << 'EOF'
+            cd "${{ secrets.FTP_SERVER }}"
+            rm -rf release
+            rm -rf .git
+            rm release.zip
+          EOF
+
+  PRODUCTION:
+    name: Deploy in PROD
+    runs-on: ubuntu-latest
+    environment: PROD    
+    needs: QUALITYANALYSIS
+    steps:
+      - name: Download ZIP Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: release
+          path: release
+
+      - name: 📂 Sync files
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./release/
+          exclude: |
+            **/.git*
+            **/.git*/**
+
+      - name: SSH into the server and unzip release.zip
+        run: |
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no "${{ secrets.SSH_USER }}" << 'EOF'
+            cd "${{ secrets.FTP_SERVER }}"
+            yes | unzip release.zip -d release
+          EOF
+
+      - name: Copy .env.example and .env, .htaccess from release directory only for php
+        run: |
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no "${{ secrets.SSH_USER }}" << 'EOF'
+            cd "${{ secrets.FTP_SERVER }}"
+            cp release/.env.example .env.example
+            cp release/.env .env
+            cp release/.htaccess .htaccess
+            rsync -av release/ . #recursively copy files
+            #Prepare .env file
+            sed -i "s/APP_ENV=.*/APP_ENV=${{ vars.APP_ENV }}/" .env
+            sed -i "s/APP_DEBUG=.*/APP_DEBUG=${{ vars.APP_DEBUG }}/" .env
+            sed -i "s/DB_DATABASE=.*/DB_DATABASE=${{ secrets.DB_DATABASE }}/" .env
+            sed -i "s/DB_USERNAME=.*/DB_USERNAME=${{ secrets.DB_USERNAME }}/" .env
+            sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=${{ secrets.DB_PASSWORD }}/" .env
+
+          EOF
+          
+      - name: Remove the 'release' directory and .zip
+        run: |
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no "${{ secrets.SSH_USER }}" << 'EOF'
+            cd "${{ secrets.FTP_SERVER }}"
+            rm -rf release
+            rm -rf .git
+            rm release.zip
+          EOF
+            
+  MIGRATION-READY:
+    name: Migration Ready
+    runs-on: ubuntu-latest
+    environment: MIGRATE
+    #needs: ["DEVELOPMENT", "QUALITYANALYSIS", "PRODUCTION"]
+    steps:
+      - name: Migration Permission okay
+        run: echo "Migrate ready"
+
+  SEED-READY:
+    name: SEED Ready
+    runs-on: ubuntu-latest
+    environment: SEED
+    steps:
+      - name: SEED Permission okay
+        run: echo "SEED ready"
+
+  MIGRATION-TEST:
+    name: Migration in TEST
+    runs-on: ubuntu-latest
+    environment: TEST
+    needs: ["MIGRATION-READY", "DEVELOPMENT"]
+    steps:
+      - name: Migrating the Database in TEST
+        run: |
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no "${{ secrets.SSH_USER }}" << 'EOF'
+            cd "${{ secrets.FTP_SERVER }}"
+            php artisan migrate:fresh --force
+          EOF
+          
+  SEED-TEST:
+    name: SEED in TEST
+    runs-on: ubuntu-latest
+    environment: TEST
+    needs: ["SEED-READY", "MIGRATION-TEST"]
+    steps:
+      - name: SEED the Database in TEST
+        run: |
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no "${{ secrets.SSH_USER }}" << 'EOF'
+            cd "${{ secrets.FTP_SERVER }}"
+            php artisan db:seed --force
+          EOF
+
+  MIGRATION-QA:
+    name: Migration in QA
+    runs-on: ubuntu-latest
+    environment: QA
+    needs: ["MIGRATION-READY", "QUALITYANALYSIS"]
+    steps:
+      - name: Migrating the Database in QA
+        run: |
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no "${{ secrets.SSH_USER }}" << 'EOF'
+            cd "${{ secrets.FTP_SERVER }}"
+            php artisan migrate:fresh --force
+          EOF
+          
+  SEED-QA:
+    name: SEED in QA
+    runs-on: ubuntu-latest
+    environment: QA
+    needs: ["SEED-READY", "MIGRATION-QA"]
+    steps:
+      - name: SEED the Database in QA
+        run: |
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no "${{ secrets.SSH_USER }}" << 'EOF'
+            cd "${{ secrets.FTP_SERVER }}"
+            php artisan db:seed --force
+          EOF
+
+  MIGRATION-PROD:
+    name: Migration in PROD
+    runs-on: ubuntu-latest
+    environment: PROD
+    needs: ["MIGRATION-READY", "PRODUCTION"]
+    steps:
+      - name: Migrating the Database in PROD
+        run: |
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no "${{ secrets.SSH_USER }}" << 'EOF'
+            cd "${{ secrets.FTP_SERVER }}"
+            php artisan migrate:fresh --force
+          EOF
+          
+  SEED-PROD:
+    name: SEED in PROD
+    runs-on: ubuntu-latest
+    environment: PROD
+    needs: ["SEED-READY", "MIGRATION-PROD"]
+    steps:
+      - name: SEED the Database in PROD
+        run: |
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no "${{ secrets.SSH_USER }}" << 'EOF'
+            cd "${{ secrets.FTP_SERVER }}"
+            php artisan db:seed --force
+          EOF
+          
