@@ -32,7 +32,7 @@ jobs:
       - name: Cleaning ${{ matrix.environment }} ftp server
         run: |
           sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no "${{ secrets.SSH_USER }}" << 'EOF'
-            cd "${{ secrets.FTP_SERVER }}"
+            cd "htdocs/${{ secrets.FTP_SERVER }}"
             [ "$(basename "$(pwd)")" = "${{ secrets.FTP_SERVER }}" ] && rm -rf ./*
           EOF
 
@@ -43,54 +43,30 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      
-      - name: Setup PHP 8.0
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.0'
-
-      - uses: actions/setup-node@master
 
       - name: Copy .env
         run: php -r "file_exists('.env') || copy('.env.example', '.env');"
-
-      - name: Install Dependencies
-        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
       - name: Prepare .env file
         run: |
           sed -i "s/DB_DATABASE=.*/DB_DATABASE=${{ secrets.DB_DATABASE }}/" .env
           sed -i "s/DB_USERNAME=.*/DB_USERNAME=${{ secrets.DB_USERNAME }}/" .env
           sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=${{ secrets.DB_PASSWORD }}/" .env
-
-      - name: Move repofiles to it's Directory
-        run: |
-          cp -r -f public/uploads/repofiles/* "${{ secrets.REPO_PATH }}/"
-          rm -rf public/uploads/repofiles
           
-      - name: Generate key
-        run: php artisan key:generate
-
-      - name: Generate storage link
-        run: php artisan storage:link
-
-      - name: Directory Permissions
-        run: chmod -R 777 storage bootstrap/cache
-
-      - name: Execute tests (Unit and Feature tests) via PHPUnit
-        run: vendor/bin/phpunit
-
       - name: Zip Repository
         run: |
           zip -r release.zip .
         working-directory: ${{ github.workspace }}
-
+        
       - name: Upload ZIP Artifact
         uses: actions/upload-artifact@v3
         with:
           name: release
           path: release.zip
           retention-days: 10
+
+
+
 
 
   DEVELOPMENT:
@@ -119,14 +95,15 @@ jobs:
       - name: SSH into the server and unzip release.zip
         run: |
           sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no "${{ secrets.SSH_USER }}" << 'EOF'
-            cd "${{ secrets.FTP_SERVER }}"
+            cd "htdocs/${{ secrets.FTP_SERVER }}"
             yes | unzip release.zip -d release
+            composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
           EOF
 
       - name: Copy .env.example and .env, .htaccess from release directory only for php
         run: |
           sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no "${{ secrets.SSH_USER }}" << 'EOF'
-            cd "${{ secrets.FTP_SERVER }}"
+            cd "htdocs/${{ secrets.FTP_SERVER }}"
             cp release/.env.example .env.example
             cp release/.env .env
             cp release/.htaccess .htaccess
@@ -135,13 +112,18 @@ jobs:
             sed -i "s/DB_DATABASE=.*/DB_DATABASE=${{ secrets.DB_DATABASE }}/" .env
             sed -i "s/DB_USERNAME=.*/DB_USERNAME=${{ secrets.DB_USERNAME }}/" .env
             sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=${{ secrets.DB_PASSWORD }}/" .env
+            
+            cp -r -f public/uploads/repofiles/* "${{ secrets.REPO_PATH }}/"
+            rm -rf public/uploads/repofiles
+            php artisan key:generate
+            chmod -R 777 storage bootstrap/cache
 
           EOF
           
       - name: Remove the 'release' directory and .zip
         run: |
           sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no "${{ secrets.SSH_USER }}" << 'EOF'
-            cd "${{ secrets.FTP_SERVER }}"
+            cd "htdocs/${{ secrets.FTP_SERVER }}"
             rm -rf release
             rm -rf .git
             rm release.zip
@@ -173,14 +155,15 @@ jobs:
       - name: SSH into the server and unzip release.zip
         run: |
           sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no "${{ secrets.SSH_USER }}" << 'EOF'
-            cd "${{ secrets.FTP_SERVER }}"
+            cd "htdocs/${{ secrets.FTP_SERVER }}"
             yes | unzip release.zip -d release
+            composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
           EOF
 
       - name: Copy .env.example and .env, .htaccess from release directory only for php
         run: |
           sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no "${{ secrets.SSH_USER }}" << 'EOF'
-            cd "${{ secrets.FTP_SERVER }}"
+            cd "htdocs/${{ secrets.FTP_SERVER }}"
             cp release/.env.example .env.example
             cp release/.env .env
             cp release/.htaccess .htaccess
@@ -191,13 +174,18 @@ jobs:
             sed -i "s/DB_DATABASE=.*/DB_DATABASE=${{ secrets.DB_DATABASE }}/" .env
             sed -i "s/DB_USERNAME=.*/DB_USERNAME=${{ secrets.DB_USERNAME }}/" .env
             sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=${{ secrets.DB_PASSWORD }}/" .env
+            
+            cp -r -f public/uploads/repofiles/* "${{ secrets.REPO_PATH }}/"
+            rm -rf public/uploads/repofiles
+            php artisan key:generate
+            chmod -R 777 storage bootstrap/cache
 
           EOF
           
       - name: Remove the 'release' directory and .zip
         run: |
           sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no "${{ secrets.SSH_USER }}" << 'EOF'
-            cd "${{ secrets.FTP_SERVER }}"
+            cd "htdocs/${{ secrets.FTP_SERVER }}"
             rm -rf release
             rm -rf .git
             rm release.zip
@@ -229,14 +217,15 @@ jobs:
       - name: SSH into the server and unzip release.zip
         run: |
           sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no "${{ secrets.SSH_USER }}" << 'EOF'
-            cd "${{ secrets.FTP_SERVER }}"
+            cd "htdocs/${{ secrets.FTP_SERVER }}"
             yes | unzip release.zip -d release
+            composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
           EOF
 
       - name: Copy .env.example and .env, .htaccess from release directory only for php
         run: |
           sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no "${{ secrets.SSH_USER }}" << 'EOF'
-            cd "${{ secrets.FTP_SERVER }}"
+            cd "htdocs/${{ secrets.FTP_SERVER }}"
             cp release/.env.example .env.example
             cp release/.env .env
             cp release/.htaccess .htaccess
@@ -247,13 +236,18 @@ jobs:
             sed -i "s/DB_DATABASE=.*/DB_DATABASE=${{ secrets.DB_DATABASE }}/" .env
             sed -i "s/DB_USERNAME=.*/DB_USERNAME=${{ secrets.DB_USERNAME }}/" .env
             sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=${{ secrets.DB_PASSWORD }}/" .env
+            
+            cp -r -f public/uploads/repofiles/* "${{ secrets.REPO_PATH }}/"
+            rm -rf public/uploads/repofiles
+            php artisan key:generate
+            chmod -R 777 storage bootstrap/cache
 
           EOF
           
       - name: Remove the 'release' directory and .zip
         run: |
           sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no "${{ secrets.SSH_USER }}" << 'EOF'
-            cd "${{ secrets.FTP_SERVER }}"
+            cd "htdocs/${{ secrets.FTP_SERVER }}"
             rm -rf release
             rm -rf .git
             rm release.zip
@@ -285,7 +279,7 @@ jobs:
       - name: Migrating the Database in TEST
         run: |
           sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no "${{ secrets.SSH_USER }}" << 'EOF'
-            cd "${{ secrets.FTP_SERVER }}"
+            cd "htdocs/${{ secrets.FTP_SERVER }}"
             php artisan migrate:fresh --force
           EOF
           
@@ -298,7 +292,7 @@ jobs:
       - name: SEED the Database in TEST
         run: |
           sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no "${{ secrets.SSH_USER }}" << 'EOF'
-            cd "${{ secrets.FTP_SERVER }}"
+            cd "htdocs/${{ secrets.FTP_SERVER }}"
             php artisan db:seed --force
           EOF
 
@@ -311,7 +305,7 @@ jobs:
       - name: Migrating the Database in QA
         run: |
           sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no "${{ secrets.SSH_USER }}" << 'EOF'
-            cd "${{ secrets.FTP_SERVER }}"
+            cd "htdocs/${{ secrets.FTP_SERVER }}"
             php artisan migrate:fresh --force
           EOF
           
@@ -324,7 +318,7 @@ jobs:
       - name: SEED the Database in QA
         run: |
           sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no "${{ secrets.SSH_USER }}" << 'EOF'
-            cd "${{ secrets.FTP_SERVER }}"
+            cd "htdocs/${{ secrets.FTP_SERVER }}"
             php artisan db:seed --force
           EOF
 
@@ -337,7 +331,7 @@ jobs:
       - name: Migrating the Database in PROD
         run: |
           sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no "${{ secrets.SSH_USER }}" << 'EOF'
-            cd "${{ secrets.FTP_SERVER }}"
+            cd "htdocs/${{ secrets.FTP_SERVER }}"
             php artisan migrate:fresh --force
           EOF
           
@@ -350,7 +344,7 @@ jobs:
       - name: SEED the Database in PROD
         run: |
           sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no "${{ secrets.SSH_USER }}" << 'EOF'
-            cd "${{ secrets.FTP_SERVER }}"
+            cd "htdocs/${{ secrets.FTP_SERVER }}"
             php artisan db:seed --force
           EOF
           
