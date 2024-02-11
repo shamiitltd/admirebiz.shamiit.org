@@ -97,13 +97,13 @@ jobs:
           sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no "${{ secrets.SSH_USER }}" << 'EOF'
             cd "htdocs/${{ secrets.FTP_SERVER }}"
             yes | unzip release.zip -d release
-            composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
           EOF
 
       - name: Copy .env.example and .env, .htaccess from release directory only for php
         run: |
           sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no "${{ secrets.SSH_USER }}" << 'EOF'
             cd "htdocs/${{ secrets.FTP_SERVER }}"
+            composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
             cp release/.env.example .env.example
             cp release/.env .env
             cp release/.htaccess .htaccess
