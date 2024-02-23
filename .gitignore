@@ -10,7 +10,6 @@ npm-debug.log
 yarn-error.log
 /uploads
 /storage/app/uploads
-modules_statuses.json
 docker-compose.override.yml
 /.idea
 /.vscode
