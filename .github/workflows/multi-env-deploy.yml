@@ -61,10 +61,6 @@ jobs:
           sed -i "s/DB_DATABASE=.*/DB_DATABASE=${{ secrets.DB_DATABASE }}/" .env
           sed -i "s/DB_USERNAME=.*/DB_USERNAME=${{ secrets.DB_USERNAME }}/" .env
           sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=${{ secrets.DB_PASSWORD }}/" .env
-      - name: Move repofiles to it's Directory
-        run: |
-          cp -r -f public/uploads/repofiles/* "${{ secrets.REPO_PATH }}/"
-          rm -rf public/uploads/repofiles
           
       - name: Generate key
         run: php artisan key:generate
@@ -134,8 +130,6 @@ jobs:
             sed -i "s/DB_USERNAME=.*/DB_USERNAME=${{ secrets.DB_USERNAME }}/" .env
             sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=${{ secrets.DB_PASSWORD }}/" .env
             
-            cp -r -f public/uploads/repofiles/* "${{ secrets.REPO_PATH }}/"
-            rm -rf public/uploads/repofiles
             php artisan key:generate
             chmod -R 777 storage bootstrap/cache
 
