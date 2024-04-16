@@ -5,7 +5,7 @@
 @endsection
 
 @section('mainContent')
-<section class="sms-breadcrumb mb-40 up_breadcrumb white-box">
+<section class="sms-breadcrumb mb-20 up_breadcrumb">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>{{@$pt}}</h1>
@@ -20,13 +20,6 @@
 
 <section class="admin-visitor-area up_admin_visitor full_wide_table">
     <div class="container-fluid p-0">
-            <div class="row">
-                <div class="col-lg-8 col-md-6">
-                    <div class="main-title">
-                        <h3 class="mb-30">@lang('common.select_criteria') </h3>
-                    </div>
-                </div>
-            </div>
             
             {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'disabled_student_search', 'method' => 'POST', 'enctype' => 'multipart/form-data']) }}
 
@@ -38,6 +31,13 @@
                 <div class="row">
                     <div class="col-lg-12">
                     <div class="white-box">
+                        <div class="row">
+                            <div class="col-lg-8 col-md-6">
+                                <div class="main-title">
+                                    <h3 class="mb-15">@lang('common.select_criteria') </h3>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row">
                             <input type="hidden" name="url" id="url" value="{{URL::to('/')}}">
                             @if(moduleStatusCheck('University'))
@@ -95,92 +95,94 @@
 
             <div class="row mt-40">
                 <div class="col-lg-12">
-                    <div class="row">
-                        <div class="col-lg-4 no-gutters">
-                            <div class="main-title">
-                                <h3 class="mb-0">{{@$pt}} </h3>
+                    <div class="white-box">
+                        <div class="row">
+                            <div class="col-lg-4 no-gutters">
+                                <div class="main-title">
+                                    <h3 class="mb-15">{{@$pt}} </h3>
+                                </div>
                             </div>
                         </div>
-                    </div>
-
-
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <x-table>
-                                <table id="table_id" class="table data-table" cellspacing="0" width="100%">
-                                    <thead>
-                                    
-                                        <tr>
-                                            <th>@lang('student.admission_no')</th>
-                                            <th>@lang('student.roll_no')</th>
-                                            <th>@lang('student.name')</th>
-                                            <th>@lang('common.class')</th>
-                                            @if(generalSetting()->with_guardian)
-                                            <th>@lang('student.father_name')</th>
-                                            @endif
-                                            <th>@lang('common.date_of_birth')</th>
-                                            <th>@lang('common.gender')</th>
-                                            <th>@lang('common.type')</th>
-                                            <th>@lang('common.phone')</th>
-                                            <th>@lang('common.actions')</th>
-                                        </tr>
-                                    </thead>
-
-                                    <tbody>
-                                        {{-- @foreach($students as $student)
-                                        <tr>
-                                            <td>{{$student->admission_no}}</td>
-                                            <td>{{$student->roll_no}}</td>
-                                            <td>{{$student->first_name.' '.$student->last_name}}</td>
-                                            <td>
-                                                @php
-                                                    $class_sec=[];
-                                                    foreach ($student->studentRecords as $classSec) {
-                                                        $class_sec[]=$classSec->class->class_name.'('. $classSec->section->section_name .'), ' ;
-                                                    }
-                                                    if (request()->class) {
-                                                        $sections = [];
-                                                        $class =  $student->recordClass ? $student->recordClass->class->class_name : '';
-                                                        if (request()->section) {
-                                                            $sections [] = $student->recordSection != "" ? $student->recordSection->section->section_name:"";
-                                                        } else {
-                                                            foreach ($student->recordClasses as $section) {
-                                                                $sections [] = $section->section->section_name;
-                                                            }
-                                                        }
-                                                        echo  $class .'('.implode(', ', $sections).'), ';
-                                                    } else{
-                                                        echo implode(', ', $class_sec);
-                                                    }
-                                                @endphp
-                                            </td>
-                                            {{-- <td>{{$student->class !=""?$student->class->class_name:""}}</td> --}}
-                                            {{-- @if(generalSetting()->with_guardian)
-                                            <td>{{$student->parents !=""?$student->parents->fathers_name:""}}</td>
-                                            @endif
-                                            <td  data-sort="{{strtotime($student->date_of_birth)}}" >
-                                            {{$student->date_of_birth != ""? dateConvert($student->date_of_birth):''}} 
-                                            </td>
-                                            <td>{{$student->gender != ""? $student->gender->base_setup_name :''}}</td>
-                                            <td>{{$student->category != ""? $student->category->category_name:''}}</td>
-                                            <td>{{$student->mobile}}</td>
-                                            <td>
-                                                <x-drop-down/>
-                                                        <a class="dropdown-item" href="{{route('student_view', [$student->id])}}">@lang('common.view')</a> 
-                                                    
-                                                        @if(userPermission('disable_student_delete'))
-                                                        <a onclick="deleteId({{$student->id}});" class="dropdown-item" href="#" data-toggle="modal" data-target="#deleteStudentModal" data-id="{{$student->id}}"  >@lang('common.delete')</a>
-                                                        @endif
-                                                        <a onclick="enableId({{$student->id}});" class="dropdown-item" href="#" data-toggle="modal" data-target="#enableStudentModal" data-id="{{$student->id}}"  >@lang('common.enable')</a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
+    
+    
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <x-table>
+                                    <table id="table_id" class="table data-table" cellspacing="0" width="100%">
+                                        <thead>
                                         
-                                        @endforeach  --}}
-                                    </tbody>
-                                </table>
-                            </x-table>
+                                            <tr>
+                                                <th>@lang('student.admission_no')</th>
+                                                <th>@lang('student.roll_no')</th>
+                                                <th>@lang('student.name')</th>
+                                                <th>@lang('common.class')</th>
+                                                @if(generalSetting()->with_guardian)
+                                                <th>@lang('student.father_name')</th>
+                                                @endif
+                                                <th>@lang('common.date_of_birth')</th>
+                                                <th>@lang('common.gender')</th>
+                                                <th>@lang('common.type')</th>
+                                                <th>@lang('common.phone')</th>
+                                                <th>@lang('common.actions')</th>
+                                            </tr>
+                                        </thead>
+    
+                                        <tbody>
+                                            {{-- @foreach($students as $student)
+                                            <tr>
+                                                <td>{{$student->admission_no}}</td>
+                                                <td>{{$student->roll_no}}</td>
+                                                <td>{{$student->first_name.' '.$student->last_name}}</td>
+                                                <td>
+                                                    @php
+                                                        $class_sec=[];
+                                                        foreach ($student->studentRecords as $classSec) {
+                                                            $class_sec[]=$classSec->class->class_name.'('. $classSec->section->section_name .'), ' ;
+                                                        }
+                                                        if (request()->class) {
+                                                            $sections = [];
+                                                            $class =  $student->recordClass ? $student->recordClass->class->class_name : '';
+                                                            if (request()->section) {
+                                                                $sections [] = $student->recordSection != "" ? $student->recordSection->section->section_name:"";
+                                                            } else {
+                                                                foreach ($student->recordClasses as $section) {
+                                                                    $sections [] = $section->section->section_name;
+                                                                }
+                                                            }
+                                                            echo  $class .'('.implode(', ', $sections).'), ';
+                                                        } else{
+                                                            echo implode(', ', $class_sec);
+                                                        }
+                                                    @endphp
+                                                </td>
+                                                {{-- <td>{{$student->class !=""?$student->class->class_name:""}}</td> --}}
+                                                {{-- @if(generalSetting()->with_guardian)
+                                                <td>{{$student->parents !=""?$student->parents->fathers_name:""}}</td>
+                                                @endif
+                                                <td  data-sort="{{strtotime($student->date_of_birth)}}" >
+                                                {{$student->date_of_birth != ""? dateConvert($student->date_of_birth):''}} 
+                                                </td>
+                                                <td>{{$student->gender != ""? $student->gender->base_setup_name :''}}</td>
+                                                <td>{{$student->category != ""? $student->category->category_name:''}}</td>
+                                                <td>{{$student->mobile}}</td>
+                                                <td>
+                                                    <x-drop-down/>
+                                                            <a class="dropdown-item" href="{{route('student_view', [$student->id])}}">@lang('common.view')</a> 
+                                                        
+                                                            @if(userPermission('disable_student_delete'))
+                                                            <a onclick="deleteId({{$student->id}});" class="dropdown-item" href="#" data-toggle="modal" data-target="#deleteStudentModal" data-id="{{$student->id}}"  >@lang('common.delete')</a>
+                                                            @endif
+                                                            <a onclick="enableId({{$student->id}});" class="dropdown-item" href="#" data-toggle="modal" data-target="#enableStudentModal" data-id="{{$student->id}}"  >@lang('common.enable')</a>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            
+                                            @endforeach  --}}
+                                        </tbody>
+                                    </table>
+                                </x-table>
+                            </div>
                         </div>
                     </div>
                 </div>

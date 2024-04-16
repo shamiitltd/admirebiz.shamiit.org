@@ -1,5 +1,5 @@
 <?php 
-return  [
+return [
     'Xendit'=>App\PaymentGateway\XenditPayment::class,
     'PayPal'=>App\PaymentGateway\PaypalPayment::class,
     'Stripe'=>App\PaymentGateway\StripePayment::class,

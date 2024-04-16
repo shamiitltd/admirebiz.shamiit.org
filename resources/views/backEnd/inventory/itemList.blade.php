@@ -3,7 +3,7 @@
 @lang('inventory.item_list')
 @endsection
 @section('mainContent')
-<section class="sms-breadcrumb mb-40 white-box">
+<section class="sms-breadcrumb mb-20">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('inventory.item_list')</h1>
@@ -33,15 +33,6 @@
             <div class="col-lg-3">
                 <div class="row">
                     <div class="col-lg-12">
-                        <div class="main-title">
-                            <h3 class="mb-30">
-                                @if(isset($editData))
-                                    @lang('inventory.edit_item')
-                                @else
-                                    @lang('inventory.add_item')
-                                @endif
-                            </h3>
-                        </div>
                         @if(isset($editData))
                             {{ Form::open(['class' => 'form-horizontal', 'route' => array('item-list-update',$editData->id), 'method' => 'PUT']) }}
                         @else
@@ -50,6 +41,15 @@
                             @endif
                         @endif
                         <div class="white-box">
+                            <div class="main-title">
+                                <h3 class="mb-15">
+                                    @if(isset($editData))
+                                        @lang('inventory.edit_item')
+                                    @else
+                                        @lang('inventory.add_item')
+                                    @endif
+                                </h3>
+                            </div>
                             <div class="add-visitor">
                                 <div class="row"> 
                                     <div class="col-lg-12 mb-15">
@@ -129,30 +129,32 @@
                 </div>
             </div>
             <div class="col-lg-9">
-                <div div class="row">
-                    <div class="col-lg-4 no-gutters">
-                        <div class="main-title">
-                            <h3 class="mb-0">@lang('inventory.item_list')</h3>
+                <div class="white-box">
+                    <div div class="row">
+                        <div class="col-lg-4 no-gutters">
+                            <div class="main-title">
+                                <h3 class="mb-15">@lang('inventory.item_list')</h3>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12">
-                        <x-table>
-                            <table id="table_id" class="table data-table" cellspacing="0" width="100%">
-                                <thead>
-                                    <tr>
-                                        <th>@lang('common.sl')</th>
-                                        <th>@lang('inventory.item_name')</th>
-                                        <th>@lang('student.category') </th>
-                                        <th>@lang('common.description') </th>
-                                        <th>@lang('inventory.total_in_stock') </th>
-                                        <th>@lang('common.action')</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </x-table>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <x-table>
+                                <table id="table_id" class="table data-table" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th>@lang('common.sl')</th>
+                                            <th>@lang('inventory.item_name')</th>
+                                            <th>@lang('student.category') </th>
+                                            <th>@lang('common.description') </th>
+                                            <th>@lang('inventory.total_in_stock') </th>
+                                            <th>@lang('common.action')</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </x-table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -174,7 +176,7 @@
             } ),
             columns: [
                     {data: 'DT_RowIndex', name: 'id'},
-                    {data: 'item_name', name: 'test'},
+                    {data: 'item_name', name: 'item_name'},
                     {data: 'category.category_name', name: 'category.category_name'},
                     {data: 'description', name: 'description'},
                     {data: 'total_in_stock', name: 'total_in_stock'},

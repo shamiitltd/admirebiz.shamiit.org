@@ -39,13 +39,13 @@
     </style>
 @endpush
 @section('mainContent')
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('front_settings.add_testimonial')</h1>
                 <div class="bc-pages">
                     <a href="{{ route('dashboard') }}">@lang('common.dashboard')</a>
-                    <a href="#">@lang('front_settings.front_settings')</a>
+                    <a href="#">@lang('front_settings.frontend_cms')</a>
                     <a href="#">@lang('front_settings.add_testimonial')</a>
                 </div>
             </div>
@@ -70,15 +70,6 @@
             <div class="col-lg-3">
                 <div class="row">
                     <div class="col-lg-12">
-                        <div class="main-title">
-                            <h3 class="mb-30">
-                                @if (isset($add_testimonial))
-                                    @lang('front_settings.edit_testimonial')
-                                @else
-                                    @lang('front_settings.add_testimonial')
-                                @endif
-                            </h3>
-                        </div>
                         @if (isset($add_testimonial))
                             {{ Form::open([
                                 'class' => 'form-horizontal',
@@ -101,6 +92,15 @@
                             @endif
                         @endif
                         <div class="white-box">
+                            <div class="main-title">
+                                <h3 class="mb-15">
+                                    @if (isset($add_testimonial))
+                                        @lang('front_settings.edit_testimonial')
+                                    @else
+                                        @lang('front_settings.add_testimonial')
+                                    @endif
+                                </h3>
+                            </div>
                             <div class="add-visitor">
                                 <div class="row">
                                     <div class="col-lg-12">
@@ -180,8 +180,8 @@
                                                     readonly>
                                                 <button class="" type="button">
                                                     <label class="primary-btn small fix-gr-bg"
-                                                        for="browseFile">{{ __('common.browse') }}</label>
-                                                    <input type="file" class="d-none" name="image" id="browseFile">
+                                                        for="addTestimonialImage">{{ __('common.browse') }}</label>
+                                                    <input type="file" class="d-none" name="image" id="addTestimonialImage">
                                                 </button>
                                             </div>
                                         </div>
@@ -189,17 +189,19 @@
                                 </div>
                                 <div class="row mt-15">
                                     <div class="col-lg-12">
+                                        <img class="previewImageSize {{ @$add_testimonial->image ? '' : 'd-none' }}" src="{{ @$add_testimonial->image ? asset($add_testimonial->image) : '' }}" alt="" id="testimonialImageShow" height="100%" width="100%">
+                                    </div>
+                                </div>
+                                <div class="row mt-15">
+                                    <div class="col-lg-12">
                                         <div class="primary_input">
-                                            <label class="primary_input_label d-flex" for="">@lang('common.description')<span
-                                                    class="text-danger"> *</span>
-                                                @if (moduleStatusCheck('AiContent'))
-                                                    @include('aicontent::inc.button')
-                                                @endif
-                                            </label>
-                                            <textarea class="generated-text primary_input_field form-control{{ $errors->has('description') ? ' is-invalid' : '' }}"
-                                                cols="0"
+                                            <label class="primary_input_label" for="">@lang('common.description')<span
+                                                    class="text-danger"> *</span></label>
+                                            <textarea class="primary_input_field form-control{{ $errors->has('description') ? ' is-invalid' : '' }}" cols="0"
                                                 rows="4"
                                                 name="description">{{ isset($add_testimonial) ? @$add_testimonial->description : old('description') }}</textarea>
+
+
                                             @if ($errors->has('description'))
                                                 <span class="text-danger d-block">
                                                     {{ $errors->first('description') }}
@@ -217,31 +219,31 @@
                                                 <input type="radio"
                                                     id="5-stars"
                                                     name="rating" value="5"
-                                                    {{ @$add_testimonial->star_rating == 5 ? 'checked' : '' }} />
+                                                    {{ @$add_testimonial->star_rating == 5 ? "checked" : '' }} />
                                                 <label for="5-stars"
                                                     class="star">&#9733;</label>
                                                 <input type="radio"
                                                     id="4-stars"
                                                     name="rating" value="4"
-                                                    {{ @$add_testimonial->star_rating == 4 ? 'checked' : '' }} />
+                                                    {{ @$add_testimonial->star_rating == 4 ? "checked" : '' }} />
                                                 <label for="4-stars"
                                                     class="star">&#9733;</label>
                                                 <input type="radio"
                                                     id="3-stars"
                                                     name="rating" value="3"
-                                                    {{ @$add_testimonial->star_rating == 3 ? 'checked' : '' }} />
+                                                    {{ @$add_testimonial->star_rating == 3 ? "checked" : '' }} />
                                                 <label for="3-stars"
                                                     class="star">&#9733;</label>
                                                 <input type="radio"
                                                     id="2-stars"
                                                     name="rating" value="2"
-                                                    {{ @$add_testimonial->star_rating == 2 ? 'checked' : '' }} />
+                                                    {{ @$add_testimonial->star_rating == 2 ? "checked" : '' }} />
                                                 <label for="2-stars"
                                                     class="star">&#9733;</label>
                                                 <input type="radio"
                                                     id="1-star"
                                                     name="rating" value="1"
-                                                    {{ @$add_testimonial->star_rating == 1 ? 'checked' : '' }} />
+                                                    {{ @$add_testimonial->star_rating == 1 ? "checked" : '' }} />
                                                 <label for="1-star"
                                                     class="star">&#9733;</label>
                                             </div>
@@ -290,118 +292,120 @@
             </div>
 
             <div class="col-lg-9">
-                <div class="row">
-                    <div class="col-lg-4 no-gutters">
-                        <div class="main-title">
-                            <h3 class="mb-0">@lang('front_settings.testimonial_list')</h3>
+                <div class="white-box">
+                    <div class="row">
+                        <div class="col-lg-4 no-gutters">
+                            <div class="main-title">
+                                <h3 class="mb-15">@lang('front_settings.testimonial_list')</h3>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-lg-12">
-                        <x-table>
-                            <table id="table_id" class="table" cellspacing="0" width="100%">
-
-                                <thead>
-
-                                    <tr>
-                                        <th>@lang('common.name')</th>
-                                        <th>@lang('front_settings.designation')</th>
-                                        <th>@lang('front_settings.institution_name')</th>
-                                        <th>@lang('common.rating')</th>
-                                        <th>@lang('front_settings.image')</th>
-                                        <th>@lang('common.action')</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-                                    @foreach ($testimonial as $value)
+    
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <x-table>
+                                <table id="table_id" class="table" cellspacing="0" width="100%">
+    
+                                    <thead>
+    
                                         <tr>
-                                            <td>{{ @$value->name }}</td>
-                                            <td>{{ @$value->designation }}</td>
-                                            <td>{{ @$value->institution_name }}</td>
-
-                                            <td>
-                                                <div class="star-rating">
-                                                    <input type="radio"
-                                                        id="5-stars{{ $value->id }}"
-                                                        name="rating{{ $value->id }}" value="5"
-                                                        {{ $value->star_rating == 5 ? 'checked' : '' }}
-                                                        disabled />
-                                                    <label for="5-stars{{ $value->id }}"
-                                                        class="star">&#9733;</label>
-
-                                                    <input type="radio"
-                                                        id="4-stars{{ $value->id }}"
-                                                        name="rating{{ $value->id }}" value="4"
-                                                        {{ $value->star_rating == 4 ? 'checked' : '' }}
-                                                        disabled />
-                                                    <label for="4-stars{{ $value->id }}"
-                                                        class="star">&#9733;</label>
-
-                                                    <input type="radio"
-                                                        id="3-stars{{ $value->id }}"
-                                                        name="rating{{ $value->id }}" value="3"
-                                                        {{ $value->star_rating == 3 ? 'checked' : '' }}
-                                                        disabled />
-                                                    <label for="3-stars{{ $value->id }}"
-                                                        class="star">&#9733;</label>
-
-                                                    <input type="radio"
-                                                        id="2-stars{{ $value->id }}"
-                                                        name="rating{{ $value->id }}" value="2"
-                                                        {{ $value->star_rating == 2 ? 'checked' : '' }}
-                                                        disabled />
-                                                    <label for="2-stars{{ $value->id }}"
-                                                        class="star">&#9733;</label>
-
-                                                    <input type="radio"
-                                                        id="1-star{{ $value->id }}"
-                                                        name="rating{{ $value->id }}" value="1"
-                                                        {{ $value->star_rating == 1 ? 'checked' : '' }}
-                                                        disabled />
-                                                    <label for="1-star{{ $value->id }}"
-                                                        class="star">&#9733;</label>
-                                                </div>
-                                            </td>
-                                            <td><img src="{{ asset(@$value->image) }}" width="60px" height="50px">
-                                            </td>
-                                            <td>
-                                                <x-drop-down>
-                                                    @if (userPermission('testimonial-details'))
-                                                        <a href="{{ route('testimonial-details', @$value->id) }}"
-                                                            class="dropdown-item small fix-gr-bg modalLink"
-                                                            title="@lang('front_settings.testimonial_details')" data-modal-size="modal-lg">
-                                                            @lang('common.view')
-                                                        </a>
-                                                    @endif
-                                                    @if (userPermission('edit-testimonial'))
-                                                        <a class="dropdown-item"
-                                                            href="{{ route('edit-testimonial', @$value->id) }}">@lang('common.edit')</a>
-                                                    @endif
-
-                                                    @if (Illuminate\Support\Facades\Config::get('app.app_sync'))
-                                                        <span tabindex="0" data-toggle="tooltip"
-                                                            title="Disabled For Demo"> <a href="#"
-                                                                class="dropdown-item small fix-gr-bg  demo_view"
-                                                                style="pointer-events: none;">@lang('common.delete')</a></span>
-                                                    @else
-                                                        @if (userPermission('for-delete-testimonial'))
-                                                            <a href="{{ route('for-delete-testimonial', @$value->id) }}"
+                                            <th>@lang('common.name')</th>
+                                            <th>@lang('front_settings.designation')</th>
+                                            <th>@lang('front_settings.institution_name')</th>
+                                            <th>@lang('common.rating')</th>
+                                            <th>@lang('front_settings.image')</th>
+                                            <th>@lang('common.action')</th>
+                                        </tr>
+                                    </thead>
+    
+                                    <tbody>
+                                        @foreach ($testimonial as $value)
+                                            <tr>
+                                                <td>{{ @$value->name }}</td>
+                                                <td>{{ @$value->designation }}</td>
+                                                <td>{{ @$value->institution_name }}</td>
+    
+                                                <td>
+                                                    <div class="star-rating">
+                                                        <input type="radio"
+                                                            id="5-stars{{ $value->id }}"
+                                                            name="rating{{ $value->id }}" value="5"
+                                                            {{ $value->star_rating == 5 ? 'checked' : '' }}
+                                                            disabled />
+                                                        <label for="5-stars{{ $value->id }}"
+                                                            class="star">&#9733;</label>
+    
+                                                        <input type="radio"
+                                                            id="4-stars{{ $value->id }}"
+                                                            name="rating{{ $value->id }}" value="4"
+                                                            {{ $value->star_rating == 4 ? 'checked' : '' }}
+                                                            disabled />
+                                                        <label for="4-stars{{ $value->id }}"
+                                                            class="star">&#9733;</label>
+    
+                                                        <input type="radio"
+                                                            id="3-stars{{ $value->id }}"
+                                                            name="rating{{ $value->id }}" value="3"
+                                                            {{ $value->star_rating == 3 ? 'checked' : '' }}
+                                                            disabled />
+                                                        <label for="3-stars{{ $value->id }}"
+                                                            class="star">&#9733;</label>
+    
+                                                        <input type="radio"
+                                                            id="2-stars{{ $value->id }}"
+                                                            name="rating{{ $value->id }}" value="2"
+                                                            {{ $value->star_rating == 2 ? 'checked' : '' }}
+                                                            disabled />
+                                                        <label for="2-stars{{ $value->id }}"
+                                                            class="star">&#9733;</label>
+    
+                                                        <input type="radio"
+                                                            id="1-star{{ $value->id }}"
+                                                            name="rating{{ $value->id }}" value="1"
+                                                            {{ $value->star_rating == 1 ? 'checked' : '' }}
+                                                            disabled />
+                                                        <label for="1-star{{ $value->id }}"
+                                                            class="star">&#9733;</label>
+                                                    </div>
+                                                </td>
+                                                <td><img src="{{ asset(@$value->image) }}" width="60px" height="50px">
+                                                </td>
+                                                <td>
+                                                    <x-drop-down>
+                                                        @if (userPermission('testimonial-details'))
+                                                            <a href="{{ route('testimonial-details', @$value->id) }}"
                                                                 class="dropdown-item small fix-gr-bg modalLink"
-                                                                title="@lang('front_settings.delete_testimonial')" data-modal-size="modal-md">
-                                                                @lang('common.delete')
+                                                                title="@lang('front_settings.testimonial_details')" data-modal-size="modal-lg">
+                                                                @lang('common.view')
                                                             </a>
                                                         @endif
-                                                    @endif
-                                                </x-drop-down>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </x-table>
+                                                        @if (userPermission('edit-testimonial'))
+                                                            <a class="dropdown-item"
+                                                                href="{{ route('edit-testimonial', @$value->id) }}">@lang('common.edit')</a>
+                                                        @endif
+    
+                                                        @if (Illuminate\Support\Facades\Config::get('app.app_sync'))
+                                                            <span tabindex="0" data-toggle="tooltip"
+                                                                title="Disabled For Demo"> <a href="#"
+                                                                    class="dropdown-item small fix-gr-bg  demo_view"
+                                                                    style="pointer-events: none;">@lang('common.delete')</a></span>
+                                                        @else
+                                                            @if (userPermission('for-delete-testimonial'))
+                                                                <a href="{{ route('for-delete-testimonial', @$value->id) }}"
+                                                                    class="dropdown-item small fix-gr-bg modalLink"
+                                                                    title="@lang('front_settings.delete_testimonial')" data-modal-size="modal-md">
+                                                                    @lang('common.delete')
+                                                                </a>
+                                                            @endif
+                                                        @endif
+                                                    </x-drop-down>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </x-table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -412,8 +416,10 @@
 @include('backEnd.partials.data_table_js')
 @push('script')
     <script>
-        $(document).on('change', '#browseFile', function(event) {
+        $(document).on('change', '#addTestimonialImage', function(event) {
+            $('#testimonialImageShow').removeClass('d-none');
             getFileName($(this).val(), '#placeholderFileOneName');
+            imageChangeWithFile($(this)[0], '#testimonialImageShow');
         });
     </script>
 @endpush

@@ -16,11 +16,22 @@
             top: 0 !important;
             left: 0 !important;
         }
+
+        .modal-body {
+            overflow: auto;
+        }
+
+        .student-certificate {
+            width: 990px;
+            height: 740px;
+        }
+
+
     </style>
 @endpush
 
 @section('mainContent')
-<section class="sms-breadcrumb mb-40 white-box up_breadcrumb">
+<section class="sms-breadcrumb mb-20 up_breadcrumb">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('admin.student_certificate')</h1>
@@ -50,15 +61,6 @@
             <div class="col-lg-5">
                 <div class="row">
                     <div class="col-lg-12">
-                        <div class="main-title">
-                            <h3 class="mb-30">@if(isset($certificate))
-                                    @lang('admin.edit_certificate')
-                                @else
-                                    @lang('admin.add_certificate')
-                                @endif
-                              
-                            </h3>
-                        </div>
                         @if(isset($certificate))
                         {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => array('student-certificate-update',$certificate->id), 'method' => 'PUT', 'enctype' => 'multipart/form-data']) }}
                         @else
@@ -68,6 +70,16 @@
                         @endif
                         @endif
                         <div class="white-box">
+
+                        <div class="main-title">
+                            <h3 class="mb-15">@if(isset($certificate))
+                                    @lang('admin.edit_certificate')
+                                @else
+                                    @lang('admin.add_certificate')
+                                @endif
+                              
+                            </h3>
+                        </div>
                             <div class="add-visitor">
                                 {{-- <div class="row">
                                     <div class="col-lg-12">
@@ -162,6 +174,33 @@
                                             @endif 
                                         </span>
                                     </div>
+                                    <div class="col-lg-6 mt-20">
+                                        <div class="primary_input">
+                                            <label for="font_size">@lang('admin.body_font') <span class="text-danger"></span></label>
+                                            <select class="primary_select form-control" name="body_font_family" id="font-family">
+                                                <option data-display=" @lang('admin.body_font')" value=""> @lang('admin.body_font')</option>
+                                                <option value="Arial" {{isset($certificate) ? ($certificate->body_font_family == 'Arial' ? 'selected' : ''):''}} >Arial</option>
+                                                <option value="Arial Black" {{isset($certificate) ? ($certificate->body_font_family == 'Arial Black' ? 'selected' : '') :''}} >Arial Black</option>
+                                                <option value="Pinyon Script" {{isset($certificate) ? ($certificate->body_font_family == 'Pinyon Script' ? 'selected' : '') :''}} >Pinyon Script</option>
+                                                <option value="Comic Sans MS" {{isset($certificate) ? ($certificate->body_font_family == 'Comic Sans MS' ? 'selected' : '') :''}} >Comic Sans MS</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 mt-20">
+                                        <div class="primary_input">
+                                            <label>@lang('admin.font_size')<span class="text-danger">*</span></label>
+                                            <input class="primary_input_field{{ $errors->has('body_font_size') ? ' is-invalid' : '' }} body_font_size" 
+                                                type="text" name="body_font_size" placeholder="Ex: 2em" autocomplete="off" value="{{isset($certificate)? $certificate->body_font_size: old('body_font_size')}}">
+                                           
+                                          
+                                            @if ($errors->has('body_font_size'))
+                                            <span class="text-danger" >
+                                                {{ $errors->first('body_font_size') }}
+                                            </span>
+                                            @endif
+                                        </div>
+                                        
+                                    </div>
                                 </div>
                                 <div class="row mt-15" id="body_two_part">
                                     <div class="col-lg-12">
@@ -183,7 +222,9 @@
                                             @endif 
                                         </span>
                                     </div>
+                                   
                                 </div>
+
 
                                 <div class="row mt-15">
                                     <div class="col-lg-12">
@@ -230,6 +271,66 @@
                                             @if ($errors->has('footer_right_text'))
                                             <span class="text-danger" >
                                                 {{ $errors->first('footer_right_text') }}
+                                            </span>
+                                            @endif
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                                <div class="row mt-15">
+                                    <div class="col-lg-12 mb-20">
+                                        <label class="primary_input_label" for="">
+                                            {{ _trans('certificate.Page Layout') }}
+                                            <span class="text-danger"> *</span>
+                                        </label>
+                                        <select
+                                            class="primary_select select_layout form-control{{ $errors->has('layout') ? ' is-invalid' : '' }}"
+                                            name="layout" id="layout">
+                                            <option data-display=" {{ _trans('certificate.Page Layout') }} *"
+                                                value=""> {{ _trans('certificate.Page Layout') }} *
+                                            </option>
+                                            <option value="1"
+                                                {{ isset($certificate) ? ($certificate->layout == 1 ? 'selected' : '') : '' }}>
+                                                {{ _trans('certificate.A4 (Portrait)') }} </option>
+                                            <option value="2"
+                                                {{ isset($certificate) ? ($certificate->layout == 2 ? 'selected' : '') : '' }}>
+                                                {{ _trans('certificate.A4 (Landscape)') }} </option>
+                                            <option value="3"
+                                                {{ isset($certificate) ? ($certificate->layout == 3 ? 'selected' : '') : '' }}>
+                                                {{ _trans('certificate.Custom') }} </option>
+
+                                        </select>
+                                        @if ($errors->has('layout'))
+                                            <span class="text-danger invalid-select" role="alert">
+                                                {{ $errors->first('layout') }}
+                                            </span>
+                                        @endif
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="primary_input">
+                                            <label>@lang('admin.height') (mm)<span class="text-danger">*</span></label>
+                                            <input class="primary_input_field{{ $errors->has('height') ? ' is-invalid' : '' }} certificate_height" 
+                                                type="text" name="height" placeholder="@lang('admin.height')" autocomplete="off" value="{{isset($certificate)? $certificate->height: old('height')}}">
+                                           
+                                          
+                                            @if ($errors->has('height'))
+                                            <span class="text-danger" >
+                                                {{ $errors->first('height') }}
+                                            </span>
+                                            @endif
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="primary_input">
+                                            <label>@lang('admin.width') (mm)<span class="text-danger">*</span></label>
+                                            <input class="primary_input_field{{ $errors->has('width') ? ' is-invalid' : '' }} certificate_width"
+                                                type="text" name="width" placeholder="@lang('admin.width')" autocomplete="off" value="{{isset($certificate)? $certificate->width: old('width')}}">
+                                           
+                                          
+                                            @if ($errors->has('width'))
+                                            <span class="text-danger" >
+                                                {{ $errors->first('width') }}
                                             </span>
                                             @endif
                                         </div>
@@ -306,10 +407,11 @@
             </div>
 
             <div class="col-lg-7">
+                <div class="white-box">
                 <div class="row">
                     <div class="col-lg-4 no-gutters">
                         <div class="main-title">
-                            <h3 class="mb-0">  @lang('admin.certificate_list')</h3>
+                            <h3 class="mb-15">  @lang('admin.certificate_list')</h3>
                         </div>
                     </div>
                 </div>
@@ -324,6 +426,7 @@
                                     <tr>
                                         <th>@lang('common.name')</th>
                                         <th>@lang('admin.background_image')</th>
+                                        <th>{{ _trans('common.Default For') }}</th>
                                         <th>@lang('common.actions')</th>
                                     </tr>
                                 </thead>
@@ -338,10 +441,29 @@
                                             @endif
                                         </td>
                                         <td>
+                                            <button type="button" class="primary-btn small fix-gr-bg text-nowrap">
+                                                {{ @$certificate->default_for }}
+                                            </button>  
+                                        </td>
+                                        <td>
                                             <x-drop-down>
                                                     <a class="dropdown-item" data-toggle="modal" data-target="#showCertificateModal{{ @$certificate->id}}"  href="#">@lang('common.view')</a>
                                                     @if(userPermission("student-certificate-edit"))
                                                     <a class="dropdown-item" href="{{route('student-certificate-edit',@$certificate->id)}}">@lang('common.edit')</a>
+                                                    @endif
+                                                    @if(userPermission("student-certificate-edit") && moduleStatusCheck('Lms'))
+                                                        @if(@$certificate->default_for == null)
+                                                            <a class="dropdown-item" href="{{route('student-certificate-set-default',[@$certificate->id,'course'])}}">
+                                                                {{_trans('lms.Make Default(Course)')}}
+                                                            </a>
+                                                            <a class="dropdown-item" href="{{route('student-certificate-set-default',[@$certificate->id,'quiz'])}}">
+                                                                {{_trans('lms.Make Default(Quiz)')}}
+                                                            </a>
+                                                        @else
+                                                            <a class="dropdown-item" href="{{route('student-certificate-reset-default',@$certificate->id)}}">
+                                                                {{_trans('lms.Reset Default')}}
+                                                            </a>
+                                                        @endif
                                                     @endif
                                                     @if(userPermission("student-certificate-delete"))
                                                     <a class="dropdown-item" data-toggle="modal" data-target="#deleteSectionModal{{ @$certificate->id}}"  href="#">@lang('common.delete')</a>
@@ -382,7 +504,7 @@
                                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                                                 </div>
                                                 <div class="modal-body p-0">
-                                                    <div class="container student-certificate">
+                                                    <div class="mx-3 my-2 student-certificate">
                                                         <div class="row justify-content-center">
                                                             <div class="col-lg-12 text-center">
                                                                 <div class="mb-5">
@@ -390,7 +512,7 @@
                                                                 </div>
                                                             </div>
 
-                                                            <div class="col-lg-10 text-center certificate-position">
+                                                            <div class="text-center certificate-position">
                                                                 <div>
                                                                     <div class="row justify-content-lg-between mb-5">
                                                                         <div class="col-md-5">
@@ -444,6 +566,7 @@
                         </x-table>
                     </div>
                 </div>
+                </div>
             </div>
         </div>
     </div>
@@ -453,6 +576,30 @@
 @include('backEnd.partials.date_picker_css_js')
 @section('script')
     <script>
+          $('.select_layout').on('change', function() {
+            let layout = $(this).val();
+            let height = $('.certificate_height');
+            let width = $('.certificate_width');
+
+            if (layout == 1) {
+                // Portrait
+                height.val('297');
+                width.val('210');
+                height.attr('readonly', true);
+                width.attr('readonly', true);
+            } else if (layout == 2) {
+                // Landscape
+                height.val('210');
+                width.val('297');
+                height.attr('readonly', true);
+                width.attr('readonly', true);
+            } else {
+                height.val('');
+                width.val('');
+                height.attr('readonly', false);
+                width.attr('readonly', false);
+            }
+        })
         $('#body_two_part').hide();
         $("#certificate_type").on("change", function () {
             var certificate_type = $("#certificate_type").val();

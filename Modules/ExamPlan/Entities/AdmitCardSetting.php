@@ -11,8 +11,5 @@ class AdmitCardSetting extends Model
 
     protected $fillable = [];
     
-    protected static function newFactory()
-    {
-        return \Modules\ExamPlan\Database\factories\AdmitCardSettingFactory::new();
-    }
+   
 }

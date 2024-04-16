@@ -3,7 +3,7 @@
         @lang('bulkprint::bulk.lms_certificate')
     @endsection
 @section('mainContent')
-<section class="sms-breadcrumb mb-40 white-box up_breadcrumb">
+<section class="sms-breadcrumb mb-20 up_breadcrumb">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('bulkprint::bulk.student_certificate')</h1>

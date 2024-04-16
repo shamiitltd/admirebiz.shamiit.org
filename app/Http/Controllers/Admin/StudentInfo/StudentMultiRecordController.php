@@ -62,8 +62,8 @@ class StudentMultiRecordController extends Controller
     }
     public function multiRecordStore(Request $request)
     {
-
-        try {
+        // dd($request->all());
+        // try {
             $class_list = [];
             $section_list = [];
             $default_id = $request->default ? (int)$request->default : null;
@@ -147,11 +147,11 @@ class StudentMultiRecordController extends Controller
                 $message = __('student.Record info updated');
                 return response()->json(['status' => $status, 'message' => $message, 'validation' => $validation]);
             }
-        } catch (\Throwable $th) {
-            $status = false;
-            $message = __('student.Record info updated Failed');
-            return response()->json(['status' => $status, 'message' => $th->getMessage()]);
-        }
+        // } catch (\Throwable $th) {
+        //     $status = false;
+        //     $message = __('student.Record info updated Failed');
+        //     return response()->json(['status' => $status, 'message' => $th->getMessage()]);
+        // }
     }
     public function insertStudentRecord($request, $pre_record = null)
     {
@@ -235,12 +235,13 @@ class StudentMultiRecordController extends Controller
             ->where('academic_id', getAcademicId())
             ->where('school_id', auth()->user()->school_id)
             ->first();
-        $data['class_id'] = $request->class;
-        $data['section_id'] = $request->section;
-        $data['teacher_name'] = $class_teacher->teacher->full_name;
-        $this->sent_notifications('Multi_Class', [$class_teacher->teacher->user_id], $data, ['Teacher']);
-        $this->sent_notifications('Multi_Class', [$studentRecord->studentDetail->user_id], $data, ['Student', 'Parent']);
-
+        if ($class_teacher) {
+            $data['class_id'] = $request->class;
+            $data['section_id'] = $request->section;
+            $data['teacher_name'] = $class_teacher->teacher->full_name;
+            $this->sent_notifications('Multi_Class', [$class_teacher->teacher->user_id], $data, ['Teacher']);
+            $this->sent_notifications('Multi_Class', [$studentRecord->studentDetail->user_id], $data, ['Student', 'Parent']);
+        }
         if (moduleStatusCheck('University')) {
             $this->assignSubjectStudent($studentRecord, $pre_record);
         }

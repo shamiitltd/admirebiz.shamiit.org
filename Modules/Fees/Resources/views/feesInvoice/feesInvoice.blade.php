@@ -26,7 +26,7 @@
             }
         </style>
     @endpush
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@if (isset($invoiceInfo))
@@ -62,8 +62,11 @@
                     <div class="col-lg-3">
                         <div class="row">
                             <div class="col-lg-12">
+                                    <input type="hidden" name="url" id="url" value="{{URL::to('/')}}">
+                                <div class="white-box">
+
                                 <div class="main-title">
-                                    <h3 class="mb-30">
+                                    <h3 class="mb-15">
                                         @if (isset($invoiceInfo))
                                             @lang('common.edit')
                                         @else
@@ -72,8 +75,7 @@
                                             @lang('fees.fees_invoice')
                                     </h3>
                                 </div>
-                                    <input type="hidden" name="url" id="url" value="{{URL::to('/')}}">
-                                <div class="white-box">
+
                                     <div class="add-visitor">                              
                                         <div class="row">
                                             <div class="col-lg-12 d-flex">
@@ -96,7 +98,7 @@
                                                     {{ __('common.student') }}
                                                         <span class="text-danger"> *</span>
                                                 </label>
-                                                {{ Form::select('student_id', @$students ?? [""=>__('common.select_student').'*'], $invoiceInfo ? $invoiceInfo->student_id : null , ['class' => 'primary_select  form-control'. ($errors->has('student_id') ? ' is-invalid' : ''), 'id'=>'select_un_student',  isset($invoiceInfo) ? 'disabled' : '']) }}
+                                                {{ Form::select('student_id', @$students ?? [""=>__('common.select_student').'*'], isset($invoiceInfo) ? $invoiceInfo->student_id : null , ['class' => 'primary_select  form-control'. ($errors->has('student_id') ? ' is-invalid' : ''), 'id'=>'select_un_student',  isset($invoiceInfo) ? 'disabled' : '']) }}
 
                                                 
                                                 <div class="pull-right loader loader_style" id="select_un_student_loader">
@@ -277,7 +279,7 @@
 
                                         <div class="row mt-40">
                                             <div class="col-lg-12 text-center">
-                                                <button class="primary-btn fix-gr-bg submit fmInvoice" data-tooltip="tooltip" title="{{$tooltip}}">
+                                                <button type="submit" class="primary-btn fix-gr-bg submit fmInvoice" data-tooltip="tooltip" title="{{$tooltip}}">
                                                     <span class="ti-check"></span>
                                                     @if (isset($invoiceInfo))
                                                         @lang('common.update')
@@ -295,10 +297,11 @@
                     
 
                     <div class="col-lg-9">
+                        <div class="white-box">
                         <div class="row">
                             <div class="col-lg-4 no-gutters">
                                 <div class="main-title">
-                                    <h3 class="mb-0">@lang('fees.fees_type_list')</h3>
+                                    <h3 class="mb-15">@lang('fees.fees_type_list')</h3>
                                 </div>
                             </div>
                         </div>
@@ -306,7 +309,7 @@
 
                         <div class="row mt-15">
                             <div class="col-lg-12">
-                                <div class="white-box pb-0 fees_invoice_type_div">
+                                <div class="pb-0 fees_invoice_type_div">
                                     <div class="row">
                                         <div class="col-lg-12">
                                             <select class="primary_select  form-control{{ $errors->has('fees_type') ? ' is-invalid' : '' }}" id="selectFeesType" name="fees_type">
@@ -352,7 +355,7 @@
                                                 <th>@lang('common.sl')</th>
                                                 <th>@lang('fees.fees_type')</th>
                                                 <th>@lang('accounts.amount')</th>
-                                                <th>@lang('exam.waiver')</th>
+                                                <th>@lang('fees.waiver')</th>
                                                 <th>@lang('fees.sub_total')</th>
                                                 @if(!isset($invoiceInfo))
                                                     <th>@lang('fees.paid_amount')</th>
@@ -453,6 +456,7 @@
                                     </table>
                                 </div>
                             </div>
+                        </div>
                         </div>
                     </div>
                 </div>

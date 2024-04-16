@@ -5,7 +5,7 @@
 @endsection
 
 @section('mainContent')
-<section class="sms-breadcrumb mb-40 white-box">
+<section class="sms-breadcrumb mb-20">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('academics.assign_subject_create')</h1>
@@ -108,7 +108,7 @@
                                                 <select class="primary_select form-control subject" name="subjects[]">
                                                     <option data-display="@lang('common.select_subjects')" value="">@lang('common.select_subjects')</option>
                                                     @foreach($subjects as $subject)
-                                                    <option value="{{$subject->id}}" {{@$assign_subject->subject_id == $subject->id? 'selected': ''}}>{{@$subject->subject_name}}</option>
+                                                    <option value="{{$subject->id}}" {{@$assign_subject->subject_id == $subject->id? 'selected': ''}}>{{@$subject->subject_name}}({{@$subject->subject_code}})</option>
                                                     @endforeach
                                                 </select>
                                             </div>

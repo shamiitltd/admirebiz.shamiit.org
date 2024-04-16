@@ -17,7 +17,6 @@
   "sm_payment_gateway_settings",
   "sm_marks_grades",
   "sm_weekends",
-  "sm_header_menu_managers",
   "sm_pages",
   "sm_news_categories",
   "sm_events",
@@ -58,5 +57,7 @@
   "sm_registration_settings",
   "sm_student_certificates",
   "vimeo_settings",
-  "course_settings"
+  "course_settings",
+  "sm_notification_settings",
+  "plugins"
 ]

@@ -3,7 +3,7 @@
     @lang('homework.add_homework')
 @endsection
 @section('mainContent')
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('homework.add_homework')</h1>
@@ -16,22 +16,26 @@
         </div>
     </section>
     <section class="admin-visitor-area">
+        @if($errors->any())
+            {{ implode('', $errors->all('<div>:message</div>')) }}
+        @endif
         <div class="container-fluid p-0">
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="main-title">
-                        <h3 class="mb-30">@lang('homework.add_homework')</h3>
-                    </div>
-                </div>
-            </div>
             @if (userPermission('saveHomeworkData'))
                 {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'saveHomeworkData', 'method' => 'POST', 'enctype' => 'multipart/form-data']) }}
             @endif
             <div class="row">
                 <div class="col-lg-12">
                     <div class="white-box">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="main-title">
+                                    <h3 class="mb-15">@lang('homework.add_homework')</h3>
+                                </div>
+                            </div>
+                        </div>
                         <div class="">
                             <input type="hidden" name="url" id="url" value="{{ URL::to('/') }}">
+                            
                             @if (moduleStatusCheck('University'))
                                 <div class="row mb-30">
                                     @includeIf(
@@ -43,8 +47,7 @@
                                 <div class="row mb-15">
                                     <div class="col-lg-4">
                                         <div class="primary_input ">
-                                            <label class="primary_input_label" for="">@lang('common.class')<span
-                                                    class="text-danger"> *</span></label>
+                                            <label class="primary_input_label" for="">@lang('common.class')<span class="text-danger"> *</span></label>
                                             <select
                                                 class="primary_select  form-control{{ $errors->has('class_id') ? ' is-invalid' : '' }}"
                                                 name="class_id" id="classSelectStudentHomeWork">
@@ -65,13 +68,9 @@
                                     </div>
                                     <div class="col-lg-4">
                                         <div class="primary_input " id="subjectSelecttHomeworkDiv">
-                                            <label class="primary_input_label" for="">@lang('common.subject') <span
-                                                    class="text-danger"> *</span></label>
-                                            <select
-                                                class="primary_select  form-control{{ $errors->has('subject_id') ? ' is-invalid' : '' }}"
-                                                name="subject_id" id="subjectSelect">
-                                                <option data-display="@lang('common.select_subjects') *" value="">
-                                                    @lang('common.subject') *</option>
+                                            <label class="primary_input_label" for="">@lang('common.subject') <span class="text-danger"> *</span></label>
+                                            <select class="primary_select  form-control{{ $errors->has('subject_id') ? ' is-invalid' : '' }}" name="subject_id" id="subjectSelect">
+                                                <option data-display="@lang('common.select_subjects') *" value="">@lang('common.subject') *</option>
                                             </select>
                                             <div class="pull-right loader loader_style" id="select_subject_loader">
                                                 <img class="loader_img_style"
@@ -85,8 +84,7 @@
                                         </div>
                                     </div>
                                     <div class="col-lg-4" id="selectSectionsDiv">
-                                        <label for="checkbox" class="mb-2">@lang('common.section') <span class="text-danger">
-                                                *</span></label>
+                                        <label for="checkbox" class="mb-2">@lang('common.section') <span class="text-danger"> *</span></label>
                                         <select id="selectSectionss" name="section_id[]" multiple="multiple"
                                             class="multypol_check_select active position-relative form-control{{ $errors->has('section_id') ? ' is-invalid' : '' }}">
                                         </select>
@@ -98,8 +96,9 @@
                                     </div>
                                 </div>
                             @endif
+
                             <div class="row mb-15">
-                                <div class="col-lg-3">
+                                <div class="col-lg-4">
                                     <div class="primary_input mb-15">
                                         <label class="primary_input_label" for="">@lang('homework.home_work_date')
                                             <span class="text-danger"> *</span></label>
@@ -124,7 +123,7 @@
                                         <span class="text-danger">{{ $errors->first('homework_date') }}</span>
                                     </div>
                                 </div>
-                                <div class="col-lg-3">
+                                <div class="col-lg-4">
                                     <div class="primary_input mb-15">
                                         <label class="primary_input_label" for="">@lang('homework.submission_date')
                                             <span class="text-danger"> *</span></label>
@@ -149,7 +148,7 @@
                                         <span class="text-danger">{{ $errors->first('submission_date') }}</span>
                                     </div>
                                 </div>
-                                <div class="col-lg-3">
+                                <div class="col-lg-4">
                                     <div class="row no-gutters input-right-icon">
                                         <div class="col">
                                             <div class="primary_input ">
@@ -167,7 +166,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-3">
+                                <div class="col-lg-4">
                                     <div class="primary_input">
                                         <label class="primary_input_label" for="">@lang('homework.attach_file')</label>
                                         <div class="primary_file_uploader">
@@ -192,14 +191,10 @@
                             <div class="row md-20">
                                 <div class="col-lg-12">
                                     <div class="primary_input ">
-                                        <label class="primary_input_label d-flex" for="">@lang('common.description') <span
-                                                class="text-danger"> *</span>
-                                            @if (moduleStatusCheck('AiContent'))
-                                                @include('aicontent::inc.button')
-                                            @endif
-                                        </label>
+                                        <label class="primary_input_label" for="">@lang('common.description') <span
+                                                class="text-danger"> *</span> </label>
                                         <textarea
-                                            class="generated-text primary_input_field form-control{{ $errors->has('description') ? ' is-invalid' : '' }}"
+                                            class="primary_input_field form-control{{ $errors->has('description') ? ' is-invalid' : '' }}"
                                             cols="0" rows="4" name="description"
                                             id="description *">{{ old('description') }}</textarea>
                                         @if ($errors->has('description'))

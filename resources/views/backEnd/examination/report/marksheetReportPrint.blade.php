@@ -276,7 +276,6 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 20px;
         }
         .company_info {
             margin-left: 20px;
@@ -343,7 +342,7 @@
             padding: 30px 40px;
         }
         .company_info{
-            margin-left: 0px;
+            margin-left: 100px;
         }
         .company_info p{
             font-size: 14px;
@@ -461,7 +460,9 @@
                                     </div>
                                     <h2>
                                         <p class="text-white">@lang('exam.exam') : {{$examInfo->title}}</p>
-                                        <p class="text-white">@lang('exam.subject') : {{$subjectInfo->subject_name}}</p>
+                                        @if(isset($subjectInfo->subject_name))
+                                            <p class="text-white">@lang('exam.subject') : {{$subjectInfo->subject_name}}</p>
+                                        @endif
                                         @if(moduleStatusCheck('University'))
                                         <p class="text-white">@lang('university::un.semester') : {{$data['semester']}} - {{$data['semester_label']}} ({{$data['session']}})  </p>
                                         @else

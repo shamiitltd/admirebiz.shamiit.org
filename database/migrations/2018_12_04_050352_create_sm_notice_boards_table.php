@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -35,6 +36,49 @@ class CreateSmNoticeBoardsTable extends Migration
             $table->integer('academic_id')->nullable()->default(1)->unsigned();
             $table->foreign('academic_id')->references('id')->on('sm_academic_years')->onDelete('cascade');
         });
+
+        DB::table('sm_notice_boards')->insert([
+            [
+                'notice_title' => 'This is a sample notice 1',
+                'notice_message' => 'This a demo notice',
+                'notice_date' => date("Y-m-d"),
+                'publish_on' => date("Y-m-d"),
+                'inform_to' => "[1]",
+                'is_published' => 1,
+            ],
+            [
+                'notice_title' => 'This is another sample notice 2',
+                'notice_message' => 'This a demo notice',
+                'notice_date' => date("Y-m-d"),
+                'publish_on' => date("Y-m-d"),
+                'inform_to' => "[1]",
+                'is_published' => 1,
+            ],
+            [
+                'notice_title' => 'This is another sample notice 3',
+                'notice_message' => 'This a demo notice',
+                'notice_date' => date("Y-m-d"),
+                'publish_on' => date("Y-m-d"),
+                'inform_to' => "[1]",
+                'is_published' => 1,
+            ],
+            [
+                'notice_title' => 'This is another sample notice 4',
+                'notice_message' => 'This a demo notice',
+                'notice_date' => date("Y-m-d"),
+                'publish_on' => date("Y-m-d"),
+                'inform_to' => "[1]",
+                'is_published' => 1,
+            ],
+            [
+                'notice_title' => 'This is another sample notice 5',
+                'notice_message' => 'This a demo notice',
+                'notice_date' => date("Y-m-d"),
+                'publish_on' => date("Y-m-d"),
+                'inform_to' => "[1]",
+                'is_published' => 1,
+            ],
+        ]);
     }
 
     /**

@@ -11,7 +11,6 @@ use App\YearCheck;
 use App\SmFeesAssign;
 use App\SmFeesMaster;
 use App\ApiBaseMethod;
-use App\Http\Controllers\Admin\StudentInfo\SmStudentReportController;
 use App\SmFeesPayment;
 use App\SmClassRoutine;
 use App\SmAssignSubject;
@@ -22,6 +21,9 @@ use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Modules\University\Entities\UnAssignSubject;
+use Modules\University\Entities\UnFeesInstallmentAssign;
+use App\Http\Controllers\Admin\StudentInfo\SmStudentReportController;
 
 class SmAcademicsController extends Controller
 {
@@ -389,102 +391,187 @@ class SmAcademicsController extends Controller
             return redirect()->back();
         }
     }
+    function universityClassReport($request){
+            return $request;
+            $input = $request->all();
+            $validator = Validator::make($input, [
+                'un_semester_label_id' => 'required'
+            ]);
+    
+            if ($validator->fails()) {
+                if (ApiBaseMethod::checkUrl($request->fullUrl())) {
+                    return ApiBaseMethod::sendError('Validation Error.', $validator->errors());
+                }
+                return redirect()->back()
+                    ->withErrors($validator)
+                    ->withInput();
+            }
+    
+            try {
+    
+                if ($request->section != "") {
+                    $sectionInfo = SmSection::where('un_academic_id', getAcademicId())->where('id', $request->un_section_id)->where('school_id', Auth::user()->school_id)->first();
+                } else {
+                    $sectionInfo = '';
+                }
+                
+                $student_ids_from_record = SmStudentReportController::SemesterLabelSectionStudent($request);
+                $students = SmStudent::query()->whereIn('id', $student_ids_from_record)->where('school_id', auth()->user()->school_id);
+               
+                $students = $students->where('active_status', 1)->get();
+                $student_ids= $students->pluck('id')->toArray();
+    
+    
+                $assign_subjects = UnAssignSubject::query()->with('teacher');
+                   
+                $assign_subjects->where('un_semester_label_id', $request->un_semester_label_id);
+                $assign_subjects = $assign_subjects->get();
+    
+    
+    
+                $assign_class_teacher = [];
+                $fees_assigns = UnFeesInstallmentAssign::whereIn("student_id", $student_ids)->get();
+                // dd($fees_assigns);
+                $fees_master_ids=$fees_assigns->pluck('fees_master_id')->toArray();
+    
+                $fees_masters = SmFeesMaster::whereIn('id', $fees_master_ids)->pluck('fees_type_id')->toArray();
+    
+                $total_collection = SmFeesPayment::where('active_status',1)->where('academic_id', getAcademicId())->whereIn('student_id', $student_ids)->whereIn('fees_type_id', $fees_masters)->sum('amount');
+                $total_assign = 0;
+                $total_due = 0;
+                $applied_discount = 0;
+                foreach ($students as $student) {
+                    $fees_assigns = SmFeesAssign::where("student_id", $student->id)->get();
+                    $fees_dues_master_ids=[];
+                    foreach ($fees_assigns as $fees_assign) {
+                        $fees_master = SmFeesMaster::where('academic_id', getAcademicId())->where('id', $fees_assign->fees_master_id)->first();
+    
+    
+                        $due_date= strtotime($fees_assign->feesGroupMaster->date);
+                        $now =strtotime(date('Y-m-d'));
+                        if ($due_date > $now ) {
+                            continue;
+                        }
+                        $total_assign = $total_assign + $fees_master->amount;
+                        $total_due += $fees_assign->fees_amount;
+                        $fees_dues_master_ids[]=$fees_assign->fees_master_id;
+    
+                    }
+                    foreach ($fees_dues_master_ids as $key => $master) {
+                        $applied_discount+=SmFeesAssign::where('student_id',$student->id)->where('fees_master_id',$master)->sum('applied_discount');
+                    }
+                }
+                $section_id = $request->section;
+                $class_id = $request->class;
+    
+                return view('backEnd.reports.class_report', compact('total_due', 'students','applied_discount', 'assign_subjects', 'assign_class_teachers', 'total_collection', 'total_assign', 'sectionInfo', 'section_id','class_id'));
+            } catch (\Exception $e) {
+                dd($e);
+                Toastr::error('Operation Failed', 'Failed');
+                return redirect()->back();
+            }
+    }
 
     public function classReportSearch(Request $request)
     {
-        // return $request;
-        $input = $request->all();
-        $validator = Validator::make($input, [
-            'class' => 'required'
-        ]);
-
-        if ($validator->fails()) {
-            if (ApiBaseMethod::checkUrl($request->fullUrl())) {
-                return ApiBaseMethod::sendError('Validation Error.', $validator->errors());
+    if (moduleStatusCheck('University')) {
+        return $this->universityClassReport($request);
+    } else {
+            // return $request;
+            $input = $request->all();
+            $validator = Validator::make($input, [
+                'class' => 'required'
+            ]);
+    
+            if ($validator->fails()) {
+                if (ApiBaseMethod::checkUrl($request->fullUrl())) {
+                    return ApiBaseMethod::sendError('Validation Error.', $validator->errors());
+                }
+                return redirect()->back()
+                    ->withErrors($validator)
+                    ->withInput();
             }
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
-        }
-
-        try {
-            $search_class = SmClass::where('academic_id', getAcademicId())->where('id', $request->class)->where('school_id', Auth::user()->school_id)->first();
-
-            if ($request->section != "") {
-                $sectionInfo = SmSection::where('academic_id', getAcademicId())->where('id', $request->section)->where('school_id', Auth::user()->school_id)->first();
-            } else {
-                $sectionInfo = '';
-            }
-            
-            $student_ids_from_record = SmStudentReportController::classSectionStudent($request);
-            $students = SmStudent::query()->whereIn('id', $student_ids_from_record)->where('school_id', auth()->user()->school_id);
-           
-            $students = $students->where('active_status', 1)->get();
-            $student_ids= $students->pluck('id')->toArray();
-
-
-            $assign_subjects = SmAssignSubject::query()->with('teacher');
-
-            if ($request->section != "") {
-                $assign_subjects->where('section_id', $request->section);
-            }
-            $assign_subjects->where('class_id', $request->class);
-            $assign_subjects = $assign_subjects->get();
-
-
-
-            $assign_class_teacher = SmAssignClassTeacher::query();
-            $assign_class_teacher->where('academic_id', getAcademicId())->where('active_status', 1);
-            if ($request->section != "") {
-                $assign_class_teacher->where('section_id', $request->section);
-            }
-            $assign_class_teacher->where('class_id', $request->class);
-            $assign_class_teacher = $assign_class_teacher->first();
-
-
-            if ($assign_class_teacher != "") {
-                $assign_class_teachers = $assign_class_teacher->classTeachers->first();
-            } else {
-                $assign_class_teachers = '';
-            }
-            $fees_assigns = SmFeesAssign::whereIn("student_id", $student_ids)->get();
-            $fees_master_ids=$fees_assigns->pluck('fees_master_id')->toArray();
-
-            $fees_masters = SmFeesMaster::whereIn('id', $fees_master_ids)->pluck('fees_type_id')->toArray();
-
-            $total_collection = SmFeesPayment::where('active_status',1)->where('academic_id', getAcademicId())->whereIn('student_id', $student_ids)->whereIn('fees_type_id', $fees_masters)->sum('amount');
-            $total_assign = 0;
-            $total_due = 0;
-            $applied_discount = 0;
-            foreach ($students as $student) {
-                $fees_assigns = SmFeesAssign::where("student_id", $student->id)->get();
-                $fees_dues_master_ids=[];
-                foreach ($fees_assigns as $fees_assign) {
-                    $fees_master = SmFeesMaster::where('academic_id', getAcademicId())->where('id', $fees_assign->fees_master_id)->first();
-
-
-                    $due_date= strtotime($fees_assign->feesGroupMaster->date);
-                    $now =strtotime(date('Y-m-d'));
-                    if ($due_date > $now ) {
-                        continue;
+    
+            try {
+                $search_class = SmClass::where('academic_id', getAcademicId())->where('id', $request->class)->where('school_id', Auth::user()->school_id)->first();
+    
+                if ($request->section != "") {
+                    $sectionInfo = SmSection::where('academic_id', getAcademicId())->where('id', $request->section)->where('school_id', Auth::user()->school_id)->first();
+                } else {
+                    $sectionInfo = '';
+                }
+                
+                $student_ids_from_record = SmStudentReportController::classSectionStudent($request);
+                $students = SmStudent::query()->whereIn('id', $student_ids_from_record)->where('school_id', auth()->user()->school_id);
+               
+                $students = $students->where('active_status', 1)->get();
+                $student_ids= $students->pluck('id')->toArray();
+    
+    
+                $assign_subjects = SmAssignSubject::query()->with('teacher');
+    
+                if ($request->section != "") {
+                    $assign_subjects->where('section_id', $request->section);
+                }
+                $assign_subjects->where('class_id', $request->class);
+                $assign_subjects = $assign_subjects->get();
+    
+    
+    
+                $assign_class_teacher = SmAssignClassTeacher::query();
+                $assign_class_teacher->where('academic_id', getAcademicId())->where('active_status', 1);
+                if ($request->section != "") {
+                    $assign_class_teacher->where('section_id', $request->section);
+                }
+                $assign_class_teacher->where('class_id', $request->class);
+                $assign_class_teacher = $assign_class_teacher->first();
+    
+    
+                if ($assign_class_teacher != "") {
+                    $assign_class_teachers = $assign_class_teacher->classTeachers->first();
+                } else {
+                    $assign_class_teachers = '';
+                }
+                $fees_assigns = SmFeesAssign::whereIn("student_id", $student_ids)->get();
+                $fees_master_ids=$fees_assigns->pluck('fees_master_id')->toArray();
+    
+                $fees_masters = SmFeesMaster::whereIn('id', $fees_master_ids)->pluck('fees_type_id')->toArray();
+    
+                $total_collection = SmFeesPayment::where('active_status',1)->where('academic_id', getAcademicId())->whereIn('student_id', $student_ids)->whereIn('fees_type_id', $fees_masters)->sum('amount');
+                $total_assign = 0;
+                $total_due = 0;
+                $applied_discount = 0;
+                foreach ($students as $student) {
+                    $fees_assigns = SmFeesAssign::where("student_id", $student->id)->get();
+                    $fees_dues_master_ids=[];
+                    foreach ($fees_assigns as $fees_assign) {
+                        $fees_master = SmFeesMaster::where('academic_id', getAcademicId())->where('id', $fees_assign->fees_master_id)->first();
+    
+    
+                        $due_date= strtotime($fees_assign->feesGroupMaster->date);
+                        $now =strtotime(date('Y-m-d'));
+                        if ($due_date > $now ) {
+                            continue;
+                        }
+                        $total_assign = $total_assign + $fees_master->amount;
+                        $total_due += $fees_assign->fees_amount;
+                        $fees_dues_master_ids[]=$fees_assign->fees_master_id;
+    
                     }
-                    $total_assign = $total_assign + $fees_master->amount;
-                    $total_due += $fees_assign->fees_amount;
-                    $fees_dues_master_ids[]=$fees_assign->fees_master_id;
-
+                    foreach ($fees_dues_master_ids as $key => $master) {
+                        $applied_discount+=SmFeesAssign::where('student_id',$student->id)->where('fees_master_id',$master)->sum('applied_discount');
+                    }
                 }
-                foreach ($fees_dues_master_ids as $key => $master) {
-                    $applied_discount+=SmFeesAssign::where('student_id',$student->id)->where('fees_master_id',$master)->sum('applied_discount');
-                }
+                $classes = SmClass::where('academic_id', getAcademicId())->where('active_status', 1)->where('school_id', Auth::user()->school_id)->get();
+                $section_id = $request->section;
+                $class_id = $request->class;
+    
+                return view('backEnd.reports.class_report', compact('total_due','classes', 'students','applied_discount', 'assign_subjects', 'assign_class_teachers', 'total_collection', 'total_assign', 'search_class', 'sectionInfo', 'section_id','class_id'));
+            } catch (\Exception $e) {
+                Toastr::error('Operation Failed', 'Failed');
+                return redirect()->back();
             }
-            $classes = SmClass::where('academic_id', getAcademicId())->where('active_status', 1)->where('school_id', Auth::user()->school_id)->get();
-            $section_id = $request->section;
-            $class_id = $request->class;
-
-            return view('backEnd.reports.class_report', compact('total_due','classes', 'students','applied_discount', 'assign_subjects', 'assign_class_teachers', 'total_collection', 'total_assign', 'search_class', 'sectionInfo', 'section_id','class_id'));
-        } catch (\Exception $e) {
-            Toastr::error('Operation Failed', 'Failed');
-            return redirect()->back();
-        }
+    }
+    
     }
 }

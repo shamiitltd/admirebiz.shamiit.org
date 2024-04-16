@@ -8,7 +8,7 @@
             <div class="row justify-content-center">
                 <div class="col-12">
                     <div class="chat_main_wrapper">
-                        <div class="chat_flow_list_wrapper ">
+                        <div class="chat_flow_list_wrapper white-box mb-3">
                             <div class="box_header">
                                 <div class="main-title">
                                     <h3 class="m-0">@lang('chat::chat.chat_list')</h3>
@@ -32,14 +32,14 @@
                             <!--/ chat_list  -->
                         </div>
 
-                        <div class="chat_flow_list_wrapper ">
+                        <div class="chat_flow_list_wrapper white-box mb-3">
                             <div class="box_header">
                                 <div class="main-title">
                                     <h3 class="m-0">@lang('chat::chat.list')</h3>
                                 </div>
                             </div>
                             <!-- chat_list  -->
-                            <div class="chat_flow_list crm_full_height">
+                            <div class="chat_flow_list crm_full_height ">
                                 <div class="chat_flow_list_inner">
                                     <ul>
                                         @forelse($users as $user)

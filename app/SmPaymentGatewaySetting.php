@@ -8,14 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class SmPaymentGatewaySetting extends Model
 {
     use HasFactory;
-
-    protected $casts = [
-        'school_id' => 'integer',
-        'active_status' => 'integer',
-        'created_by' => 'integer',
-        'updated_by' => 'integer',
-    ];
-
     public static function getStripeDetails()
     {
 

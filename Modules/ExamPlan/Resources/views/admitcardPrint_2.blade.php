@@ -138,12 +138,12 @@
                         </td>
                     </tr>
                 </table>
-                <div class="profile flex items-center justify-center border">
-                    @if($setting->student_photo)
-                        <img src="{{asset(@$admitcard->studentRecord->studentDetail->student_photo != '' ? @$admitcard->studentRecord->studentDetail->student_photo : 'public/uploads/staff/demo/staff.jpg')}}"
-                             alt="{{asset(@$admitcard->studentRecord->studentDetail->full_name)}}">
-                    @endif
-                </div>
+                @if($setting->student_photo)
+                    <div class="profile flex items-center justify-center border">
+                            <img src="{{asset(@$admitcard->studentRecord->studentDetail->student_photo != '' ? @$admitcard->studentRecord->studentDetail->student_photo : 'public/uploads/staff/demo/staff.jpg')}}"
+                                    alt="{{asset(@$admitcard->studentRecord->studentDetail->full_name)}}">
+                    </div>
+                @endif
             </div>
             <div class="h-10"></div>
             @if(@$setting->description)

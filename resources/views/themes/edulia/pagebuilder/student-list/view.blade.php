@@ -23,10 +23,13 @@
                 search: "<i class='far fa-search datatable-search'></i>",
             },
         });
-        $('.individual_result_datatable .dataTables_length label select').niceSelect('destroy');
-        $(".individual_result_datatable .dataTables_length label select").select2({
-            minimumResultsForSearch: Infinity
-        });
+
+        if($('.individual_result_datatable .dataTables_length label select').length > 0){
+            $('.individual_result_datatable .dataTables_length label select').niceSelect('destroy');
+            $(".individual_result_datatable .dataTables_length label select").select2({
+                minimumResultsForSearch: Infinity
+            });
+        }
     </script>
     <script>
         $(document).ready(function() {
@@ -119,7 +122,7 @@
                                 });
                             } else {
                                 $("#section_selector_div .current").html(
-                                    "SELECT CLASS *");
+                                    "SELECT SECTION *");
                                 $("#section_selector").find("option").not(":first")
                                     .remove();
                                 $("#section_selector_div ul").find("li").not(":first")

@@ -82,10 +82,13 @@
         .video-action-btns ul li a:hover i {
             transform: scale(1.2)
         }
+        div#showDetaildModalBody iframe {
+            width: 100%;
+        }
     </style>
 @endpush
 @section('mainContent')
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('downloadCenter.video') </h1>
@@ -101,22 +104,22 @@
         <div class="container-fluid p-0">
             @if (auth()->user()->role_id != 2)
                 <div class="row">
-                    <div class="col-lg-8 col-md-6 col-sm-6">
-                        <div class="main-title mt_0_sm mt_0_md">
-                            <h3 class="mb-30">@lang('common.search')</h3>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 text-md-right col-md-6 mb-30-lg col-6 text-right">
-                        <button class="primary-btn-small-input primary-btn small fix-gr-bg" type="button"
-                            data-toggle="modal" data-target="#addVideo">
-                            <span class="ti-plus pr-2"></span>
-                            @lang('common.add')
-                        </button>
-                    </div>
-                </div>
-                <div class="row">
                     <div class="col-lg-12">
                         <div class="white-box filter_card">
+                            <div class="row">
+                                <div class="col-lg-8 col-md-6 col-sm-6 col-6">
+                                    <div class="main-title mt_0_sm mt_0_md">
+                                        <h3 class="mb-15">@lang('common.search')</h3>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 text-md-right col-md-6 mb-30-lg col-6 text-right">
+                                    <button class="primary-btn-small-input primary-btn small fix-gr-bg" type="button"
+                                        data-toggle="modal" data-target="#addVideo">
+                                        <span class="ti-plus pr-2"></span>
+                                        @lang('common.add')
+                                    </button>
+                                </div>
+                            </div>
                             {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'download-center.video-list-search', 'method' => 'GET', 'enctype' => 'multipart/form-data']) }}
                             <div class="row">
                                 @include('backEnd.common.class_section_subject', [
@@ -149,14 +152,14 @@
             <div class="row mt-40">
                 <div class="col-lg-12">
                     <div class="row">
-                        <div class="col-lg-4 no-gutters">
-                            <div class="main-title">
-                                <h3 class="mb-2">@lang('downloadCenter.video_list')</h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
                         <div class="col-lg-12 white-box mt-10">
+                            <div class="row">
+                                <div class="col-lg-4 no-gutters">
+                                    <div class="main-title">
+                                        <h3 class="mb-15">@lang('downloadCenter.video_list')</h3>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="row vidoe-list">
                                 @foreach ($videos as $video)
                                     @php
@@ -305,13 +308,9 @@
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <div class="primary_input">
-                                            <label class="primary_input_label d-flex"
-                                                for="">@lang('downloadCenter.description')<span></span>
-                                                @if (moduleStatusCheck('AiContent'))
-                                                    @include('aicontent::inc.button')
-                                                @endif
-                                            </label>
-                                            <textarea class="generated-text primary_input_field form-control" cols="0" rows="3"
+                                            <label class="primary_input_label"
+                                                for="">@lang('downloadCenter.description')<span></span> </label>
+                                            <textarea class="primary_input_field form-control" cols="0" rows="3"
                                                 name="description" id="description"></textarea>
                                         </div>
                                     </div>

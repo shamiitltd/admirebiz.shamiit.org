@@ -10,7 +10,7 @@
     <style>
         .user_id_card_header {
             padding: 10px;
-            background: #c738d8;
+            background: var(--primary-color);
         }
 
         .user_id_card_header h4 {
@@ -44,7 +44,7 @@
     </style>
 @endpush
 @section('mainContent')
-    <section class="sms-breadcrumb mb-40 white-box up_breadcrumb">
+    <section class="sms-breadcrumb mb-20 up_breadcrumb">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>

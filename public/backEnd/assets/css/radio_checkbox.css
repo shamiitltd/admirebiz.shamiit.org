@@ -44,7 +44,7 @@
     font-weight: 600;
     color: #fff;
     border: none;
-    background: linear-gradient(90deg, #7C32FF 0.47%, #C738D8 100%);
+    background: var(--primary-color);
     box-shadow: 0px 5px 10px rgba(108, 39, 255, 0.25);
     transition: 0.3s;
     display: none;

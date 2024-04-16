@@ -25,7 +25,7 @@ class SmHeaderMenuManagerController extends Controller
                 $courseCategories = SmCourseCategory::where('school_id', app('school')->id)->get();
                 $news = SmNews::where('school_id', app('school')->id)->get();
                 $news_categories = SmNewsCategory::where('school_id', app('school')->id)->get();
-                $menus = SmHeaderMenuManager::where('school_id', app('school')->id)->where('parent_id', null)->orderBy('position')->get();
+                $menus = SmHeaderMenuManager::with('childs')->where('school_id', app('school')->id)->where('theme', 'default')->where('parent_id', null)->orderBy('position')->get();
                 return view('backEnd.frontSettings.headerMenuManager', compact('pages', 'static_pages', 'courses', 'courseCategories', 'news_categories', 'news', 'menus'));
             }else{
                 $themeMenuManage = new ThemeBasedMenuManagerController();
@@ -262,7 +262,7 @@ class SmHeaderMenuManagerController extends Controller
             $courseCategories = SmCourseCategory::where('school_id', app('school')->id)->get();
             $news = SmNews::where('school_id', app('school')->id)->get();
             $news_categories = SmNewsCategory::where('school_id', app('school')->id)->get();
-            $menus = SmHeaderMenuManager::where('parent_id', null)->where('school_id', app('school')->id)->orderBy('position')->get();
+            $menus = SmHeaderMenuManager::with('childs')->where('parent_id', null)->where('school_id', app('school')->id)->where('theme', 'default')->orderBy('position')->get();
             return view('backEnd.frontSettings.headerSubmenuList', compact('pages', 'static_pages', 'courses', 'courseCategories', 'news_categories', 'news', 'menus'));
         }else{
             $themeMenuManage = new ThemeBasedMenuManagerController();

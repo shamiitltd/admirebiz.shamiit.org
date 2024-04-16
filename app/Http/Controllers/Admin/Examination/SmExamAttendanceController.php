@@ -130,7 +130,7 @@ class SmExamAttendanceController extends Controller
                     'students',
                     'exam_attendance_childs',
                     'subject_id',
-                    'new_students',
+
                     'exam_id',
                     'un_session',
                     'un_faculty',
@@ -178,7 +178,13 @@ class SmExamAttendanceController extends Controller
                     return redirect('exam-attendance-create');
                 }
 
-                $exam_attendance = SmExamAttendance::where('exam_id', $request->exam)
+                $exam = SmExam::where('exam_type_id', $request->exam)
+                    ->where('class_id', $request->class)
+                    ->where('section_id', $request->section)
+                    ->where('subject_id', $request->subject)
+                    ->first();
+
+                $exam_attendance = SmExamAttendance::where('exam_id', $exam->id)
                     ->when($request->class, function ($q) use ($request) {
                         $q->where('class_id', $request->class);
                     })
@@ -346,6 +352,7 @@ class SmExamAttendanceController extends Controller
             return redirect('exam-attendance-create');
         } catch (\Exception $e) {
             DB::rollback();
+            dd($e);
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();
         }

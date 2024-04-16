@@ -3,7 +3,7 @@
     @lang('student.student_list')
 @endsection
 @section('mainContent')
-    <section class="sms-breadcrumb mb-40 up_breadcrumb white-box">
+    <section class="sms-breadcrumb mb-20 up_breadcrumb">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>{{@$pt}}</h1>
@@ -24,40 +24,42 @@
             {{-- @if (@$students) --}}
             <div class="row mt-40 full_wide_table">
                 <div class="col-lg-12">
-                    <div class="row">
-                        <div class="col-lg-4 no-gutters">
-                            
+                    <div class="white-box">
+                        <div class="row">
+                            <div class="col-lg-4 no-gutters">
+                                
+                            </div>
                         </div>
-                    </div>
-                    <div class="row  ">
-                        <div class="col-lg-12">
-                            <x-table>
-                                <table id="table_id" class="table data-table" cellspacing="0" width="100%">
-                                    <thead>
-                                    <tr>
-                                        <th>@lang('student.admission_no')</th>                                 
-                                        <th>@lang('student.name')</th>    
-                                        @if(!moduleStatusCheck('University') && generalSetting()->with_guardian)                               
-                                            <th>@lang('student.father_name')</th>
-                                        @endif
-                                        <th>@lang('student.date_of_birth')</th>
-                                        @if(moduleStatusCheck('University'))
-                                            <th>@lang('university::un.semester_label')</th>
-                                            <th>@lang('student.fac_dept')</th>
-                                        @else
-                                            <th>@lang('student.class_sec')</th>   
-                                        @endif
-                                    
-                                        <th>@lang('common.gender')</th>
-                                        <th>@lang('common.type')</th>
-                                        <th>@lang('common.phone')</th>
-                                        <th>@lang('common.actions')</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
-                            </x-table>
+                        <div class="row mt-40">
+                            <div class="col-lg-12">
+                                <x-table>
+                                    <table id="table_id" class="table data-table" cellspacing="0" width="100%">
+                                        <thead>
+                                        <tr>
+                                            <th>@lang('student.admission_no')</th>                                 
+                                            <th>@lang('student.name')</th>    
+                                            @if(!moduleStatusCheck('University') && generalSetting()->with_guardian)                               
+                                                <th>@lang('student.father_name')</th>
+                                            @endif
+                                            <th>@lang('student.date_of_birth')</th>
+                                            @if(moduleStatusCheck('University'))
+                                                <th>@lang('university::un.semester_label')</th>
+                                                <th>@lang('student.fac_dept')</th>
+                                            @else
+                                                <th>@lang('student.class_sec')</th>   
+                                            @endif
+                                        
+                                            <th>@lang('common.gender')</th>
+                                            <th>@lang('common.type')</th>
+                                            <th>@lang('common.phone')</th>
+                                            <th>@lang('common.actions')</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </x-table>
+                            </div>
                         </div>
                     </div>
                 </div>

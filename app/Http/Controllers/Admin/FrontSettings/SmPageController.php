@@ -21,13 +21,8 @@ class SmPageController extends Controller
     public function index()
     {
         try {
-            if(activeTheme() == "edulia"){
-                return redirect()->route('pagebuilder');
-            }else{
-                $pages = SmPage::where('school_id', app('school')->id)->where('is_dynamic', 1)->get();
-                return view('backEnd.frontSettings.pageList', compact('pages'));
-            }
-            
+            $pages = SmPage::where('school_id', app('school')->id)->where('is_dynamic', 1)->get();
+            return view('backEnd.frontSettings.pageList', compact('pages'));
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();

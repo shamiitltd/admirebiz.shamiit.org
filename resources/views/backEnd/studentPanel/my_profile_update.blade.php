@@ -669,7 +669,7 @@
                                                         src="{{ asset($student->parents->fathers_photo) }}"
                                                         alt="{{ $student->parents->fathers_name }}">
                                                     <div class="white-box radius-t-y-0">
-                                                        <div class="single-meta mt-10">
+                                                        <div class="single-meta mt-50">
                                                             <div class="d-flex justify-content-between">
                                                                 <div class="name">
                                                                     @lang('student.full_name')

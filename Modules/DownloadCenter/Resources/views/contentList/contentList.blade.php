@@ -43,8 +43,8 @@
 
         .common-checkbox.video-list~label::before,
         .common-checkbox.video-list~label::after {
-            top: 21px !important;
-            left: -20px !important;
+            top: 10px !important;
+            left: -26px !important;
         }
 
         .common-checkbox~label::before,
@@ -77,10 +77,17 @@
         li.attached-content-item:hover {
             background-color: #f5f4f4bf;
         }
+
+        .content-table tbody tr td:first-child {
+            padding-left: 60px!important;
+        }
+        .content-table tbody tr td label{
+            margin-top: 7px;
+        }
     </style>
 @endpush
 @section('mainContent')
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('downloadCenter.content') </h1>
@@ -95,15 +102,15 @@
     <section class="admin-visitor-area up_st_admin_visitor">
         <div class="container-fluid p-0">
             <div class="row">
-                <div class="col-lg-8 col-md-6 col-sm-6">
-                    <div class="main-title mt_0_sm mt_0_md">
-                        <h3 class="mb-30">@lang('common.search')</h3>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
                 <div class="col-lg-12">
                     <div class="white-box filter_card">
+                        <div class="row">
+                            <div class="col-lg-8 col-md-6 col-sm-6">
+                                <div class="main-title mt_0_sm mt_0_md">
+                                    <h3 class="mb-15">@lang('common.search')</h3>
+                                </div>
+                            </div>
+                        </div>
                         {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'download-center.content-list-search', 'method' => 'GET', 'enctype' => 'multipart/form-data']) }}
                         <div class="col-lg-12">
                             <div class="primary_input sm_mb_20 ">
@@ -132,19 +139,9 @@
                 </div>
             </div>
             <div class="row mt-40">
-                <div class="col-lg-3">
+                <div class="col-lg-4 col-xl-3">
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="main-title">
-                                <h3 class="mb-30">
-                                    @if (isset($editContent))
-                                        @lang('downloadCenter.edit_content')
-                                    @else
-                                        @lang('downloadCenter.add_content')
-                                    @endif
-
-                                </h3>
-                            </div>
                             @if (isset($editContent))
                                 {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'download-center.content-list-update', 'method' => 'POST', 'enctype' => 'multipart/form-data']) }}
                                 <input type="hidden" name="content_id" value="{{ @$editContent->id }}">
@@ -152,6 +149,16 @@
                                 {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'download-center.content-list-save', 'method' => 'POST', 'enctype' => 'multipart/form-data']) }}
                             @endif
                             <div class="white-box">
+                                <div class="main-title">
+                                    <h3 class="mb-15">
+                                        @if (isset($editContent))
+                                            @lang('downloadCenter.edit_content')
+                                        @else
+                                            @lang('downloadCenter.add_content')
+                                        @endif
+    
+                                    </h3>
+                                </div>
                                 <div class="add-visitor">
                                     @if (isset($editContent))
                                         <div class="row no-gutters input-right-icon mb-20">
@@ -273,106 +280,108 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-9">
-                    <div class="row">
-                        <div class="col-lg-4 no-gutters">
-                            <div class="main-title">
-                                <h3 class="mb-0">@lang('downloadCenter.content_list')</h3>
+                <div class="col-lg-8 col-xl-9">
+                    <div class="white-box">
+                        <div class="row">
+                            <div class="col-lg-4 no-gutters">
+                                <div class="main-title">
+                                    <h3 class="mb-15">@lang('downloadCenter.content_list')</h3>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <a class="primary-btn fix-gr-bg submit mt-30 shareContentData" id="shareContentModal"
-                                href="#">@lang('downloadCenter.share')</a>
-                            <a class="primary-btn fix-gr-bg submit mt-30 shareContentData" id="generateUrlModal"
-                                href="#">@lang('downloadCenter.generate_url')</a>
-                            <x-table>
-                                <table id="table_id" class="table Crm_table_active3" cellspacing="0" width="100%">
-                                    <thead>
-                                        <tr>
-                                            <th>@lang('downloadCenter.sl')</th>
-                                            <th>@lang('downloadCenter.document')</th>
-                                            <th>@lang('downloadCenter.content_type')</th>
-                                            <th>@lang('downloadCenter.size')</th>
-                                            <th>@lang('downloadCenter.uploaded_by')</th>
-                                            <th>@lang('downloadCenter.created_on')</th>
-                                            <th>@lang('downloadCenter.action')</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (@$contents as $key => $content)
-                                            @php
-                                                $fileSize = '';
-                                                $dataUnit = '';
-                                                if ($content->file_size < 1000000) {
-                                                    $fileSize = $content->file_size / 1000;
-                                                    $dataUnit = 'KB';
-                                                } else {
-                                                    $fileSize = $content->file_size / 1000000;
-                                                    $dataUnit = 'MB';
-                                                }
-                                            @endphp
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <a class="primary-btn fix-gr-bg submit mt-0 shareContentData" id="shareContentModal"
+                                    href="#">@lang('downloadCenter.share')</a>
+                                <a class="primary-btn fix-gr-bg submit mt-0 shareContentData" id="generateUrlModal"
+                                    href="#">@lang('downloadCenter.generate_url')</a>
+                                <x-table>
+                                    <table id="table_id" class="table Crm_table_active3 content-table" cellspacing="0" width="100%">
+                                        <thead>
                                             <tr>
-                                                <td>
-                                                    <input type="checkbox" id="content{{ $content->id }}"
-                                                        class="common-checkbox video-list contentDataCheckbox"
-                                                        data-name="{{ $content->file_name }}"
-                                                        name="content[]" value="{{ $content->id }}">
-                                                    <label for="content{{ $content->id }}"></label>
-                                                    {{ $key + 1 }}
-                                                </td>
-                                                <td>{{ $content->file_name }}</td>
-                                                <td>{{ $content->contentType->name }}</td>
-                                                <td>{{ number_format($fileSize, 2, '.', ',') }} {{ $dataUnit }}</td>
-                                                <td>{{ $content->user->full_name }}</td>
-                                                <td>{{ $content->created_at }}</td>
-                                                <td>
-                                                    <x-drop-down>
-                                                        <a class="dropdown-item"
-                                                            href="{{ route('download-center.content-list-edit', $content->id) }}">@lang('common.edit')</a>
-                                                        <a class="dropdown-item" data-toggle="modal"
-                                                            data-target="#deleteContentModal{{ @$content->id }}"
-                                                            href="#">@lang('common.delete')</a>
-                                                    </x-drop-down>
-                                                </td>
+                                                <th>@lang('downloadCenter.sl')</th>
+                                                <th>@lang('downloadCenter.document')</th>
+                                                <th>@lang('downloadCenter.content_type')</th>
+                                                <th>@lang('downloadCenter.size')</th>
+                                                <th>@lang('downloadCenter.uploaded_by')</th>
+                                                <th>@lang('downloadCenter.created_on')</th>
+                                                <th>@lang('downloadCenter.action')</th>
                                             </tr>
-                                            <div class="modal fade admin-query"
-                                                id="deleteContentModal{{ @$content->id }}">
-                                                <div class="modal-dialog modal-dialog-centered">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h4 class="modal-title">
-                                                                @lang('downloadCenter.delete_content')
-                                                            </h4>
-                                                            <button type="button" class="close" data-dismiss="modal">
-                                                                &times;
-                                                            </button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <div class="text-center">
-                                                                <h4>@lang('common.are_you_sure_to_delete')</h4>
-                                                            </div>
-                                                            <div class="mt-40 d-flex justify-content-between">
-                                                                <button type="button" class="primary-btn tr-bg"
-                                                                    data-dismiss="modal">
-                                                                    @lang('common.cancel')
+                                        </thead>
+                                        <tbody>
+                                            @foreach (@$contents as $key => $content)
+                                                @php
+                                                    $fileSize = '';
+                                                    $dataUnit = '';
+                                                    if ($content->file_size < 1000000) {
+                                                        $fileSize = $content->file_size / 1000;
+                                                        $dataUnit = 'KB';
+                                                    } else {
+                                                        $fileSize = $content->file_size / 1000000;
+                                                        $dataUnit = 'MB';
+                                                    }
+                                                @endphp
+                                                <tr>
+                                                    <td>
+                                                        <input type="checkbox" id="content{{ $content->id }}"
+                                                            class="common-checkbox video-list contentDataCheckbox"
+                                                            data-name="{{ $content->file_name }}"
+                                                            name="content[]" value="{{ $content->id }}">
+                                                        <label for="content{{ $content->id }}"></label>
+                                                        {{ $key + 1 }}
+                                                    </td>
+                                                    <td class="text-break">{{ $content->file_name }}</td>
+                                                    <td>{{ $content->contentType->name }}</td>
+                                                    <td>{{ number_format($fileSize, 2, '.', ',') }} {{ $dataUnit }}</td>
+                                                    <td>{{ $content->user->full_name }}</td>
+                                                    <td>{{ $content->created_at }}</td>
+                                                    <td>
+                                                        <x-drop-down>
+                                                            <a class="dropdown-item"
+                                                                href="{{ route('download-center.content-list-edit', $content->id) }}">@lang('common.edit')</a>
+                                                            <a class="dropdown-item" data-toggle="modal"
+                                                                data-target="#deleteContentModal{{ @$content->id }}"
+                                                                href="#">@lang('common.delete')</a>
+                                                        </x-drop-down>
+                                                    </td>
+                                                </tr>
+                                                <div class="modal fade admin-query"
+                                                    id="deleteContentModal{{ @$content->id }}">
+                                                    <div class="modal-dialog modal-dialog-centered">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h4 class="modal-title">
+                                                                    @lang('downloadCenter.delete_content')
+                                                                </h4>
+                                                                <button type="button" class="close" data-dismiss="modal">
+                                                                    &times;
                                                                 </button>
-                                                                <a href="{{ route('download-center.content-list-delete', [@$content->id]) }}"
-                                                                    class="text-light">
-                                                                    <button class="primary-btn fix-gr-bg" type="submit">
-                                                                        @lang('common.delete')
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <div class="text-center">
+                                                                    <h4>@lang('common.are_you_sure_to_delete')</h4>
+                                                                </div>
+                                                                <div class="mt-40 d-flex justify-content-between">
+                                                                    <button type="button" class="primary-btn tr-bg"
+                                                                        data-dismiss="modal">
+                                                                        @lang('common.cancel')
                                                                     </button>
-                                                                </a>
+                                                                    <a href="{{ route('download-center.content-list-delete', [@$content->id]) }}"
+                                                                        class="text-light">
+                                                                        <button class="primary-btn fix-gr-bg" type="submit">
+                                                                            @lang('common.delete')
+                                                                        </button>
+                                                                    </a>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </x-table>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </x-table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -500,7 +509,11 @@
                                             <li class="nav-item">
                                                 <a class="nav-link" selectTab="C" href="#class_section_video"
                                                     role="tab" data-toggle="tab">
-                                                    @lang('common.class')
+                                                   @if (moduleStatusCheck('University'))
+                                                   @lang('university::un.semester')
+                                                    @else 
+                                                       @lang('common.class')
+                                                   @endif 
                                                 </a>
                                             </li>
                                         </ul>
@@ -578,6 +591,11 @@
                                             <div role="tabpanel" class="tab-pane fade mt-2" id="class_section_video">
                                                 <div class="white-box">
                                                     <div class="row mb-35">
+                                                        @if (moduleStatusCheck('University'))
+                                                           <div class="col-lg-12">
+                                                            @includeIf('university::common.session_faculty_depart_academic_semester_level',['required' => ['USN','UF', 'UD', 'US', 'USL'] , 'hide' => ['USUB','UA'],'row' => 1, 'div' => 'col-lg-12', 'mt' =>'mt-0'])
+                                                           </div>
+                                                        @else 
                                                         <div class="col-lg-12">
                                                             <select
                                                                 class="primary_select  form-control{{ $errors->has('class_id') ? ' is-invalid' : '' }}"
@@ -605,6 +623,7 @@
                                                                 id="selectMultiSections" name="section_ids[]"
                                                                 style="width:300px"></select>
                                                         </div>
+                                                        @endif 
                                                     </div>
                                                 </div>
                                                 <span class="text-danger" id="classError">
@@ -618,7 +637,7 @@
                                 <div class="d-flex justify-content-between">
                                     <button type="button" class="primary-btn tr-bg"
                                         data-dismiss="modal">@lang('downloadCenter.cancel')</button>
-                                    <button class="primary-btn fix-gr-bg submit" id="save_button_query"
+                                    <button class="primary-btn fix-gr-bg submit" id="save_button_qu"
                                         type="submit">@lang('downloadCenter.share')</button>
                                 </div>
                             </div>
@@ -722,7 +741,7 @@
                                 <div class="d-flex justify-content-between">
                                     <button type="button" class="primary-btn tr-bg"
                                         data-dismiss="modal">@lang('downloadCenter.cancel')</button>
-                                    <button class="primary-btn fix-gr-bg submit" id="save_button_query"
+                                    <button class="primary-btn fix-gr-bg submit" id="save_button_q"
                                         type="submit">@lang('downloadCenter.share')</button>
                                 </div>
                             </div>
@@ -863,12 +882,14 @@
             const submit_url = shareContent.attr('action');
             const method = shareContent.attr('method');
             const formData = new FormData(shareContent[0]);
+            let submitButton = $('#save_button_qu');
+            submitButton.prop('disabled', false);
+
             $.ajax({
                 url: submit_url,
                 type: method,
                 data: formData,
                 contentType: false,
-                cache: false,
                 processData: false,
                 dataType: 'JSON',
                 success: function(response) {
@@ -884,6 +905,7 @@
                     $('#groupError').html(xhr.responseJSON.errors.role);
                     $('#individualError').html(xhr.responseJSON.errors.role_id);
                     $('#classError').html(xhr.responseJSON.errors.class_id);
+                    submitButton.prop('disabled', false);
                 }
             });
         });
@@ -891,10 +913,18 @@
     <script>
         $(document).on('submit', '#generate-url-form', function(e) {
             e.preventDefault();
+            $('#generateTitleError').html('');
+            $('#generateValidUptoError').html('');
+
+            let submitButton = $('#save_button_q');
+
+            submitButton.prop('disabled', false);
+
             let shareContent = $(this);
             const submit_url = shareContent.attr('action');
             const method = shareContent.attr('method');
             const formData = new FormData(shareContent[0]);
+
             $.ajax({
                 url: submit_url,
                 type: method,
@@ -913,6 +943,9 @@
                     console.log(xhr.responseJSON.errors.title);
                     $('#generateTitleError').html(xhr.responseJSON.errors.title);
                     $('#generateValidUptoError').html(xhr.responseJSON.errors.validUpto);
+
+                    // Enable the submit button on error
+                    submitButton.prop('disabled', false);
                 }
             });
         });

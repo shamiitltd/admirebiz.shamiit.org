@@ -27,12 +27,14 @@
 @include('backEnd.partials.multi_select_js')
 @push('script')
     <script src="{{ asset('public/backEnd/') }}/full_calendar/js/index.global.min.js"></script>
-    <script  type="module">
+    <script>
         document.addEventListener('DOMContentLoaded', function() {
             var calendarEl = document.getElementById('academicCalendar');
             var eventsData = @json($events);
             var system_url = $('#system_url').val();
-
+            @php
+                $is_alumni = App\GlobalVariable::isAlumni();
+            @endphp
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 headerToolbar: {
                     left: 'prevYear,prev,next,nextYear today',
@@ -41,8 +43,7 @@
                 },
                 initialDate: '{{ \Carbon\Carbon::now()->format('Y-m-d') }}',
                 navLinks: true, // can click day/week names to navigate views
-                locale: '{{userLanguage() ?? "en"}}',
-                @if (userPermission('event-store'))
+                @if (userPermission('event-store') && auth()->user()->role_id != $is_alumni)
                     editable: true,
                     selectable: true,
                 @endif
@@ -52,41 +53,11 @@
                 select: function(start, end, allDays) {
                     var startDate = start.start;
                     var endDate = start.end;
-                    $('#currentDate').html('(' + formatDate(start.start) + ')');
+                    $('#calendarStartDate').val(moment(startDate).format('YYYY-MM-DD'));
+                    $('#currentDate').html('(' + formatDate(startDate) + ')');
                     errorDataShow(true, null);
+
                     $('#addEventOnCalendar').modal('show');
-                    $('#saveButtonForAddEvent').click(function() {
-                        var event_title = $("input[name=event_title]").val();
-                        var role_ids = $('#selectMultiUsers').val();
-                        var event_location = $("input[name=event_location]").val();
-                        var event_des = $('#event_desData').val();
-                        var url = $('#event_urlData').val();
-                        var from_date = moment(startDate).format('YYYY-MM-DD');
-                        var to_date = moment(endDate).format('YYYY-MM-DD');
-                        var data_type = 'ajax';
-                        $.ajax({
-                            url: '{{ route('event') }}',
-                            type: 'POST',
-                            dataType: 'json',
-                            data: {
-                                event_title,
-                                role_ids,
-                                event_location,
-                                event_des,
-                                url,
-                                from_date,
-                                to_date,
-                                data_type
-                            },
-                            success: function(response) {
-                                $('#addEventOnCalendar').modal('hide');
-                                location.reload();
-                            },
-                            error: function(xhr) {
-                                errorDataShow(null, xhr);
-                            }
-                        })
-                    })
                 },
                 eventClick: function(event, jsEvent, view) {
                     $('#downloadEventFile').addClass('d-none');
@@ -133,7 +104,7 @@
                         $('#Eedate').html(formatDate(event.event.extendedProps.endDate));
                         if (event.event.extendedProps.image) {
                             $('#eventFile').removeClass('d-none');
-                            $('#eventFile').attr('href', system_url + '/' + event.event.extendedProps
+                            $('#eventFile').attr('href','/' + event.event.extendedProps
                                 .image);
                         }
                         if (event.event.extendedProps.link) {
@@ -248,6 +219,42 @@
                 $('#error_url').html(xhr.responseJSON.errors.url);
             }
         }
+
+        $('#saveButtonForAddEvent').click(function(e) {
+            e.stopPropagation();
+            let strtDate = $('#calendarStartDate').val();
+            var event_title = $("input[name=event_title]").val();
+            var role_ids = $('#selectMultiUsers').val();
+            var event_location = $("input[name=event_location]").val();
+            var event_des = $('#event_desData').val();
+            var url = $('#event_urlData').val();
+            var from_date = strtDate;
+            var to_date = strtDate;
+            var data_type = 'ajax';
+            console.log(event_title);
+            $.ajax({
+                url: '{{ route('event') }}',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    event_title,
+                    role_ids,
+                    event_location,
+                    event_des,
+                    url,
+                    from_date,
+                    to_date,
+                    data_type
+                },
+                success: function(response) {
+                    $('#addEventOnCalendar').modal('hide');
+                    location.reload();
+                },
+                error: function(xhr) {
+                    errorDataShow(null, xhr);
+                }
+            })
+        })
     </script>
     <script>
         $(document).ready(function() {

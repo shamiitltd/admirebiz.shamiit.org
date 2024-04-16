@@ -5,14 +5,14 @@
 
 @push('css')
 <style>
-    .parent-lesson-plan .table tr td{
+    .table-responsive .table tr td{
         min-width: 200px;
     }
 </style>
 @endpush
 @section('mainContent')
     <link rel="stylesheet" href="{{ url('Modules/Lesson/Resources/assets/css/lesson_plan.css') }}">
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>{{ $student_detail->full_name }} - @lang('lesson::lesson.lesson_plan') </h1>
@@ -59,7 +59,7 @@
                                 <div role="tabpanel" class="tab-pane fade  @if ($key == 0) active show @endif"
                                     id="tab{{ $key }}">
                                    
-                                        <div class="container-fluid p-0 mt-40">
+                                        <div class="container-fluid p-0 mt-10">
                                             <div class="white-box">
                                                 <div class="row">
                                                     <div class="col-lg-12 col-md-12">
@@ -89,7 +89,7 @@
                                                 <div class="row">
                                                     <div class="col-lg-12">
 
-                                                        <div class="table-responsive parent-lesson-plan">
+                                                        <div class="table-responsive">
                                                             <table id="" class="table" cellspacing="0" width="100%">
                                                                 <thead>
                                                                     <tr>

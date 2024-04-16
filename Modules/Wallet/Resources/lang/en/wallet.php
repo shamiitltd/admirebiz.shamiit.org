@@ -16,6 +16,8 @@
        'approve_date'=>'Approve date',
        'reject_date'=>'Reject Date',
        'approve'=>'Approve',
+       'approved'=>'Approved',
+       'rejected'=>'Rejected',
        'reject'=>'Reject',
        'method'=>'Method',
        'amount'=>'amount',

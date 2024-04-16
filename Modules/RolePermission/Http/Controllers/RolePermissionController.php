@@ -231,7 +231,6 @@ class RolePermissionController extends Controller
                     $q->where('is_parent', 1);
                })
                ->orderBy('position', 'ASC')
-               ->where('status',1)
                ->get();
 
                return view('rolepermission::role_permission_student', compact('role', 'all_permissions', 'already_assigned'));
@@ -258,7 +257,6 @@ class RolePermissionController extends Controller
                 })
                 ->where('is_admin', 1)
                 ->orderBy('position', 'ASC')
-                ->where('status',1)
                 ->get();
         
                 return view('rolepermission::role_permission', compact('role', 'all_permissions', 'already_assigned'));

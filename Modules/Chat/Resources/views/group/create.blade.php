@@ -8,7 +8,7 @@
             <div class="row justify-content-center">
                 <div class="col-12">
                     <div class="chat_main_wrapper">
-                        <div class="chat_flow_list_wrapper ">
+                        <div class="chat_flow_list_wrapper white-box mb-3">
                             <div class="box_header">
                                 <div class="main-title">
                                     <h3 class="m-0">@lang('chat::chat.chat_list')</h3>
@@ -32,16 +32,16 @@
                                     :asset_type="{{ json_encode('/public') }}"
                             ></side-panel-component>
                         </div>
-                        <div class="chat_view_list ">
+                        <div class="chat_view_list white-box">
                             <div class="box_header">
                                 <div class="main-title">
                                     <h3 class="m-0">@lang('chat::chat.create_group')</h3>
                                 </div>
                             </div>
-                            <div class="chat_view_list_inner crm_full_height ">
+                            <div class="chat_view_list_inner crm_full_height p-0">
                                 <form action="{{ route('chat.group.create.store') }}" method="post" enctype="multipart/form-data">
                                     @csrf
-                                    <div class="chat_view_list_inner_scrolled" style="overflow: unset;">
+                                    <div class="chat_view_list_inner_scrolled pb-0" style="overflow: unset;">
                                         <div class="primary_input">
                                             <label class="primary_input_label" for="">@lang('chat::chat.group_name') <span class="text-danger"> *</span></label>
                                             <input class="primary_input_field" placeholder="-" type="text" name="name" required>
@@ -65,7 +65,7 @@
                                         </div>
                                         <div class="primary_input mb-15 mt-15">
                                             <label class="primary_input_label" for="">@lang('common.member') <span class="text-danger"> *</span></label>
-                                            <select class="primary_selet select_users mb-25" name="users[]" id="" multiple required>
+                                            <select class="primary_select select_users mb-25" name="users[]" id="" multiple required>
                                                 @foreach ($users as $key => $user)
                                                     <option value="{{ $user->id }}">{{ $user->first_name }}</option>
                                                 @endforeach

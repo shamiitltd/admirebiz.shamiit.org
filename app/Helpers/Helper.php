@@ -19,6 +19,7 @@ use App\SmDateFormat;
 use App\SmFeesMaster;
 use App\SmMarksGrade;
 use App\SmSmsGateway;
+use App\Jobs\EmailJob;
 use App\SmFeesPayment;
 use App\SmResultStore;
 use GuzzleHttp\Client;
@@ -36,6 +37,7 @@ use App\Models\FeesInvoice;
 use App\SmFeesCarryForward;
 use Illuminate\Support\Str;
 use App\CustomResultSetting;
+use App\SmHeaderMenuManager;
 use App\SmSubjectAttendance;
 use App\Models\StudentRecord;
 use App\SmExamAttendanceChild;
@@ -623,7 +625,7 @@ if (!function_exists('getTempleteDetails')) {
 
 if (!function_exists('send_mail')) {
     function send_mail($reciver_email, $receiver_name, $purpose, $data = [])
-    {
+    {   
         if (!$reciver_email) {
             return;
         }
@@ -649,9 +651,10 @@ if (!function_exists('send_mail')) {
 
         $body = SmsTemplate::emailTempleteToBody(getTempleteDetails($purpose, 'email')->body, $data);
         $view = view('backEnd.email.emailBody', compact('body'));
+
         try {
-            if ($email_driver == "smtp") {
-                if (Schema::hasTable('sm_email_settings')) {
+            if (Schema::hasTable('sm_email_settings')) {
+                if ($email_driver == "smtp") {
                     $config = Auth::check() ? DB::table('sm_email_settings')
                         ->where('school_id', Auth::user()->school_id)
                         ->where('mail_driver', 'smtp')
@@ -661,29 +664,29 @@ if (!function_exists('send_mail')) {
                         ->first();
 
                     if ($config) {
-                        Config::set('mail.driver', $config->mail_driver);
-                        Config::set('mail.from', $config->mail_username);
-                        Config::set('mail.name', $config->from_name);
-                        Config::set('mail.host', $config->mail_host);
-                        Config::set('mail.port', $config->mail_port);
-                        Config::set('mail.username', $config->mail_username);
-                        Config::set('mail.password', $config->mail_password);
-                        Config::set('mail.encryption', $config->mail_encryption);
+                        Config::set('mail.mailers.smtp.transport', 'smtp');
+                        Config::set('mail.from.from', $config->mail_username);
+                        Config::set('mail.from.name', $config->from_name);
+                        Config::set('mail.mailers.smtp.host', $config->mail_host);
+                        Config::set('mail.mailers.smtp.port', $config->mail_port);
+                        Config::set('mail.mailers.smtp.username', $config->mail_username);
+                        Config::set('mail.mailers.smtp.password', $config->mail_password);
+                        Config::set('mail.mailers.smtp.encryption', $config->mail_encryption);
                     }
+                } else {
+                    Config::set('mail.default', 'sendmail');
                 }
-                Mail::send('backEnd.email.emailBody', compact('body'), function ($message) use ($reciver_email, $receiver_name, $sender_name, $sender_email, $subject) {
-                    $message->to($reciver_email, $receiver_name)->subject($subject);
-                    $message->from($sender_email, $sender_name);
-                });
             }
-            if ($email_driver == "php") {
-                $message = (string)$view;
-                $headers = "From: <$sender_email> \r\n";
-                $headers .= "Reply-To: $receiver_name <$reciver_email> \r\n";
-                $headers .= "MIME-Version: 1.0\r\n";
-                $headers .= "Content-Type: text/html; charset=utf-8\r\n";
-                @mail($reciver_email, $subject, $message, $headers);
-            }
+
+            $emailData['driver'] = $email_driver;
+            $emailData['reciver_email'] = $reciver_email;
+            $emailData['receiver_name'] = $receiver_name;
+            $emailData['sender_name'] = $sender_name;
+            $emailData['sender_email'] = $sender_email;
+            $emailData['subject'] = $subject;
+
+
+            dispatch(new EmailJob($body, $emailData));
         } catch (\Exception $e) {
             Log::info($e);
         }
@@ -1039,6 +1042,29 @@ if (!function_exists('getGrade')) {
     }
 }
 
+if (!function_exists('getGradeUpdate')) {
+    function getGradeUpdate($grade)
+    {
+        $mark = SmMarksGrade::where('from', '<=', $grade)->where('up', '>=', $grade)->where('academic_id', getAcademicId())->first();
+        if ($mark) {
+            return $mark;
+        } else {
+            $fail_grade = SmMarksGrade::where('active_status', 1)
+                ->where('academic_id', getAcademicId())
+                ->where('school_id', Auth::user()->school_id)
+                ->min('gpa');
+
+            $mark = SmMarksGrade::where('active_status', 1)
+                ->where('academic_id', getAcademicId())
+                ->where('school_id', Auth::user()->school_id)
+                ->where('gpa', $fail_grade)
+                ->first();
+
+            return $mark;
+        }
+    }
+}
+
 if (!function_exists('is_optional_subject')) {
     function is_optional_subject($student_id, $subject_id)
     {
@@ -1308,7 +1334,8 @@ if (!function_exists('generalSetting')) {
             } elseif (request('school_id')) {
                 $generalSetting =  SmGeneralSettings::where('school_id', request('school_id'))->first();
             } else {
-                $generalSetting = Auth::check() ? SmGeneralSettings::where('school_id', Auth::user()->school_id)->first() : SmGeneralSettings::first();
+                // $generalSetting = Auth::check() ? SmGeneralSettings::where('school_id', Auth::user()->school_id)->first() : SmGeneralSettings::where('school_id',app('school')->id)->first();
+                $generalSetting = Auth::check() ? SmGeneralSettings::where('school_id', Auth::user()->school_id)->first() : SmGeneralSettings::where('school_id', 1)->first();
             }
         }
 
@@ -1499,7 +1526,7 @@ if (!function_exists('academicYears')) {
 }
 
 if (!function_exists('subjectFullMark')) {
-    function subjectFullMark($examtype, $subject, $class_id, $section_id)
+    function subjectFullMark($examtype, $subject, $class_id = null, $section_id = null)
     {
         try {
             $full_mark = SmExam::withOutGlobalScopes();
@@ -1511,8 +1538,12 @@ if (!function_exists('subjectFullMark')) {
             } else {
                 $full_mark = $full_mark->where('subject_id', $subject);
             }
+            if (moduleStatusCheck('University')) {
+                $full_mark = $full_mark->first('exam_mark')->exam_mark;
+            } else {
+                $full_mark = $full_mark->where('class_id', $class_id)->where('section_id', $section_id)->first('exam_mark')->exam_mark;
+            }
 
-            $full_mark = $full_mark->where('class_id', $class_id)->where('section_id', $section_id)->first('exam_mark')->exam_mark;
 
             return $full_mark;
         } catch (\Exception $e) {
@@ -2444,7 +2475,11 @@ if (!function_exists('is_show')) {
     {
         $fields = getStudentRegistrationFields();
         $field = $fields->where('field_name', $field_name)->first();
-        return $field && $field->is_show == 1;
+        if (moduleStatusCheck('ParentRegistration')) {
+            return $field && $field->is_show == 1;
+        } else {
+            return true;
+        }
     }
 }
 
@@ -3401,7 +3436,7 @@ if (!function_exists('getStudentMeritPosition')) {
     function getStudentMeritPosition($class_id, $section_id, $exam_term_id, $record_id)
     {
         try {
-            $position = ExamMeritPosition::withOUtGlobalScopes()->where('class_id', $class_id)
+            $position = ExamMeritPosition::withOutGlobalScopes()->where('class_id', $class_id)
                 ->where('section_id', $section_id)
                 ->where('exam_term_id', $exam_term_id)
                 ->where('record_id', $record_id)
@@ -3782,11 +3817,225 @@ if (!function_exists('getSubjectAttendance')) {
 if (!function_exists('activeTheme')) {
     function activeTheme()
     {
-       try{
+        try {
             return generalSetting()->active_theme;
-       }catch(\Exception $e){
-           return null ;
-       }
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+}
+if (!function_exists('userLocal')) {
+    function userLocal()
+    {
+        try {
+            $user = auth()->user();
+            if (isset($user->language)) {
+                $user_lang = $user->language;
+            } else {
+                $user_lang = App::getLocale();
+            }
+            return $user_lang;
+        } catch (\Throwable $th) {
+            return 'en';
+        }
+    }
+}
+if (!function_exists('_translation')) {
+    function _translation($key)
+    {
+        $trans = trans($key);
+        try {
+            $exp = explode('.', $trans);
+            if (count($exp) == 2) {
+                $txt = Str::replace('_', ' ', ucfirst($exp[1]));
+                $txt = ucfirst($txt);
+            } else {
+                $txt = $trans;
+                $txt = Str::replace('_', ' ', ucfirst($txt));
+                $txt = ucfirst($txt);
+            }
+            return $txt;
+        } catch (\Throwable $th) {
+            return $key;
+        }
+    }
+}
+
+
+if (!function_exists('_trans')) {
+    function _trans($value)
+    {
+
+        try {
+            if (env('APP_ENV') == 'production') {
+                return trans($value);
+            } else {
+
+                $local = userLocal() ? userLocal() : app()->getLocale();
+
+                $langPath = resource_path('lang/' . $local . '/');
+
+                if (!file_exists($langPath)) {
+                    mkdir($langPath, 0777, true);
+                }
+
+                if (str_contains($value, '.')) {
+                    $new_trns = explode('.', $value);
+                    $file_name = $new_trns[0];
+                    // $trans_key = $new_trns[1];
+                    $trans_key = str_replace($file_name . '.', '', $value);
+
+
+                    $file_path = $langPath . '' . $file_name . '.php';
+                    if (file_exists($file_path)) {
+                        $file_content = include($file_path);
+
+                        if (array_key_exists($trans_key, $file_content)) {
+                            return _translation($value);
+                        } else {
+                            $file_content[$trans_key] = $trans_key;
+                            $str = <<<EOT
+                                            <?php
+                                                return [
+                                            EOT;
+                            foreach ($file_content as $key => $val) {
+                                if (gettype($val) == 'string') {
+
+                                    $line = <<<EOT
+                                                                    "{$key}" => "{$val}",\n
+                                                                EOT;
+                                }
+                                if (gettype($val) == 'array') {
+                                    $line = <<<EOT
+                                                                            "{$key}" => [\n
+                                                                        EOT;
+                                    $str .= $line;
+                                    foreach ($val as $lang_key => $lang_val) {
+
+                                        $line = <<<EOT
+                                                                            "{$lang_key}" => "{$lang_val}",\n
+                                                                        EOT;
+
+                                        $str .= $line;
+                                    }
+
+                                    $line = <<<EOT
+                                                                        ],\n
+                                                                    EOT;
+                                }
+
+                                $str .= $line;
+                            }
+                            $end = <<<EOT
+                                                    ]
+                                            ?>
+                                            EOT;
+                            $str .= $end;
+
+                            file_put_contents($file_path, $str, $flags = 0, $context = null);
+                        }
+                    } else {
+
+                        fopen($file_path, 'w');
+                        $file_content = [];
+                        $file_content[$trans_key] = $trans_key;
+                        $str = <<<EOT
+                                            <?php
+                                                return [
+                                            EOT;
+                        foreach ($file_content as $key => $val) {
+                            if (gettype($val) == 'string') {
+
+                                $line = <<<EOT
+                                                                    "{$key}" => "{$val}",\n
+                                                                EOT;
+                            }
+                            if (gettype($val) == 'array') {
+                                $line = <<<EOT
+                                                                            "{$key}" => [\n
+                                                                        EOT;
+                                $str .= $line;
+                                foreach ($val as $lang_key => $lang_val) {
+
+                                    $line = <<<EOT
+                                                                            "{$lang_key}" => "{$lang_val}",\n
+                                                                        EOT;
+
+                                    $str .= $line;
+                                }
+
+                                $line = <<<EOT
+                                                                        ],\n
+                                                                    EOT;
+                            }
+
+                            $str .= $line;
+                        }
+                        $end = <<<EOT
+                                                    ]
+                                            ?>
+                                            EOT;
+                        $str .= $end;
+
+                        file_put_contents($file_path, $str, $flags = 0, $context = null);
+                    }
+
+                    return _translation($value);
+                } else {
+
+                    $trans_key = $value;
+                    $file_path = resource_path('lang/' . $local . '/' . $local . '.php');
+
+                    fopen($file_path, 'w');
+                    $file_content = [];
+                    $file_content[$trans_key] = $trans_key;
+                    $str = <<<EOT
+                                            <?php
+                                                return [
+                                            EOT;
+                    foreach ($file_content as $key => $val) {
+                        if (gettype($val) == 'string') {
+
+                            $line = <<<EOT
+                                                                    "{$key}" => "{$val}",\n
+                                                                EOT;
+                        }
+                        if (gettype($val) == 'array') {
+                            $line = <<<EOT
+                                                                            "{$key}" => [\n
+                                                                        EOT;
+                            $str .= $line;
+                            foreach ($val as $lang_key => $lang_val) {
+
+                                $line = <<<EOT
+                                                                            "{$lang_key}" => "{$lang_val}",\n
+                                                                        EOT;
+
+                                $str .= $line;
+                            }
+
+                            $line = <<<EOT
+                                                                        ],\n
+                                                                    EOT;
+                        }
+
+                        $str .= $line;
+                    }
+                    $end = <<<EOT
+                                                    ]
+                                            ?>
+                                            EOT;
+                    $str .= $end;
+
+                    file_put_contents($file_path, $str, $flags = 0, $context = null);
+                    return _translation($value);
+                }
+                return _translation($value);
+            }
+        } catch (Exception $exception) {
+            dd($exception);
+            return $value;
+        }
     }
 }
 
@@ -3797,6 +4046,17 @@ if (!function_exists('defaultLogo')) {
             return asset($path);
         } else {
             return asset('public/uploads/settings/logo.png');
+        }
+    }
+}
+
+if (!function_exists('defaultUserLogo')) {
+    function defaultUserLogo($path)
+    {
+        if ($path && file_exists($path)) {
+            return asset($path);
+        } else {
+            return asset('public/uploads/staff/demo/staff.jpg');
         }
     }
 }
@@ -3816,7 +4076,7 @@ if (!function_exists('latterAvater')) {
     }
 }
 
-if (!function_exists('getProfileImage')){
+if (!function_exists('getProfileImage')) {
     function getProfileImage($user_id)
     {
         $user = User::find($user_id);
@@ -3827,16 +4087,12 @@ if (!function_exists('getProfileImage')){
         if ($role_id == 2) {
             $profile = $student->student_photo ? $student->student_photo : 'public/backEnd/assets/img/avatar.png';
         } elseif ($role_id == 3) {
-            $profile = $parent->fathers_photo ? $parent->fathers_photo : 'public/backEnd/assets/img/avatar.png';
+            $profile = $parent->fathers_photo ? $parent->fathers_photo : 'c';
         } else {
             $profile = $staff->staff_photo ? $staff->staff_photo : 'public/backEnd/assets/img/avatar.png';
         }
         return $profile;
     }
-
-
-   
-
 
     function headerContent()
     {
@@ -3857,5 +4113,70 @@ if (!function_exists('getProfileImage')){
         if ($footerPage) {
             return view('pagebuilder::components.header-footer-page-components', ['page' => $footerPage]);
         }
+    }
+
+    function formatedDate($date)
+    {
+        return date('Y-m-d', strtotime($date));
+    }
+}
+
+if (!function_exists('envu')) {
+    function envu($data = array())
+    {
+        foreach ($data as $key => $value) {
+            if (env($key) === $value) {
+                unset($data[$key]);
+            }
+        }
+
+        if (!count($data)) {
+            return false;
+        }
+
+        $env = file_get_contents(base_path() . '/.env');
+        $env = explode("\n", $env);
+        foreach ((array) $data as $key => $value) {
+            foreach ($env as $env_key => $env_value) {
+                $entry = explode("=", $env_value, 2);
+                if ($entry[0] === $key) {
+                    $env[$env_key] = $key . "=" . (is_string($value) ? '"' . $value . '"' : $value);
+                } else {
+                    $env[$env_key] = $env_value;
+                }
+            }
+        }
+        $env = implode("\n", $env);
+        file_put_contents(base_path() . '/.env', $env);
+        return true;
+    }
+}
+if (!function_exists('lastOneMonthDates')) {
+    function lastOneMonthDates()
+    {
+        $days_ago = [];
+        for ($i = 30; $i >= 1; $i--) {
+            $day = date('Y-m-d', strtotime('-' . $i . ' days', strtotime(date('Y-m-d'))));
+            array_push($days_ago, $day);
+        }
+        return $days_ago;
+    }
+}
+if (!function_exists('insertMenuManage')) {
+    function insertMenuManage($menu)
+    {
+        $menuData = SmHeaderMenuManager::create($menu);
+        if (gv($menu, 'childs')) {
+            foreach (gv($menu, 'childs') as $child) {
+                $child['parent_id'] = $menuData->id;
+                insertMenuManage($child);
+            }
+        }
+    }
+}
+if (!function_exists('asset_path')) {
+    function asset_path($path = null)
+    {
+        return 'public/' . $path;
     }
 }

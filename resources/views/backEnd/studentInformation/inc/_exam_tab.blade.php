@@ -4,10 +4,6 @@
         min-width: 150px;
     }
 
-    .exam-tab-table .table tr td{
-        min-width: 150px;
-    }
-
     .student-exam-data-table tr td:first-child{
         padding-left: 20px!important;
     }
@@ -23,8 +19,8 @@
             $exam_count = count($exam_terms);
         @endphp
         @if ($exam_count > 1)
-            <div class="white-box no-search no-paginate no-table-info mb-2">
-                <div class="table-responsive exam-tab-table">
+            <div class="no-search no-paginate no-table-info mb-2">
+                <div class="table-responsive">
                     <table class="table school-table-style shadow-none pb-0" cellspacing="0" width="100%">
                         <thead>
                             <tr>
@@ -49,7 +45,7 @@
                 </div>
             </div>
         @endif
-        <div class="white-box no-search no-paginate no-table-info mb-2">
+        <div class="no-search no-paginate no-table-info mb-2">
             @foreach ($student_detail->studentRecords as $record)
                 @foreach ($exam_terms as $key=>$exam)
                     @php

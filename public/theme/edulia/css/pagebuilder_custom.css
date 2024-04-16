@@ -152,3 +152,6 @@ button {
   width: 15px;
   height: auto;
 }
+.fade.in {
+  visibility: visible;
+}

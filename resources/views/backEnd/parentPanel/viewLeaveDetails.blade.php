@@ -206,7 +206,7 @@ $days = $days_between + 1;
                         @endif
                         <div class="white-box-modal radius-t-y-0">
 
-                            <div class="single-meta mt-10">
+                            <div class="single-meta mt-50">
                                 <div class="d-flex justify-content-between">
                                     <div class="name">
                                         @if ($leaveDetails->role_id == 2)

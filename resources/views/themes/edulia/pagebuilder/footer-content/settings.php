@@ -17,8 +17,7 @@ return [
         [
             'id'            => 'footer-right-content-text',
             'type'          => 'editor',
-            'value'         => "Matie boy chancer argy bargy blower golly gosh butty bog matie boy chancer argybar gy blower gollygosh butty bog.
-                                Blower golly gosh butty bog matie boychan argybargy blower",
+            'value'         => "Make school tasks easy! With InfixEDU's School Management Software, teachers can quickly handle attendance and grades. It helps teachers do their jobs better so they can focus on helping students succeed.",
             'class'         => '',
             'label_title'   => __('edulia.footer_content'),
             'placeholder'   => __('edulia.enter_text'),

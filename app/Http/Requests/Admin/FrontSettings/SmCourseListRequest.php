@@ -28,7 +28,7 @@ class SmCourseListRequest extends FormRequest
         $course = SmCourse::find($this->id);
         $rules =  [
             'title' => 'required',
-            'image' => 'required|dimensions:min_width=1420,min_height=450|mimes:jpg,jpeg,png|max:'.$maxFileSize,
+            'image' => 'required|mimes:jpg,jpeg,png|max:'.$maxFileSize,
             'category_id'=> 'required',
             'overview' =>'nullable',
             'outline' =>'nullable',
@@ -38,7 +38,7 @@ class SmCourseListRequest extends FormRequest
         ];
 
         if($course && $course->image){
-            $rules['image'] = 'dimensions:min_width=1420,min_height=450|mimes:jpg,jpeg,png|max:'.$maxFileSize;
+            $rules['image'] = 'mimes:jpg,jpeg,png|max:'.$maxFileSize;
         }
 
         return $rules;

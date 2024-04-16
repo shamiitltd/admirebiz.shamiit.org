@@ -6,7 +6,7 @@
     @php
         $route = moduleStatusCheck('OnlineExam')==true ? 'om-take_online_exam' : 'take_online_exam' ;
     @endphp
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('exam.online_exam') </h1>
@@ -22,111 +22,123 @@
         <div class="container-fluid p-0">
             <div class="row">
                 <div class="col-lg-12 student-details up_admin_visitor">
-                    <ul class="nav nav-tabs tabs_scroll_nav ml-0" role="tablist">
-                        @foreach($records as $key => $record) 
-                            <li class="nav-item">
-                                <a class="nav-link @if($key== 0) active @endif " href="#tab{{$key}}" role="tab" data-toggle="tab">{{$record->class->class_name}} ({{$record->section->section_name}}) </a>
-                            </li>
-                        @endforeach
-                    </ul>
-                    <!-- Tab panes -->
-                    <div class="tab-content mt-40">
-                        @foreach($records as $key => $record) 
-                            <div role="tabpanel" class="tab-pane fade  @if($key== 0) active show @endif" id="tab{{$key}}">
-                                <x-table>
-                                <table id="table_id" class="table" cellspacing="0" width="100%">
-                                    <thead>
-                                    <tr>
-                                        <th>@lang('exam.title')</th>
-                                        <th>@lang('common.class_Sec')</th>
-                                        <th>@lang('exam.subject')</th>
-                                        <th>@lang('exam.exam_date')</th>
-                                        <th>@lang('exam.duration')</th>
-                                      
-                                        <th>@lang('common.status')</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    @foreach($record->OnlineExam  as $online_exam)
-                                        @php
-                                            @$submitted_answer = $student->studentOnlineExam->where('online_exam_id',$online_exam->id)->first();
-                                        @endphp
+                    <div class="white-box">
+                        <ul class="nav nav-tabs tabs_scroll_nav ml-0 mb-20" role="tablist">
+                            @foreach($records as $key => $record) 
+                                <li class="nav-item">
+                                    <a class="nav-link @if($key== 0) active @endif " href="#tab{{$key}}" role="tab" data-toggle="tab">
+                                        {{moduleStatusCheck('University') ? $record->unSemesterLabel->name : $record->class->class_name}} 
+                                        ({{$record->section->section_name}}) 
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                        <!-- Tab panes -->
+                        <div class="tab-content">
+                            @foreach($records as $key => $record) 
+                                <div role="tabpanel" class="tab-pane fade mt-60  @if($key== 0) active show @endif" id="tab{{$key}}">
+                                    <x-table>
+                                        <table id="table_id" class="table" cellspacing="0" width="100%">
+                                            <thead>
                                             <tr>
-                                                <td>{{@$online_exam->title}}</td>
-                                                <td>{{@$online_exam->class->class_name.'  ('.@$online_exam->section->section_name.')'}}</td>
-                                                <td>{{@$online_exam->subject !=""?@$online_exam->subject->subject_name:""}}</td>
-                                                <td data-sort="{{strtotime(@$online_exam->date)}}">
-                                                    {{@$online_exam->date != ""? dateConvert(@$online_exam->date):''}}
-    
-                                                    <br>
-                                                    Time: {{date('h:i A', strtotime(@$online_exam->start_time)).' - '.date('h:i A', strtotime(@$online_exam->end_time))}}
-                                                </td>
+                                                <th>@lang('exam.title')</th>
+                                                @if(moduleStatusCheck('University'))
+                                                    <th> @lang('university::un.semester_label') (@lang('common.section'))</th>
+                                                @else
+                                                    <th>@lang('common.class_Sec')</th>
+                                                @endif
+                                                <th>@lang('exam.subject')</th>
+                                                <th>@lang('exam.exam_date')</th>
+                                                <th>@lang('exam.duration')</th>
+                                            
+                                                <th>@lang('common.status')</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            @foreach($record->OnlineExam  as $online_exam)
                                                 @php
-    
-                                                    $totalDuration = $online_exam->end_time !='NULL' ? Carbon::parse($online_exam->end_time)->diffinminutes( Carbon::parse($online_exam->start_time) ) : 0;
-    
+                                                    @$submitted_answer = $student->studentOnlineExam->where('online_exam_id',$online_exam->id)->first();
                                                 @endphp
-                                                <td>
-                                                    {{  $online_exam->end_time !='NULL' ? gmdate($totalDuration) : 'Unlimited'}}  @lang('exam.minutes')
-                                                </td>
-                                                {{-- <td>
-                                                    {{ $online_exam->total_durations }} @lang('exam.minutes')
-                                                </td> --}}
-    
-                                                <td>
-                                                    @php
-                                                            $startTime = strtotime($online_exam->date . ' ' . $online_exam->start_time);
-                                                            $endTime = strtotime($online_exam->date . ' ' . $online_exam->end_time);
-                                                            $now = date('h:i:s');
-                                                            $now =  strtotime("now");
+                                                    <tr>
+                                                        <td>{{@$online_exam->title}}</td>
+                                                        @if(moduleStatusCheck('University'))
+                                                            <td>{{@$online_exam->unSemesterLabel->name.'  ('.@$online_exam->section->section_name.')'}}</td>
+                                                        @else
+                                                            <td>{{@$online_exam->class->class_name.'  ('.@$online_exam->section->section_name.')'}}</td>
+                                                        @endif
+                                                        <td>{{@$online_exam->subject !=""?@$online_exam->subject->subject_name:""}}</td>
+                                                        <td data-sort="{{strtotime(@$online_exam->date)}}">
+                                                            {{@$online_exam->date != ""? dateConvert(@$online_exam->date):''}}
+            
+                                                            <br>
+                                                            Time: {{date('h:i A', strtotime(@$online_exam->start_time)).' - '.date('h:i A', strtotime(@$online_exam->end_time))}}
+                                                        </td>
+                                                        @php
+            
+                                                            $totalDuration = $online_exam->end_time !='NULL' ? Carbon::parse($online_exam->end_time)->diffinminutes( Carbon::parse($online_exam->start_time) ) : 0;
+            
                                                         @endphp
-                                                    @if( !empty( $submitted_answer))
-                                                        @if(@$submitted_answer->status == 1)
-    
-                                                                @if($submitted_answer->student_done==1)
-                                                                    <span class="btn primary-btn small  fix-gr-bg"
-                                                                    style="background:green">@lang('exam.already_submitted')</span>
-                                                                @elseif($startTime <= $now && $now <= $endTime)
+                                                        <td>
+                                                            {{  $online_exam->end_time !='NULL' ? gmdate($totalDuration) : 'Unlimited'}}  @lang('exam.minutes')
+                                                        </td>
+                                                        {{-- <td>
+                                                            {{ $online_exam->total_durations }} @lang('exam.minutes')
+                                                        </td> --}}
+            
+                                                        <td>
+                                                            @php
+                                                                    $startTime = strtotime($online_exam->date . ' ' . $online_exam->start_time);
+                                                                    $endTime = strtotime($online_exam->date . ' ' . $online_exam->end_time);
+                                                                    $now = date('h:i:s');
+                                                                    $now =  strtotime("now");
+                                                                    // dump($submitted_answer);
+                                                                @endphp
+                                                            @if( !empty( $submitted_answer))
+                                                                @if(@$submitted_answer->status == 1)
+                                                                        @if($submitted_answer->student_done==1)
+                                                                            <span class="btn primary-btn small  fix-gr-bg"
+                                                                            style="background:green">@lang('exam.already_submitted')</span>
+                                                                        @elseif($startTime <= $now && $now <= $endTime)
+                                                                            <a class="btn primary-btn small  fix-gr-bg"
+                                                                                style="background:green"
+                                                                                href="{{route($route, [@$online_exam->id])}}">@lang('exam.take_exam')</a>
+                                                                        
+                                                                        @elseif($startTime >= $now && $now <= $endTime)
+                                                                            <span class="btn primary-btn small  fix-gr-bg"
+                                                                                style="background:blue">Waiting</span>
+                                                                        @elseif($now >= $endTime)
+                                                                            <span class="btn primary-btn small  fix-gr-bg"
+                                                                                style="background:#dc3545">Closed</span>
+                                                                        
+                                                                        
+                                                                        @else
+                                                                            
+                                                                            <span class="btn primary-btn small  fix-gr-bg"
+                                                                                style="background:green">@lang('exam.already_submitted')</span>
+                                                                        @endif
+                                                                @endif
+                                                            @else
+                                                                @if($startTime <= $now && $now <= $endTime)
                                                                     <a class="btn primary-btn small  fix-gr-bg"
-                                                                        style="background:green"
-                                                                        href="{{route($route, [@$online_exam->id])}}">@lang('exam.take_exam')</a>
-                                                                
+                                                                    style="background:green;"
+                                                                    href="{{route($route, [@$online_exam->id])}}">@lang('exam.take_exam')</a>
                                                                 @elseif($startTime >= $now && $now <= $endTime)
                                                                     <span class="btn primary-btn small  fix-gr-bg"
-                                                                        style="background:blue">Waiting</span>
+                                                                        style="background:blue">@lang('common.waiting')</span>
                                                                 @elseif($now >= $endTime)
                                                                     <span class="btn primary-btn small  fix-gr-bg"
-                                                                        style="background:#dc3545">Closed</span>
-                                                                
-                                                                
-                                                                @else
-                                                                    
-                                                                    <span class="btn primary-btn small  fix-gr-bg"
-                                                                        style="background:green">@lang('exam.already_submitted')</span>
+                                                                        style="background:#dc3545">@lang('common.closed')</span>
                                                                 @endif
-                                                        @endif
-                                                    @else
-                                                        @if($startTime <= $now && $now <= $endTime)
-                                                            <a class="btn primary-btn small  fix-gr-bg"
-                                                                style="background:green"
-                                                                href="{{route($route, [@$online_exam->id])}}">@lang('exam.take_exam')</a>
-                                                        
-                                                        @elseif($startTime >= $now && $now <= $endTime)
-                                                            <span class="btn primary-btn small  fix-gr-bg"
-                                                                style="background:blue">@lang('common.waiting')</span>
-                                                        @elseif($now >= $endTime)
-                                                            <span class="btn primary-btn small  fix-gr-bg"
-                                                                style="background:#dc3545">@lang('common.closed')</span>
-                                                        @endif
-                                                    @endif
-                                                </td>
-                                            </tr>
-                                    @endforeach
-                                    </tbody>
-                                </table>
-                                </x-table>
-                            </div>
-                        @endforeach
+                                                            @endif
+                                                        </td>
+                                                    </tr>
+                                            @endforeach
+                                            </tbody>
+                                        </table>
+                                    </x-table>
+                                </div>
+                            @endforeach
+                        </div>
                     </div>
                 </div>
             </div>

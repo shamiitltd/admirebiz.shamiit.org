@@ -25,14 +25,16 @@ use App\SmItemReceiveChild;
 use Illuminate\Http\Request;
 use App\Models\StudentRecord;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Traits\NotificationSend;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
 use Modules\RolePermission\Entities\InfixRole;
 use App\Http\Requests\Admin\Inventory\SmItemSellRequest;
 use App\Http\Requests\Admin\Inventory\SmItemIssueRequest;
-use App\Traits\NotificationSend;
 
 class SmItemSellController extends Controller
 {
@@ -964,6 +966,35 @@ class SmItemSellController extends Controller
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();
+        }
+    }
+
+    # This is for upadate database sm_item_sells && sm_item_sell_children table for the issue of  float/double datatype only stores 8 digits.
+
+    public static function updateSmItemSellDatabase()
+    {
+        try {
+            Schema::table('sm_item_sells', function (Blueprint $table) {
+                $table->decimal('grand_total', 20, 2)->change();
+                $table->decimal('total_quantity', 20, 2)->change();
+                $table->decimal('total_paid', 20, 2)->change();
+                $table->decimal('total_due', 20, 2)->change();
+            });
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+    
+    public static function updateSmItemSellChildrenDatabase()
+    {
+        try {
+            Schema::table('sm_item_sell_children', function (Blueprint $table) {
+                $table->decimal('sell_price', 20, 2)->change();
+                $table->decimal('quantity', 20, 2)->change();
+                $table->decimal('sub_total', 20, 2)->change();
+            });
+        } catch (\Exception $e) {
+            return $e->getMessage();
         }
     }
 }

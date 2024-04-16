@@ -411,24 +411,24 @@
                     <tr>
                         <!-- first header  -->
                         @if($invoiceSettings->per_th==1 || $invoiceSettings->per_th==2 || $invoiceSettings->per_th==3)
-                            <th>@lang('fees.fees_details')</th>
-                            <th>@lang('accounts.amount') ({{generalSetting()->currency_symbol}})</th>
+                            <th class="text-right">@lang('fees.fees_details')</th>
+                            <th class="text-right">@lang('accounts.amount') ({{generalSetting()->currency_symbol}})</th>
                             <!-- space  -->
                             <th class="border-0" rowspan="{{5+count($fees_assigneds)}}" ></th>
                         @endif
 
                     <!-- 2nd header  -->
                         @if($invoiceSettings->per_th==2 || $invoiceSettings->per_th==3)
-                            <th>@lang('fees.fees_details')</th>
-                            <th>@lang('accounts.amount') ({{generalSetting()->currency_symbol}})</th>
+                            <th class="text-right">@lang('fees.fees_details')</th>
+                            <th class="text-right">@lang('accounts.amount') ({{generalSetting()->currency_symbol}})</th>
 
                         @endif
 
                     <!-- 3rd header  -->
                         @if( $invoiceSettings->per_th==3)
                             <th class="border-0" rowspan="{{5+count($fees_assigneds)}}" ></th>
-                            <th>@lang('fees.fees_details')</th>
-                            <th>@lang('accounts.amount') ({{generalSetting()->currency_symbol}})</th>
+                            <th class="text-right">@lang('fees.fees_details')</th>
+                            <th class="text-right">@lang('accounts.amount') ({{generalSetting()->currency_symbol}})</th>
                         @endif
                     </tr>
                     @php

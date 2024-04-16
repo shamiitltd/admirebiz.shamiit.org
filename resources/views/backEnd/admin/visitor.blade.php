@@ -12,7 +12,7 @@
 @endsection
 
 @section('mainContent')
-    <section class="sms-breadcrumb mb-40 white-box up_breadcrumb">
+    <section class="sms-breadcrumb mb-20 up_breadcrumb">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('admin.visitor_book')</h1>
@@ -40,16 +40,6 @@
                 <div class="col-lg-3">
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="main-title">
-                                <h3 class="mb-30">
-                                    @if (isset($visitor))
-                                        @lang('admin.edit_visitor')
-                                    @else
-                                        @lang('admin.add_visitor')
-                                    @endif
-
-                                </h3>
-                            </div>
                             @if (isset($visitor))
                                 {{ Form::open([
                                     'class' => 'form-horizontal',
@@ -72,7 +62,16 @@
                             @endif
                             <div class="white-box">
                                 <div class="add-visitor">
-
+                                    <div class="main-title">
+                                        <h3 class="mb-15">
+                                            @if (isset($visitor))
+                                                @lang('admin.edit_visitor')
+                                            @else
+                                                @lang('admin.add_visitor')
+                                            @endif
+        
+                                        </h3>
+                                    </div>
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="primary_input">
@@ -149,7 +148,8 @@
                                     <div class="row no-gutters input-right-icon mt-15">
                                         <div class="col">
                                             <div class="primary_input">
-                                                <label class="primary_input_label" for="">@lang('admin.date')</label>
+                                                <label class="primary_input_label" for="">@lang('admin.date')<span
+                                                    class="text-danger"> *</span></label>
                                                 <input class="primary_input_field  primary_input_field date form-control"
                                                     placeholder="{{ __('admin.date') }}" id="startDate" type="text"
                                                     name="date"
@@ -290,38 +290,67 @@
                 </div>
 
                 <div class="col-lg-9">
-                    <div class="row">
-                        <div class="col-lg-4 no-gutters">
-                            <div class="main-title">
-                                <h3 class="mb-0">@lang('admin.visitor_list')</h3>
+                    <div class="white-box">
+    
+                        {{-- <div class="row">
+                            <div class="col-lg-12">
+                                <div class="main-title">
+                                    <h3 class="mb-15">@lang('admin.visitor_list')</h3>
+                                </div>
+                                <x-table>
+                                    <table id="table_id" class="Crm_table_active3 table data-table" cellspacing="0" width="100%">
+    
+                                        <thead>
+    
+                                            <tr>
+                                                <th>@lang('common.sl')</th>
+                                                <th>@lang('common.name')</th>
+                                                <th>@lang('admin.no_of_person')</th>
+                                                <th>@lang('admin.phone')</th>
+                                                <th>@lang('admin.purpose')</th>
+                                                <th>@lang('admin.date')</th>
+                                                <th>@lang('admin.in_time')</th>
+                                                <th>@lang('admin.out_time')</th>
+                                                <th>@lang('common.actions')</th>
+                                            </tr>
+                                        </thead>
+    
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </x-table>
                             </div>
-                        </div>
-                    </div>
+                        </div> --}}
 
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <x-table>
-                                <table id="table_id" class="Crm_table_active3 table data-table" cellspacing="0" width="100%">
-
-                                    <thead>
-
-                                        <tr>
-                                            <th>@lang('common.sl')</th>
-                                            <th>@lang('common.name')</th>
-                                            <th>@lang('admin.no_of_person')</th>
-                                            <th>@lang('admin.phone')</th>
-                                            <th>@lang('admin.purpose')</th>
-                                            <th>@lang('admin.date')</th>
-                                            <th>@lang('admin.in_time')</th>
-                                            <th>@lang('admin.out_time')</th>
-                                            <th>@lang('common.actions')</th>
-                                        </tr>
-                                    </thead>
-
-                                    <tbody>
-                                    </tbody>
-                                </table>
-                            </x-table>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="main-title">
+                                    <h3 class="mb-15">@lang('admin.visitor_list')</h3>
+                                </div>
+                                <x-table>
+                                    <table id="table_id" class="Crm_table_active3 table data-table" cellspacing="0" width="100%">
+    
+                                        <thead>
+    
+                                            <tr>
+                                                <th>@lang('common.sl')</th>
+                                                <th>@lang('common.name')</th>
+                                                <th>@lang('admin.no_of_person')</th>
+                                                <th>@lang('admin.phone')</th>
+                                                <th>@lang('admin.purpose')</th>
+                                                <th>@lang('admin.date')</th>
+                                                <th>@lang('admin.in_time')</th>
+                                                <th>@lang('admin.out_time')</th>
+                                                <th>@lang('admin.created_by')</th>
+                                                <th>@lang('common.actions')</th>
+                                            </tr>
+                                        </thead>
+    
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </x-table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -387,6 +416,7 @@
                     {data: 'query_date', name: 'query_date'},
                     {data: 'in_time', name: 'in_time'},
                     {data: 'out_time', name: 'out_time'},
+                    {data: 'created_by', name: 'created_by'},
                     {data: 'action', name: 'action', orderable: false, searchable: false},
                 ],
                 bLengthChange: false,

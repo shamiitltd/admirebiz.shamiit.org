@@ -1,9 +1,10 @@
-@if (@$my_leaves)
+<div class="white-box">
+    @if (@$my_leaves)
     <div class="row">
         <div class="col-lg-12">
-            <div class="row mt-30 mb-20">
+            <div class="row ">
                 <div class="col-lg-4 no-gutters">
-                    <div class="main-title">
+                    <div class="main-title mb-15">
                         <h3>@lang('leave.leave_types')</h3>
                     </div>
                 </div>
@@ -45,3 +46,5 @@
         </div>
     </div>
 @endif
+
+</div>

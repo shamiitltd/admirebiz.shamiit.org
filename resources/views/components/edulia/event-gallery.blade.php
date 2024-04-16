@@ -1,7 +1,7 @@
 @foreach ($events as $event)
     <div class="col-lg-{{$column}}">
         <div class="events_item">
-            @if (file_exists($event->uplad_image_file))
+            @if (file_exists(asset($event->uplad_image_file)))
                 <div class="events_item_img">
                     <img src="{{asset($event->uplad_image_file)}}" alt="{{$event->event_title}}">
                 </div>

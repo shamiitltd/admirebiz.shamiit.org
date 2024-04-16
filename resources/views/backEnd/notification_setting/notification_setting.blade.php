@@ -45,7 +45,7 @@
     @lang('system_settings.notification_settings')
 @endsection
 @section('mainContent')
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('system_settings.notification_settings')</h1>
@@ -59,86 +59,88 @@
     </section>
     <section class="admin-visitor-area up_st_admin_visitor">
         <div class="container-fluid p-0">
-            <div class="row">
-                <div class="col-lg-4 col-md-6">
-                    <div class="main-title">
-                        <h3 class="mb-30">@lang('system_settings.notification_settings')</h3>
+            <div class="white-box">
+                <div class="row">
+                    <div class="col-lg-4 col-md-6">
+                        <div class="main-title">
+                            <h3 class="mb-15">@lang('system_settings.notification_settings')</h3>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-12">
-                    <x-table>
-                        <div class="table-responsive">
-                            <table id="table_id" class="table" cellspacing="0" width="100%">
-                                <thead>
-                                    <tr>
-                                        <th>@lang('system_settings.event')</th>
-                                        <th>@lang('system_settings.destination')</th>
-                                        <th>@lang('system_settings.recipient')</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($notificationSettings as $data)
-                                        <input type="hidden" id="dataId" value="{{ $data->id }}">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <x-table>
+                            <div class="table-responsive">
+                                <table id="table_id" class="table" cellspacing="0" width="100%">
+                                    <thead>
                                         <tr>
-                                            <td width="15%">
-                                                <input type="hidden" name="event" value="1">
-                                                {{ str_replace('_', ' ', $data->event) }}
-                                            </td>
-                                            <td width="15%">
-                                                @foreach ($data->destination as $key => $destination)
-                                                    <div class="col-lg-12">
-                                                        <input type="checkbox"
-                                                            id="destination{{ $loop->index }}{{ $data->id }}"
-                                                            class="common-checkbox destinationCheckbox"
-                                                            {{ $destination == 1 ? 'checked' : '' }} value="{{ $key }}"
-                                                            name="destination{{ $loop->index }}{{ $data->id }}"
-                                                            data-id="{{ $data->id }}">
-                                                        <label class="primary_input_label"
-                                                            for="destination{{ $loop->index }}{{ $data->id }}">{{ $key }}</label>
-                                                    </div>
-                                                @endforeach
-                                            </td>
-                                            <td width="70%">
-                                                <div class="d-flex recipientCards">
-                                                    @foreach ($data->recipient as $key => $recipient)
-                                                        <div class="white-box w-100">
-                                                            <div
-                                                                class="d-flex align-items-center justify-content-between">
-                                                                <input type="checkbox"
-                                                                    id="recipient{{ $loop->index }}{{ $data->id }}"
-                                                                    class="common-checkbox recipientCheckbox"
-                                                                    {{ $recipient == 1 ? 'checked' : '' }}
-                                                                    data-id="{{ $data->id }}"
-                                                                    value="{{ $key }}"
-                                                                    name="recipient{{ $loop->index }}{{ $data->id }}">
-                                                                <label class="primary_input_label m-0"
-                                                                    for="recipient{{ $loop->index }}{{ $data->id }}"><b>{{ $key }}</b></label>
-                                                                <a class="primary-btn fix-gr-bg modalLink"
-                                                                    title="{{ str_replace('_', ' ', $data->event) }}[{{ $key }}]"
-                                                                    data-modal-size="large-modal"
-                                                                    href="{{ route('notification_event_modal', [$data->id, $key]) }}">@lang('common.edit')</a>
-                                                            </div>
-                                                            <p class="recipientCard">
-                                                                @isset($data->shortcode)
-                                                                    @foreach ($data->shortcode as $role => $short)
-                                                                        @if ($key == $role)
-                                                                            {{$short}}
-                                                                        @endif
-                                                                    @endforeach
-                                                                @endisset
-                                                            </p>
+                                            <th>@lang('system_settings.event')</th>
+                                            <th>@lang('system_settings.destination')</th>
+                                            <th>@lang('system_settings.recipient')</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($notificationSettings as $data)
+                                            <input type="hidden" id="dataId" value="{{ $data->id }}">
+                                            <tr>
+                                                <td width="15%">
+                                                    <input type="hidden" name="event" value="1">
+                                                    {{ str_replace('_', ' ', $data->event) }}
+                                                </td>
+                                                <td width="15%">
+                                                    @foreach ($data->destination as $key => $destination)
+                                                        <div class="col-lg-12">
+                                                            <input type="checkbox"
+                                                                id="destination{{ $loop->index }}{{ $data->id }}"
+                                                                class="common-checkbox destinationCheckbox"
+                                                                {{ $destination == 1 ? 'checked' : '' }} value="{{ $key }}"
+                                                                name="destination{{ $loop->index }}{{ $data->id }}"
+                                                                data-id="{{ $data->id }}">
+                                                            <label class="primary_input_label"
+                                                                for="destination{{ $loop->index }}{{ $data->id }}">{{ $key }}</label>
                                                         </div>
                                                     @endforeach
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </x-table>
+                                                </td>
+                                                <td width="70%">
+                                                    <div class="d-flex recipientCards">
+                                                        @foreach ($data->recipient as $key => $recipient)
+                                                            <div class="white-box w-100">
+                                                                <div
+                                                                    class="d-flex align-items-center justify-content-between">
+                                                                    <input type="checkbox"
+                                                                        id="recipient{{ $loop->index }}{{ $data->id }}"
+                                                                        class="common-checkbox recipientCheckbox"
+                                                                        {{ $recipient == 1 ? 'checked' : '' }}
+                                                                        data-id="{{ $data->id }}"
+                                                                        value="{{ $key }}"
+                                                                        name="recipient{{ $loop->index }}{{ $data->id }}">
+                                                                    <label class="primary_input_label m-0"
+                                                                        for="recipient{{ $loop->index }}{{ $data->id }}"><b>{{ $key }}</b></label>
+                                                                    <a class="primary-btn fix-gr-bg modalLink"
+                                                                        title="{{ str_replace('_', ' ', $data->event) }}[{{ $key }}]"
+                                                                        data-modal-size="large-modal"
+                                                                        href="{{ route('notification_event_modal', [$data->id, $key]) }}">@lang('common.edit')</a>
+                                                                </div>
+                                                                <p class="recipientCard">
+                                                                    @isset($data->shortcode)
+                                                                        @foreach ($data->shortcode as $role => $short)
+                                                                            @if ($key == $role)
+                                                                                {{$short}}
+                                                                            @endif
+                                                                        @endforeach
+                                                                    @endisset
+                                                                </p>
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </x-table>
+                    </div>
                 </div>
             </div>
         </div>

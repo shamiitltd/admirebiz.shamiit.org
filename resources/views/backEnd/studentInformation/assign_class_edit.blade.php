@@ -7,7 +7,9 @@
     <div class="col-lg-12">
 
 
-        @includeIf('university::common.session_faculty_depart_academic_semester_level',['div'=>'col-lg-12', 'row'=>1, 'niceSelect' => 'niceSelect1', 'mt'=> 'mt-0','required' => ['USN','UF', 'UD', 'UA', 'US', 'USL'], 'hide' => ['USUB']])
+        @includeIf('university::common.session_faculty_depart_academic_semester_level',
+        ['div'=>'col-lg-12', 'row'=>1, 'mt'=> 'mt-0','required' => 
+        ['USN','UF', 'UD', 'UA', 'US', 'USL'], 'hide' => ['USUB']])
     </div>
     @else
     <div class="col-lg-12">

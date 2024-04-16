@@ -16,12 +16,14 @@ use App\SmGeneralSettings;
 use App\SmInventoryPayment;
 use App\SmItemReceiveChild;
 use Illuminate\Http\Request;
+use App\Traits\NotificationSend;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
 use App\Http\Requests\Admin\Inventory\SmItemReceiveRequest;
-use App\Traits\NotificationSend;
 
 class SmItemReceiveController extends Controller
 {
@@ -710,6 +712,35 @@ class SmItemReceiveController extends Controller
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();
+        }
+    }
+    
+    # This is for upadate database sm_item_receive_children table for the issue of  float/double datatype only stores 8 digits.
+
+    public static function updateSmItemReceiveDatabase()
+    {
+        try {
+            Schema::table('sm_item_receives', function (Blueprint $table) {
+                $table->decimal('grand_total', 20, 2)->change();
+                $table->decimal('total_quantity', 20, 2)->change();
+                $table->decimal('total_paid', 20, 2)->change();
+                $table->decimal('total_due', 20, 2)->change();
+            });
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public static function updateSmItemReceiveChildrenDatabase()
+    {
+        try {
+            Schema::table('sm_item_receive_children', function (Blueprint $table) {
+                $table->decimal('unit_price', 20, 2)->change();
+                $table->decimal('quantity', 20, 2)->change();
+                $table->decimal('sub_total', 20, 2)->change();
+            });
+        } catch (\Exception $e) {
+            return $e->getMessage();
         }
     }
 }

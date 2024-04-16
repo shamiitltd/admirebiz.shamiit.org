@@ -5,6 +5,7 @@ namespace App\Traits;
 use App\Models\User;
 use App\SmsTemplate;
 use App\SmSmsGateway;
+use App\Jobs\EmailJob;
 use GuzzleHttp\Client;
 use App\SmEmailSetting;
 use App\SmNotification;
@@ -32,23 +33,23 @@ trait NotificationSend
 
             foreach ($notificationData->recipient as $roleName => $recipientType) {
                 // For Super Admin Start
-                if ($recipientType == 1) {
-                    foreach ($notificationData->destination as $key => $type) {
-                        if ($roleName == 'Super admin') {
-                            $admin = User::find(1, ['id', 'full_name', 'email', 'phone_number']);
-                            $data['user_id'] = $admin->id;
-                            $data['role_id'] = 1;
-                            $data['receiver_name'] = $admin->full_name;
-                            $data['receiver_email'] = $admin->email;
-                            $data['receiver_phone_number'] = $admin->phone_number;
-                            $data['admin_name'] = $data['receiver_name'];
-                            if ($type == 1) {
-                                $function = 'send_' . strtolower($key);
-                                $this->$function($notificationData, $roleName, $data);
-                            }
-                        }
-                    }
-                }
+                // if ($recipientType == 1) {
+                //     foreach ($notificationData->destination as $key => $type) {
+                //         if ($roleName == 'Super admin') {
+                //             $admin = User::find(1, ['id', 'full_name', 'email', 'phone_number']);
+                //             $data['user_id'] = $admin->id;
+                //             $data['role_id'] = 1;
+                //             $data['receiver_name'] = $admin->full_name;
+                //             $data['receiver_email'] = $admin->email;
+                //             $data['receiver_phone_number'] = $admin->phone_number;
+                //             $data['admin_name'] = $data['receiver_name'];
+                //             if ($type == 1) {
+                //                 $function = 'send_' . strtolower($key);
+                //                 $this->$function($notificationData, $roleName, $data);
+                //             }
+                //         }
+                //     }
+                // }
                 // For Super Admin End
                 if ($recipientType == 1) {
                     if(!is_null($role_names)){
@@ -63,10 +64,10 @@ trait NotificationSend
                                     $data['receiver_email'] = $admin->email;
                                     $data['receiver_phone_number'] = $admin->phone_number;
                                     $data['admin_name'] = $data['receiver_name'];
-                                    if ($type == 1) {
-                                        $function = 'send_' . strtolower($key);
-                                        $this->$function($notificationData, $roleName, $data);
-                                    }
+                                    // if ($type == 1) {
+                                    //     $function = 'send_' . strtolower($key);
+                                    //     $this->$function($notificationData, $roleName, $data);
+                                    // }
                                 }
                                 // For Super Admin End
                                 foreach ($user_ids as $user_id) {
@@ -79,7 +80,18 @@ trait NotificationSend
                                         $data['receiver_phone_number'] = $userInfo->phone_number;
     
                                         $data['student_name'] = $userInfo->full_name;
-                                    } elseif ($roleName == 'Parent') {
+                                    }
+                                    elseif ($roleName == 'Alumni') {
+                                        $data['user_id'] = $userInfo->id;
+                                        $data['role_id'] = $userInfo->roles->id;
+                                        $data['receiver_name'] = $userInfo->full_name;
+                                        $data['receiver_email'] = $userInfo->email;
+                                        $data['receiver_phone_number'] = $userInfo->phone_number;
+    
+                                        $data['alumni_name'] = $userInfo->full_name;
+                                    }
+                                    
+                                    elseif ($roleName == 'Parent') {
                                         $data['role_id'] = 3;
                                         if($userInfo->role_id == 3){
                                             $data['user_id'] = $userInfo->id;
@@ -149,40 +161,35 @@ trait NotificationSend
         $view = view('backEnd.email.emailBody', compact('body'));
 
         try {
-            if ($email_driver == "smtp") {
-                if (Schema::hasTable('sm_email_settings')) {
-                    $config = auth()->check() ? DB::table('sm_email_settings')
-                        ->where('school_id', auth()->user()->school_id)
-                        ->where('mail_driver', 'smtp')
-                        ->first() :
-                        DB::table('sm_email_settings')
-                        ->where('mail_driver', 'smtp')
-                        ->first();
+            if (Schema::hasTable('sm_email_settings')) {
+                $config = auth()->check() ? DB::table('sm_email_settings')
+                    ->where('school_id', auth()->user()->school_id)
+                    ->where('mail_driver', 'smtp')
+                    ->first() :
+                    DB::table('sm_email_settings')
+                    ->where('mail_driver', 'smtp')
+                    ->first();
 
-                    if ($config) {
-                        Config::set('mail.driver', $config->mail_driver);
-                        Config::set('mail.from', $config->mail_username);
-                        Config::set('mail.name', $config->from_name);
-                        Config::set('mail.host', $config->mail_host);
-                        Config::set('mail.port', $config->mail_port);
-                        Config::set('mail.username', $config->mail_username);
-                        Config::set('mail.password', $config->mail_password);
-                        Config::set('mail.encryption', $config->mail_encryption);
-                    }
+                if ($config) {
+                    Config::set('mail.default', $config->mail_driver);
+                    Config::set('mail.from', $config->mail_username);
+                    Config::set('mail.name', $config->from_name);
+                    Config::set('mail.host', $config->mail_host);
+                    Config::set('mail.port', $config->mail_port);
+                    Config::set('mail.username', $config->mail_username);
+                    Config::set('mail.password', $config->mail_password);
+                    Config::set('mail.encryption', $config->mail_encryption);
                 }
-                Mail::send('backEnd.email.emailBody', compact('body'), function ($message) use ($reciver_email, $receiver_name, $sender_name, $sender_email, $subject) {
-                    $message->to($reciver_email, $receiver_name)->subject($subject);
-                    $message->from($sender_email, $sender_name);
-                });
             }
-            if ($email_driver == "php") {
-                $message = (string)$view;
-                $headers = "From: <$sender_email> \r\n";
-                $headers .= "Reply-To: $receiver_name <$reciver_email> \r\n";
-                $headers .= "MIME-Version: 1.0\r\n";
-                $headers .= "Content-Type: text/html; charset=utf-8\r\n";
-                @mail($reciver_email, $subject, $message, $headers);
-            }
+
+            $emailData['driver'] = $email_driver;
+            $emailData['reciver_email'] = $reciver_email;
+            $emailData['receiver_name'] = $receiver_name;
+            $emailData['sender_name'] = $sender_name;
+            $emailData['sender_email'] = $sender_email;
+            $emailData['subject'] = $subject;
+
+            dispatch(new EmailJob($body, $emailData));
         } catch (\Exception $e) {
             Log::info($e);
         }
@@ -345,6 +352,22 @@ trait NotificationSend
             })
             ->when($section_id, function ($s) use ($section_id) {
                 $s->where('section_id', $section_id);
+            })
+            ->where('is_promote', 0)
+            ->where('active_status', 1)
+            ->where('school_id', auth()->user()->school_id)
+            ->where('academic_id', getAcademicId())
+            ->distinct('student_id')
+            ->get();
+    }
+    public function unStudentRecordInfo($un_semester_label_id = null, $un_section_id = null)
+    {
+        return StudentRecord::with('studentDetail', 'class', 'section')
+            ->when($un_semester_label_id, function ($c) use ($un_semester_label_id) {
+                $c->where('un_semester_label_id', $un_semester_label_id);
+            })
+            ->when($un_section_id, function ($s) use ($un_section_id) {
+                $s->where('un_section_id', $un_section_id);
             })
             ->where('is_promote', 0)
             ->where('active_status', 1)

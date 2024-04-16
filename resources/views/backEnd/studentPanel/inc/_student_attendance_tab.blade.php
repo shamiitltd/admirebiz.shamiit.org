@@ -58,11 +58,6 @@
             box-shadow: inset 0 0 5px grey
         }
 
-        th {
-            padding: .5rem !important;
-            font-size: 10px !important;
-        }
-
         td {
             padding: .3rem !important;
             font-size: 12px !important;
@@ -71,21 +66,17 @@
         .dataTables_filter {
             margin-top: 30px;
         }
-
-        .dt-buttons {
-            margin-top: 30px;
-        }
     </style>
 @endpush
 <div role="tabpanel" class="tab-pane fade" id="studentAttendance">
-    <div class="white-box">
+    <div>
         @if (isset($attendance))
             <section class="student-attendance">
                 <div class="container-fluid p-0">
-                    <div class="row mt-40">
+                    <div class="row">
                         <div class="col-lg-12 no-gutters d-flex align-items-center justify-content-between">
                             <div class="main-title">
-                                <h3 class="mb-0">@lang('student.student_attendance_report')
+                                <h3 class="mb-15">@lang('student.student_attendance_report')
                                     <small>
                                         <span class="text-success">P:<span id="total_present"></span></span>
                                         <span class="text-warning">L:<span id="total_late"></span></span>
@@ -110,7 +101,7 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="lateday d-flex mt-4">
+                            <div class="lateday d-flex">
                                 <div class="mr-3">@lang('student.present'): <span class="text-success">P</span></div>
                                 <div class="mr-3">@lang('student.late'): <span class="text-warning">L</span></div>
                                 <div class="mr-3">@lang('student.absent'): <span class="text-danger">A</span></div>

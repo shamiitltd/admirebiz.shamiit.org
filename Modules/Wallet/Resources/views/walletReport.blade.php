@@ -3,7 +3,7 @@
         @lang('wallet::wallet.wallet_report')
     @endsection
 @section('mainContent')
-<section class="sms-breadcrumb mb-40 white-box">
+<section class="sms-breadcrumb mb-20">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('wallet::wallet.wallet_report')</h1>
@@ -18,15 +18,15 @@
 <section class="admin-visitor-area up_admin_visitor">
     <div class="container-fluid p-0">
         <div class="row">
-            <div class="col-lg-4 col-md-6">
-                <div class="main-title">
-                    <h3 class="mb-30">@lang('common.select_criteria') </h3>
-                </div>
-            </div>
-        </div>
-        <div class="row">
             <div class="col-lg-12">
                 <div class="white-box">
+                    <div class="row">
+                        <div class="col-lg-4 col-md-6">
+                            <div class="main-title">
+                                <h3 class="mb-15">@lang('common.select_criteria') </h3>
+                            </div>
+                        </div>
+                    </div>
                     {{ Form::open(['class' => 'form-horizontal', 'route' => 'wallet.wallet-report-search', 'method' => 'POST']) }}
                         <div class="row">
                             <input type="hidden" name="url" id="url" value="{{URL::to('/')}}">
@@ -75,46 +75,48 @@
 </section>
 <section class="admin-visitor-area up_st_admin_visitor mt-40">
     <div class="container-fluid p-0">
-        <div class="row">
-            <div class="col-lg-12">
-                <x-table>
-                    <table id="table_id" class="table" cellspacing="0" width="100%">
-                        <thead>
-                            <tr>
-                                <th>@lang('common.sl')</th>
-                                <th>@lang('common.name')</th>
-                                <th>@lang('common.status')</th>
-                                <th>@lang('wallet::wallet.apply_date')</th>
-                                <th>@lang('wallet::wallet.approve_date')</th>
-                            </tr>
-                        </thead>
-                        @if (isset($walletReports))
-                            <tbody>
-                                @foreach ($walletReports as $key=>$walletReport)
-                                    <tr>
-                                        <td>{{$key+1}}</td>
-                                        <td>{{@$walletReport->userName->full_name}}</td>
-                                        <td>
-                                            @if ($walletReport->status == 'pending')
-                                                <button class="primary-btn small bg-warning text-white border-0">@lang('common.pending')</button> 
-                                            @elseif ($walletReport->status == 'approve')
-                                                <button class="primary-btn small bg-success text-white border-0">@lang('wallet::wallet.approve')</button>
-                                            @else
-                                                <button class="primary-btn small bg-danger text-white border-0">@lang('wallet::wallet.reject')</button>
-                                            @endif
-                                        </td>
-                                        <td>{{dateConvert($walletReport->created_at)}}</td>
-                                        <td>{{dateConvert($walletReport->updated_at)}}</td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        @endif
-                    </table>
-                </x-table>
+        <div class="white-box">
+            <div class="row mt-40">
+                <div class="col-lg-12">
+                    <x-table>
+                        <table id="table_id" class="table" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>@lang('common.sl')</th>
+                                    <th>@lang('common.name')</th>
+                                    <th>@lang('common.status')</th>
+                                    <th>@lang('wallet::wallet.apply_date')</th>
+                                    <th>@lang('wallet::wallet.approve_date')</th>
+                                </tr>
+                            </thead>
+                            @if (isset($walletReports))
+                                <tbody>
+                                    @foreach ($walletReports as $key=>$walletReport)
+                                        <tr>
+                                            <td>{{$key+1}}</td>
+                                            <td>{{@$walletReport->userName->full_name}}</td>
+                                            <td>
+                                                @if ($walletReport->status == 'pending')
+                                                    <button class="primary-btn small bg-warning text-white border-0">@lang('common.pending')</button> 
+                                                @elseif ($walletReport->status == 'approve')
+                                                    <button class="primary-btn small bg-success text-white border-0">@lang('wallet::wallet.approve')</button>
+                                                @else
+                                                    <button class="primary-btn small bg-danger text-white border-0">@lang('wallet::wallet.reject')</button>
+                                                @endif
+                                            </td>
+                                            <td>{{dateConvert($walletReport->created_at)}}</td>
+                                            <td>{{dateConvert($walletReport->updated_at)}}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            @endif
+                        </table>
+                    </x-table>
+                </div>
             </div>
         </div>
     </div>
 </section>
 @endsection
-@include('backEnd.partials.data_table_js')
+@include('backEnd.partials.data_table_js', ['i' => true])
 @include('backEnd.partials.date_range_picker_css_js')

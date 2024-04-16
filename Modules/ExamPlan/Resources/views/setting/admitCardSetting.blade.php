@@ -20,7 +20,7 @@
     </style>
 @endpush
 @section('mainContent')
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('examplan::exp.admit_card_setting')</h1>
@@ -102,7 +102,7 @@
                                 </div>
                                 <form action="{{ route('examplan.admitcard.settingUpdate') }}" method="post"
                                       enctype="multipart/form-data"
-                                      class="bg-white p-4 rounded">
+                                      class="bg-white rounded">
                                     <input type="hidden" name="tab_layout" value="1">
                                     @csrf
                                     <div class="row">
@@ -387,22 +387,20 @@
                                                             class="primary-btn-small-input browse_file" type="button">
 
                                                         <label class="primary-btn small fix-gr-bg"
-                                                               for="teacher_signature_photo">@lang('common.browse')</label>
+                                                               for="addTeacherSignatureImage">@lang('common.browse')</label>
                                                         <input type="file" class="d-none"
                                                                value="{{ old('teacher_signature_photo') }}"
                                                                name="teacher_signature_photo"
-                                                               id="teacher_signature_photo">
+                                                               id="addTeacherSignatureImage">
                                                     </button>
                                                 </div>
-                                                @if ($setting->teacher_signature_photo)
-                                                    <div class="col-auto">
-                                                        <div class="img_prevView">
-                                                            <img class="img-fluid"
-                                                                 src="{{ asset($setting->teacher_signature_photo) }}"
-                                                                 alt="@lang('examplan::exp.class_teacher_signature')">
-                                                        </div>
-                                                    </div>
-                                                @endif
+                                            </div>
+                                            <div class="row no-gutters input-right-icon mt-15">
+                                                <div class="col-lg-12">
+                                                    <img class="previewImageSize {{ @$setting->teacher_signature_photo ? '' : 'd-none' }}"
+                                                    src="{{ @$setting->teacher_signature_photo ? asset($setting->teacher_signature_photo) : '' }}"
+                                                    alt="" id="teacherSignatureImageShow" height="100%" width="100%">
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="col-lg-6 relation-button justify-content-between">
@@ -429,21 +427,19 @@
                                                             class="primary-btn-small-input" type="button">
 
                                                         <label class="primary-btn small fix-gr-bg"
-                                                               for="principal_signature_photo">@lang('common.browse')</label>
+                                                               for="addPrincipalSignatureImage">@lang('common.browse')</label>
                                                         <input type="file" class="d-none"
                                                                name="principal_signature_photo"
-                                                               id="principal_signature_photo">
+                                                               id="addPrincipalSignatureImage">
                                                     </button>
                                                 </div>
-                                                @if ($setting->principal_signature_photo)
-                                                    <div class="col-auto">
-                                                        <div class="img_prevView">
-                                                            <img class="img-fluid Img-100"
-                                                                 src="{{ asset($setting->principal_signature_photo) }}"
-                                                                 alt="@lang('examplan::exp.principal_signature')">
-                                                        </div>
-                                                    </div>
-                                                @endif
+                                            </div>
+                                            <div class="row no-gutters input-right-icon mt-15">
+                                                <div class="col-lg-12">
+                                                    <img class="previewImageSize {{ @$setting->principal_signature_photo ? '' : 'd-none' }}"
+                                                    src="{{ @$setting->principal_signature_photo ? asset($setting->principal_signature_photo) : '' }}"
+                                                    alt="" id="principalSignatureImageShow" height="100%" width="100%">
+                                                </div>
                                             </div>
                                         </div>
 
@@ -466,7 +462,7 @@
                                 </div>
                                 <form action="{{ route('examplan.admitcard.settingUpdatetwo') }}" method="post"
                                       enctype="multipart/form-data"
-                                      class="bg-white p-4 rounded">
+                                      class="bg-white rounded">
                                     <input type="hidden" name="tab_layout" value="2">
                                     @csrf
                                     <div class="row">
@@ -738,21 +734,19 @@
                                                     <button style="position: relative; top: 8px; right: 12px;"
                                                             class="primary-btn-small-input" type="button">
                                                         <label class="primary-btn small fix-gr-bg"
-                                                               for="principal_signature_photo_2">@lang('common.browse')</label>
+                                                               for="addPrincipalSignatureImage2">@lang('common.browse')</label>
                                                         <input type="file" class="d-none"
                                                                name="principal_signature_photo_2"
-                                                               id="principal_signature_photo_2">
+                                                               id="addPrincipalSignatureImage2">
                                                     </button>
                                                 </div>
-                                                @if ($setting->principal_signature_photo)
-                                                    <div class="col-auto">
-                                                        <div class="img_prevView">
-                                                            <img class="img-fluid Img-100"
-                                                                 src="{{ asset($setting->principal_signature_photo) }}"
-                                                                 alt="@lang('examplan::exp.principal_signature')">
-                                                        </div>
-                                                    </div>
-                                                @endif
+                                            </div>
+                                            <div class="row no-gutters input-right-icon mt-15">
+                                                <div class="col-lg-12">
+                                                    <img class="previewImageSize {{ @$setting->principal_signature_photo ? '' : 'd-none' }}"
+                                                    src="{{ @$setting->principal_signature_photo ? asset($setting->principal_signature_photo) : '' }}"
+                                                    alt="" id="principalSignatureTwoImageShow" height="100%" width="100%">
+                                                </div>
                                             </div>
                                         </div>
 
@@ -875,5 +869,26 @@
                 ).placeholder = fileInput.files[0].name;
             });
         }
+    </script>
+    <script>
+        $(document).on('change', '#addTeacherSignatureImage', function(event) {
+            $('#teacherSignatureImageShow').removeClass('d-none');
+            getFileName($(this).val(), '#teacher_signature_photo_placeholder');
+            imageChangeWithFile($(this)[0], '#teacherSignatureImageShow');
+        });
+    </script>
+    <script>
+        $(document).on('change', '#addPrincipalSignatureImage', function(event) {
+            $('#principalSignatureImageShow').removeClass('d-none');
+            getFileName($(this).val(), '#principal_signature_photo_placeholder');
+            imageChangeWithFile($(this)[0], '#principalSignatureImageShow');
+        });
+    </script>
+    <script>
+        $(document).on('change', '#addPrincipalSignatureImage2', function(event) {
+            $('#principalSignatureTwoImageShow').removeClass('d-none');
+            getFileName($(this).val(), '#principal_signature_photo_2_placeholder');
+            imageChangeWithFile($(this)[0], '#principalSignatureTwoImageShow');
+        });
     </script>
 @endpush

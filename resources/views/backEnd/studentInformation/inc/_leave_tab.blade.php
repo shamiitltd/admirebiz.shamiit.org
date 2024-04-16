@@ -1,5 +1,5 @@
 <div role="tabpanel" class="tab-pane fade" id="leaves">
-    <div class="white-box">
+    <div>
         <div class="row">
             <div class="col-lg-12">
                 <div class="table-responsive">

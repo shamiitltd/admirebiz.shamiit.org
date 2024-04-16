@@ -8,11 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class SmClassRoom extends Model
 {
+   
     protected static function boot(){
         parent::boot();
+  
         static::addGlobalScope(new ActiveStatusSchoolScope);
     }
-    
     use HasFactory;
 
 }

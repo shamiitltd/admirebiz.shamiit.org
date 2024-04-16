@@ -285,7 +285,7 @@
         content: "\f106";
         }
         .btn_zindex{
-        z-index: 1000;
+        z-index: 995;
         }
         .btn_div{
         margin-top: -43px;
@@ -347,6 +347,26 @@
                 text-decoration: none;
             }
 
+            @media (max-width: 576px){
+                .dd-handle{
+                    padding-left: 10px;
+                }
+                .primary-btn{
+                    padding: 0 16px;
+                }
+
+                .dd-handle .pull-left {
+                    max-width: calc(100% - 110px);
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
+                .dd-list .dd-list{
+                    padding-left: 10px;
+                }
+            }
+
 
 </style>
 @endpush
@@ -364,7 +384,7 @@
             <h1>@lang('front_settings.header_menu_manager')</h1>
             <div class="bc-pages">
                 <a href="{{route('dashboard')}}">@lang('common.dashboard')</a>
-                <a href="#">@lang('front_settings.front_settings')</a>
+                <a href="#">@lang('front_settings.frontend_cms')</a>
                 <a href="#">@lang('front_settings.header_menu_manager')</a>
             </div>
         </div>

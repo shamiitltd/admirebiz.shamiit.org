@@ -4,8 +4,8 @@
     <input type="hidden" name="day" value="{{ $day_id }}">
     <input type="hidden" name="class_id" value="{{ $class_id }}">
     <input type="hidden" name="section_id" value="{{ $section_id }}">
-        <div class="white-box no-padding">
-            <div class="table-responsive class-routine-table">
+        <div>
+            <div class="table-responsive tableheight">
                 <table class="table" id="classRoutineTable">
                    
                     <thead>

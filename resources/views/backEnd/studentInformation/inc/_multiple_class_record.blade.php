@@ -80,7 +80,7 @@
         <div class="col-2">
             <div class="primary_input">
                 <input oninput="numberCheck(this)" class="primary_input_field" type="text" id="roll_number" placeholder="{{ moduleStatusCheck('Lead') == true ? __('lead::lead.id_number') : __('student.roll') }}{{ is_required('roll_number') == true ? ' *' : '' }}"
-                    name="old_record[{{ $record->id }}][roll_number][]" value="{{ old('roll_number') }}">
+                    name="old_record[{{ $record->id }}][roll_number][]" value="{{ $record->roll_no ? $record->roll_no : old('roll_number') }}">
                 
                 <span class="text-danger" id="roll-error" role="alert">
                     <strong></strong>

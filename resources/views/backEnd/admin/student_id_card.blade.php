@@ -12,7 +12,7 @@
     } */
     .user_id_card_header{
         padding: 10px;
-        background: #c738d8;
+        background: var(--primary-color);
 
     }
     .user_id_card_header h4{
@@ -90,7 +90,7 @@
 
 
 </style>
-<section class="sms-breadcrumb mb-40 white-box up_breadcrumb">
+<section class="sms-breadcrumb mb-20 up_breadcrumb">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('admin.create_id_card')</h1>
@@ -769,7 +769,7 @@
                             </div>
                         </div>
 
-                        <div id="vertical" class="d-none" style="margin: 0; padding: 0; font-family: 'Poppins', sans-serif;  font-size: 12px; line-height:1.02 ;">
+                        <div id="vertical" class="d-none overflow-auto" style="margin: 0; padding: 0; font-family: 'Poppins', sans-serif;  font-size: 12px; line-height:1.02 ;">
                             <div class="vertical__card" style="line-height:1.02; background-image: url({{asset('public/backEnd/id_card/img/horizontal_bg.png')}}); width: 86mm; height: 54mm; margin: auto; background-size: 100% 100%; background-position: center center; position: relative;">
                                 <div class="horizontal_card_header" style="line-height:1.02; display: flex; align-items:center; justify-content:space-between; padding: 12px">
                                     <div class="logo__img logoImage vLogo" style="line-height:1.02; width: 80px; background-image: url('{{asset('public/backEnd/img/logo.png')}}');background-size: cover;

@@ -10,9 +10,9 @@
         display: block !important;
         width: 100%;
         background: #ffffff;
-        padding: 40px 30px;
+        padding: 30px 30px;
         border-radius: 5px;
-        box-shadow: 0px 10px 15px rgba(236, 208, 244, 0.3);
+        box-shadow: var(--box_shadow);
         margin: 0 auto;
         clear: both;
         border-collapse: separate;
@@ -175,7 +175,7 @@
 
 </style>
 @section('mainContent')
-    <section class="sms-breadcrumb mb-40 white-box up_breadcrumb">
+    <section class="sms-breadcrumb mb-20 up_breadcrumb">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('admin.admin_setup')</h1>
@@ -203,18 +203,6 @@
                 <div class="col-lg-3">
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="main-title">
-                                <h3 class="mb-30">
-                                    @if (isset($admin_setup))
-                                        @lang('admin.edit_admin_setup')
-
-                                    @else
-                                        @lang('admin.add_admin_setup')
-
-                                    @endif
-
-                                </h3>
-                            </div>
                             @if (isset($admin_setup))
                                 {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => ['setup-admin-update', @$admin_setup->id], 'method' => 'PUT']) }}
                             @else
@@ -224,6 +212,18 @@
                             @endif
                             <input type="hidden" name="url" id="url" value="{{ URL::to('/') }}">
                             <div class="white-box">
+                                <div class="main-title">
+                                    <h3 class="mb-15">
+                                        @if (isset($admin_setup))
+                                            @lang('admin.edit_admin_setup')
+    
+                                        @else
+                                            @lang('admin.add_admin_setup')
+    
+                                        @endif
+    
+                                    </h3>
+                                </div>
                                 <div class="add-visitor">
                                     <div class="row">
                                         <div class="col-lg-12">
@@ -315,97 +315,99 @@
                 </div>
 
                 <div class="col-lg-9">
-                    <div class="row">
-                        <div class="col-lg-4 no-gutters">
-                            <div class="main-title">
-                                <h3 class="mb-0">@lang('admin.admin_setup_list')</h3>
+                    <div class="white-box">
+                        <div class="row">
+                            <div class="col-lg-4 no-gutters">
+                                <div class="main-title">
+                                    <h3 class="mb-0">@lang('admin.admin_setup_list')</h3>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row base-setup mt-30">
-                        <div class="col-lg-12">
-                            <div class="erp_role_permission_area ">
-                                <!-- single_permission  -->
-                                <div class="mesonary_role_header">
-                                    @php $i = 0; @endphp
-                                    @foreach ($admin_setups as $key => $values)
-                                        <!-- single_role_blocks  -->
-                                        <div class="single_role_blocks">
-                                            <div class="single_permission" id="">
-                                                <div
-                                                    class="permission_header d-flex align-items-center justify-content-between">
-                                                    <div>
-                                                        <input name="module_id[]" value="" id="Main_Module"
-                                                            class="common-radio permission-checkAll main_module_id_">
-                                                        <label for="Main_Module">
-                                                            @php
-                                                                if ($key == 1) {
-                                                                    echo trans('admin.purpose');
-                                                                } elseif ($key == 2) {
-                                                                    echo trans('admin.complaint_type');
-                                                                } elseif ($key == 3) {
-                                                                    echo trans('admin.source');
-                                                                } elseif ($key == 4) {
-                                                                    echo trans('admin.reference');
-                                                                }
-                                                            @endphp
-                                                        </label>
+                        <div class="row base-setup">
+                            <div class="col-lg-12">
+                                <div class="erp_role_permission_area ">
+                                    <!-- single_permission  -->
+                                    <div class="mesonary_role_header">
+                                        @php $i = 0; @endphp
+                                        @foreach ($admin_setups as $key => $values)
+                                            <!-- single_role_blocks  -->
+                                            <div class="single_role_blocks">
+                                                <div class="single_permission" id="">
+                                                    <div
+                                                        class="permission_header d-flex align-items-center justify-content-between">
+                                                        <div>
+                                                            <input name="module_id[]" value="" id="Main_Module"
+                                                                class="common-radio permission-checkAll main_module_id_">
+                                                            <label for="Main_Module">
+                                                                @php
+                                                                    if ($key == 1) {
+                                                                        echo trans('admin.purpose');
+                                                                    } elseif ($key == 2) {
+                                                                        echo trans('admin.complaint_type');
+                                                                    } elseif ($key == 3) {
+                                                                        echo trans('admin.source');
+                                                                    } elseif ($key == 4) {
+                                                                        echo trans('admin.reference');
+                                                                    }
+                                                                @endphp
+                                                            </label>
+                                                        </div>
+    
+                                                        <div class="arrow collapsed" data-toggle="collapse"
+                                                            data-target="#Role{{ $key }}">
+    
+    
+    
+                                                        </div>
+    
                                                     </div>
-
-                                                    <div class="arrow collapsed" data-toggle="collapse"
-                                                        data-target="#Role{{ $key }}">
-
-
-
-                                                    </div>
-
-                                                </div>
-
-                                                <div id="Role{{ $key }}" class="collapse">
-                                                    <div class="permission_body school-table">
-                                                        <ul>
-                                                            <li>
-                                                                <ul class="option">
-                                                                    @foreach ($values as $index => $admin_setup)
-                                                                        <li>
-                                                                            <div class="module_link_option_div" id="">
-
-                                                                                <div class="dropdown p-2">
-                                                                                    <button type="button"
-                                                                                        class="btn dropdown-toggle infix_csk module_id_ module_option_ module_link_option"
-                                                                                        data-toggle="dropdown">{{ @$admin_setup->name }}
-                                                                                    </button>
-
-                                                                                    <div
-                                                                                        class="dropdown-menu dropdown-menu-right">
-                                                                                        @if (userPermission('setup-admin-edit'))
-                                                                                            <a class="dropdown-item"
-                                                                                                href="{{ route('setup-admin-edit', @$admin_setup->id) }}">@lang('common.edit')</a>
-                                                                                        @endif
-                                                                                        @if (userPermission("setup-admin-delete"))
-                                                                                            <a class="dropdown-item deleteSetupAdminModal"
-                                                                                                href="#" data-toggle="modal"
-                                                                                                data-target="#deleteSetupAdminModal"
-                                                                                                data-id="{{ @$admin_setup->id }}">@lang('common.delete')</a>
-                                                                                        @endif
+    
+                                                    <div id="Role{{ $key }}" class="collapse">
+                                                        <div class="permission_body school-table">
+                                                            <ul>
+                                                                <li>
+                                                                    <ul class="option">
+                                                                        @foreach ($values as $index => $admin_setup)
+                                                                            <li>
+                                                                                <div class="module_link_option_div" id="">
+    
+                                                                                    <div class="dropdown p-2">
+                                                                                        <button type="button"
+                                                                                            class="btn dropdown-toggle infix_csk module_id_ module_option_ module_link_option"
+                                                                                            data-toggle="dropdown">{{ @$admin_setup->name }}
+                                                                                        </button>
+    
+                                                                                        <div
+                                                                                            class="dropdown-menu dropdown-menu-right">
+                                                                                            @if (userPermission('setup-admin-edit'))
+                                                                                                <a class="dropdown-item"
+                                                                                                    href="{{ route('setup-admin-edit', @$admin_setup->id) }}">@lang('common.edit')</a>
+                                                                                            @endif
+                                                                                            @if (userPermission("setup-admin-delete"))
+                                                                                                <a class="dropdown-item deleteSetupAdminModal"
+                                                                                                    href="#" data-toggle="modal"
+                                                                                                    data-target="#deleteSetupAdminModal"
+                                                                                                    data-id="{{ @$admin_setup->id }}">@lang('common.delete')</a>
+                                                                                            @endif
+                                                                                        </div>
                                                                                     </div>
+    
+    
                                                                                 </div>
-
-
-                                                                            </div>
-                                                                        </li>
-                                                                    @endforeach
-
-
-                                                                </ul>
-                                                            </li>
-
-                                                        </ul>
+                                                                            </li>
+                                                                        @endforeach
+    
+    
+                                                                    </ul>
+                                                                </li>
+    
+                                                            </ul>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    @endforeach
+                                        @endforeach
+                                    </div>
                                 </div>
                             </div>
                         </div>

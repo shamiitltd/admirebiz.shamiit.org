@@ -31,9 +31,10 @@
         }
     </style>
 @endpushonce
-{{headerContent()}}
+
 @extends(config('pagebuilder.site_layout'), ['edit' => false])
 @section(config('pagebuilder.site_section'))
+{{headerContent()}}
     <section class="bradcrumb_area">
         <div class="container">
             <div class="row">

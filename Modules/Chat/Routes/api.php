@@ -25,10 +25,9 @@ Route::middleware(['auth:web', 'subdomain'])->get('chat', function (Request $req
 });
 
 Route::middleware(['auth:api', 'subdomain'])->group(function () {
-     
+
     Route::get('chat/settings', [UserController::class, 'settings']);
     Route::post('chat/settings', [UserController::class, 'settingsUpdate']);
-    
     Route::post('chat/invitation/requirement', [UserController::class, 'invitationRequirementSetting']);
     
     
@@ -81,11 +80,10 @@ Route::middleware(['auth:api', 'subdomain'])->group(function () {
     Route::post('chat/check/notification', [ChatController::class, 'newNotificationCheck']);
     Route::get('chat/notification/all-read', [ChatController::class, 'allRead']);
     
-        //for edu
+    //for edu
     Route::post('chat/file/limit', [SettingsController::class, 'chatSettings']);
     Route::get('chat/settings/permission', [SettingsController::class, 'chatPermission']);
     Route::post('chat/settings/permission', [SettingsController::class, 'chatPermissionStore']);
     Route::get('chat/invitation/generate/{type}', [SettingsController::class, 'generate']);
-    
     Route::post('broadcasting/auth', [SettingsController::class,'pusherAuth']);
 });

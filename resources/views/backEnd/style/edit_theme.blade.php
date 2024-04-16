@@ -4,7 +4,7 @@
 @endsection
 
 @section('mainContent')
-    <section class="sms-breadcrumb mb-40 white-box up_breadcrumb">
+    <section class="sms-breadcrumb mb-20 up_breadcrumb">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('style.color_style')</h1>
@@ -19,19 +19,19 @@
 
     <section class="admin-visitor-area">
         <div class="container-fluid p-0">
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="main-title">
-                        <h3 class="mb-30">@lang('style.Edit Color Theme')</h3>
-                    </div>
-                </div>
-            </div>
             {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => ['themes.update', $theme->id], 'method' => 'PUT', 'enctype' => 'multipart/form-data']) }}
             <input type="hidden" value="{{ $theme->id }}" name="theme_id">
             <input type="hidden" id="old_bg_image" value="{{ asset($theme->background_image) }}">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="white-box">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="main-title">
+                                    <h3 class="mb-15">@lang('style.Edit Color Theme')</h3>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-lg-4">
                                 <div class="primary_input">
@@ -46,7 +46,7 @@
                                     
                                     @if ($errors->has('title'))
                                         <span class="text-danger" >
-                                            <strong>{{ @$errors->first('title') }}
+                                            {{ @$errors->first('title') }}
                                         </span>
                                     @endif
                                 </div>
@@ -96,8 +96,8 @@
                                                 readonly>
                                         <button class="" type="button">
                                             <label class="primary-btn small fix-gr-bg"
-                                                for="browseFile">@lang('common.browse')</label>
-                                            <input type="file" class="d-none" id="browseFile" name="background_image">
+                                                for="addThemeImage">@lang('common.browse')</label>
+                                            <input type="file" class="d-none" id="addThemeImage" name="background_image">
                                         </button>
                                     </div>
                                    
@@ -107,6 +107,11 @@
                                     </span>
                                     @endif
                                 </div>
+                            </div>
+                        </div>
+                        <div class="row mt-15" id="themeImageDiv">
+                            <div class="col-lg-12">
+                                <img class="previewImageSize {{ @$theme->background_image ? '' : 'd-none' }}" src="{{ @$theme->background_image ? asset($theme->background_image) : '' }}" alt="" id="themeImageShow" height="100%" width="100%">
                             </div>
                         </div>
                         <div class="row">
@@ -143,7 +148,7 @@
 
                                 @if ($errors->has('box_shadow'))
                                     <span class="text-danger validate-textarea-checkbox" role="alert">
-                                        <strong>{{ @$errors->first('box_shadow') }}
+                                        {{ @$errors->first('box_shadow') }}
                                     </span>
                                 @endif
                             </div>
@@ -151,7 +156,7 @@
                             <div class="col-12">
                                 <div class="submit_btn text-center ">
                                     <button class="primary-btn semi_large2 fix-gr-bg" id="reset_to_default"
-                                        type="button"><i class="ti-check"></i>{{ __('style.Reset To Default') }}
+                                        type="button"><i class="ti-reload"></i>{{ __('style.Reset To Default') }}
                                     </button>
                                     <button class="primary-btn semi_large2 fix-gr-bg" type="submit"><i
                                             class="ti-check"></i>{{ __('common.save') }}
@@ -172,4 +177,11 @@
 
 @push('scripts')
     @include('backEnd.style.script')
+    <script>
+        $(document).on('change', '#addThemeImage', function(event) {
+            $('#themeImageShow').removeClass('d-none');
+            getFileName($(this).val(), '#placeholderInput');
+            imageChangeWithFile($(this)[0], '#themeImageShow');
+        });
+    </script>
 @endpush

@@ -16,6 +16,7 @@
       
       $(".sidebar").toggleClass("mini_sidebar");
       $("#main-content").toggleClass("mini_main_content");
+      $(".footer-area").toggleClass("mini_main_content");
     });
     // $(".open_miniSide").click(function () {
     //   $(".sidebar").toggleClass("mini_sidebar");
@@ -1746,6 +1747,12 @@
           $(this).show();
         });
   });
-
+  //Show file name
+  $('.file_upload').on('change',function(){
+    var file = $(this).val();
+    var fileName = file.split("\\");
+    fileName = fileName[fileName.length-1];
+    $(this).closest('.primary_file_uploader').find('.primary_input_field').val(fileName);
+  });
   ("use strict");
 })(jQuery);

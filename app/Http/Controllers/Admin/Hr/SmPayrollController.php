@@ -298,11 +298,15 @@ class SmPayrollController extends Controller
 
     public function savePayrollPaymentData(Request $request)
     {
-
-        $request->validate([
-            'expense_head_id' => "required",
-            'payment_mode' => "required"
+        $validation = Validator::make($request->all(), [
+            'expense_head_id' => 'required',
+            'payment_mode'    => 'required',
         ]);
+
+        if ($validation->fails()){
+            Toastr::error($validation->messages());
+            return redirect()->back();
+        }
 
         try {
             $payroll_month = $request->payroll_month;

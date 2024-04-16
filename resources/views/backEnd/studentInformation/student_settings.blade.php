@@ -47,7 +47,7 @@
         }
 
         input:checked+.slider {
-            background: linear-gradient(90deg, var(--gradient_1) 0%, #c738d8 51%, var(--gradient_1) 100%);
+            background: var(--primary-color);
         }
 
         input:focus+.slider {
@@ -100,7 +100,7 @@
             color: #a336eb;
         }
     </style>
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('student.settings')</h1>
@@ -119,13 +119,12 @@
                 <div class="col-lg-12">
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="main-title">
-                                <h3 class="mb-30 text-center">
-                                    @lang('student.student_admission_field')
-                                </h3>
-                            </div>
-
                             <div class="white-box">
+                                <div class="main-title">
+                                    <h3 class="mb-15 text-center">
+                                        @lang('student.student_admission_field')
+                                    </h3>
+                                </div>
                                 <div class="add-visitor">
                                     <div class="row">
                                         <div class="col-lg-12">

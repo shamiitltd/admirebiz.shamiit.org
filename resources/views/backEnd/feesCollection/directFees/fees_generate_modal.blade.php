@@ -3,7 +3,11 @@
           display: none;
       }
       .primary_input_field ~ label {
-      top: -15px;
+          top: -15px;
+      }
+      .ti-calendar:before {
+          position: relative!important;
+          bottom: 22px!important;
       }
   </style>
   

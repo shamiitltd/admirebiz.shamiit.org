@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\GlobalVariable;
 use App\Role;
 use App\SmBook;
 use App\SmClass;
@@ -36,7 +37,7 @@ class SmAcademicCalendarController extends Controller
         $data['roles'] = InfixRole::where(function ($q) {
             $q->where('school_id', auth()->user()->school_id)->orWhere('type', 'System');
         })
-        ->whereNotIn('id', [1, 2])
+        ->whereNotIn('id', [1])
         ->get();
 
         $data['events'] = $this->calenderData();
@@ -66,13 +67,26 @@ class SmAcademicCalendarController extends Controller
 	}
 
 	public function getCalendarSettings($menu_name){
-		return SmCalendarSetting::where('menu_name', $menu_name)
-				->select('font_color', 'bg_color', 'status')
-				->first();
+        return SmCalendarSetting::where('menu_name', $menu_name)
+            ->select('font_color', 'bg_color', 'status')
+            ->first();  
 	}
+
+    public function alumniGetCalendarSettings($menu_name){
+        if(auth()->user()->role_id == GlobalVariable::isAlumni()){
+            $data['status'] = 0;
+            $obj = (object) $data;
+            return $obj;
+        }else{
+            return SmCalendarSetting::where('menu_name', $menu_name)
+            ->select('font_color', 'bg_color', 'status')
+            ->first();
+        }
+    }
 
     public function calenderData(){
         // CalenderQuery Start
+        try{
         $admissionQuries = [];
         $homeworks = [];
         $studyMaterials = [];
@@ -85,17 +99,17 @@ class SmAcademicCalendarController extends Controller
         $leaveDatas = [];
         $libraryDatas = [];
 
-        $admissionQuerySettings = $this->getCalendarSettings('admission_query');
-        $homeworkSettings = $this->getCalendarSettings('homework');
-        $studyMaterialSettings = $this->getCalendarSettings('study_material');
+        $admissionQuerySettings = $this->alumniGetCalendarSettings('admission_query');
+        $homeworkSettings = $this->alumniGetCalendarSettings('homework');
+        $studyMaterialSettings = $this->alumniGetCalendarSettings('study_material');
         $eventSettings = $this->getCalendarSettings('event');
-        $holidaySettings = $this->getCalendarSettings('holiday');
-        $examSettings = $this->getCalendarSettings('exam');
+        $holidaySettings = $this->alumniGetCalendarSettings('holiday');
+        $examSettings = $this->alumniGetCalendarSettings('exam');
         $noticeBoardSettings = $this->getCalendarSettings('notice_board');
-        $onlineExamSettings = $this->getCalendarSettings('online_exam');
-        $lessonPlanSettings = $this->getCalendarSettings('lesson_plan');
-        $leaveSettings = $this->getCalendarSettings('leave');
-        $librarySettings = $this->getCalendarSettings('library');
+        $onlineExamSettings = $this->alumniGetCalendarSettings('online_exam');
+        $lessonPlanSettings = $this->alumniGetCalendarSettings('lesson_plan');
+        $leaveSettings = $this->alumniGetCalendarSettings('leave');
+        $librarySettings = $this->alumniGetCalendarSettings('library');
 
         $userRoleId = auth()->user()->role_id;
         $roleInfo = auth()->user()->roles;
@@ -105,6 +119,7 @@ class SmAcademicCalendarController extends Controller
         }else{
             $studentRecords = [];
         }
+
         if($userRoleId == 3){
             $childrenRecords = [];
             $childrenUserids = [];
@@ -149,7 +164,6 @@ class SmAcademicCalendarController extends Controller
             })
             ->get(['class_id', 'section_id', 'subject_id', 'description', 'submission_date']);
         }
-
         if($studyMaterialSettings->status == 1){
             $studyMaterials = SmTeacherUploadContent::with('classes', 'sections')
             ->when($userRoleId == 2, function($s) use ($studentRecords){
@@ -205,7 +219,7 @@ class SmAcademicCalendarController extends Controller
         }
 
         if($noticeBoardSettings->status == 1){
-            $noticeBoards = SmNoticeBoard::when($roleInfo->id != 1, function($a) use($roleInfo){
+            $noticeBoards = SmNoticeBoard::when($roleInfo->name != 'Super admin', function($a) use($roleInfo){
                 $a->whereJsonContains('inform_to', (string)$roleInfo->id);
             })
             ->get(['notice_title', 'notice_message', 'publish_on', 'inform_to']);
@@ -287,7 +301,7 @@ class SmAcademicCalendarController extends Controller
                 'color' => $admissionQuerySettings->bg_color,
                 'type' => 'admission_query',
             ];
-        }
+        }    
 
         foreach($homeworks as $homework){
             $eventData [] = [
@@ -343,6 +357,7 @@ class SmAcademicCalendarController extends Controller
                 'type' => 'study_material',
             ];
         }
+        
 
         foreach($allEvents as $event){
             $eventData [] = [
@@ -366,7 +381,7 @@ class SmAcademicCalendarController extends Controller
                 'title' => __('communicate.holiday').'- '.$holiday->holiday_title,
                 'title_content' => $holiday->holiday_title,
                 'description' => $holiday->details,
-                'start' => Carbon::parse($holiday->form_date)->format('Y-m-d'),
+                'start' => Carbon::parse($holiday->from_date)->format('Y-m-d'),
                 'end' => Carbon::parse($holiday->to_date)->addDay(1)->format('Y-m-d'),
                 'endDate' => Carbon::parse($holiday->to_date)->format('Y-m-d'),
                 'image' => $holiday->upload_image_file,
@@ -395,6 +410,7 @@ class SmAcademicCalendarController extends Controller
                 'type' => 'exam',
             ];
         }
+        
 
         foreach($noticeBoards as $notice) {
             $eventData [] = [
@@ -458,7 +474,7 @@ class SmAcademicCalendarController extends Controller
                 'type' => 'leave',
             ];
         }
-
+        
         foreach($libraryDatas as $library) {
             $eventData [] = [
                 'title' => __('communicate.library').'- '.$library->user->full_name ?? '',
@@ -472,5 +488,9 @@ class SmAcademicCalendarController extends Controller
             ];
         }
         return $eventData;
+
+        }catch(\Exception $e){
+            return [];
+        }
     }
 }

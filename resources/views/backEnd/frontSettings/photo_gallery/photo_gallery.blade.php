@@ -3,32 +3,23 @@
     @lang('front_settings.photo_gallery')
 @endsection
 @section('mainContent')
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('front_settings.photo_gallery')</h1>
                 <div class="bc-pages">
                     <a href="{{ route('dashboard') }}">@lang('common.dashboard')</a>
-                    <a href="#">@lang('front_settings.front_settings')</a>
+                    <a href="#">@lang('front_settings.frontend_cms')</a>
                     <a href="{{ route('photo-gallery') }}">@lang('front_settings.photo_gallery')</a>
                 </div>
             </div>
         </div>
     </section>
     <section class="admin-visitor-area up_st_admin_visitor">
-        <div class="row">
+        <div class="row row-gap-24">
             <div class="col-lg-4">
                 <div class="row">
                     <div class="col-lg-12">
-                        <div class="main-title">
-                            <h3 class="mb-30">
-                                @if (isset($add_photo_gallery))
-                                    @lang('front_settings.edit_photo_gallery')
-                                @else
-                                    @lang('front_settings.photo_gallery')
-                                @endif
-                            </h3>
-                        </div>
                         @if (isset($add_photo_gallery))
                             {{ Form::open([
                                 'class' => 'form-horizontal',
@@ -50,6 +41,15 @@
                             @endif
                         @endif
                         <div class="white-box">
+                            <div class="main-title">
+                                <h3 class="mb-15">
+                                    @if (isset($add_photo_gallery))
+                                        @lang('front_settings.edit_photo_gallery')
+                                    @else
+                                        @lang('front_settings.photo_gallery')
+                                    @endif
+                                </h3>
+                            </div>
                             <div class="add-visitor">
                                 <div class="row">
                                     <div class="col-lg-12">
@@ -96,9 +96,9 @@
                                                     id="placeholderUploadContent" readonly>
                                                 <button class="" type="button">
                                                     <label class="primary-btn small fix-gr-bg"
-                                                        for="document_file_1">{{ __('common.browse') }}</label>
+                                                        for="addPhotoGalleryImage">{{ __('common.browse') }}</label>
                                                     <input type="file" class="d-none" name="feature_image"
-                                                        id="document_file_1">
+                                                        id="addPhotoGalleryImage">
                                                 </button>
                                             </div>
                                             @if ($errors->has('feature_image'))
@@ -107,6 +107,11 @@
                                                 </span>
                                             @endif
                                         </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-20">
+                                    <div class="col-lg-12">
+                                        <img class="previewImageSize {{ @$add_photo_gallery->feature_image ? '' : 'd-none' }}" src="{{ @$add_photo_gallery->feature_image ? asset($add_photo_gallery->feature_image) : '' }}" alt="" id="photoGalleryImageShow" height="100%" width="100%">
                                     </div>
                                 </div>
                                 <div class="row mt-40 align-items-center">
@@ -118,7 +123,7 @@
                                     <div class="col-lg-2 col-3 text-right">
                                         <a href="javascript:void(0)" class="primary-btn icon-only fix-gr-bg"
                                             id="addRowBtn">
-                                            <span class="ti-plus pr-2"></span>
+                                            <span class="ti-plus"></span>
                                         </a>
                                     </div>
                                 </div>
@@ -162,6 +167,9 @@
                                 </div>
                                 <div class="row mt-40">
                                     <div class="col-lg-12 text-center">
+                                        @if(config('app.app_sync'))
+                                            <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Disabled For Demo "> <button class="primary-btn small fix-gr-bg  demo_view" style="pointer-events: none;" type="button" >@lang('common.add')</button></span>
+                                        @else
                                         <button class="primary-btn fix-gr-bg" data-toggle="tooltip"
                                             title="{{ @$tooltip }}">
                                             @if (isset($add_photo_gallery))
@@ -170,6 +178,7 @@
                                                 @lang('common.add')
                                             @endif
                                         </button>
+                                        @endif 
                                     </div>
                                 </div>
                             </div>
@@ -180,75 +189,77 @@
             </div>
 
             <div class="col-lg-8">
-                <div class="row">
-                    <div class="col-lg-4 no-gutters">
-                        <div class="main-title">
-                            <h3 class="mb-0">@lang('front_settings.photo_gallery_list')</h3>
+                <div class="white-box">
+                    <div class="row">
+                        <div class="col-xl-4 col-sm-6 no-gutters">
+                            <div class="main-title">
+                                <h3 class="mb-15">@lang('front_settings.photo_gallery_list')</h3>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-lg-12">
-                        <x-table>
-                            <table id="table_id" class="table" cellspacing="0" width="100%">
-                                <thead>
-                                    <tr>
-                                        <th>@lang('common.sl')</th>
-                                        <th>@lang('front_settings.name')</th>
-                                        <th>@lang('front_settings.description')</th>
-                                        <th>@lang('front_settings.image')</th>
-                                        <th>@lang('common.action')</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($photoGalleries as $key => $value)
-                                        <input type="hidden" id="photo_gallery_id" value="{{ @$value->id }}">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <x-table>
+                                <table id="table_id" class="table photoGallery" cellspacing="0" width="100%">
+                                    <thead>
                                         <tr>
-                                            <td>{{ $key + 1 }}</td>
-                                            <td>{{ @$value->name }}</td>
-                                            <td>{{ @$value->description }}</td>
-                                            <td><img src="{{ asset(@$value->feature_image) }}" width="60px"
-                                                    height="50px">
-                                            </td>
-                                            <td>
-                                                <x-drop-down>
-                                                    <a class="dropdown-item" data-toggle="modal"
-                                                        data-target="#photogallery{{ @$value->id }}"
-                                                        onclick="getPhotoGallery({{ @$value->id }})"
-                                                        href="#">
-                                                        @lang('common.view')
-                                                    </a>
-                                                    <a class="dropdown-item"
-                                                        href="{{ route('photo-gallery-edit', @$value->id) }}">@lang('common.edit')</a>
-                                                    <a href="{{ route('photo-gallery-delete-modal', @$value->id) }}"
-                                                        class="dropdown-item small fix-gr-bg modalLink"
-                                                        title="@lang('front_settings.delete_photo_gallery')" data-modal-size="modal-md">
-                                                        @lang('common.delete')
-                                                    </a>
-                                                </x-drop-down>
-                                            </td>
+                                            <th>@lang('common.sl')</th>
+                                            <th>@lang('front_settings.name')</th>
+                                            <th>@lang('front_settings.description')</th>
+                                            <th>@lang('front_settings.image')</th>
+                                            <th>@lang('common.action')</th>
                                         </tr>
-                                        <div class="modal fade admin-query" id="photogallery{{ @$value->id }}">
-                                            <div class="modal-dialog modal-dialog-centered large-modal">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h4 class="modal-title">@lang('front_settings.view_images')</h4>
-                                                        <button type="button" class="close"
-                                                            data-dismiss="modal">&times;</button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <div class="col-lg-12" id="photo_gallery_list">
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($photoGalleries as $key => $value)
+                                            <input type="hidden" id="url" value="{{URL::to('/')}}">
+                                            <input type="hidden" id="photo_gallery_id" value="{{ @$value->id }}">
+                                            <tr e_id="{{$value->id}}">
+                                                <td><span class="mr-2" style="cursor: grab"><i class="ti-menu"></i></span>{{ $key + 1 }}</td>
+                                                <td>{{ @$value->name }}</td>
+                                                <td>{{ @$value->description }}</td>
+                                                <td><img src="{{ asset(@$value->feature_image) }}" width="60px"
+                                                        height="50px">
+                                                </td>
+                                                <td>
+                                                    <x-drop-down>
+                                                        <a class="dropdown-item" data-toggle="modal"
+                                                            data-target="#photogallery{{ @$value->id }}"
+                                                            onclick="getPhotoGallery({{ @$value->id }})"
+                                                            href="#">
+                                                            @lang('common.view')
+                                                        </a>
+                                                        <a class="dropdown-item"
+                                                            href="{{ route('photo-gallery-edit', @$value->id) }}">@lang('common.edit')</a>
+                                                        <a href="{{ route('photo-gallery-delete-modal', @$value->id) }}"
+                                                            class="dropdown-item small fix-gr-bg modalLink"
+                                                            title="@lang('front_settings.delete_photo_gallery')" data-modal-size="modal-md">
+                                                            @lang('common.delete')
+                                                        </a>
+                                                    </x-drop-down>
+                                                </td>
+                                            </tr>
+                                            <div class="modal fade admin-query" id="photogallery{{ @$value->id }}">
+                                                <div class="modal-dialog modal-dialog-centered large-modal">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title">@lang('front_settings.view_images')</h4>
+                                                            <button type="button" class="close"
+                                                                data-dismiss="modal">&times;</button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="col-lg-12" id="photo_gallery_list">
 
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </x-table>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </x-table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -260,12 +271,13 @@
 @push('script')
     <script type="text/javascript">
         function getPhotoGallery(galleryId) {
+            var url = $('#url').val();
             $.ajax({
                 type: "GET",
                 data: {
                     galleryId: galleryId
                 },
-                url: "/photo-gallery-view-modal/" + galleryId,
+                url: url+"/photo-gallery-view-modal/" + galleryId,
                 dataType: "html",
                 success: function(response) {
                     $('#photo_gallery_list').html(response);
@@ -321,6 +333,14 @@
         $(document).on('change', '.file-upload-multi', function(e) {
             let fileName = e.target.files[0].name;
             $(this).parent().parent().find('.file-upload-multi-placeholder').attr('placeholder', fileName);
+        });
+
+        datableArrange('.photoGallery', 'sm_photo_galleries');
+        
+        $(document).on('change', '#addPhotoGalleryImage', function(event) {
+            $('#photoGalleryImageShow').removeClass('d-none');
+            getFileName($(this).val(), '#placeholderFileOneName');
+            imageChangeWithFile($(this)[0], '#photoGalleryImageShow');
         });
     </script>
 @endpush

@@ -61,11 +61,14 @@ class ImportController extends Controller
                             StaffImportBulkTemporary::where('user_id', Auth::user()->id)->delete();
                             Toastr::error('Your Staff limit has been crossed.', 'Failed');
                             return redirect()->route('staff_directory');
-
                         }
                     }
-                    $role_id = InfixRole::where('name', $singleStaff->role)->where('school_id', auth()->user()->school_id)->value('id') ?? null;
-                   
+                    $role_id = InfixRole::where('name', $singleStaff->role)
+                        ->where(function ($q) {
+                            $q->where('school_id', auth()->user()->school_id)
+                                ->orWhere('type', 'System');
+                        })
+                        ->value('id') ?? null;
                     $department_id = SmHumanDepartment::where('name', $singleStaff->department)->value('id') ?? null;
                     $designation_id = SmDesignation::where('title', $singleStaff->designation)->value('id') ?? null;
 
@@ -89,10 +92,10 @@ class ImportController extends Controller
 
                     if ($user) {
                         $basic_salary = $singleStaff->basic_salary ?? 0;
-                        
+
                         $staff = new SmStaff();
                         $staff->staff_no = $singleStaff->staff_no;
-                        $staff->role_id =$role_id == 1 ? 5 : $role_id;
+                        $staff->role_id = $role_id == 1 ? 5 : $role_id;
                         $staff->department_id = $department_id;
                         $staff->designation_id = $designation_id;
                         $staff->first_name = $singleStaff->first_name;
@@ -128,7 +131,6 @@ class ImportController extends Controller
                         $staff->driving_license = $singleStaff->driving_license;
                         $staff->save();
                     }
-
                 }
 
                 StaffImportBulkTemporary::where('user_id', Auth::user()->id)->delete();
@@ -136,26 +138,24 @@ class ImportController extends Controller
                 Toastr::success('Operation successful', 'Success');
                 return redirect()->route('staff_directory');
             }
-
         } catch (\Throwable $th) {
-        
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->route('staff_directory');
         }
     }
-    private function checkExitUser($phone_number = null, $email = null):bool
+    private function checkExitUser($phone_number = null, $email = null): bool
     {
         $user = User::when($phone_number && !$email, function ($q) use ($phone_number) {
             $q->where('phone_number', $phone_number)->orWhere('username', $phone_number);
         })
-        ->when($email && !$phone_number, function ($q) use ($email) {
-            $q->where('email', $email)->orWhere('username', $email);
-        })
-        ->when($email && $phone_number, function ($q) use ($phone_number) {
-            $q->where('phone_number', $phone_number);
-        })
-        ->first();
-        if($user) {
+            ->when($email && !$phone_number, function ($q) use ($email) {
+                $q->where('email', $email)->orWhere('username', $email);
+            })
+            ->when($email && $phone_number, function ($q) use ($phone_number) {
+                $q->where('phone_number', $phone_number);
+            })
+            ->first();
+        if ($user) {
             return true;
         }
         return false;
@@ -163,7 +163,7 @@ class ImportController extends Controller
     private function assignChatGroup($user)
     {
         $groups = \Modules\Chat\Entities\Group::where('school_id', auth()->user()->school_id)->get();
-        foreach($groups as $group){
+        foreach ($groups as $group) {
             createGroupUser($group, $user->id);
         }
     }

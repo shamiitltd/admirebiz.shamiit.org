@@ -126,9 +126,6 @@ class staffRequest extends FormRequest
                 'basic_salary' => [Rule::requiredIf(function () use ($field) {
                     return in_array('basic_salary', $field);
                 }),'max:100'],
-                'basic_salary'=>[Rule::requiredIf(function () use ($field) {
-                    return in_array('basic_salary', $field);
-                })],
                 'contract_type'=>[Rule::requiredIf(function () use ($field) {
                     return in_array('contract_type', $field);
                 })],

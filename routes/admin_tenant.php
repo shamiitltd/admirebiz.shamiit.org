@@ -3,14 +3,18 @@
 
 use App\SmStaff;
 use App\SmSchool;
+use App\SmBaseSetup;
 use App\Models\Theme;
+use App\SmNotification;
 use App\SmGeneralSettings;
 use App\InfixModuleManager;
+use App\SmHeaderMenuManager;
 use Ixudra\Curl\Facades\Curl;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use Larabuild\Pagebuilder\Models\Page;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;
@@ -22,6 +26,7 @@ use Modules\RolePermission\Entities\AssignPermission;
 use App\Http\Controllers\SmAcademicCalendarController;
 use Modules\RolePermission\Entities\InfixPermissionAssign;
 use App\Http\Controllers\TeacherEvaluationReportController;
+use App\Http\Controllers\Admin\SystemSettings\PluginController;
 use Modules\RolePermission\Entities\InfixModuleStudentParentInfo;
 use App\Http\Controllers\Admin\FrontSettings\ThemeManageController;
 use App\Http\Controllers\Admin\FeesCollection\SmFeesCarryForwardController;
@@ -33,7 +38,7 @@ Route::get('checkForeignKey', 'HomeController@checkForeignKey')->name('checkFore
 Route::post('logout', 'Auth\LoginController@logout')->name('logout');
 
 Route::get('reg', function () {
-    return view('auth.register');
+    dd('hello');
 });
 
 
@@ -126,6 +131,7 @@ Route::group(['middleware' => ['XSS', 'subscriptionAccessUrl']], function () {
         Route::get('add-toDo', 'HomeController@addToDo');
         Route::post('saveToDoData', 'HomeController@saveToDoData')->name('saveToDoData');
         Route::get('view-toDo/{id}', 'HomeController@viewToDo')->where('id', '[0-9]+');
+        Route::get('view-toDo/{id}', 'HomeController@viewToDo')->where('id', '[0-9]+');
         Route::get('edit-toDo/{id}', 'HomeController@editToDo')->where('id', '[0-9]+');
         Route::post('update-to-do', 'HomeController@updateToDo');
         Route::get('remove-to-do', 'HomeController@removeToDo');
@@ -189,7 +195,7 @@ Route::group(['middleware' => ['XSS', 'subscriptionAccessUrl']], function () {
         Route::get('subject-attendance-search',  'Admin\StudentInfo\SmSubjectAttendanceController@search')->name('subject-attendance-search');
         Route::post('subject-attendance-store',  'Admin\StudentInfo\SmSubjectAttendanceController@storeAttendance')->name('subject-attendance-store')->middleware('userRolePermission:student-attendance-store');
         Route::post('subject-attendance-store-second',  'Admin\StudentInfo\SmSubjectAttendanceController@storeAttendanceSecond')->name('subject-attendance-store-second')->middleware('userRolePermission:student-attendance-store');
-        Route::post('student-subject-holiday-store',  'Admin\StudentInfo\SmSubjectAttendanceController@subjectHolidayStore')->name('student-subject-holiday-store')->middleware('userRolePermission:student-subject-holiday-store');
+        Route::post('student-subject-holiday-store',  'Admin\StudentInfo\SmSubjectAttendanceController@subjectHolidayStore')->name('student-subject-holiday-store');
 
 
         // Student Attendance Report
@@ -1829,6 +1835,12 @@ Route::group(['middleware' => ['XSS', 'subscriptionAccessUrl']], function () {
         Route::get('edit-staff-custom-field/{id}', 'SmCustomFieldController@edit_staff_custom_field')->name('edit-staff-custom-field');
         Route::post('update-staff-custom-field', 'SmCustomFieldController@update_staff_custom_field')->name('update-staff-custom-field')->middleware('userRolePermission:edit-staff-custom-field');
         Route::post('delete-staff-custom-field', 'SmCustomFieldController@delete_staff_custom_field')->name('delete-staff-custom-field')->middleware('userRolePermission:delete-staff-custom-field');
+
+        Route::get('donor-reg-custom-field', 'SmCustomFieldController@donor_reg_custom_field')->name('donor-reg-custom-field')->middleware('userRolePermission:donor-reg-custom-field');
+        Route::post('store-donor-registration-custom-field', 'SmCustomFieldController@store_donor_registration_custom_field')->name('store-donor-registration-custom-field')->middleware('userRolePermission:store-donor-registration-custom-field');
+        Route::get('edit-donor-custom-field/{id}', 'SmCustomFieldController@edit_donor_custom_field')->name('edit-donor-custom-field');
+        Route::post('update-donor-custom-field', 'SmCustomFieldController@update_donor_custom_field')->name('update-donor-custom-field')->middleware('userRolePermission:edit-donor-custom-field');
+        Route::post('delete-donor-custom-field', 'SmCustomFieldController@delete_donor_custom_field')->name('delete-donor-custom-field')->middleware('userRolePermission:delete-donor-custom-field');
         //Custom Field End
 
 
@@ -2090,6 +2102,30 @@ Route::group(['middleware' => ['XSS', 'subscriptionAccessUrl']], function () {
     Route::get('/front-academic-calendar-delete-modal/{id}', 'Admin\FrontSettings\SmAcademicCalendarController@deleteModal')->name('front-academic-calendar-delete-modal')->middleware('userRolePermission:front-academic-calendar-delete-modal');
     Route::get('/front-academic-calendar-delete/{id}', 'Admin\FrontSettings\SmAcademicCalendarController@delete')->name('front-academic-calendar-delete')->middleware('userRolePermission:front-academic-calendar-delete');
 
+    //for speech-slider
+    Route::get('/speech-slider', 'Admin\FrontSettings\SpeechSliderController@index')->name('speech-slider')->middleware('userRolePermission:speech-slider');
+    Route::post('/speech-slider-store', 'Admin\FrontSettings\SpeechSliderController@store')->name('speech-slider-store')->middleware('userRolePermission:speech-slider-store');
+    Route::get('/speech-slider-edit/{id}', 'Admin\FrontSettings\SpeechSliderController@edit')->name('speech-slider-edit')->middleware('userRolePermission:speech-slider-edit');
+    Route::post('/speech-slider-update', 'Admin\FrontSettings\SpeechSliderController@update')->name('speech-slider-update')->middleware('userRolePermission:speech-slider-update');
+    Route::get('/speech-slider-delete-modal/{id}', 'Admin\FrontSettings\SpeechSliderController@deleteModal')->name('speech-slider-delete-modal')->middleware('userRolePermission:speech-slider-delete-modal');
+    Route::get('/speech-slider-delete/{id}', 'Admin\FrontSettings\SpeechSliderController@delete')->name('speech-slider-delete')->middleware('userRolePermission:speech-slider-delete');
+
+    //for donor
+    Route::get('/donor', 'Admin\FrontSettings\SmDonorController@index')->name('donor')->middleware('userRolePermission:donor');
+    Route::post('/donor-store', 'Admin\FrontSettings\SmDonorController@store')->name('donor-store')->middleware('userRolePermission:donor-store');
+    Route::get('/donor-edit/{id}', 'Admin\FrontSettings\SmDonorController@edit')->name('donor-edit')->middleware('userRolePermission:donor-edit');
+    Route::post('/donor-update', 'Admin\FrontSettings\SmDonorController@update')->name('donor-update')->middleware('userRolePermission:donor-update');
+    Route::get('/donor-delete-modal/{id}', 'Admin\FrontSettings\SmDonorController@deleteModal')->name('donor-delete-modal')->middleware('userRolePermission:donor-delete-modal');
+    Route::get('/donor-delete/{id}', 'Admin\FrontSettings\SmDonorController@delete')->name('donor-delete')->middleware('userRolePermission:donor-delete');
+
+    //for form download
+    Route::get('/form-download', 'Admin\FrontSettings\SmFormDownloadController@index')->name('form-download')->middleware('userRolePermission:form-download');
+    Route::post('/form-download-store', 'Admin\FrontSettings\SmFormDownloadController@store')->name('form-download-store')->middleware('userRolePermission:form-download-store');
+    Route::get('/form-download-edit/{id}', 'Admin\FrontSettings\SmFormDownloadController@edit')->name('form-download-edit')->middleware('userRolePermission:form-download-edit');
+    Route::post('/form-download-update', 'Admin\FrontSettings\SmFormDownloadController@update')->name('form-download-update')->middleware('userRolePermission:form-download-update');
+    Route::get('/form-download-delete-modal/{id}', 'Admin\FrontSettings\SmFormDownloadController@deleteModal')->name('form-download-delete-modal')->middleware('userRolePermission:form-download-delete-modal');
+    Route::get('/form-download-delete/{id}', 'Admin\FrontSettings\SmFormDownloadController@delete')->name('form-download-delete')->middleware('userRolePermission:form-download-delete');
+
     // Contact us
     Route::get('contact-page', 'Admin\FrontSettings\SmContactUsController@index')->name('conpactPage')->middleware('userRolePermission:conpactPage');
     Route::get('contact-page/edit', 'Admin\FrontSettings\SmContactUsController@edit')->name('contactPageEdit');
@@ -2118,7 +2154,7 @@ Route::group(['middleware' => ['XSS', 'subscriptionAccessUrl']], function () {
     Route::get('about-page', 'Admin\FrontSettings\AboutPageController@index')->name('about-page')->middleware('userRolePermission:about-page');
     Route::get('about-page/edit', 'Admin\FrontSettings\AboutPageController@edit')->name('about-page/edit');
     Route::post('about-page/update', 'Admin\FrontSettings\AboutPageController@update')->name('about-page/update');
-    
+
     //footer widget
     Route::get('custom-links', 'Admin\FrontSettings\SmFooterWidgetController@index')->name('custom-links')->middleware('userRolePermission:custom-links');
     Route::post('custom-links-update', 'Admin\FrontSettings\SmFooterWidgetController@update')->name('custom-links-update')->middleware('userRolePermission:custom-links');
@@ -2295,6 +2331,7 @@ Route::group(['middleware' => ['XSS', 'subscriptionAccessUrl']], function () {
     Route::get('item-receive-list-ajax', 'DatatableQueryController@itemReceiveListAjax')->name('item-receive-list-ajax');
 
     Route::get('student-transport-report-ajax',  'DatatableQueryController@studentTransportReportAjax')->name('studentTransportReportAjax');
+    Route::get('graduate-list-ajax',  'DatatableQueryController@graduateListAjax')->name('graduateListAjax');
 
 
     Route::get('due_fees_login_permission',  'Admin\FeesCollection\DueFeesLoginPermissionController@index')->name('due_fees_login_permission')->middleware('userRolePermission:due_fees_login_permission');
@@ -2377,18 +2414,10 @@ Route::group(['middleware' => ['XSS', 'subscriptionAccessUrl']], function () {
     Route::get('class-exam-routine-page', 'Admin\FrontSettings\SmClassExamRoutinePageController@classExamRoutinePage')->name('class-exam-routine-page')->middleware('userRolePermission:class-exam-routine-page');
     Route::post('class-exam-routine-page-update', 'Admin\FrontSettings\SmClassExamRoutinePageController@classExamRoutinePageUpdate')->name('class-exam-routine-page-update')->middleware('userRolePermission:class-exam-routine-page-update');
 
-
-
-    Route::get('test-permission', function () {
-        // Permission::where('id','!=','null')->delete();
-        $adminPermissionList = include('./resources/var/permission/without_student_parent_positions.php');
-        foreach ($adminPermissionList as $item) {
-            storePermissionData($item);
-        }
-        Artisan::call('optimize:clear');
-       
-    });
+    Route::post('arrange-table-row-position', 'Admin\SystemSettings\SmSystemSettingController@arrangeTablePosition');
     Route::get('store-data-test', 'Admin\SystemSettings\SmNotificationController@insertdata')->name('store-data');
+
+   
 
     Route::controller(ThemeManageController::class)->group(function () {
         Route::get('theme/index', 'index')->name('theme.index')->middleware('userRolePermission:theme.index');
@@ -2397,34 +2426,13 @@ Route::group(['middleware' => ['XSS', 'subscriptionAccessUrl']], function () {
         Route::post('theme/remove', 'remove')->name('theme.remove')->middleware('userRolePermission:theme.remove');
     });
 
-});
 
+    Route::controller(PluginController::class)->group(function () {
+        Route::get('plugin/tawk-setting', 'tawkSetting')->name('tawkSetting')->middleware('userRolePermission:tawkSetting');
+        Route::post('plugin/tawk-setting', 'tawkSettingUpdate')->name('tawkSettingUpdate');
+        Route::get('plugin/facebook-messenger-setting', 'messengerSetting')->name('messengerSetting')->middleware('userRolePermission:messengerSetting');
+        Route::post('plugin/facebook-messenger-setting', 'messengerSettingUpdate')->name('messengerSettingUpdate');
+    });
 
-
-
-Route::get('demo_pages', function(){
-    $filesInFolder = File::files(resource_path('/views/themes/edulia/demo/'));     
-        foreach($filesInFolder as $path) { 
-            $file = pathinfo($path);
-            if(file_exists($file['dirname'] .'/'.$file['basename'])){
-                $file_content =  file_get_contents(($file['dirname'] .'/'.$file['basename']));
-                $file_data = json_decode($file_content, true);
-                replace_array_recursive("[App_url]",(url('/')),$file_data);
-                if($file_data){
-                    $check_exist  = Page::where('school_id',1)->where('slug',$file_data['slug'])->first();
-                    if(!$check_exist){
-                        $new_page = new Page();
-                        $new_page->name = $file_data['name'];
-                        $new_page->title = $file_data['title'];
-                        $new_page->description = $file_data['description'];
-                        $new_page->slug= $file_data['slug'];
-                        $new_page->settings = $file_data['settings'];
-                        $new_page->status = 'published';
-                        $new_page->school_id = 1;
-                        $new_page->save();
-                    }  
-                }
-            }
-        }
 });
 

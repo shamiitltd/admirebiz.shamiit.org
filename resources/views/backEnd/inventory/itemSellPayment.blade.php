@@ -13,7 +13,7 @@
         <div class="row mt-25">
             <div class="col-lg-12">
                 <div class="primary_input">
-                    <select class="primary_select1 w-100 bb form-control{{ $errors->has('income_head_id') ? ' is-invalid' : '' }}" name="income_head_id" id="income_head_id">
+                    <select class="primary_select w-100 form-control{{ $errors->has('income_head_id') ? ' is-invalid' : '' }}" name="income_head_id" id="income_head_id">
                         <option data-display="@lang('accounts.payroll') *" value="">@lang('common.select')</option>
                         @foreach($sell_heads as $sell_head)
                             <option value="{{$sell_head->id}}" 
@@ -35,7 +35,7 @@
         <div class="row mt-25">
             <div class="col-lg-12">
                 <div class="primary_input">
-                    <select class="primary_select1 w-100 bb form-control{{ $errors->has('payment_mode') ? ' is-invalid' : '' }}" name="payment_method" id="payment_mode">
+                    <select class="primary_select w-100 form-control{{ $errors->has('payment_mode') ? ' is-invalid' : '' }}" name="payment_method" id="payment_mode">
                         @if($editData->paymentMethodName->method =="Bank")
                         <option data-string="{{@$editData->paymentMethodName->method}}" value="{{@$editData->payment_method}}" selected>{{@$editData->paymentMethodName->method}}</option>
                         @else
@@ -130,8 +130,8 @@
 </div>
 @include('backEnd.partials.date_picker_css_js')
 <script>
-    if ($(".niceSelect1").length) {
-        $(".niceSelect1").niceSelect();
+    if ($(".primary_select").length) {
+        $(".primary_select").niceSelect();
     }
     $(document).ready(function() {
         $("#payment_mode").on("change", function() {

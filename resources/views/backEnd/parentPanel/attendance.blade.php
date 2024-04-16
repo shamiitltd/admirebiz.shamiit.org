@@ -62,11 +62,6 @@
             box-shadow: inset 0 0 5px grey
         }
 
-        th {
-            padding: .5rem !important;
-            font-size: 10px !important;
-        }
-
         td {
             padding: .3rem !important;
             font-size: 12px !important;
@@ -75,17 +70,12 @@
 @endpush
 @section('mainContent')
     <style>
-        th {
-            padding: .5rem !important;
-            font-size: 10px !important;
-        }
-
         td {
             padding: .3rem !important;
             font-size: 12px !important;
         }
     </style>
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('student.attendance')</h1>
@@ -106,7 +96,7 @@
                         <div class="white-box">
                             <div class="row">
                                 <div class="col-lg-5 col-md-6">
-                                    <div class="single-meta mt-20">
+                                    <div class="single-meta">
                                         <div class="row">
                                             <div class="col-lg-6 col-md-6">
                                                 <div class="value text-left">
@@ -177,75 +167,77 @@
     <section class="admin-visitor-area">
         <div class="container-fluid p-0">
 
-            <div class="row">
-                <div class="col-lg-4 col-md-6">
-                    <div class="main-title">
-                        <h3 class="mb-30">@lang('common.select_criteria') </h3>
+            <div class="white-box">
+                <div class="row">
+                    <div class="col-lg-4 col-md-6">
+                        <div class="main-title">
+                            <h3 class="mb-15">@lang('common.select_criteria') </h3>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-12">
-
-                    <div class="white-box">
-                        {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'parent_attendance_search', 'method' => 'POST', 'enctype' => 'multipart/form-data', 'id' => 'search_student']) }}
-                        <div class="row">
-                            <input type="hidden" name="url" id="url" value="{{URL::to('/')}}">
-                            <input type="hidden" name="student_id" id="student_id" value="{{$student_detail->id}}">
-
-
-                            <div class="col-lg-6 mt-30-md">
-                                <select class="primary_select form-control{{ $errors->has('month') ? ' is-invalid' : '' }}"
-                                        name="month">
-                                    <option data-display="Select Month *" value="">@lang('student.select_month')*
-                                    </option>
-                                    <option value="01" {{isset($month)? ($month == "01"? 'selected': ''): ''}}>@lang('student.january')</option>
-                                    <option value="02" {{isset($month)? ($month == "02"? 'selected': ''): ''}}>@lang('student.february')</option>
-                                    <option value="03" {{isset($month)? ($month == "03"? 'selected': ''): ''}}>@lang('student.march')</option>
-                                    <option value="04" {{isset($month)? ($month == "04"? 'selected': ''): ''}}>@lang('student.april')</option>
-                                    <option value="05" {{isset($month)? ($month == "05"? 'selected': ''): ''}}>@lang('student.may')</option>
-                                    <option value="06" {{isset($month)? ($month == "06"? 'selected': ''): ''}}>@lang('student.june')</option>
-                                    <option value="07" {{isset($month)? ($month == "07"? 'selected': ''): ''}}>@lang('student.july')</option>
-                                    <option value="08" {{isset($month)? ($month == "08"? 'selected': ''): ''}}>@lang('student.august')</option>
-                                    <option value="09" {{isset($month)? ($month == "09"? 'selected': ''): ''}}>@lang('student.september')</option>
-                                    <option value="10" {{isset($month)? ($month == "10"? 'selected': ''): ''}}>@lang('student.october')</option>
-                                    <option value="11" {{isset($month)? ($month == "11"? 'selected': ''): ''}}>@lang('student.november')</option>
-                                    <option value="12" {{isset($month)? ($month == "12"? 'selected': ''): ''}}>@lang('student.december')</option>
-                                </select>
-                                @if ($errors->has('month'))
-                                    <span class="text-danger invalid-select" role="alert">
-                                        {{ $errors->first('month') }}
-                                    </span>
-                                @endif
-                            </div>
-                            <div class="col-lg-6">
-                                <select class="primary_select form-control{{$errors->has('year') ? ' is-invalid' : ''}}"
-                                        name="year" id="year">
-                                    <option data-display="Select Year *" value="">@lang('student.select_year')*
-                                    </option>
-                                    @foreach (academicYears() as $academic_year)
-                                        <option value="{{$academic_year->year}}">{{$academic_year->year}}
-                                            [{{$academic_year->title}}]
+                <div class="row">
+                    <div class="col-lg-12">
+    
+                        <div>
+                            {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'parent_attendance_search', 'method' => 'POST', 'enctype' => 'multipart/form-data', 'id' => 'search_student']) }}
+                            <div class="row">
+                                <input type="hidden" name="url" id="url" value="{{URL::to('/')}}">
+                                <input type="hidden" name="student_id" id="student_id" value="{{$student_detail->id}}">
+    
+    
+                                <div class="col-lg-6 mt-30-md">
+                                    <select class="primary_select form-control{{ $errors->has('month') ? ' is-invalid' : '' }}"
+                                            name="month">
+                                        <option data-display="Select Month *" value="">@lang('student.select_month')*
                                         </option>
-
-                                    @endforeach
-
-
-                                </select>
-                                @if ($errors->has('year'))
-                                    <span class="text-danger invalid-select" role="alert">
-                                        {{ $errors->first('year') }}
-                                    </span>
-                                @endif
+                                        <option value="01" {{isset($month)? ($month == "01"? 'selected': ''): ''}}>@lang('student.january')</option>
+                                        <option value="02" {{isset($month)? ($month == "02"? 'selected': ''): ''}}>@lang('student.february')</option>
+                                        <option value="03" {{isset($month)? ($month == "03"? 'selected': ''): ''}}>@lang('student.march')</option>
+                                        <option value="04" {{isset($month)? ($month == "04"? 'selected': ''): ''}}>@lang('student.april')</option>
+                                        <option value="05" {{isset($month)? ($month == "05"? 'selected': ''): ''}}>@lang('student.may')</option>
+                                        <option value="06" {{isset($month)? ($month == "06"? 'selected': ''): ''}}>@lang('student.june')</option>
+                                        <option value="07" {{isset($month)? ($month == "07"? 'selected': ''): ''}}>@lang('student.july')</option>
+                                        <option value="08" {{isset($month)? ($month == "08"? 'selected': ''): ''}}>@lang('student.august')</option>
+                                        <option value="09" {{isset($month)? ($month == "09"? 'selected': ''): ''}}>@lang('student.september')</option>
+                                        <option value="10" {{isset($month)? ($month == "10"? 'selected': ''): ''}}>@lang('student.october')</option>
+                                        <option value="11" {{isset($month)? ($month == "11"? 'selected': ''): ''}}>@lang('student.november')</option>
+                                        <option value="12" {{isset($month)? ($month == "12"? 'selected': ''): ''}}>@lang('student.december')</option>
+                                    </select>
+                                    @if ($errors->has('month'))
+                                        <span class="text-danger invalid-select" role="alert">
+                                            {{ $errors->first('month') }}
+                                        </span>
+                                    @endif
+                                </div>
+                                <div class="col-lg-6">
+                                    <select class="primary_select form-control{{$errors->has('year') ? ' is-invalid' : ''}}"
+                                            name="year" id="year">
+                                        <option data-display="Select Year *" value="">@lang('student.select_year')*
+                                        </option>
+                                        @foreach (academicYears() as $academic_year)
+                                            <option value="{{$academic_year->year}}">{{$academic_year->year}}
+                                                [{{$academic_year->title}}]
+                                            </option>
+    
+                                        @endforeach
+    
+    
+                                    </select>
+                                    @if ($errors->has('year'))
+                                        <span class="text-danger invalid-select" role="alert">
+                                            {{ $errors->first('year') }}
+                                        </span>
+                                    @endif
+                                </div>
+                                <div class="col-lg-12 mt-20 text-right">
+                                    <button type="submit" class="primary-btn small fix-gr-bg">
+                                        <span class="ti-search pr-2"></span>
+                                        @lang('common.search')
+                                    </button>
+                                </div>
                             </div>
-                            <div class="col-lg-12 mt-20 text-right">
-                                <button type="submit" class="primary-btn small fix-gr-bg">
-                                    <span class="ti-search pr-2"></span>
-                                    @lang('common.search')
-                                </button>
-                            </div>
+                            {{ Form::close() }}
                         </div>
-                        {{ Form::close() }}
                     </div>
                 </div>
             </div>
@@ -253,12 +245,12 @@
     </section>
 
     @isset($records)
-        <section class="student-attendance">
+        <section class="student-attendance white-box mt-40">
             <div class="container-fluid p-0">
 
-                <div class="row mt-40">
-                    <div class="col-lg-12 student-details up_admin_visitor">
-                        <ul class="nav nav-tabs tabs_scroll_nav" role="tablist">
+                <div class="row">
+                    <div class="col-lg-12 student-details up_admin_visitor mt-0">
+                        <ul class="nav nav-tabs tabs_scroll_nav mt-0" role="tablist">
                             @foreach($records as $key => $record)
                                 <li class="nav-item">
                                     <a class="nav-link @if($key== 0) active @endif " href="#tab{{$key}}" role="tab"
@@ -271,15 +263,15 @@
                 </div>
             </div>
             <!-- Tab panes -->
-            <div class="tab-content">
+            <div class="tab-content mt-10">
                 @foreach($records as $key => $record)
                     <div role="tabpanel" class="tab-pane fade  @if($key== 0) active show @endif"
                          id="tab{{$key}}">
                         <div class="container-fluid p-0">
-                            <div class="row mt-40">
+                            <div class="row">
 
-                                    <div class="col-lg-12 no-gutters d-flex align-items-center justify-content-between">
-                                        <div class="lateday d-flex mt-4">
+                                    <div class="col-lg-12 no-gutters d-flex flex-wrap align-items-center justify-content-between">
+                                        <div class="lateday d-flex flex-wrap">
                                             <div class="mr-3">Present: <span class="text-success">P</span>
                                             </div>
                                             <div class="mr-3">Late: <span class="text-warning">L</span>
@@ -295,8 +287,8 @@
                                                     class="ti-printer"> </i> @lang('common.print')</a>
 
                                     </div>
-                                <div class="col-lg-12">
-                                    <div class="white-box">
+                                <div class="col-lg-12 mt-15">
+                                    <div>
 
                                         <table class="display school-table table-responsive"
                                                cellspacing="0" width="100%">

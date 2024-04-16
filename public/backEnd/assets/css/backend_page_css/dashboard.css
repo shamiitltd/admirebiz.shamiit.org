@@ -48,12 +48,7 @@ background: url(../../img/summery-bg1.png) no-repeat center;
   -webkit-text-fill-color: currentColor !important;
 }
 .single-summery.active:hover h1 {
-  background: -webkit-linear-gradient(90deg, #7c32ff 0%, #c738d8 100%) !important;
-  background: -moz-linear-gradient(90deg, #7c32ff 0%, #c738d8 100%) !important;
-  background: -o-linear-gradient(90deg, #7c32ff 0%, #c738d8 100%) !important;
-  background: linear-gradient(90deg, #7c32ff 0%, #c738d8 100%) !important;
-  -webkit-background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
+  background: var(--primary-color)!important;
 }
 .white-box.single-summery.active h3, .white-box.single-summery.active p, .white-box.single-summery.active h1 {
     color: #ffffff;

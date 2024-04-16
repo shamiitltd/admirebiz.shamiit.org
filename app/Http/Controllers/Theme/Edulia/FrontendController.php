@@ -6,9 +6,11 @@ use App\SmExam;
 use App\SmNews;
 use App\SmClass;
 use App\SmEvent;
+use App\SmStaff;
 use App\SmCourse;
 use App\SmSection;
 use App\SmStudent;
+use App\SmVisitor;
 use App\YearCheck;
 use App\SmExamType;
 use App\SmNewsPage;
@@ -16,9 +18,14 @@ use App\SmMarksGrade;
 use App\SmExamSetting;
 use App\SmNoticeBoard;
 use App\SmResultStore;
+use App\Models\SmDonor;
+use App\SmNewsCategory;
 use App\SmAssignSubject;
 use App\SmMarksRegister;
+use App\SmCourseCategory;
+use App\Models\SpeechSlider;
 use Illuminate\Http\Request;
+use App\Models\SmCustomField;
 use App\Models\SmNewsComment;
 use App\Models\StudentRecord;
 use App\Models\SmPhotoGallery;
@@ -27,7 +34,9 @@ use App\SmOptionalSubjectAssign;
 use App\Models\FrontendExamResult;
 use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
+use App\Http\Requests\Admin\AdminSection\SmVisitorRequest;
 use App\Http\Requests\Admin\FrontSettings\ExamResultSearch;
+use Modules\RolePermission\Entities\Permission;
 
 class FrontendController extends Controller
 {
@@ -333,6 +342,159 @@ class FrontendController extends Controller
             return response()->json(['success' => true, 'html' => $html, 'total_data' => $data['count']]);
         } catch (\Exception $e) {
             return response()->json(['error' => $e]);
+        }
+    }
+
+    public function singleSpeechSlider($id)
+    {
+        try {
+            $data['singleSpeechSlider'] = SpeechSlider::where('school_id', app('school')->id)->findOrFail($id);
+            return view('frontEnd.theme.' . activeTheme() . '.speechSlider.single_speech_slider', $data);
+        } catch (\Exception $e) {
+            Toastr::error('Operation Failed', 'Failed');
+            return redirect()->back();
+        }
+    }
+
+    public function courseList()
+    {
+        try {
+            $data['courseCategories'] = SmCourseCategory::where('school_id', app('school')->id)->with('courses')->get();
+            return view('frontEnd.theme.' . activeTheme() . '.courseList.course_list', $data);
+        } catch (\Exception $e) {
+            Toastr::error('Operation Failed', 'Failed');
+            return redirect()->back();
+        }
+    }
+    public function singleCourseDetail($id)
+    {
+        try {
+            $data['singleCourseDetail'] = SmCourse::where('id', $id)->where('school_id', app('school')->id)->with('courseCategory')->first();
+            return view('frontEnd.theme.' . activeTheme() . '.courseList.single_course_details', $data);
+        } catch (\Exception $e) {
+            Toastr::error('Operation Failed', 'Failed');
+            return redirect()->back();
+        }
+    }
+    public function frontendSingleStudentDetails($id)
+    {
+        try {
+            $data['singleStudent'] = SmStudent::where('id', $id)->where('school_id', app('school')->id)->with('parents', 'gender', 'religion', 'bloodGroup', 'studentRecord.class', 'studentRecord.section')->first();
+            return view('frontEnd.theme.' . activeTheme() . '.frontend_single_student_details', $data);
+        } catch (\Exception $e) {
+            Toastr::error('Operation Failed', 'Failed');
+            return redirect()->back();
+        }
+    }
+    public function archiveList()
+    {
+        try {
+            $data['archives'] = SmNews::with('category')->where('school_id', app('school')->id);
+            $data['archiveYears'] = $data['archives']->get()->groupBy(function ($q) {
+                return $q->created_at->format('Y');
+            });
+            $data['archiveCategories'] = SmNewsCategory::where('school_id', app('school')->id)->get();
+            return view('frontEnd.theme.' . activeTheme() . '.archive.archive_list', $data);
+        } catch (\Exception $e) {
+            return response('error');
+        }
+    }
+
+    public function loadMoreArchiveList(Request $request)
+    {
+        try {
+            $years = $request->year;
+            $data['count'] = SmNews::count();
+            $data['skip'] = $request->skip;
+            $data['limit'] = $data['count'] - $data['skip'];
+            $data['archives'] = SmNews::when($request->year, function ($q) use ($years) {
+                $q->where(function ($query) use ($years) {
+                    foreach ($years as $year) {
+                        $query->whereYear('created_at', '=', $year, 'or');
+                    }
+                });
+            })->skip($data['skip'])->where('school_id', app('school')->id)->take(5)->get();
+            $html = view('frontEnd.theme.' . activeTheme() . '.archive.read_more_archive_list', $data)->render();
+            return response()->json(['success' => true, 'html' => $html, 'total_data' => $data['count']]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e]);
+        }
+    }
+    public function archiveYearFilter(Request $request)
+    {
+        try {
+            $years = $request->year;
+            $data['archives'] = SmNews::with('category')
+                    ->where('school_id', app('school')->id)
+                    ->when($request->data_count > 0 , function($q) use($years){
+                        $q->where(function ($q) use ($years) {
+                            foreach ($years as $year) {
+                                $q->whereYear('created_at', '=', $year, 'or');
+                            }
+                        });
+                    })->paginate(5);
+            $html = view('frontEnd.theme.' . activeTheme() . '.archive.archive_year_filter', $data)->render();
+            return response()->json(['success' => true, 'html' => $html]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e]);
+        }
+    }
+
+    public function bookAVisit()
+    {
+        try {
+            return view('frontEnd.theme.' . activeTheme() . '.visit_a_book');
+        } catch (\Exception $e) {
+            Toastr::error('Operation Failed', 'Failed');
+            return redirect()->back();
+        }
+    }
+    public function bookAVisitStore(SmVisitorRequest $request)
+    {
+        try {
+            $destination = 'public/uploads/visitor/';
+            $fileName = fileUpload($request->upload_event_image, $destination);
+            $visitor = new SmVisitor();
+            $visitor->name = $request->name;
+            $visitor->phone = $request->phone;
+            $visitor->visitor_id = $request->visitor_id;
+            $visitor->no_of_person = $request->no_of_person;
+            $visitor->purpose = $request->purpose;
+            $visitor->date = date('Y-m-d', strtotime($request->date));
+            $visitor->in_time = $request->in_time;
+            $visitor->out_time = $request->out_time;
+            $visitor->file = $fileName;
+            $visitor->created_by = null;
+            $visitor->school_id = app('school')->id;
+            $visitor->academic_id = getAcademicId();
+            $visitor->save();
+
+            Toastr::success('Operation successful', 'Success');
+            return redirect()->back();
+        } catch (\Exception $e) {
+            Toastr::error('Operation Failed', 'Failed');
+            return redirect()->back();
+        }
+    }
+    public function donorDetails($id)
+    {
+        try {
+            $data['donorDetails'] = SmDonor::where('id', $id)->where('school_id', app('school')->id)->where('show_public', 1)->first();
+            $data['custom_filed_values'] = json_decode($data['donorDetails']->custom_field);
+            return view('frontEnd.theme.' . activeTheme() . '.donor.donor_details', $data);
+        } catch (\Exception $e) {
+            Toastr::error('Operation Failed', 'Failed');
+            return redirect()->back();
+        }
+    }
+    public function staffDetails($id)
+    {
+        try {
+            $data['staffDetails'] = SmStaff::where('id', $id)->where('school_id', app('school')->id)->first();
+            return view('frontEnd.theme.' . activeTheme() . '.staff.staff_details', $data);
+        } catch (\Exception $e) {
+            Toastr::error('Operation Failed', 'Failed');
+            return redirect()->back();
         }
     }
 }

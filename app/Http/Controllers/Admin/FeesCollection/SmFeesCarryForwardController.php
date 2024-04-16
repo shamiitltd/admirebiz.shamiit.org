@@ -40,9 +40,44 @@ class SmFeesCarryForwardController extends Controller
             return redirect()->back();
         }
     }
+    function universityFeesForwardSearch($request)
+    {
+        $input = $request->all();
+        try {
+            $students = StudentRecord::where('un_semester_label_id', $request->un_semester_label_id)
+                        ->where('un_section_id', $request->un_section_id)
+                        ->where('school_id',Auth::user()->school_id)
+                        ->whereHas('student', function($q){
+                            $q->where('active_status',1);
+                        })
+                        ->get();
+
+            if ($students->count() != 0) {
+                foreach ($students as $student) {
+                    $fees_balance = SmFeesCarryForward::where('student_id', $student->student_id)->count();
+                }
+                if ($fees_balance == 0) {
+                    return view('backEnd.feesCollection.fees_forward', compact('students'));
+                } else {
+                    $update = "";
+                    return view('backEnd.feesCollection.fees_forward', compact('students', 'update'));
+                }
+            }else{
+                Toastr::error('Operation Failed', 'Failed');
+                return redirect('fees-forward');
+            }
+        } catch (\Exception $e) {
+            dd($e);
+            Toastr::error('Operation Failed', 'Failed');
+            return redirect()->back();
+        }
+    }
 
     public function feesForwardSearch(SmFeesForwardSearchRequest $request)
     {
+     if (moduleStatusCheck(('University'))) {
+        return $this->universityFeesForwardSearch($request);
+     } else {
         $input = $request->all();
         $validator = Validator::make($input, [
             'class' => 'required',
@@ -86,6 +121,8 @@ class SmFeesCarryForwardController extends Controller
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();
         }
+     }
+     
     }
 
     public function feesForwardStore(Request $request)
@@ -97,9 +134,11 @@ class SmFeesCarryForwardController extends Controller
                 if ($request->update == 1) {
 
                     $fees_forward = SmFeesCarryForward::find($student);
-                    $fees_forward->balance = $request->balance[$student] ?? 0;
-                    $fees_forward->notes = $request->notes[$student];
-                    $fees_forward->save();
+                    if ($fees_forward) {
+                        $fees_forward->balance = $request->balance[$student] ?? 0;
+                        $fees_forward->notes = $request->notes[$student];
+                        $fees_forward->save();
+                    }
                 } else {
                     $fees_forward = new SmFeesCarryForward();
                     $fees_forward->student_id = $student;

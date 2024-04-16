@@ -3,7 +3,7 @@
 @lang('transport.assign_vehicle')
 @endsection
 @section('mainContent')
-<section class="sms-breadcrumb mb-25 white-box">
+<section class="sms-breadcrumb mb-20">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('transport.assign_vehicle')</h1>
@@ -34,15 +34,6 @@
             <div class="col-lg-3">
                 <div class="row">
                     <div class="col-lg-12">
-                        <div class="main-title">
-                            <h3 class="mb-30">@if(isset($assign_vehicle))
-                                    @lang('transport.edit_assign_vehicle')
-                                @else
-                                    @lang('transport.add_assign_vehicle')
-                                @endif
-                               
-                            </h3>
-                        </div>
                         @if(isset($assign_vehicle))
                         {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => array('assign-vehicle-update',@$assign_vehicle->id), 'method' => 'PUT']) }}
                         @else
@@ -53,6 +44,15 @@
                         @endif
                         <input type="hidden" name="id" value="{{isset($assign_vehicle)? @$assign_vehicle->id:''}}">
                         <div class="white-box">
+                            <div class="main-title">
+                                <h3 class="mb-30">@if(isset($assign_vehicle))
+                                        @lang('transport.edit_assign_vehicle')
+                                    @else
+                                        @lang('transport.add_assign_vehicle')
+                                    @endif
+                                   
+                                </h3>
+                            </div>
                             <div class="add-visitor">
                                 <div class="row">
                                     <div class="col-lg-12">
@@ -119,53 +119,55 @@
             </div>
 
             <div class="col-lg-9">
-                <div class="row">
-                    <div class="col-lg-4 no-gutters">
-                        <div class="main-title">
-                            <h3 class="mb-0">@lang('transport.assign_vehicle_list')</h3>
+                <div class="white-box">
+                    <div class="row">
+                        <div class="col-lg-4 no-gutters">
+                            <div class="main-title">
+                                <h3 class="mb-15">@lang('transport.assign_vehicle_list')</h3>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-lg-12">
-                        <x-table>
-                        <table id="table_id" class="table" cellspacing="0" width="100%">
-
-                            <thead>
-                             
-                                <tr>
-                                    <th>@lang('transport.route')</th>
-                                    <th>@lang('transport.vehicle')</th>
-                                    <th>@lang('common.action')</th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                                @foreach($assign_vehicles as $assign_vehicle)
-                                <tr>
-                                    <td valign="top">{{@$assign_vehicle->route !=""? @$assign_vehicle->route->title:""}}</td>
-                                    <td>
-                                    {{@$assign_vehicle->vehicle !=""? @$assign_vehicle->vehicle->vehicle_no:""}}
-                                    </td>
-                                    
-                                    <td valign="top">
-                                        <x-drop-down>
-
-                                               
-                                                <a class="dropdown-item" href="{{route('assign-vehicle-edit',@$assign_vehicle->id)}}">@lang('common.edit')</a>
-                                                
-                                               
-                                               
-                                                <a class="dropdown-item deleteAssignVehicle" data-toggle="modal" href="#" data-id="{{@$assign_vehicle->id}}" data-target="#deleteAssignVehicle">@lang('common.delete')</a>
-                                          
-                                        </x-drop-down>
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </x-table>
+    
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <x-table>
+                            <table id="table_id" class="table" cellspacing="0" width="100%">
+    
+                                <thead>
+                                 
+                                    <tr>
+                                        <th>@lang('transport.route')</th>
+                                        <th>@lang('transport.vehicle')</th>
+                                        <th>@lang('common.action')</th>
+                                    </tr>
+                                </thead>
+    
+                                <tbody>
+                                    @foreach($assign_vehicles as $assign_vehicle)
+                                    <tr>
+                                        <td valign="top">{{@$assign_vehicle->route !=""? @$assign_vehicle->route->title:""}}</td>
+                                        <td>
+                                        {{@$assign_vehicle->vehicle !=""? @$assign_vehicle->vehicle->vehicle_no:""}}
+                                        </td>
+                                        
+                                        <td valign="top">
+                                            <x-drop-down>
+    
+                                                   
+                                                    <a class="dropdown-item" href="{{route('assign-vehicle-edit',@$assign_vehicle->id)}}">@lang('common.edit')</a>
+                                                    
+                                                   
+                                                   
+                                                    <a class="dropdown-item deleteAssignVehicle" data-toggle="modal" href="#" data-id="{{@$assign_vehicle->id}}" data-target="#deleteAssignVehicle">@lang('common.delete')</a>
+                                              
+                                            </x-drop-down>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </x-table>
+                        </div>
                     </div>
                 </div>
             </div>

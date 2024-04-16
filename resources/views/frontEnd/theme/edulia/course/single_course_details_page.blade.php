@@ -1,7 +1,6 @@
 @extends(config('pagebuilder.site_layout'),['edit' => false ])
-{{headerContent()}}
-
 @section(config('pagebuilder.site_section'))
+{{headerContent()}}
     <section class="bradcrumb_area">
         <div class="container">
             <div class="row">
@@ -14,7 +13,7 @@
         </div>
     </section>
 
-    <section class="section_padding course course_details_page">
+    <section class="section_padding course course_details_page mt-5">
         <div class="container">
             <div class="row">
                 <div class="col-lg-4 col-md-12">
@@ -95,8 +94,6 @@
             </div>
         </div>
     </section>
-    
-    {{footerContent()}}
 @endsection
 @pushonce(config('pagebuilder.site_script_var'))
     <script>

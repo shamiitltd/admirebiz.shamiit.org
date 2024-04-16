@@ -221,15 +221,15 @@ body - var(--body_color)
   color: var(--primary_color);
 } */
 .sidebar #sidebar_menu li.mm-active > a.has-arrow:hover::after {
-  color: var(--primary_color);
+  color: var(--base_color);
 }
 .sidebar #sidebar_menu li ul li a {
-  color: var(--secondary_color);
+  color: var(--base_color);
   font-size: 13px;
   text-transform: capitalize;
 }
 .sidebar #sidebar_menu li ul li a {
-  color: var(--secondary_color);
+  color: var(--base_color);
   font-size: 13px;
   text-transform: capitalize;
   font-weight: 400;
@@ -442,14 +442,14 @@ body - var(--body_color)
 }
 @media (min-width: 1370px) {
   #sidebar {
-    min-width: 250px;
-    max-width: 250px;
+    min-width: 265px;
+    max-width: 265px;
   }
   #main-content {
-    width: calc(100% - 250px);
+    width: calc(100% - 265px);
   }
   #main-content {
-    margin-left: 250px;
+    margin-left: 265px;
   }
 }
 

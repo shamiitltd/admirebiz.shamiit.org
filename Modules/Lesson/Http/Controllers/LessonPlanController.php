@@ -580,9 +580,8 @@ class LessonPlanController extends Controller
                         ->get();
                 }
             }
-
             $class_id = $request->class_id;
-            $teacher_id = $request->teacher_id;
+            $teacher_id = $request->teacher;
             $section_id = $request->section_id;
             $subject_id = $request->subject_id;
 
@@ -607,7 +606,7 @@ class LessonPlanController extends Controller
             $selected['class_id'] = $class_id;
             $selected['section_id'] = $section_id;
             $selected['subject_id'] = $subject_id;
-
+            $selected['teacher'] = $teacher_id;
             return view('lesson::lessonPlan.manage_lesson_planner', compact('total', 'completed_total', 'alllessonPlanner', 'lessonPlanner', 'classes', 'teachers', 'percentage', 'subjects', 'sections', 'class_id', 'section_id', 'subject_id', 'teacher_id', 'selected'));
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');

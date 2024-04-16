@@ -83,7 +83,12 @@ class ThemeBasedMenuManagerController extends Controller
     private function indexData(){
         $data['pages'] = SmPage::where('is_dynamic', 1)->where('school_id', app('school')->id)->get();
         $data['static_pages'] = Page::whereNotIn('name', ['header_menu', 'footer_menu'])->where('school_id', app('school')->id)->get();
-        $data['menus'] = SmHeaderMenuManager::where('school_id', app('school')->id)->where('theme', activeTheme())->where('parent_id', null)->orderBy('position')->get();
+        $data['menus'] = SmHeaderMenuManager::with('childs')
+                    ->where('school_id', app('school')->id)
+                    ->where('theme', activeTheme())
+                    ->where('parent_id', null)
+                    ->orderBy('position')
+                    ->get();
         return $data;
     }
 }

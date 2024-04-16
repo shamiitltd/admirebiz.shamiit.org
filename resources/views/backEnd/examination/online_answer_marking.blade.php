@@ -10,7 +10,7 @@
     </style>
 @endpush
 @section('mainContent')
-<section class="sms-breadcrumb mb-40 white-box">
+<section class="sms-breadcrumb mb-20">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('exam.examinations') </h1>
@@ -82,7 +82,8 @@
                                             $submited_answer_status=App\OnlineExamStudentAnswerMarking::StudentImageAnswerStatus($online_exam_info->id,$question->question_bank_id,$s_id);
                                         } 
                                 @endphp
-                               
+
+                                
                                 <tr>
                                     <td width="80%">
                                         <h4 class="text-center">{{++$j.'.'}} {{@$question->questionBank->question}}</h4>
@@ -243,13 +244,15 @@
                                     @endphp
                                     <td width="10%" class="text-right">
                                         <div class="mt-20 float-right">
-                                            <input type="radio" id="marks_{{@$question->questionBank!=""?@$question->questionBank->id:""}}_incorrect"  class="common-checkbox common-radio relationButton" name="marks[]{{@$question->questionBank->id}}" {{@$incorrect}} >
+                                            <input type="radio" id="marks_{{@$question->questionBank!=""?@$question->questionBank->id:""}}_incorrect"  class="common-checkbox common-radio relationButton"
+                                             name="marks[]{{@$question->questionBank->id}}" {{@$incorrect}} >
                                             <label for="marks_{{@$question->questionBank!=""?@$question->questionBank->id:""}}_incorrect"></label>
                                         </div>
                                     </td>
                                     <td width="10%" class="text-right">
                                         <div class="mt-20">
-                                            <input type="radio" id="marks_{{@$question->questionBank !=""?@$question->questionBank->id:""}}" class="common-checkbox common-radio relationButton" name="marks[]{{@$question->questionBank->id}}" value="{{@$question->questionBank!=""?@$question->questionBank->id:""}}" {{@$correct}}>
+                                            <input type="radio" id="marks_{{@$question->questionBank !=""?@$question->questionBank->id:""}}" class="common-checkbox common-radio relationButton"
+                                             name="marks[]{{@$question->questionBank->id}}" value="{{@$question->questionBank!=""?@$question->questionBank->id:""}}" {{@$correct}}>
                                             <label for="marks_{{@$question->questionBank!=""?@$question->questionBank->id:""}}"></label>
                                         </div>
                                     </td>

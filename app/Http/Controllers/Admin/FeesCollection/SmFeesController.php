@@ -383,7 +383,12 @@ class SmFeesController extends Controller
                 ->where('active_status', 1)
                 ->distinct('fees_group_id')
                 ->where('school_id',Auth::user()->school_id)
-                ->where('academic_id', getAcademicId())
+                ->when(moduleStatusCheck('University'), function ($q) {
+                    $q->where('un_academic_id', getAcademicId());
+                })
+                ->when(!moduleStatusCheck('University'), function ($q) {
+                    $q->where('academic_id', getAcademicId());
+                })
                 ->get();
 
             $students = StudentRecord::where('school_id',Auth::user()->school_id)
@@ -438,23 +443,23 @@ class SmFeesController extends Controller
             return redirect()->back();
         }
     }
-    public function searchFeesDue(Request $request)
-    {
+    function universitySearchFeesDue($request){
         try {
-            $classes = SmClass::where('active_status', 1)
-                ->where('academic_id', getAcademicId())
-                ->where('school_id',Auth::user()->school_id)
-                ->get();
 
             $fees_masters = SmFeesMaster::select('fees_group_id')
                 ->where('active_status', 1)
                 ->distinct('fees_group_id')
                 ->where('school_id',Auth::user()->school_id)
-                ->where('academic_id', getAcademicId())
+                ->when(moduleStatusCheck('University'), function ($q) {
+                    $q->where('un_academic_id', getAcademicId());
+                })
+                ->when(!moduleStatusCheck('University'), function ($q) {
+                    $q->where('academic_id', getAcademicId());
+                })
                 ->get();
 
             $students = StudentRecord::where('school_id',Auth::user()->school_id)
-                ->where('academic_id', getAcademicId())
+                ->where('un_academic_id', getAcademicId())
                 ->whereHas('student',function($q){
                     $q->where('active_status',1);
                 })
@@ -463,15 +468,17 @@ class SmFeesController extends Controller
             $fees_dues = [];
             $fees_due_ids = [];
 
-            $fees_assigns = SmFeesAssign::with('feesGroupMaster', 'recordDetail', 'feesGroupMaster.feesTypes')->get();
+            $fees_assigns = UnFeesInstallmentAssign::get();
             foreach ($fees_assigns as $assignFees) {
-                $discount_amount = $assignFees->applied_discount;
-                $total_amount = $assignFees->feesGroupMaster->amount;
-                $amount = $assignFees->totalPaid;
+                // dd($assignFees);
+                $discount_amount = $assignFees->discount_amount;
+                $total_amount = $assignFees->amount;
+                $amount = $assignFees->paid_amount;
                 $paid = $discount_amount + $amount;
 
                 if ($total_amount > $paid) {
-                    $due_date= strtotime($assignFees->feesGroupMaster->date);
+                    $due_date= strtotime($assignFees->due_date);
+                    // dd($due_date);
                     $now =strtotime(date('Y-m-d'));
                     if ($due_date > $now ) {
                         continue;
@@ -479,12 +486,66 @@ class SmFeesController extends Controller
                     $fees_due_ids[] = $assignFees->id;
                 }
             }
+            // dd($fees_assigns);
             $fees_dues = $fees_assigns->whereIn('id', $fees_due_ids);
-            return view('backEnd.feesCollection.search_fees_due', compact('classes', 'fees_masters', 'fees_dues'));
+            return view('backEnd.feesCollection.search_fees_due', compact('fees_masters', 'fees_dues'));
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();
         }
+    }
+    public function searchFeesDue(Request $request)
+    {
+        if (moduleStatusCheck('University')) {
+            return $this->universitySearchFeesDue($request);
+        } else {
+            try {
+                $classes = SmClass::where('active_status', 1)
+                    ->where('academic_id', getAcademicId())
+                    ->where('school_id',Auth::user()->school_id)
+                    ->get();
+    
+                $fees_masters = SmFeesMaster::select('fees_group_id')
+                    ->where('active_status', 1)
+                    ->distinct('fees_group_id')
+                    ->where('school_id',Auth::user()->school_id)
+                    ->where('academic_id', getAcademicId())
+                    ->get();
+    
+                $students = StudentRecord::where('school_id',Auth::user()->school_id)
+                    ->where('academic_id', getAcademicId())
+                    ->whereHas('student',function($q){
+                        $q->where('active_status',1);
+                    })
+                    ->get();
+    
+                $fees_dues = [];
+                $fees_due_ids = [];
+    
+                $fees_assigns = SmFeesAssign::with('feesGroupMaster', 'recordDetail', 'feesGroupMaster.feesTypes')->get();
+                foreach ($fees_assigns as $assignFees) {
+                    $discount_amount = $assignFees->applied_discount;
+                    $total_amount = $assignFees->feesGroupMaster->amount;
+                    $amount = $assignFees->totalPaid;
+                    $paid = $discount_amount + $amount;
+    
+                    if ($total_amount > $paid) {
+                        $due_date= strtotime($assignFees->feesGroupMaster->date);
+                        $now =strtotime(date('Y-m-d'));
+                        if ($due_date > $now ) {
+                            continue;
+                        }
+                        $fees_due_ids[] = $assignFees->id;
+                    }
+                }
+                $fees_dues = $fees_assigns->whereIn('id', $fees_due_ids);
+                return view('backEnd.feesCollection.search_fees_due', compact('classes', 'fees_masters', 'fees_dues'));
+            } catch (\Exception $e) {
+                Toastr::error('Operation Failed', 'Failed');
+                return redirect()->back();
+            }
+        }
+        
     }
 
     public function feesDueSearch(Request $request)
@@ -516,10 +577,23 @@ class SmFeesController extends Controller
         }
         try {
             if(moduleStatusCheck('University')){
+                // dump($request->all());
                 $rangeArr = $request->date_range ? explode('-', $request->date_range) : "".date('m/d/Y')." - ".date('m/d/Y')."";
+                // dd($rangeArr);
+                $date_from = new \DateTime(trim(date('m/d/Y')));
+                $date_to =  new \DateTime(trim(date('m/d/Y')));
 
-                $date_from = new \DateTime(trim($rangeArr[0]));
-                $date_to =  new \DateTime(trim($rangeArr[1]));
+                $fees_masters = SmFeesMaster::select('fees_group_id')
+                ->where('active_status', 1)
+                ->distinct('fees_group_id')
+                ->where('school_id',Auth::user()->school_id)
+                ->when(moduleStatusCheck('University'), function ($q) {
+                    $q->where('un_academic_id', getAcademicId());
+                })
+                ->when(!moduleStatusCheck('University'), function ($q) {
+                    $q->where('academic_id', getAcademicId());
+                })
+                ->get();
 
                 $fees_dues = UnFeesInstallmentAssign::whereHas('recordDetail')->whereIn('active_status',[0,2])
                     ->where('un_semester_label_id',$request->un_semester_label_id)
@@ -528,7 +602,7 @@ class SmFeesController extends Controller
                         $q->where('due_date',  '<=', $date_to);
                     })
                     ->get();
-                return view('backEnd.feesCollection.search_fees_due', compact('fees_dues','date_to', 'date_from'));
+                return view('backEnd.feesCollection.search_fees_due', compact('fees_dues','fees_masters'));
             }elseif(directFees()){
                 $rangeArr = $request->date_range ? explode('-', $request->date_range) : "".date('m/d/Y')." - ".date('m/d/Y')."";
 
@@ -629,6 +703,7 @@ class SmFeesController extends Controller
 
 
         } catch (\Exception $e) {
+            dd($e);
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();
         }
@@ -855,13 +930,11 @@ class SmFeesController extends Controller
         $classes = SmClass::get();
         return view('backEnd.accounts.fine_report',compact('classes'));
     }
-
-    public function fineReportSearch(SmFineReportSearchRequest $request){
-
+    function universityFineReportSearch($request)
+    {
         $rangeArr = $request->date_range ? explode('-', $request->date_range) : "".date('m/d/Y')." - ".date('m/d/Y')."";
-
+        // dd($request->all());
         try {
-            $classes = SmClass::get();
 
             if($request->date_range){
                 $date_from = new \DateTime(trim($rangeArr[0]));
@@ -876,39 +949,87 @@ class SmFeesController extends Controller
 
                 $fine_info = $fine_info->groupBy('student_id');
             }
-
-            if($request->class){
-                $students=SmStudent::where('class_id',$request->class)
-                    ->get();
-
-                $fine_info = SmFeesPayment::where('active_status',1)->where('payment_date', '>=', $date_from)
-                    ->where('payment_date', '<=', $date_to)
-                    ->where('school_id',Auth::user()->school_id)
-                    ->whereIn('student_id', $students)
-                    ->get();
-                $fine_info = $fine_info->groupBy('student_id');
-
-            }
-
-            if($request->class && $request->section){
-
-                $students=SmStudent::where('class_id',$request->class)
-                    ->where('section_id',$request->section)
-                    ->get();
+               
+                $students=StudentRecord::with('student')
+                    ->when($request->un_semester_label_id,function($q) use ($request){
+                        $q->where('un_semester_label_id',$request->un_semester_label_id);
+                    })
+                    ->when($request->section_id,function($q) use ($request){
+                        $q->where('section_id',$request->section_id);
+                    })->pluck('student_id')->toArray();
 
                 $fine_info = SmFeesPayment::where('active_status',1)->where('payment_date', '>=', $date_from)
                     ->where('payment_date', '<=', $date_to)
                     ->where('school_id',Auth::user()->school_id)
                     ->whereIn('student_id', $students)
                     ->get();
-
                 $fine_info = $fine_info->distinct('student_id');
-            }
-            return view('backEnd.accounts.fine_report',compact('classes','fine_info'));
+
+            return view('backEnd.accounts.fine_report',compact('fine_info'));
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();
         }
+    }
+
+    public function fineReportSearch(SmFineReportSearchRequest $request){
+        if (moduleStatusCheck('University')) {
+            return $this->universityFineReportSearch($request);
+        } else {
+            $rangeArr = $request->date_range ? explode('-', $request->date_range) : "".date('m/d/Y')." - ".date('m/d/Y')."";
+
+            try {
+                $classes = SmClass::get();
+    
+                if($request->date_range){
+                    $date_from = new \DateTime(trim($rangeArr[0]));
+                    $date_to =  new \DateTime(trim($rangeArr[1]));
+                }
+    
+                if($request->date_range ){
+                    $fine_info = SmFeesPayment::where('active_status',1)->where('payment_date', '>=', $date_from)
+                        ->where('payment_date', '<=', $date_to)
+                        ->where('school_id',Auth::user()->school_id)
+                        ->get();
+    
+                    $fine_info = $fine_info->groupBy('student_id');
+                }
+    
+                if($request->class){
+                    $students=SmStudent::where('class_id',$request->class)
+                        ->get();
+    
+                    $fine_info = SmFeesPayment::where('active_status',1)->where('payment_date', '>=', $date_from)
+                        ->where('payment_date', '<=', $date_to)
+                        ->where('school_id',Auth::user()->school_id)
+                        ->whereIn('student_id', $students)
+                        ->get();
+                    $fine_info = $fine_info->groupBy('student_id');
+    
+                }
+    
+                if($request->class && $request->section){
+    
+                    $students=SmStudent::where('class_id',$request->class)
+                        ->where('section_id',$request->section)
+                        ->get();
+    
+                    $fine_info = SmFeesPayment::where('active_status',1)->where('payment_date', '>=', $date_from)
+                        ->where('payment_date', '<=', $date_to)
+                        ->where('school_id',Auth::user()->school_id)
+                        ->whereIn('student_id', $students)
+                        ->get();
+    
+                    $fine_info = $fine_info->distinct('student_id');
+                }
+                return view('backEnd.accounts.fine_report',compact('classes','fine_info'));
+            } catch (\Exception $e) {
+                Toastr::error('Operation Failed', 'Failed');
+                return redirect()->back();
+            }
+        }
+        
+      
     }
 
 

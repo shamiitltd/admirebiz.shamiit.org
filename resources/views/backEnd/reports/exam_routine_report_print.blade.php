@@ -77,7 +77,7 @@
             @foreach ($exam_schedules as $item)               
           
             <tr>
-                <td >{{ dateConvert($item->date) }} <br>{{ Carbon::createFromFormat('Y-m-d', $item->date)->format('l'); }}</td>
+                <td >{{ dateConvert($item->date) }} <br>{{ Carbon::createFromFormat('Y-m-d', $item->date)->format('l') }}</td>
                 <td>
                   <strong> {{ $item->subject ? $item->subject->subject_name :'' }} </strong> 
                 </td>

@@ -11,7 +11,7 @@
             }
         </style>
     @endpush
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('exam.exam_attendance')</h1>
@@ -27,15 +27,15 @@
     <section class="admin-visitor-area">
         <div class="container-fluid p-0">
             <div class="row">
-                <div class="col-lg-4 col-md-6">
-                    <div class="main-title">
-                        <h3 class="mb-30">@lang('common.select_criteria') </h3>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
                 <div class="col-lg-12">
                     <div class="white-box">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-6">
+                                <div class="main-title">
+                                    <h3 class="mb-15">@lang('common.select_criteria') </h3>
+                                </div>
+                            </div>
+                        </div>
                         {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'exam_attendance_create_search', 'method' => 'POST', 'enctype' => 'multipart/form-data', 'id' => 'search_student']) }}
                         <div class="row">
                             <input type="hidden" name="url" id="url" value="{{ URL::to('/') }}">
@@ -179,21 +179,21 @@
                     <input type="hidden" name="un_section_id" value="{{ @$un_section->id }}">
                     <div class="row mt-40">
                         <div class="col-lg-12">
-                            <div class="row">
-                                <div class="col-lg-12 no-gutters mb-30">
-                                    <div class="main-title">
-                                        <h3>@lang('exam.exam_attendance') | <strong>@lang('exam.subject')</strong>:
-                                            {{ $subjectName->subject_name }}</h3>
-                                        @includeIf('university::exam._university_info')
-                                    </div>
-                                </div>
-                            </div>
                             <input class="examId" type="hidden" name="exam_id" value="{{ @$exam_id }}">
                             <input class="subjectId" type="hidden" name="un_subject_id" value="{{ @$subject_id }}">
 
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="white-box">
+                                        <div class="row">
+                                            <div class="col-lg-12 no-gutters mb-15">
+                                                <div class="main-title">
+                                                    <h3>@lang('exam.exam_attendance') | <strong>@lang('exam.subject')</strong>:
+                                                        {{ $subjectName->subject_name }}</h3>
+                                                    @includeIf('university::exam._university_info')
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="table-responsive">
                                             <table class="table school-table-style shadow-none p-0" cellspacing="0"
                                                 width="100%">
@@ -298,16 +298,6 @@
                 @else
                     <div class="row mt-40">
                         <div class="col-lg-12">
-                            <div class="row">
-                                <div class="col-lg-12 no-gutters">
-                                    <div class="main-title">
-                                        <h3 class="mb-30">@lang('exam.exam_attendance') | <small>@lang('common.class'):
-                                                {{ $search_info['class_name'] }}, @lang('common.section'):
-                                                {{ $search_info['section_name'] }}, @lang('common.subject'):
-                                                {{ $search_info['subject_name'] }}</small></h3>
-                                    </div>
-                                </div>
-                            </div>
 
                             <input class="examId" type="hidden" name="exam_id" value="{{ @$exam_id }}">
                             <input class="subjectId" type="hidden" name="subject_id" value="{{ @$subject_id }}">
@@ -317,6 +307,16 @@
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="white-box">
+                                        <div class="row">
+                                            <div class="col-lg-12 no-gutters">
+                                                <div class="main-title">
+                                                    <h3 class="mb-15">@lang('exam.exam_attendance') | <small>@lang('common.class'):
+                                                            {{ $search_info['class_name'] }}, @lang('common.section'):
+                                                            {{ $search_info['section_name'] }}, @lang('common.subject'):
+                                                            {{ $search_info['subject_name'] }}</small></h3>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="table-responsive">
                                             <table class="table school-table-style shadow-none p-0" cellspacing="0"
                                                 width="100%">

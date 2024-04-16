@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Communicate;
 
+use App\GlobalVariable;
 use App\User;
 use Carbon\Carbon;
 use App\SmNoticeBoard;
@@ -69,6 +70,8 @@ class SmNoticeController extends Controller
                     $this->sent_notifications('Notice', $userIds, $data, ['Student']);
                 }elseif($role_id == 3){
                     $this->sent_notifications('Notice', $userIds, $data, ['Parent']);
+                }elseif($role_id == GlobalVariable::isAlumni()){
+                    $this->sent_notifications('Notice', $userIds, $data, ['Alumni']);
                 }
             }
 

@@ -4,7 +4,7 @@
 @endsection
 
 @section('mainContent')
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('communicate.calendar')</h1>
@@ -20,7 +20,9 @@
 
     <section class="mb-40 sms-accordion">
         <div class="container-fluid p-0">
-            @include('backEnd.communicate.commonAcademicCalendar')
+            <div>
+                @include('backEnd.communicate.commonAcademicCalendar')
+            </div>
         </div>
     </section>
 @endsection

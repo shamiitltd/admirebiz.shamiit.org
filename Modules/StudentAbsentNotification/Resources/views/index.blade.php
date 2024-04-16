@@ -1,12 +1,12 @@
 @extends('backEnd.master')
 @section('title')
-    @lang('student.time_setup')
+    @lang('student.sms_sending_time')
 @endsection
 @section('mainContent')
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
-                <h1>@lang('student.time_setup')</h1>
+                <h1>@lang('student.sms_sending_time')</h1>
                 <div class="bc-pages">
                     <a href="{{ route('dashboard') }}">@lang('common.dashboard')</a>
                     <a href="#">@lang('student.student_information')</a>
@@ -58,15 +58,6 @@
                 <div class="col-lg-3">
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="main-title">
-                                <h3 class="mb-30">
-                                    @if (isset($editData))
-                                        @lang('student.edit_time_setup')
-                                    @else
-                                        @lang('student.add_time_setup')
-                                    @endif
-                                </h3>
-                            </div>
                             @if (isset($editData))
                                 {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'absent_time_setup_update', 'method' => 'POST', 'enctype' => 'multipart/form-data']) }}
 
@@ -84,6 +75,15 @@
                             @endif
                             <input type="hidden" name="url" id="url" value="{{ URL::to('/') }}">
                             <div class="white-box">
+                                <div class="main-title">
+                                    <h3 class="mb-15">
+                                        @if (isset($editData))
+                                            @lang('student.edit_time_setup')
+                                        @else
+                                            @lang('student.add_time_setup')
+                                        @endif
+                                    </h3>
+                                </div>
                                 <div class="add-visitor">
                                     <div class="row no-gutters input-right-icon mt-25">
                                         <div class="col">
@@ -174,49 +174,51 @@
                 </div>
 
                 <div class="col-lg-9">
-                    <div class="row">
-                        <div class="col-lg-4 no-gutters">
-                            <div class="main-title">
-
-                                <h3 class="mb-0">@lang('student.time_setup_list')</h3>
+                    <div class="white-box">
+                        <div class="row">
+                            <div class="col-lg-4 no-gutters">
+                                <div class="main-title">
+    
+                                    <h3 class="mb-15">@lang('student.time_setup_list')</h3>
+                                </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <x-table>
-                                <table id="table_id" class="table" cellspacing="0" width="100%">
-
-                                    <thead>
-                                        <tr>
-                                            <th>@lang('student.time')</th>
-                                            {{-- <th>@lang('student.end_time')</th> --}}
-                                            <th>@lang('common.status')</th>
-                                            <th>@lang('common.action')</th>
-                                        </tr>
-                                    </thead>
-
-                                    <tbody>
-                                        @foreach ($setups as $item)
+    
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <x-table>
+                                    <table id="table_id" class="table" cellspacing="0" width="100%">
+    
+                                        <thead>
                                             <tr>
-                                                <td>{{ @$item->time_from }}</td>
-                                                {{-- <td>{{@$item->time_to}}</td> --}}
-                                                <td>
-                                                    @if ($item->active_status == 1)
-                                                        @lang('common.active')
-                                                    @else
-                                                        @lang('common.pending')
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    <x-drop-down>
-                                                        <a class="dropdown-item"
-                                                            href="{{ route('absent_time_edit', [$item->id]) }}">@lang('common.edit')</a>
-                                                        <a class="dropdown-item" data-toggle="modal"
-                                                            data-target="#deleteStudentTypeModal{{ $item->id }}"
-                                                            href="#">@lang('common.delete')</a>
-                                                    </x-drop-down>
+                                                <th>@lang('student.time')</th>
+                                                {{-- <th>@lang('student.end_time')</th> --}}
+                                                <th>@lang('common.status')</th>
+                                                <th>@lang('common.action')</th>
+                                            </tr>
+                                        </thead>
+    
+                                        <tbody>
+                                            @foreach ($setups as $item)
+                                                <tr>
+                                                    <td>{{ @$item->time_from }}</td>
+                                                    {{-- <td>{{@$item->time_to}}</td> --}}
+                                                    <td>
+                                                        @if ($item->active_status == 1)
+                                                            @lang('common.active')
+                                                        @else
+                                                            @lang('common.pending')
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        <x-drop-down>
+                                                            <a class="dropdown-item"
+                                                                href="{{ route('absent_time_edit', [$item->id]) }}">@lang('common.edit')</a>
+                                                            <a class="dropdown-item" data-toggle="modal"
+                                                                data-target="#deleteStudentTypeModal{{ $item->id }}"
+                                                                href="#">@lang('common.delete')</a>
+                                                        </x-drop-down>
+                            </div>
                         </div>
                     </div>
                     </td>

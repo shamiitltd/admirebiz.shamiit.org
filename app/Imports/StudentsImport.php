@@ -17,10 +17,15 @@ class StudentsImport implements ToModel, WithStartRow, WithHeadingRow
     */
     public function model(array $row)
     {
+
+       
+
+        
         $dob = null;
         $admission_date = date('Y-m-d');
 
         if(gv($row, 'date_of_birth')){
+          
             $dob = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['date_of_birth'])->format('Y-m-d');
         }
         
@@ -28,6 +33,7 @@ class StudentsImport implements ToModel, WithStartRow, WithHeadingRow
         if(gv($row, 'admission_date')){
             $admission_date = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['admission_date'])->format('Y-m-d');
         }
+        
 
       
         return new StudentBulkTemporary([
@@ -67,6 +73,7 @@ class StudentsImport implements ToModel, WithStartRow, WithHeadingRow
           "note" => @$row['note'],
           "user_id" => Auth::user()->id
         ]);
+    
 
        
     }

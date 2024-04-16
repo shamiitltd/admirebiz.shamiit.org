@@ -10,7 +10,7 @@
         }
     </style>
 @endpush
-<section class="sms-breadcrumb mb-40 white-box">
+<section class="sms-breadcrumb mb-20">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('wallet::wallet.wallet_transaction')</h1>
@@ -25,31 +25,33 @@
 
 <section class="admin-visitor-area up_st_admin_visitor mt-20">
     <div class="container-fluid p-0">
-        <div class="row">
-            <div class="col-lg-12">
-                <x-table>
-                    <table id="table_id" class="table data-table" cellspacing="0" width="100%">
-                        <thead>
-                            <tr>
-                                <th>@lang('common.sl')</th>
-                                <th>@lang('common.name')</th>
-                                <th>@lang('wallet::wallet.method')</th>
-                                <th>@lang('common.pending')</th>
-                                <th>@lang('wallet::wallet.approve')</th>
-                                <th>@lang('wallet::wallet.reject')</th>
-                                <th>@lang('wallet::wallet.refund')</th>
-                                <th>@lang('accounts.expense')</th>
-                                <th>@lang('fees::feesModule.fees_refund')</th>
-                                <th>@lang('common.status')</th>
-                                <th>@lang('common.date')</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                           
-                            
-                        </tbody>
-                    </table>
-                </x-table>
+        <div class="white-box">
+            <div class="row mt-40">
+                <div class="col-lg-12">
+                    <x-table>
+                        <table id="table_id" class="table data-table" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>@lang('common.sl')</th>
+                                    <th>@lang('common.name')</th>
+                                    <th>@lang('wallet::wallet.method')</th>
+                                    <th>@lang('common.pending')</th>
+                                    <th>@lang('wallet::wallet.approve')</th>
+                                    <th>@lang('wallet::wallet.reject')</th>
+                                    <th>@lang('wallet::wallet.refund')</th>
+                                    <th>@lang('accounts.expense')</th>
+                                    <th>@lang('fees::feesModule.fees_refund')</th>
+                                    <th>@lang('common.status')</th>
+                                    <th>@lang('common.date')</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                               
+                                
+                            </tbody>
+                        </table>
+                    </x-table>
+                </div>
             </div>
         </div>
     </div>

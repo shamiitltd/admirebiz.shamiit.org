@@ -3,7 +3,7 @@
     @lang('student.student_list')
 @endsection
 @section('mainContent')
-    <section class="sms-breadcrumb mb-40 up_breadcrumb white-box">
+    <section class="sms-breadcrumb mb-20 up_breadcrumb">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('student.manage_student')</h1>
@@ -17,26 +17,26 @@
     </section>
     <section class="admin-visitor-area up_admin_visitor">
         <div class="container-fluid p-0">
-            <div class="row">
-                <div class="col-lg-8 col-md-6 col-sm-6">
-                    <div class="main-title mt_0_sm mt_0_md">
-                        <h3 class="mb-30  ">@lang('common.select_criteria')</h3>
-                    </div>
-                </div>
-
-                @if (userPermission('student_admission'))
-                    <div class="col-lg-4 text-md-right text-left col-md-6 mb-30-lg col-sm-6 text_sm_right">
-                        <a href="{{ route('student_admission') }}" class="primary-btn small fix-gr-bg">
-                            <span class="ti-plus pr-2"></span>
-                            @lang('student.add_student')
-                        </a>
-                    </div>
-                @endif
-            </div>
             {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'student-list-search', 'method' => 'POST', 'enctype' => 'multipart/form-data', 'id' => 'infix_form']) }}
             <div class="row">
                 <div class="col-lg-12">
                     <div class="white-box filter_card">
+                        <div class="row">
+                            <div class="col-lg-8 col-md-6 col-sm-6">
+                                <div class="main-title mt_0_sm mt_0_md">
+                                    <h3 class="mb-15">@lang('common.select_criteria')</h3>
+                                </div>
+                            </div>
+            
+                            @if (userPermission('student_admission'))
+                                <div class="col-lg-4 text-md-right text-left col-md-6 mb-30-lg col-sm-6 text_sm_right">
+                                    <a href="{{ route('student_admission') }}" class="primary-btn small fix-gr-bg">
+                                        <span class="ti-plus pr-2"></span>
+                                        @lang('student.add_student')
+                                    </a>
+                                </div>
+                            @endif
+                        </div>
                         <div class="row">
                             <input type="hidden" name="url" id="url" value="{{ URL::to('/') }}">
 
@@ -64,12 +64,12 @@
                                 </div>
                             @else
                                 @include('backEnd.common.search_criteria', [
-                                    'mt' => 'mt-30',
+                                    'mt' => 'mt-0',
                                     'div' => 'col-lg-3',
                                     'required' => ['academic'],
                                     'visiable' => ['academic', 'class', 'section'],
                                 ])
-                                <div class="col-lg-2 mt-30">
+                                <div class="col-lg-2">
                                     <div class="primary_input sm_mb_20 ">
                                         <label class="primary_input_label" for="">@lang('student.search_by_name')</label>
 
@@ -78,7 +78,7 @@
 
                                     </div>
                                 </div>
-                                <div class="col-lg-1 mt-30">
+                                <div class="col-lg-1">
                                     <div class="primary_input sm_mb_20 ">
                                         <label class="primary_input_label" for="">@lang('student.search_by_roll')</label>
                                         <input class="primary_input_field" type="text" placeholder="Roll" name="roll_no"
@@ -113,44 +113,46 @@
             {{-- @if (@$students) --}}
             <div class="row mt-40 full_wide_table">
                 <div class="col-lg-12">
-                    <div class="row">
-                        <div class="col-lg-4 no-gutters">
-                            <div class="main-title">
-                                <h3 class="mb-0">@lang('student.student_list')</h3>
+                    <div class="white-box">
+                        <div class="row">
+                            <div class="col-lg-4 no-gutters">
+                                <div class="main-title">
+                                    <h3 class="mb-15">@lang('student.student_list')</h3>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <x-table>
-                                <table id="table_id"
-                                    class="table data-table Crm_table_active3 no-footer dtr-inline collapsed"
-                                    cellspacing="0" width="100%">
-                                    <thead>
-                                        <tr>
-                                            <th>@lang('student.admission_no')</th>
-                                            <th>@lang('student.name')</th>
-                                            @if (!moduleStatusCheck('University') && generalSetting()->with_guardian)
-                                                <th>@lang('student.father_name')</th>
-                                            @endif
-                                            <th>@lang('student.date_of_birth')</th>
-                                            @if (moduleStatusCheck('University'))
-                                                <th>@lang('university::un.semester_label')</th>
-                                                <th>@lang('student.fac_dept')</th>
-                                            @else
-                                                <th>@lang('student.class_sec')</th>
-                                            @endif
-
-                                            <th>@lang('common.gender')</th>
-                                            <th>@lang('common.type')</th>
-                                            <th>@lang('common.phone')</th>
-                                            <th>@lang('common.actions')</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
-                            </x-table>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <x-table>
+                                    <table id="table_id"
+                                        class="table data-table Crm_table_active3 no-footer dtr-inline collapsed"
+                                        cellspacing="0" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th>@lang('student.admission_no')</th>
+                                                <th>@lang('student.name')</th>
+                                                @if (!moduleStatusCheck('University') && generalSetting()->with_guardian)
+                                                    <th>@lang('student.father_name')</th>
+                                                @endif
+                                                <th>@lang('student.date_of_birth')</th>
+                                                @if (moduleStatusCheck('University'))
+                                                    <th>@lang('university::un.semester_label')</th>
+                                                    <th>@lang('university::un.fac_dept')</th>
+                                                @else
+                                                    <th>@lang('student.class_sec')</th>
+                                                @endif
+    
+                                                <th>@lang('common.gender')</th>
+                                                <th>@lang('common.type')</th>
+                                                <th>@lang('common.phone')</th>
+                                                <th>@lang('common.actions')</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </x-table>
+                            </div>
                         </div>
                     </div>
                 </div>

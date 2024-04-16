@@ -8,11 +8,14 @@
     .school-table-style tbody tr td{
         min-width: 150px;
     }
+    .fa-check-icon:hover {
+        cursor: pointer;
+    }
 </style>
 @endpush
 
 @section('mainContent')
-<section class="sms-breadcrumb mb-40 up_breadcrumb white-box">
+<section class="sms-breadcrumb mb-20 up_breadcrumb">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('student.student_promote')</h1>
@@ -117,9 +120,6 @@
                                     </span>
                                     @endif
                                 </div>
-
-                                
-                               
                                 <div class="col-lg-12 mt-20 text-right">
                                     <button type="submit" class="primary-btn small fix-gr-bg" id="search_promote">
                                         <span class="ti-search pr-2"></span>
@@ -138,7 +138,7 @@
     @if(isset($students))
     <section class="admin-visitor-area">
         <div class="container-fluid p-0">
-            <div class="row mt-40">
+            <div class="row mt-40 white-box">
                 <div class="col-lg-12">
                     <div class="row">
                         <div class="col-lg-12 no-gutters">
@@ -172,7 +172,7 @@
                     <input type="hidden" name="promote_session" value="{{$promote_session}}">
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="table-responsive">
+                            <div>
                                 <table class="table school-table-style" cellspacing="0" width="100%">
                                     <thead>
                                         <tr>
@@ -181,32 +181,41 @@
                                                 <input type="checkbox" id="checkAll" class="common-checkbox" name="checkAll">
                                                 <label for="checkAll">@lang('common.all')</label>
                                             </th>
-                                            {{-- <th>@lang('student.admission') @lang('student.no')</th> --}}
                                             <th>@lang('student.current_roll')</th>
-                                            <th>@lang('student.name')</th>   
-                                            {{-- <th>@lang('student.photo')</th>  --}}
-                                            {{-- <th>@lang('common.class_Sec')</th>                                                                         --}}
-                                                                                
-                                            <th>@lang('student.promote_class')</th>           
-                                            <th>@lang('student.promote_section')</th>                           
-                                            <th>@lang('student.next_roll_number')</th>
+                                            <th>@lang('student.name')</th>
+                                            @if (moduleStatusCheck('Alumni'))
+                                                <th>@lang('student.promotion_type')</th> 
+                                                <th class="graduate_datas d-none text-center">@lang('student.mark_as_graduate')</th>  
+                                            @endif                         
+                                            <th class="class_datas">@lang('student.promote_class')</th>           
+                                            <th class="class_datas">@lang('student.promote_section')</th>                           
+                                            <th class="class_datas">@lang('student.next_roll_number')</th>
                                         </tr>
                                     </thead>
     
                                     <tbody>
                                         @foreach($students  as $key=>$student)
-                                      
                                         <tr>
                                             <td>
                                                 <input type="checkbox" id="student_{{$student->id}}" class="common-checkbox promote_check" name="promote[{{$student->id}}][student]" value="{{$student->id}}">
                                                 <label for="student_{{$student->id}}"></label>
                                             </td>
-                                            <td> <a href="{{route('student_view',[$student->id]) }}"  target="_blank" rel="noopener noreferrer">  <h5 style="color:#A235EC">{{$student->recordStudentRoll->roll_no}}</h5></a> </td>
+                                        
+                                            <td> <a href="{{route('student_view',[$student->id]) }}"  target="_blank" rel="noopener noreferrer">  <h5 style="color:#A235EC">{{$student->studentRecord->getRawOriginal('roll_no')}} </h5></a> </td>
                                             <td>{{  $student->first_name .' '.$student->last_name }}</td>
-                                           
-                                            {{-- <td></td> --}}
-    
                                             <td>
+                                                <select class="primary_select form-control promote_type" data-student-id="{{ $student->id }}">
+                                                    <option data-display="@lang('student.select_promotion_type') *" value="">@lang('student.select_promotion_type') *</option>
+                                                    <option value="next_class" {{ $student->studentRecords->isNotEmpty() || ($student->studentRecords->first() && $student->studentRecords->first()->is_graduate == 0) ? 'selected' : '' }}> {{ __('student.next_class')}} </option>
+                                                    <option value="graduate" {{ $student->studentRecords->isNotEmpty() && $student->studentRecords->first()->is_graduate == 1 ? 'selected' : '' }}>{{ __('student.graduate')}}</option>
+                                                </select>
+                                            </td> 
+
+                                            <td class="graduate_datas d-none text-center" data-student-id="{{ $student->id }}">
+                                                <input type="checkbox" name="is_graduate" value="1" class="is_graduate_checkbox"
+                                                    @if($student->studentRecords->isNotEmpty() && $student->studentRecords->first()->is_graduate == 1) checked @endif>
+                                            </td>
+                                            <td class="class_datas">
                                                 <div class="row">
                                                     <div class="col-lg-12">
     
@@ -218,21 +227,17 @@
                                                         </select>
                                                         @if ($errors->has('class'))
                                                             <span class="text-danger invalid-select" role="alert">
-                                                    {{ $errors->first('class') }}
-                                                </span>
+                                                                {{ $errors->first('class') }}
+                                                            </span>
                                                         @endif
     
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td>
-    
+                                            <td class="class_datas">
                                                 <div class="row">
-    
                                                     <div class="col-lg-12" id="promote_section_div{{ $key }}">
-    
                                                         <select class="primary_select form-control{{ $errors->has('section') ? ' is-invalid' : '' }} promote_section" id="promote_section{{ $key }}"   name="promote[{{$student->id}}][section]">
-    
                                                             <option data-display="@lang('student.select_section') *" value="">@lang('student.select_section') *
                                                             </option>
                                                             @if($next_sections)
@@ -249,27 +254,23 @@
                                                                 {{ $errors->first('section') }}
                                                             </span>
                                                         @endif
-    
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td> 
+                                            <td class="class_datas"> 
                                                 <div class="row">
                                                     <div class="col-lg-12"> 
                                                         <div class="primary_input">
                                                         <input class="primary_input_field form-control{{ @$errors->has('name') ? ' is-invalid' : '' }} promote_roll_number" type="number" name="promote[{{$student->id}}][roll_number]" autocomplete="off">
-                                                          
+                                                            
                                                         <span class="text-danger errorExitRoll"></span>  
-                                                        {{--  --}}
                                                         
                                                         </div>
                                                     </div>
                                                 </div>
                                             </td>
-                                           
                                         </tr>
                                         @endforeach
-                                  
                                     </tbody>
                                 </table>
                             </div>
@@ -282,27 +283,51 @@
                             </div>
                             @endif
                         </div>
-
                     </div>
-
                     <div class="row">
                         
                     </div>
-
-                    {{ Form::close() }}
                 </div>
             </div>
-    </div>
-</section>
+        </div>
+    </section>
 @endif
-<script>
-
-
-
-</script>
 
 @endsection
 @section('script')
+
+<script>
+    $(document).ready(function () {
+        $('.promote_type').change(function () {
+            var selectedOption = $(this).val();
+            var studentId = $(this).data('student-id');
+            var row = $(this).closest('tr');
+            
+            if (selectedOption === 'next_class') {
+                row.find('.graduate_datas').addClass('d-none');
+                row.find('.class_datas').removeClass('d-none');
+            } else if (selectedOption === 'graduate') {
+                row.find('.graduate_datas').removeClass('d-none');
+                row.find('.class_datas').addClass('d-none');
+            }
+        });
+
+        $('.promote_type').trigger('change');
+        
+        $('.promote_check').change(function () {
+            var isChecked = $(this).prop('checked');
+            var row = $(this).closest('tr');
+            row.find('.is_graduate_checkbox').prop('checked', isChecked);
+        });
+
+        $('.is_graduate_checkbox').change(function () {
+            var isChecked = $(this).prop('checked');
+            var row = $(this).closest('tr');
+            row.find('.promote_check').prop('checked', isChecked);
+        });
+    });
+</script>
+
 <script>
     $(document).ready(function(){
         $(document).on('change', '.promote_section', function () {
@@ -334,37 +359,28 @@
                    promote_roll_number : promote_roll_number,
                  };
 
-              var $this = $(this);
+            var $this = $(this);
           
-             $.ajax({
+            $.ajax({
                 type: "GET",
                 data: formData,
                 dataType: "json",
                 url: url + "/" + "ajaxStudentRollCheck",
                                                    
-             success: function(data) {                             
+            success: function(data) {                             
                   console.log(data);
                     if(data > 0){
                         var error_msg='Roll Already Exit';
                         $this.closest('tr').find('.errorExitRoll').delay(5000).fadeOut('slow').html(error_msg); 
-                        // 
-                    }
-                                                       
-                                                   
-                },
-                                                
-             error: function(data) {
+                    }                                
+                },                              
+            error: function(data) {
                 
               },
                                                 
-             });
-
+            });
         });
-        
-
-   
-   
     })
-
 </script>
 @endsection
+@include('backEnd.partials.date_picker_css_js')

@@ -75,8 +75,8 @@
     <link rel="stylesheet" href="{{ asset('public/backEnd/') }}/vendors/css/fullcalendar.print.css">
 
     <link rel="stylesheet" href="{{ asset('public/') }}/frontend/css/infix.css" />
-    <x-root-css />
     <link rel="stylesheet" href="{{ asset('public/whatsapp-support/style.css') }}">
+    <x-root-css />
     <script src="{{ asset('public/backEnd/') }}/vendors/js/jquery-3.2.1.min.js"></script>
     <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
     <script>
@@ -84,26 +84,6 @@
         window._rtl = {{ userRtlLtl() == 1 ? 'true' : 'false' }};
     </script>
     @stack('css')
-    <style>
-        .whats_app_popup .whats_app_popup_close {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .whats_app_popup button.btn {
-            background: transparent;
-        }
-
-        .whats_app_popup input.primary_input_field:focus {
-            border: 0;
-            outline: 0;
-        }
-
-        .whats_app_popup input.primary_input_field::placeholder {
-            top: 0;
-        }
-    </style>
 </head>
 
 <body class="client light">
@@ -138,101 +118,109 @@
                                             @foreach ($menu->childs as $key => $sub_menu)
                                                 <li class="{{ $sub_menu->show == 1 ? 'menu_list_left' : '' }}">
                                                     <a {{ $sub_menu->is_newtab ? 'target="_blank"' : '' }}
-                                                        @if ($sub_menu->type == 'dPages') href="{{ route('view-page', $sub_menu->link) }}" @endif
-                                                        @if ($sub_menu->type == 'sPages') @if ($sub_menu->link == '/login')
+                                                        @if ($sub_menu->type == 'dPages') 
+                                                            href="{{ route('view-page', $sub_menu->link) }}" 
+                                                        @endif
+                                                        @if ($sub_menu->type == 'sPages') 
+                                                            @if ($sub_menu->link == '/login')
                                                                 @if (!auth()->check())
                                                                     href="{{ url('/') }}{{ $sub_menu->link }}"
                                                                 @else
-                                                                    href="{{ url('/') }}{{ $sub_menu->link }}" @endif
-                                                    @else
-                                                        href="{{ url('/') }}{{ $sub_menu->link }}"
+                                                                    href="{{ url('/') }}{{ $sub_menu->link }}" 
+                                                                @endif
+                                                            @else
+                                                                href="{{ url('/') }}{{ $sub_menu->link }}"
+                                                            @endif
                                                         @endif
-                                            @endif
-                                            @if ($sub_menu->type == 'dCourse') href="{{ route('course-Details', $sub_menu->element_id) }}" @endif
-                                            @if ($sub_menu->type == 'dCourseCategory') href="{{ route('view-course-category', $sub_menu->element_id) }}" @endif
-                                            @if ($sub_menu->type == 'dNewsCategory') href="{{ route('view-news-category', $sub_menu->element_id) }}" @endif
-                                            @if ($sub_menu->type == 'dNews') href="{{ route('news-Details', $sub_menu->element_id) }}" @endif
-                                            @if ($sub_menu->type == 'customLink') href="{{ $sub_menu->link }}" @endif
-                                            >
-                                            @if ($sub_menu->link == '/login')
-                                                @if (!auth()->check())
-                                                    {{ $sub_menu->title }}
-                                                @else
-                                                    @lang('common.dashboard')
-                                                @endif
-                                            @else
-                                                {{ $sub_menu->title }}
-                                            @endif
-                                            </a>
-                                            <ul class="sumbmenu">
-                                                @foreach ($sub_menu->childs as $key => $child_sub_menu)
-                                                    <li>
-                                                        <a {{ $child_sub_menu->is_newtab ? 'target="_blank"' : '' }}
-                                                            @if ($child_sub_menu->type == 'dPages') href="{{ route('view-page', $child_sub_menu->link) }}" @endif
-                                                            @if ($child_sub_menu->type == 'sPages') @if ($child_sub_menu->link == '/login')
+                                                        @if ($sub_menu->type == 'dCourse') href="{{ route('course-Details', $sub_menu->element_id) }}" @endif
+                                                        @if ($sub_menu->type == 'dCourseCategory') href="{{ route('view-course-category', $sub_menu->element_id) }}" @endif
+                                                        @if ($sub_menu->type == 'dNewsCategory') href="{{ route('view-news-category', $sub_menu->element_id) }}" @endif
+                                                        @if ($sub_menu->type == 'dNews') href="{{ route('news-Details', $sub_menu->element_id) }}" @endif
+                                                        @if ($sub_menu->type == 'customLink') href="{{ $sub_menu->link }}" @endif
+                                                    >
+                                                        @if ($sub_menu->link == '/login')
+                                                            @if (!auth()->check())
+                                                                {{ $sub_menu->title }}
+                                                            @else
+                                                                @lang('common.dashboard')
+                                                            @endif
+                                                        @else
+                                                            {{ $sub_menu->title }}
+                                                        @endif
+                                                    </a>
+                                                    <ul class="sumbmenu">
+                                                        @foreach ($sub_menu->childs as $key => $child_sub_menu)
+                                                            <li>
+                                                                <a {{ $child_sub_menu->is_newtab ? 'target="_blank"' : '' }}
+                                                                    @if ($child_sub_menu->type == 'dPages') 
+                                                                        href="{{ route('view-page', $child_sub_menu->link) }}" 
+                                                                    @endif
+                                                                    @if ($child_sub_menu->type == 'sPages') 
+                                                                        @if ($child_sub_menu->link == '/login')
                                                                             @if (!auth()->check())
                                                                                 href="{{ url('/') }}{{ $child_sub_menu->link }}"
                                                                             @else
-                                                                                href="{{ url('/') }}{{ $child_sub_menu->link }}" @endif
-                                                        @else
-                                                            href="{{ url('/') }}{{ $child_sub_menu->link }}"
-                                                            @endif
-                                                @endif
-                                                @if ($child_sub_menu->type == 'dCourse') href="{{ route('course-Details', $child_sub_menu->element_id) }}" @endif
-                                                @if ($child_sub_menu->type == 'dCourseCategory') href="{{ route('view-course-category', $child_sub_menu->element_id) }}" @endif
-                                                @if ($child_sub_menu->type == 'dNewsCategory') href="{{ route('view-news-category', $child_sub_menu->element_id) }}" @endif
-                                                @if ($child_sub_menu->type == 'dNews') href="{{ route('news-Details', $child_sub_menu->element_id) }}" @endif
-                                                @if ($child_sub_menu->type == 'customLink') href="{{ $child_sub_menu->link }}" @endif
-                                                >
-                                                @if ($child_sub_menu->link == '/login')
-                                                    @if (!auth()->check())
-                                                        {{ $child_sub_menu->title }}
-                                                    @else
-                                                        @lang('common.dashboard')
-                                                    @endif
-                                                @else
-                                                    {{ $child_sub_menu->title }}
-                                                @endif
-                                                </a>
+                                                                                href="{{ url('/') }}{{ $child_sub_menu->link }}" 
+                                                                            @endif
+                                                                        @else
+                                                                            href="{{ url('/') }}{{ $child_sub_menu->link }}"
+                                                                        @endif
+                                                                    @endif
+                                                                    @if ($child_sub_menu->type == 'dCourse') href="{{ route('course-Details', $child_sub_menu->element_id) }}" @endif
+                                                                    @if ($child_sub_menu->type == 'dCourseCategory') href="{{ route('view-course-category', $child_sub_menu->element_id) }}" @endif
+                                                                    @if ($child_sub_menu->type == 'dNewsCategory') href="{{ route('view-news-category', $child_sub_menu->element_id) }}" @endif
+                                                                    @if ($child_sub_menu->type == 'dNews') href="{{ route('news-Details', $child_sub_menu->element_id) }}" @endif
+                                                                    @if ($child_sub_menu->type == 'customLink') href="{{ $child_sub_menu->link }}" @endif
+                                                                >
+                                                                    @if ($child_sub_menu->link == '/login')
+                                                                        @if (!auth()->check())
+                                                                            {{ $child_sub_menu->title }}
+                                                                        @else
+                                                                            @lang('common.dashboard')
+                                                                        @endif
+                                                                    @else
+                                                                        {{ $child_sub_menu->title }}
+                                                                    @endif
+                                                                </a>
+                                                            </li>
+                                                        @endforeach
+                                                    </ul>
+                                                </li>
+                                            @endforeach
+                                        </ul>
                                     </li>
-                                @endforeach
-                        </ul>
-                        </li>
-                        @endforeach
-                        </ul>
-                        </li>
-                    @else
-                        <li class="nav-item">
-                            <a class="nav-link" {{ $menu->is_newtab ? 'target="_blank"' : '' }}
-                                @if ($menu->type == 'dPages') href="{{ route('view-page', $menu->link) }}" @endif
-                                @if ($menu->type == 'sPages') @if ($menu->link == '/login')
+                                @else
+                                    <li class="nav-item">
+                                        <a class="nav-link" {{ $menu->is_newtab ? 'target="_blank"' : '' }}
+                                            @if ($menu->type == 'dPages') href="{{ route('view-page', $menu->link) }}" @endif
+                                            @if ($menu->type == 'sPages') @if ($menu->link == '/login')
                                                 @if (!auth()->check())
                                                 href="{{ url('/') }}{{ $menu->link }}"
                                                 @else
                                                 href="{{ url('/admin-dashboard') }}" @endif
-                            @else
-                                href="{{ url('/') }}{{ $menu->link }}"
+                                        @else
+                                            href="{{ url('/') }}{{ $menu->link }}"
+                                            @endif
+                                            @endif
+                                            @if ($menu->type == 'dCourse') href="{{ route('course-Details', $menu->element_id) }}" @endif
+                                            @if ($menu->type == 'dCourseCategory') href="{{ route('view-course-category', $menu->element_id) }}" @endif
+                                            @if ($menu->type == 'dNewsCategory') href="{{ route('view-news-category', $menu->element_id) }}" @endif
+                                            @if ($menu->type == 'dNews') href="{{ route('news-Details', $menu->element_id) }}" @endif
+                                            @if ($menu->type == 'customLink') href="{{ $menu->link }}" @endif
+                                            >
+                                            @if ($menu->link == '/login')
+                                                @if (!auth()->check())
+                                                    {{ $menu->title }}
+                                                @else
+                                                    @lang('common.dashboard')
+                                                @endif
+                                            @else
+                                                {{ $menu->title }}
+                                            @endif
+                                        </a>
+                                    </li>
                                 @endif
-                                @endif
-                                @if ($menu->type == 'dCourse') href="{{ route('course-Details', $menu->element_id) }}" @endif
-                                @if ($menu->type == 'dCourseCategory') href="{{ route('view-course-category', $menu->element_id) }}" @endif
-                                @if ($menu->type == 'dNewsCategory') href="{{ route('view-news-category', $menu->element_id) }}" @endif
-                                @if ($menu->type == 'dNews') href="{{ route('news-Details', $menu->element_id) }}" @endif
-                                @if ($menu->type == 'customLink') href="{{ $menu->link }}" @endif
-                                >
-                                @if ($menu->link == '/login')
-                                    @if (!auth()->check())
-                                        {{ $menu->title }}
-                                    @else
-                                        @lang('common.dashboard')
-                                    @endif
-                                @else
-                                    {{ $menu->title }}
-                                @endif
-                            </a>
-                        </li>
-                        @endif
-                        @endforeach
+                            @endforeach
                         @if (moduleStatusCheck('Saas') and session('domain') == 'school')
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ url('/institution-register-new') }}"
@@ -247,6 +235,9 @@
                                     href="{{ route('parentregistration/registration', $reg_setting->url) }}">@lang('student.student_registration')</a>
                             </li>
 
+                        @endif
+                        @if (moduleStatusCheck('Certificate'))
+                            <li class="nav-item"> <a class="nav-link" href="{{ route('certificate.verify-certificate') }}">{{ __('certificate.Certificate') }}</a></li>
                         @endif
 
                         </ul>
@@ -282,6 +273,9 @@
                                                     </a>
                                                 </li>
                                             @endif
+                                        @endif
+                                        @if (moduleStatusCheck('Certificate'))
+                                            <li class="nav-item"> <a  href="{{ route('certificate.verify-certificate') }}">{{ __('certificate.Certificate') }}</a></li>
                                         @endif
                                         @if ($custom_link->link_href1 != '')
                                             <li>
@@ -489,10 +483,144 @@
     <script src="{{ asset('public/backEnd/') }}/js/custom.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="{{ asset('public/backEnd/') }}/js/developer.js"></script>
-    <script src="{{ asset('public/whatsapp-support/scripts.js') }}"></script>
     {!! Toastr::message() !!}
     @yield('script')
 
+    <style>
+        .messengerContainer:hover {
+            cursor: pointer;
+        }
+    </style>
+    @if($messenger_position == 'right') 
+        <style>
+            .messengerContainer {
+                position: fixed;
+                bottom: 85px;
+                right: 22px;
+                width: 48px;
+                height: 45px;
+                border-radius: 50%;
+                color: white;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 24px;
+                z-index: 3;
+                box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;
+            }
+        </style>
+    @elseif($messenger_position == 'left') 
+        <style>
+            .messengerContainer {
+                position: fixed;
+                bottom: 85px;
+                width: 48px;
+                height: 45px;
+                left: 22px;
+                border-radius: 50%;
+                color: white;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 24px;
+                z-index: 3;
+                box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;
+            }
+        </style>
+    @endif
+
+    @php
+        $school_id = @Auth::user()->school_id;
+        $tawk_is_enable = @App\Models\Plugin::where('school_id', $school_id)->where('name', 'tawk')->first()->is_enable;
+        $messenger_is_enable = @App\Models\Plugin::where('school_id', $school_id)->where('name', 'messenger')->first()->is_enable;
+    @endphp
+
+    @if ($tawk_is_enable == 1)
+        <div class="tawk-min-container tawk-test">
+            <script type="text/javascript">
+                var Tawk_API=Tawk_API||{},
+                Tawk_LoadStart=new Date();
+                (function(){ var s1=document.createElement("script"),
+                s0=document.getElementsByTagName("script")[0];
+                s1.async=true; s1.src=`https://embed.tawk.to/@include('plugins.tawk_to')`;
+                s1.charset='UTF-8'; s1.setAttribute('crossorigin','*');
+                s0.parentNode.insertBefore(s1,s0); })();
+            </script>
+        </div>  
+    @endif
+
+    <script src="{{ asset('public/whatsapp-support/scripts.js') }}"></script>
+    
+
+    @if($messenger_is_enable == 1)
+        <div class="messengerContainer">
+            <!-- Messenger Chat Plugin Code -->
+            <div id="fb-root"></div>
+        
+            <!-- Your Chat Plugin code -->
+            <div id="fb-customer-chat" class="fb-customerchat">
+            </div>
+        
+            <script>
+            var chatbox = document.getElementById('fb-customer-chat');
+            chatbox.setAttribute("page_id", "@include('plugins.messenger')");
+            chatbox.setAttribute("attribution", "biz_inbox");
+            </script>
+        
+            <!-- Your SDK code -->
+            <script>
+            window.fbAsyncInit = function() {
+                FB.init({
+                xfbml            : true,
+                version          : 'v18.0'
+                });
+            };
+        
+            (function(d, s, id) {
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) return;
+                js = d.createElement(s); js.id = id;
+                js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
+                fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
+            </script>
+        </div>
+    @endif
+    
+    <script>
+        var position = '{{ $position }}';
+        var tawkposition = '';
+    
+        if(position == 'left'){
+            tawkposition = 'bl';
+        }else{
+            tawkposition = 'br';
+        }
+        var Tawk_API = Tawk_API || {};
+    
+        Tawk_API.customStyle = {
+            visibility : {
+                desktop : {
+                    position : tawkposition,
+                    xOffset : 0,
+                    yOffset : 20
+                },
+                mobile : {
+                    position : tawkposition,
+                    xOffset : 0,
+                    yOffset : 0
+                },
+                bubble : {
+                    rotate : '0deg',
+                     xOffset : -20,
+                     yOffset : 0
+                }
+            }
+        };
+    </script>
+    @if(moduleStatusCheck('WhatsappSupport'))
+        @include('whatsappsupport::partials._popup')
+    @endif
 </body>
 
 </html>

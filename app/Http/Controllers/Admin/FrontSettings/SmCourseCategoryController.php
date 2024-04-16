@@ -91,18 +91,23 @@ class SmCourseCategoryController extends Controller
         }
     }
 
-    public function delete(Request $request)
+    public function delete(Request $request, $id)
     {
         try{
-            $data = SmCourseCategory::find($request->id);
+            $tables = SmCourse::where('category_id', 1)->first();
+            if($tables == null){
+                $data = SmCourseCategory::find($request->id);
                 if ($data->category_image != "") {
                     unlink($data->category_image);
                 }
-          $data->delete();
-             
+                $data->delete();
+            } else {
+                $msg = 'This category is already assigned with a course.';
+                Toastr::warning($msg, 'Warning');
+                return redirect()->back();
+            }
             Toastr::success('Operation Successfull', 'Success');
             return redirect('course-category');
-            
         }catch(\Exception $e){
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();

@@ -748,8 +748,8 @@ Lots taken from Flatly (MIT): https://bootswatch.com/4/flatly/bootstrap.css
 }
 
 .fc-button-primary:focus {
-  -webkit-box-shadow: 0px 10px 20px rgba(108, 39, 255, 0.3);
-  box-shadow: 0px 10px 20px rgba(108, 39, 255, 0.3);
+  -webkit-box-shadow: var(--box_shadow);
+  box-shadow: var(--box_shadow);
 }
 
 .fc-button-primary:disabled {

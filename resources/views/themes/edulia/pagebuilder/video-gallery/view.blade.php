@@ -11,7 +11,7 @@
                 </div>
             </div>
         </div>
-        <x-video-gallery :column="pagesetting('video_gallery_column')" :count="pagesetting('video_gallery_count')" :sorting="pagesetting('photo_gallery_sorting')"></x-video-gallery>
+        <x-video-gallery :column="pagesetting('video_gallery_column')" :count="pagesetting('video_gallery_count')"></x-video-gallery>
     </div>
 </div>
 @pushonce(config('pagebuilder.site_script_var'))

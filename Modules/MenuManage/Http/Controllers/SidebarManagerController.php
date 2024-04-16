@@ -2,6 +2,7 @@
 
 namespace Modules\MenuManage\Http\Controllers;
 
+use App\GlobalVariable;
 use Illuminate\Http\Request;
 use App\Traits\SidebarDataStore;
 use Illuminate\Http\JsonResponse;
@@ -37,7 +38,7 @@ class SidebarManagerController extends Controller
                 'is_menu' => 1,
                 'status' => 1,
                 'menu_status' => 1,
-                'is_admin'=>!in_array(auth()->user()->role_id, [2,3]) ? 1 : 0,
+                'is_admin'=>!in_array(auth()->user()->role_id, [2,3,GlobalVariable::isAlumni()]) ? 1 : 0,
                 'is_student'=>auth()->user()->role_id == 2 ? 1 : 0,
                 'is_parent'=>auth()->user()->role_id == 3 ? 1 : 0,
             ]);

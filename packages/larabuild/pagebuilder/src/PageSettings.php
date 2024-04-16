@@ -2,8 +2,9 @@
 
 namespace Larabuild\Pagebuilder;
 
-use Larabuild\Pagebuilder\Models\Page;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Cache;
+use Larabuild\Pagebuilder\Models\Page;
 use Illuminate\Support\Facades\Validator;
 
 class PageSettings
@@ -57,12 +58,11 @@ class PageSettings
             $pageData['home_page'] =  0;
         }
 
-        // dd($pageData);
         $validator = Validator::make($pageData, [
             'name' => 'required',
             'title' => 'required',
             'description' => 'nullable',
-            'slug' => 'required|unique:' . config('pagebuilder.db_prefix') . 'pages,slug,' . ($pageData['id'] ?? ''),
+            'slug' => ['required', 'max:100', Rule::unique(config('pagebuilder.db_prefix') . 'pages', 'slug')->where('school_id', auth()->user()->school_id)->ignore($pageData['id'] ?? '')],
         ]);
 
         if ($validator->passes()) {
@@ -76,8 +76,31 @@ class PageSettings
 
                 if (empty($pageData['slug']))
                     $pageData['slug'] = null;
-                
-                Page::updateOrCreate(['id' => $pageData['id'] ?? null, 'school_id' => auth()->user()->school_id, 'created_by' => auth()->id()], $pageData);
+
+                if (!empty($pageData['id'])) {
+                    $page = Page::where('home_page', '!=', 1)->where('school_id', auth()->user()->school_id)->find($pageData['id']);
+                    $page->name = $pageData['name'];
+                    $page->title = $pageData['title'];
+                    $page->description = $pageData['description'];
+                    $page->slug = $pageData['slug'];
+                    $page->home_page = !empty($pageData['home_page']) ? 1 : 0;
+                    $page->status = $pageData['status'];
+                    $page->updated_by = auth()->user()->id;
+                    $page->school_id = auth()->user()->school_id;
+                    $page->save();
+                } else {
+                    $page = new Page();
+                    $page->name = $pageData['name'];
+                    $page->title = $pageData['title'];
+                    $page->description = $pageData['description'];
+                    $page->slug = $pageData['slug'];
+                    $page->home_page = !empty($pageData['home_page']) ? 1 : 0;
+                    $page->status = $pageData['status'];
+                    $page->created_by = auth()->user()->id;
+                    $page->published_by = auth()->user()->id;
+                    $page->school_id = auth()->user()->school_id;
+                    $page->save();
+                }
 
                 if (!empty($pageData['id']))
                     Cache::forget('pagebuilder__pageData_' . $pageData['id']);
@@ -163,7 +186,12 @@ class PageSettings
 
     public function updateStatus($request)
     {
-        Page::find(gv($request, 'id'))->update(['status' => gv($request, 'status')]);
-        return response()->json(['success' => true]);
+        $page = Page::find(gv($request, 'id'));
+        if ($page->home_page == 1) {
+            return response()->json(['success' => false, 'error' => 'This page is Home page']);
+        } else {
+            $page->update(['status' => gv($request, 'status')]);
+            return response()->json(['success' => true]);
+        }
     }
 }

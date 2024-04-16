@@ -11,9 +11,10 @@ class dropDown extends Component
      *
      * @return void
      */
-    public function __construct()
+    public $menus;
+    public function __construct($menus=[])
     {
-        //
+        $this->menus = $menus;
     }
 
     /**
@@ -23,6 +24,7 @@ class dropDown extends Component
      */
     public function render()
     {
-        return view('components.drop-down');
+        $menus = $this->menus;
+        return view('components.drop-down', compact('menus'));
     }
 }

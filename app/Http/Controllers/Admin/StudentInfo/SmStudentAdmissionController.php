@@ -71,6 +71,7 @@ use Modules\University\Repositories\Interfaces\UnCommonRepositoryInterface;
 use Modules\University\Repositories\Interfaces\UnSubjectRepositoryInterface;
 use Modules\University\Repositories\Interfaces\UnDepartmentRepositoryInterface;
 use Modules\University\Repositories\Interfaces\UnSemesterLabelRepositoryInterface;
+use App\Rules\FileValidationRule;
 
 class SmStudentAdmissionController extends Controller
 {
@@ -309,7 +310,6 @@ class SmStudentAdmissionController extends Controller
             $student->mobile = $request->phone_number;
             $student->admission_date = date('Y-m-d', strtotime($request->admission_date));
             $student->student_photo = session()->get('student_photo') ?? fileUpload($request->photo, $student_file_destination);
-            // $student->student_photo = fileUpload($request->photo, $student_file_destination);
             $student->bloodgroup_id = $request->blood_group;
             $student->religion_id = $request->religion;
             $student->height = $request->height;
@@ -399,7 +399,7 @@ class SmStudentAdmissionController extends Controller
                 $data['teacher_name'] = $class_teacher->teacher->full_name;
                 $this->sent_notifications('Student_Admission', (array)$class_teacher->teacher->user_id, $data, ['Teacher']);
             }
-            $this->sent_notifications('Student_Admission', [$user_stu->id], $data, ['Student', 'Parent']);
+            $this->sent_notifications('Student_Admission', [$user_stu->id], $data, ['Student', 'Parent','Super admin']);
 
             $student->toArray();
             if (moduleStatusCheck('Lead') == true) {
@@ -412,23 +412,23 @@ class SmStudentAdmissionController extends Controller
 
             ]));
             //end insert
-            // if ($student) {
-            //     $compact['user_email'] = $request->email_address;
-            //     $compact['slug'] = 'student';
-            //     $compact['id'] = $student->id;
-            //     @send_mail($request->email_address, $request->first_name . ' ' . $request->last_name, "student_login_credentials", $compact);
-            //     @send_sms($request->phone_number, 'student_admission', $compact);
-            // }
-            // if ($parentInfo) {
-            //     if ($parent) {
-            //         $compact['user_email'] = $parent->guardians_email;
-            //         $compact['slug'] = 'parent';
-            //         $compact['parent_name'] = $request->guardians_name;
-            //         $compact['id'] = $parent->id;
-            //         @send_mail($parent->guardians_email, $request->fathers_name, "parent_login_credentials", $compact);
-            //         @send_sms($request->guardians_phone, 'student_admission_for_parent', $compact);
-            //     }
-            // }
+            if ($student) {
+                $compact['user_email'] = $request->email_address;
+                $compact['slug'] = 'student';
+                $compact['id'] = $student->id;
+                @send_mail($request->email_address, $request->first_name . ' ' . $request->last_name, "student_login_credentials", $compact);
+                @send_sms($request->phone_number, 'student_admission', $compact);
+            }
+            if ($parentInfo) {
+                if ($parent) {
+                    $compact['user_email'] = $parent->guardians_email;
+                    $compact['slug'] = 'parent';
+                    $compact['parent_name'] = $request->guardians_name;
+                    $compact['id'] = $parent->id;
+                    @send_mail($parent->guardians_email, $request->fathers_name, "parent_login_credentials", $compact);
+                    @send_sms($request->guardians_phone, 'student_admission_for_parent', $compact);
+                }
+            }
 
             //add by abu nayem for lead convert to student
             if (moduleStatusCheck('Lead') == true && $request->lead_id) {
@@ -503,9 +503,13 @@ class SmStudentAdmissionController extends Controller
         if ($request->relation == 'Father') {
             $guardians_photo = fileUpdate($student->parents->guardians_photo, $request->fathers_photo, $student_file_destination);
         } elseif ($request->relation == 'Mother') {
-            $guardians_photo = fileUpdate($student->parents->guardians_photo, $request->mothers_photo, $student_file_destination);
+            if($request->mothers_photo != null) {
+                $guardians_photo = fileUpdate($student->parents->guardians_photo, $request->mothers_photo, $student_file_destination);
+            }
         } else {
-            $guardians_photo = fileUpdate($student->parents->guardians_photo, $request->guardians_photo, $student_file_destination);
+            if($request->guardians_photo != null) {
+                $guardians_photo = fileUpdate($student->parents->guardians_photo, $request->guardians_photo, $student_file_destination);
+            }
         }
 
         DB::beginTransaction();
@@ -554,18 +558,24 @@ class SmStudentAdmissionController extends Controller
                     $parent->fathers_name = $request->fathers_name;
                     $parent->fathers_mobile = $request->fathers_phone;
                     $parent->fathers_occupation = $request->fathers_occupation;
-                    // $parent->fathers_photo = fileUpdate($parent->fathers_photo, $request->fathers_photo, $student_file_destination);
+                    if($request->fathers_photo != null ) {
+                        $parent->fathers_photo = fileUpdate($parent->fathers_photo, $request->fathers_photo, $student_file_destination);
+                    }
                     $parent->mothers_name = $request->mothers_name;
                     $parent->mothers_mobile = $request->mothers_phone;
                     $parent->mothers_occupation = $request->mothers_occupation;
-                    // $parent->mothers_photo = fileUpdate($parent->mothers_photo, $request->mothers_photo, $student_file_destination);
+                    if($request->mothers_photo != null) {
+                        $parent->mothers_photo = fileUpdate($parent->mothers_photo, $request->mothers_photo, $student_file_destination);
+                    }
                     $parent->guardians_name = $request->guardians_name;
                     $parent->guardians_mobile = $request->guardians_phone;
                     $parent->guardians_email = $request->guardians_email;
                     $parent->guardians_occupation = $request->guardians_occupation;
                     $parent->guardians_relation = $request->relation;
                     $parent->relation = $request->relationButton;
-                    // $parent->guardians_photo = $guardians_photo;
+                    if($request->guardians_photo != null) {
+                        $parent->guardians_photo = $guardians_photo;
+                    }
                     $parent->guardians_address = $request->guardians_address;
                     $parent->is_guardian = $request->is_guardian;
                     $parent->save();
@@ -596,7 +606,9 @@ class SmStudentAdmissionController extends Controller
             $student->email = $request->email_address;
             $student->mobile = $request->phone_number;
             $student->admission_date = date('Y-m-d', strtotime($request->admission_date));
-            // $student->student_photo = fileUpdate($student->student_photo, $request->photo, $student_file_destination);
+            if($request->photo) {
+                $student->student_photo = fileUpdate($student->student_photo, $request->photo, $student_file_destination);
+            }
             $student->bloodgroup_id = $request->blood_group;
             $student->religion_id = $request->religion;
             $student->height = $request->height;
@@ -676,7 +688,6 @@ class SmStudentAdmissionController extends Controller
 
     public function update(SmStudentAdmissionRequest $request)
     {
-
         try {
             $studentRecord = StudentRecord::where('student_id', $request->id)->orderBy('created_at')->where('school_id', auth()->user()->id)->first();
             if (generalSetting()->multiple_roll == 0 && $request->roll_number && $studentRecord) {
@@ -1037,7 +1048,10 @@ class SmStudentAdmissionController extends Controller
             'school_id' => auth()->user()->school_id
         ])->get();
         $student = SmStudent::where('school_id', auth()->user()->school_id)->find($request->student_id);
+        
         if ($student) {
+            $student->roll_no = $request->roll_number;
+            $student->save();
             $user = $student->user;
             foreach ($groups as $group) {
                 createGroupUser($group, $user->id, 2, auth()->id());

@@ -11,17 +11,20 @@ use Illuminate\Support\Facades\Session;
 class SmParent extends Model
 {
     use HasFactory;
+    protected $casts = [
+        'role_id' => 'integer',
+        'active_status' => 'integer',
+        'user_id' => 'integer',
+        'school_id' => 'integer',
+        'academic_id' => 'integer',
+        'created_by' => 'integer',
+        'updated_by' => 'integer'
+    ];
+
 	protected static function boot (){
         parent::boot();
         static::addGlobalScope(new SchoolScope);
     }
-
-    protected $casts = [
-        'active_status' => 'integer',
-        'user_id' => 'integer',
-        'school_id' => 'integer',
-        'academic_id' => 'integer'
-    ];
     
     public function parent_user()
     {

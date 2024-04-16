@@ -38,7 +38,6 @@ class ChatController extends Controller
             $users = $this->invitationService->getAllConnectedUsers();
             if ($id){
                 $activeUser = $users->where('id',$id)->first();
-
                 $notification = auth()->user()->notifications()->find($notification_id) ?? null;
                 if ($notification_id && $notification){
                     $notification->markAsRead();

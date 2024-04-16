@@ -113,9 +113,16 @@
             background: linear-gradient(
                     90deg, #d8e6ff 0%, #ecd0f4 100%);
         }
+        @media (max-width: 576px){
+            .single-report-admit .report-admit-img{
+                position: initial;
+                margin: auto;
+                margin-top: 20px;
+            }
+        }
 
 </style>
-<section class="sms-breadcrumb mb-40 white-box">
+<section class="sms-breadcrumb mb-20">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@if (@$custom_mark_report == 'custom_mark_report')
@@ -139,18 +146,18 @@
     </section>
     <section class="admin-visitor-area mb-40">
         <div class="container-fluid p-0">
-            <div class="row">
-                <div class="col-lg-8 col-md-6">
-                    <div class="main-title">
-                        <h3 class="mb-30">@lang('common.select_criteria') </h3>
-                    </div>
-                </div>
-            </div>
         </div>
         <div class="row">
             <div class="col-lg-12">
            
                 <div class="white-box">
+                    <div class="row">
+                        <div class="col-lg-8 col-md-6">
+                            <div class="main-title">
+                                <h3 class="mb-15">@lang('common.select_criteria') </h3>
+                            </div>
+                        </div>
+                    </div>
                     {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'progress_card_report_search', 'method' => 'POST', 'enctype' => 'multipart/form-data', 'id' => 'search_student']) }}
                     <div class="row">
                         <input type="hidden" name="url" id="url" value="{{URL::to('/')}}">
@@ -163,7 +170,8 @@
                                         ['USN', 'UD', 'UA', 'US', 'USL'],'hide'=> ['USUB']
                                     ])
 
-                                    <div class="col-lg-3 mt-30" id="select_exam_typ_subject_div">
+                                    <div class="col-lg-3 mt-15" id="select_exam_typ_subject_div">
+                                        <label for="">@lang('exam.select_exam')</label>
                                         {{ Form::select('exam_type',[""=>__('exam.select_exam').'*'], null , ['class' => 'primary_select  form-control'. ($errors->has('exam_type') ? ' is-invalid' : ''), 'id'=>'select_exam_typ_subject']) }}
                                         
                                         <div class="pull-right loader loader_style" id="select_exam_type_loader">
@@ -176,7 +184,8 @@
                                         @endif
                                     </div>
 
-                                    <div class="col-lg-3 mt-30" id="select_un_student_div">
+                                    <div class="col-lg-3 mt-15" id="select_un_student_div">
+                                        <label for="">@lang('common.select_student')</label>
                                         {{ Form::select('student_id',[""=>__('common.select_student').'*'], null , ['class' => 'primary_select  form-control'. ($errors->has('student_id') ? ' is-invalid' : ''), 'id'=>'select_un_student']) }}
                                         
                                         <div class="pull-right loader loader_style" id="select_un_student_loader">

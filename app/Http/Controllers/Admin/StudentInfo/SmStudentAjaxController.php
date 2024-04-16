@@ -250,7 +250,12 @@ class SmStudentAjaxController extends Controller
 
     public function ajaxSelectStudent(Request $request)
     {
-        $student_ids = SmStudentReportController::classSectionStudent($request);
+        if($request->has('member_type') && $request->member_type == 10){
+            $student_ids = SmStudentReportController::classSectionAlumni($request);
+        }else{
+            $student_ids = SmStudentReportController::classSectionStudent($request);
+        }
+        
         $students = SmStudent::with('parents')->whereIn('id', $student_ids)->where('active_status', 1)->where('school_id', Auth::user()->school_id)->get()->map(function ($student) {
             return [
                 'id' => $student->id,

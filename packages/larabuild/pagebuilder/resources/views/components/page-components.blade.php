@@ -8,7 +8,7 @@ setGridId($grid['grid_id']);
 $css = getCss();
 if(!empty(getBgOverlay()))
 $css = 'position:relative;'.$css;
-$x_components = ['header-breadcumb','home-slider','counter','event','news-area','event-gallery'];
+$x_components = ['header-breadcumb','home-slider','counter','event','news-area','event-gallery', 'app-banner', 'news-section'];
 $container = [];
 $non_container = [];
 foreach ($grid['data'] as $key => $components) {
@@ -27,8 +27,8 @@ foreach ($grid['data'] as $key => $components) {
     @if(!empty($container))
         <div {!! getContainerStyles() !!}>
             <div class="row">
+               
                 @foreach ($container as $column => $components)
-                
                     <div class="{{ $columns[$column] }}">
                         @foreach ($components as $component)
                         

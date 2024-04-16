@@ -20,12 +20,7 @@ use App\SmFeesAssignDiscount;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\SmStudentResourse;
-use App\Http\Resources\SmStudentTransportResourse;
-use App\Http\Resources\StudentRecordResource;
 use App\Models\SmStudentRegistrationField;
-use App\Models\StudentRecord;
-use App\SmAcademicYear;
 use App\SmHomework;
 use App\SmVehicle;
 use Brian2694\Toastr\Facades\Toastr;
@@ -121,31 +116,21 @@ class AuthenticationController extends Controller
 
     public function logout(Request $request)
     {
-        // $user = $request->user();
-        // if (!$user) {
-        //     throw ValidationException::withMessages(['message' => 'These credentials do not match our records']);
-        // }
-        // $user->device_token = null;
-        // $user->save();
-        // $user->token()->revoke();
-        // $data['message'] = "Successfully logged out.";
-
-        // $response = [
-        //     'success' => true,
-        //     'data'    => $data,
-        //     'message' => 'Successfully logged out.',
-        // ];
-
-        // return response()->json($response, 200);
-
         $user = $request->user();
+        if (!$user) {
+            throw ValidationException::withMessages(['message' => 'These credentials do not match our records']);
+        }
+        $user->device_token = null;
+        $user->save();
         $user->token()->revoke();
-        
-        return response([
+        $response = [
             'success' => true,
             'data'    => null,
-            'message' => 'Logged out successfully'
-        ], 200);
+            'message' => 'Successfully logged out.',
+        ];
+        return response()->json($response, 200);
+        throw ValidationException::withMessages($response);
+        
     }
 
     public function DemoUser(Request $request, $role_id)
@@ -250,19 +235,19 @@ class AuthenticationController extends Controller
         }, 'studentDocument' => function ($q7) {
             $q7->select('id', 'title', 'file');
         }])
-            ->select('student_photo', 'first_name', 'last_name', 'admission_no', 'date_of_birth', 'age', 'mobile', 'email', 'current_address', 'permanent_address', 'bloodgroup_id', 'religion_id', 'parent_id', 'route_list_id', 'vechile_id', 'dormitory_id', 'height', 'weight', 'national_id_no', 'local_id_no', 'bank_name', 'bank_account_no')->findOrFail($id);
+            ->select('student_photo','first_name', 'last_name', 'admission_no', 'date_of_birth', 'age', 'mobile', 'email', 'current_address', 'permanent_address', 'bloodgroup_id', 'religion_id', 'parent_id', 'route_list_id', 'vechile_id', 'dormitory_id', 'height', 'weight', 'national_id_no', 'local_id_no', 'bank_name', 'bank_account_no')->findOrFail($id);
         $data['driver'] = SmVehicle::select('sm_staffs.full_name', 'sm_staffs.mobile')->where('sm_vehicles.id', '=', $data['student_detail']->vechile_id)
             ->join('sm_staffs', 'sm_staffs.id', '=', 'sm_vehicles.driver_id')
             ->first();
 
-        $data['show_permission'] = SmStudentRegistrationField::select('field_name', 'is_show')->where('school_id', app('school')->id)->get();
+         $data['show_permission'] = SmStudentRegistrationField::select('field_name', 'is_show')->where('school_id', app('school')->id)->get();
 
-        $response = [
+         $response = [
             'success' => true,
             'data'    => $data,
-            'message' => 'Operation successful',
         ];
-        return response()->json($response, 200);
+         return response()->json($response, 200);
+
     }
 
     public function generalSettings()
@@ -272,14 +257,12 @@ class AuthenticationController extends Controller
             $response = [
                 'success' => true,
                 'data'    => $data,
-                'message' => 'Operation successful',
             ];
             return response()->json($response, 200);
         } else {
             $response = [
                 'success' => true,
                 'data'    => $data,
-                'message' => 'Operation successful',
             ];
             return response()->json($response, 404);
             // throw ValidationException::withMessages(['message' => 'Data not found.']);
@@ -288,23 +271,22 @@ class AuthenticationController extends Controller
 
     public function studentProfileEdit($id)
     {
-        $data['student_detail'] = SmStudent::select('student_photo', 'first_name', 'last_name', 'admission_no', 'date_of_birth', 'age', 'mobile', 'email', 'current_address')->findOrFail($id);
+        $data['student_detail'] = SmStudent::select('student_photo','first_name', 'last_name', 'admission_no', 'date_of_birth', 'age', 'mobile', 'email', 'current_address')->findOrFail($id);
 
         $data['edit_permission'] = SmStudentRegistrationField::select('field_name', 'student_edit')->where('school_id', app('school')->id)->get();
 
         $response = [
             'success' => true,
-            'data'    => $data,
-            'message' => 'Operation successful',
+            'data'    => $data
         ];
         return response()->json($response, 200);
     }
 
     public function studentProfileUpdate(Request $request)
-    { 
+    {
         $student = SmStudent::find($request->id);
-        $user = User::find($student->user_id);
-
+        $student_file_destination = 'public/uploads/student/';
+        $parent = SmParent::find($student->parent_id);
         if ($request->filled('first_name')) {
             $student->first_name = $request->first_name;
         }
@@ -313,142 +295,26 @@ class AuthenticationController extends Controller
         }
         if ($request->filled('first_name') && $request->filled('last_name')) {
             $student->full_name = $request->first_name . ' ' . $request->last_name;
-            $user->full_name = $request->first_name . ' ' . $request->last_name;
         }
         if ($request->filled('date_of_birth')) {
             $student->date_of_birth = date('Y-m-d', strtotime($request->date_of_birth));
         }
+        if ($request->filled('photo')) {
+            $student->student_photo = fileUpdate($parent->student_photo, $request->photo, $student_file_destination);
+        }
         if ($request->filled('current_address')) {
             $student->current_address = $request->current_address;
         }
-
-        $student->save();
-        $user->save();
-
         
-
-        $proifle_details = SmStudent::with('bloodGroup', 'religion')->where('id', $request->id)->first();
-        $data['profilePersonal'] = new SmStudentResourse($proifle_details);
-
-        $response = [
-            'success' => true,
-            'data'    => $data,
-            'message' => 'Profile updated successfully.',
-        ];
-
-        return response()->json($response, 200);
-    }
-
-    public function studentProfileImgUpdate(Request $request)
-    {
-        $student = SmStudent::find($request->id);
-        $student_file_destination = 'public/uploads/student/';
-        $parent = SmParent::find($student->parent_id);
-
-        $student->student_photo = fileUpdate($parent->student_photo, $request->photo, $student_file_destination);
-
         $student->save();
 
-        $proifle_details = SmStudent::with(['bloodGroup', 'religion'])->where('user_id', $request->id)->first();
-        $data['profilePersonal'] = new SmStudentResourse($proifle_details);
-
-
         $response = [
             'success' => true,
-            'data'    => $data,
+            'data'    => $student,
             'message' => 'Profile updated successfully.',
         ];
 
         return response()->json($response, 200);
     }
 
-    public function profilePersonal()
-    {
-        $proifle_details = SmStudent::with(['bloodGroup', 'religion'])->where('user_id', Auth::user()->id)->first();
-        $data['profilePersonal'] = new SmStudentResourse($proifle_details);
-
-        $data['show_permission'] = SmStudentRegistrationField::select('field_name', 'is_show')->where('school_id', app('school')->id)->get();
-
-        $response = [
-            'success' => true,
-            'data'    => $data,
-            'message' => 'Operation Successful',
-        ];
-
-        return response()->json($response, 200);
-    }
-
-    public function profileParents()
-    {
-        $students = SmStudent::where('user_id', auth()->user()->id)->first();
-        $data['profileParents'] = SmParent::select('id', 'fathers_name', 'fathers_mobile', 'fathers_occupation', 'fathers_photo', 'mothers_name', 'mothers_mobile', 'mothers_occupation', 'mothers_photo', 'guardians_name', 'guardians_mobile', 'guardians_email', 'guardians_occupation', 'guardians_relation', 'guardians_photo')->findOrFail($students->parent_id);
-        $data['show_permission'] = SmStudentRegistrationField::select('field_name', 'is_show')->where('school_id', app('school')->id)->get();
-
-        $response = [
-            'success' => true,
-            'data'    => $data,
-            'message' => 'Operation Successful',
-        ];
-
-        return response()->json($response, 200);
-    }
-
-    public function profileTransport()
-    {
-        $students = SmStudent::with('route', 'dormitory', 'vehicle.driver')->where('user_id', auth()->user()->id)->first();
-        $data['profileTransport'] = new SmStudentTransportResourse($students);
-        $data['show_permission'] = SmStudentRegistrationField::select('field_name', 'is_show')->where('school_id', app('school')->id)->get();
-        $response = [
-            'success' => true,
-            'data'    => $data,
-            'message' => 'Operation Successful',
-        ];
-        return response()->json($response, 200);
-    }
-
-    public function profileOthers()
-    {
-        $data['profileOthers'] = SmStudent::select('height', 'weight', 'national_id_no', 'local_id_no', 'bank_name', 'bank_account_no')->where('user_id', auth()->user()->id)->first();
-        $data['show_permission'] = SmStudentRegistrationField::select('field_name', 'is_show')->where('school_id', app('school')->id)->get();
-
-        $response = [
-            'success' => true,
-            'data'    => $data,
-            'message' => 'Operation Successful',
-        ];
-
-        return response()->json($response, 200);
-    }
-
-    public function profileDocuments()
-    {
-        $students = SmStudent::where('user_id', auth()->user()->id)->first();
-        $data['profileDocuments'] = SmStudentDocument::select('id', 'title', 'file')->where('student_staff_id', $students->id)->get();
-        $data['show_permission'] = SmStudentRegistrationField::select('field_name', 'is_show')->where('school_id', app('school')->id)->get();
-
-        $response = [
-            'success' => true,
-            'data'    => $data,
-            'message' => 'Operation Successful',
-        ];
-
-        return response()->json($response, 200);
-    }
-
-    public function studentRecord()
-    {
-        $student = SmStudent::where('user_id', auth()->user()->id)->first();
-
-        $record = StudentRecord::with('class', 'section')->where(['student_id'=> $student->id, 'academic_id' => SmAcademicYear::API_ACADEMIC_YEAR($student->school_id)])->get();
-
-        $data['studentRecords'] = StudentRecordResource::collection($record);
-
-        $response = [
-            'success' => true,
-            'data'    => $data,
-            'message' => 'Operation Successful',
-        ];
-
-        return response()->json($response, 200);
-    }
 }

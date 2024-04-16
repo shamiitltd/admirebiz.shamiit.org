@@ -57,4 +57,7 @@ return[
     'wise_evaluation_report'=> 'Wise Evaluation Report',
     'teacher_wise_evaluation_report'=> 'Teacher Wise Evaluation Report',
     'student_parent_evaluation_approval'=> 'Student-Parent Evaluation Approval',
+    'approved_report' => 'Approved Report',
+    'pending_report' => 'Pending Report',
+    'teacher_wise_report' => 'Teacher Wise Report',
 ];

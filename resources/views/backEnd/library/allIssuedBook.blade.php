@@ -3,7 +3,7 @@
     @lang('library.issued_Book_List')
 @endsection
 @section('mainContent')
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('library.issued_Book_List')</h1>
@@ -18,19 +18,19 @@
     <section class="admin-visitor-area up_admin_visitor">
         <div class="container-fluid p-0">
             <div class="row">
-                <div class="col-lg-8 col-md-6">
-                    <div class="main-title">
-                        <h3 class="mb-30 ">@lang('common.select_criteria')</h3>
-                    </div>
-                </div>
-                <div class="col-lg-4 text-md-right text-left col-md-6 mb-30-lg">
-                    <a href="{{ route('addStaff') }}" class="primary-btn small fix-gr-bg">
-                    </a>
-                </div>
-            </div>
-            <div class="row">
                 <div class="col-lg-12">
                     <div class="white-box">
+                        <div class="row">
+                            <div class="col-lg-8 col-md-6">
+                                <div class="main-title">
+                                    <h3 class="mb-15 ">@lang('common.select_criteria')</h3>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 text-md-right text-left col-md-6 mb-30-lg">
+                                <a href="{{ route('addStaff') }}" class="primary-btn small fix-gr-bg">
+                                </a>
+                            </div>
+                        </div>
                         {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'search-issued-book', 'method' => 'POST', 'enctype' => 'multipart/form-data']) }}
                         <div class="row">
                             <input type="hidden" id="book_id" name="book_id" value="{{@$book_id}}">
@@ -82,36 +82,38 @@
             </div>
             <div class="row mt-40">
                 <div class="col-lg-12">
-                    <div class="row">
-                        <div class="col-lg-4 no-gutters">
-                            <div class="main-title">
-                                <h3 class="mb-0">@lang('library.all_issued_book')</h3>
+                    <div class="white-box">
+                        <div class="row">
+                            <div class="col-lg-4 no-gutters">
+                                <div class="main-title">
+                                    <h3 class="mb-15">@lang('library.all_issued_book')</h3>
+                                </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <x-table>
-                                <table id="table_id" class="table data-table" cellspacing="0" width="100%">
-                                    <thead>
-                                        <tr>
-                                            <th>@lang('library.book_title')</th>
-                                            <th>@lang('library.book_no')</th>
-                                            <th>@lang('library.isbn_no')</th>
-                                            <th>@lang('library.member_name')</th>
-                                            <th>@lang('library.author')</th>
-                                            <th>@lang('library.subject')</th>
-                                            <th>@lang('library.issue_date')</th>
-                                            <th>@lang('library.return_date')</th>
-                                            <th>@lang('common.status')</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        
-                                    </tbody>
-                                </table>
-                            </x-table>
+    
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <x-table>
+                                    <table id="table_id" class="table data-table" cellspacing="0" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th>@lang('library.book_title')</th>
+                                                <th>@lang('library.book_no')</th>
+                                                <th>@lang('library.isbn_no')</th>
+                                                <th>@lang('library.member_name')</th>
+                                                <th>@lang('library.author')</th>
+                                                <th>@lang('library.subject')</th>
+                                                <th>@lang('library.issue_date')</th>
+                                                <th>@lang('library.return_date')</th>
+                                                <th>@lang('common.status')</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            
+                                        </tbody>
+                                    </table>
+                                </x-table>
+                            </div>
                         </div>
                     </div>
                 </div>

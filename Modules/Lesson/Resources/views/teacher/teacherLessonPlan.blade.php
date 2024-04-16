@@ -1,6 +1,6 @@
 @extends('backEnd.master')
 @section('title') 
-@lang('lesson::lesson.lesson_plan')
+@lang('lesson::lesson.my_lesson_plan')
 @endsection
 
 @push('css')
@@ -12,27 +12,20 @@
 @endpush
 @section('mainContent')
  <link rel="stylesheet" href="{{url('Modules/Lesson/Resources/assets/css/lesson_plan.css')}}">
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-10 white-box">
         <div class="container-fluid">
             <div class="row justify-content-between">
-                <h1>@lang('lesson::lesson.lesson_plan_create')</h1>
+                <h1>@lang('lesson::lesson.my_lesson_plan')</h1>
                 <div class="bc-pages">
                     <a href="{{route('dashboard')}}">@lang('common.dashboard')</a>
                     <a href="#">@lang('lesson::lesson.lesson')</a>
-                    <a href="#">@lang('lesson::lesson.lesson_plan_create')</a>
+                    <a href="#">@lang('lesson::lesson.my_lesson_plan')</a>
                 </div>
             </div>
         </div>
     </section>
     <section class="admin-visitor-area">
         <div class="container-fluid p-0">
-            <div class="row">
-                <div class="col-lg-8 col-md-6">
-                    <div class="main-title">
-                        <h3 class="mb-30">@lang('common.select_criteria') </h3>
-                    </div>
-                </div>
-            </div>
             <div class="row">
                 <div class="col-lg-12">
               
@@ -73,7 +66,7 @@
     @if(isset($class_times))
 <section class="mt-20">
     <div class="container-fluid p-0">
-<div class="row mt-40">
+<div class="row mt-20">
                     <div class="col-lg-12 col-md-12">
                         <div class="main-title">
                             <?php 
@@ -199,7 +192,6 @@
                                         @endphp
                                         @if($lessonPlan)
                                         <div class="row">
-                                               @if(userPermission(814))
                                             <div class="col-lg-2 text-right">
                                                 <a href="{{route('view-lesson-planner-lesson', [$lessonPlan->id])}}" 
                                                     class="primary-btn small tr-bg icon-only modalLink"
@@ -207,8 +199,6 @@
                                                     <span class="ti-eye" id=""></span>
                                                 </a>
                                             </div>
-                                             @endif
-                                               @if(userPermission(813))
                                                      <div class="col-lg-2 text-right">
                                                         <a href="{{route('delete-lesson-planner-lesson', [$lessonPlan->id])}}" 
                                                             class="primary-btn small tr-bg icon-only  modalLink" data-modal-size="modal-md" 
@@ -216,8 +206,6 @@
                                                             <span class="ti-close" id=""></span>
                                                         </a>
                                                     </div>
-                                             @endif
-                                               @if(userPermission(812))
                                                     <div class="col-lg-2 text-right">
                                                         <a href="{{route('edit-lesson-planner-lesson', [$lessonPlan->id])}}" 
                                                             class="primary-btn small tr-bg icon-only mr-10 modalLink" data-modal-size="modal-lg" 
@@ -225,11 +213,8 @@
                                                             <span class="ti-pencil" id=""></span>
                                                         </a>
                                                     </div>
-                                                @endif
                                         </div>
                                         @else
-                                       
-                                            @if(userPermission(811))
                                                 <div class="col-lg-6 text-right">
                                                     <a href="{{route('add-lesson-planner-lesson', [$sm_weekend->id,$teacher_id,$routine_id,$lesson_date])}}" 
                                                         class="primary-btn small tr-bg icon-only mr-10 modalLink" data-modal-size="modal-lg" 
@@ -237,7 +222,6 @@
                                                         <span class="ti-plus" id="addClassRoutine"></span>
                                                     </a>
                                                 </div>
-                                             @endif
                                         @endif
                                      @endif
                 

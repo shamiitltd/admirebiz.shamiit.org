@@ -3,7 +3,7 @@
 @lang('exam.online_exam')
 @endsection
 @section('mainContent')
-<section class="sms-breadcrumb mb-40 white-box">
+<section class="sms-breadcrumb mb-20">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('exam.examinations') </h1>
@@ -54,7 +54,6 @@
                         </div>
                         <div class="question_table">
 
-                        
                         <table id="table_id" class="table" cellspacing="0" width="100%">
                             <tbody>
                                 <tr>

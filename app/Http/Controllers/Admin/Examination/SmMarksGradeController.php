@@ -104,17 +104,9 @@ class SmMarksGradeController extends Controller
     public function destroy(Request $request, $id)
     {
         try {
-            $tables = tableList::getTableList('id', $id);
-            if ($tables == null) {
-                $marks_grade = SmMarksGrade::destroy($id);
-
-                Toastr::success('Operation successful', 'Success');
-                return redirect('marks-grade');
-            } else {
-                $msg = 'This data already used in  : ' . $tables . ' Please remove those data first';
-                Toastr::error($msg, 'Failed');
-                return redirect()->back();
-            }
+            $marks_grade = SmMarksGrade::destroy($id);
+            Toastr::success('Operation successful', 'Success');
+            return redirect('marks-grade');
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();

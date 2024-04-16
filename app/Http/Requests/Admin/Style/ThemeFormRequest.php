@@ -23,12 +23,16 @@ class ThemeFormRequest extends FormRequest
      * @return array
      */
     public function rules()
-    {      
-        return [
-           'title'=>['required', 'max:30',Rule::unique('themes', 'title')->where('school_id', auth()->user()->school_id)->ignore($this->theme_id)],
-           'background_type'=>['required', 'in:image,color'],
-           'background_image'=>['required_if:background_type,image'],
-           'background_color'=>['required_if:background_type,color'],
+    {
+        $rules = [
+            'title' => ['required', 'max:30', Rule::unique('themes', 'title')->where('school_id', auth()->user()->school_id)->ignore($this->theme_id)],
+            'background_type' => ['required', 'in:image,color'],
+            'background_image' => ['required_if:background_type,image'],
+            'background_color' => ['required_if:background_type,color'],
         ];
+        if ($this->theme_id) {
+            $rules['background_image'] = "sometimes|nullable|image";
+        }
+        return $rules;
     }
 }

@@ -7,6 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ __('Page Builder') . ' | '.$page->name }}</title>
+    @if( ! is_null(schoolConfig() ))
+        <link rel="icon" href="{{asset(schoolConfig()->favicon)}}" type="image/png"/>
+    @else
+        <link rel="icon" href="{{asset('public/uploads/settings/favicon.png')}}" type="image/png"/>
+    @endif
     @if( config('pagebuilder.add_bootstrap') === 'yes' )
     <link rel="stylesheet" href="{{ asset('public/vendor/optionbuilder/css/bootstrap.min.css') }}">
     @endif

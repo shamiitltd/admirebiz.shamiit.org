@@ -1,7 +1,7 @@
 <div role="tabpanel" class="tab-pane fade" id="studentFees">
 
     @foreach ($records as $record)
-        <div class="white-box no-search no-paginate no-table-info mb-2">
+        <div class="no-search no-paginate no-table-info mb-2">
             <div class="row">
                 <div class="col-lg-3">
                     <div class="main-title">

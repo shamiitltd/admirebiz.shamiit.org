@@ -76,7 +76,7 @@ Author E-mail: info@spondonit.com
 /* line 38, /Applications/MAMP/htdocs/InfixEduTheme/public/backend/scss/1_default/admin/_predefine.scss */
 .common-box-shadow, .primary-btn:hover, .primary-btn.fix-gr-bg:hover, .nice-select .list, .sms-accordion .card, .school-table .dropdown .dropdown-toggle:hover, .school-table .dropdown .dropdown-toggle:focus, .school-table .dropdown .dropdown-menu, .bootstrap-datetimepicker-widget table td.hour:hover, .bootstrap-datetimepicker-widget table td.minute:hover, .bootstrap-datetimepicker-widget table td span.glyphicon-chevron-up:hover:after, .bootstrap-datetimepicker-widget table td span.glyphicon-chevron-down:hover:after, .datepicker.dropdown-menu, .datepicker table tr td.active.day, .datepicker table tr td.day:hover, .datepicker thead tr:first-child th:hover, .pagination .page-link:hover, .common-calendar .fc-month-view .fc-day.fc-widget-content.fc-today, .common-calendar .fc-state-default.fc-corner-left:hover,
 .common-calendar .fc-button.fc-state-default:hover, .admin .navbar .right-navbar .dropdown .badge, .single-cms-box:hover .single-cms {
-  box-shadow: 0px 10px 20px rgba(108, 39, 255, 0.3);
+  box-shadow: var(--box_shadow);
 }
 
 /* line 42, /Applications/MAMP/htdocs/InfixEduTheme/public/backend/scss/1_default/admin/_predefine.scss */
@@ -694,7 +694,7 @@ html[dir="rtl"] .primary-btn.white:hover {
   background: -moz-linear-gradient(90deg, var(--gradient_1) 0%, var(--gradient_3) 100%);
   background: -o-linear-gradient(90deg, var(--gradient_1) 0%, var(--gradient_3) 100%);
   background: linear-gradient(90deg, var(--gradient_1) 0%, var(--gradient_3) 100%);
-  box-shadow: 0px 10px 20px rgba(108, 39, 255, 0.3);
+  box-shadow: var(--box_shadow);
 }
 
 /* line 40, /Applications/MAMP/htdocs/InfixEduTheme/public/backend/scss/1_default/style.scss */
@@ -1370,7 +1370,7 @@ html[dir="rtl"] .to-do-list.up_buttom {
   background: var(--bg_white);
   padding: 40px 30px;
   border-radius: 10px;
-  box-shadow: 0px 10px 15px rgba(236, 208, 244, 0.3);
+  box-shadow: var(--box_shadow);
 }
 
 @media (max-width: 1300px) and (min-width: 992px) {
@@ -1610,8 +1610,7 @@ html[dir="rtl"] .to-do-list.up_buttom {
 
 /* line 188, /Applications/MAMP/htdocs/InfixEduTheme/public/backend/scss/1_default/admin/_component.scss */
 .modal-content .modal-header {
-  background: url(../../img/modal-header-bg.png) no-repeat center;
-  background-size: cover;
+  background: var(--primary-color);
   border-radius: 5px 5px 0px 0px;
   border: 0;
   padding: 33px 40px;
@@ -2155,7 +2154,7 @@ html[dir="rtl"] .to-do-list.up_buttom {
   background: var(--bg_white);
   padding: 40px 30px;
   border-radius: 10px;
-  box-shadow: 0px 10px 15px rgba(236, 208, 244, 0.3);
+  box-shadow: var(--box_shadow);
   margin: 0 auto;
   clear: both;
   border-collapse: separate;
@@ -2291,7 +2290,7 @@ html[dir="rtl"] .school-table .dropdown .dropdown-toggle:hover {
   background: -moz-linear-gradient(90deg, var(--gradient_1) 0%, var(--gradient_3) 100%);
   background: -o-linear-gradient(90deg, var(--gradient_1) 0%, var(--gradient_3) 100%);
   background: linear-gradient(90deg, var(--gradient_1) 0%, var(--gradient_3) 100%);
-  box-shadow: 0px 10px 20px rgba(108, 39, 255, 0.3);
+  box-shadow: var(--box_shadow);
 }
 
 /* line 193, /Applications/MAMP/htdocs/InfixEduTheme/public/backend/scss/1_default/style.scss */
@@ -2313,7 +2312,7 @@ html[dir="rtl"] .school-table .dropdown .dropdown-toggle:focus:after {
 
 /* line 207, /Applications/MAMP/htdocs/InfixEduTheme/public/backend/scss/1_default/style.scss */
 html[dir="rtl"] .school-table .dropdown .dropdown-menu {
-  box-shadow: 0px 10px 20px rgba(108, 39, 255, 0.3);
+  box-shadow: var(--box_shadow);
 }
 
 /* line 1, /Applications/MAMP/htdocs/InfixEduTheme/public/backend/scss/1_default/admin/_login.scss */
@@ -4995,7 +4994,7 @@ html[dir="rtl"] .client .header-area .navbar .nav .nav-item {
 
 /* line 512, /Applications/MAMP/htdocs/InfixEduTheme/public/backend/scss/1_default/client/_home.scss */
 .client.light .fact-area .white-box.single-summery, .client.color .fact-area .white-box.single-summery {
-  box-shadow: 0px 10px 15px rgba(236, 208, 244, 0.3);
+  box-shadow: var(--box_shadow);
 }
 
 /* line 515, /Applications/MAMP/htdocs/InfixEduTheme/public/backend/scss/1_default/client/_home.scss */
@@ -5267,7 +5266,7 @@ html[dir="rtl"] .common-calendar .fc-button.fc-state-default:hover {
   background: -moz-linear-gradient(90deg, var(--gradient_1) 0%, var(--gradient_3) 100%);
   background: -o-linear-gradient(90deg, var(--gradient_1) 0%, var(--gradient_3) 100%);
   background: linear-gradient(90deg, var(--gradient_1) 0%, var(--gradient_3) 100%);
-  box-shadow: 0px 10px 20px rgba(108, 39, 255, 0.3);
+  box-shadow: var(--box_shadow);
 }
 
 /* line 495, /Applications/MAMP/htdocs/InfixEduTheme/public/backend/scss/1_default/style.scss */
@@ -8685,7 +8684,7 @@ top: 45px !important;
   top: -14px;
   right: 10px;
   border-width: 0 15px 20px 15px;
-  border-color: transparent transparent var(--base_color) transparent;
+  border-color: transparent transparent var(--white) transparent;
 }
 
 /* line 521, G:/laragon/www/383-infixpm_lv/public/scss/_header.scss */
@@ -13487,7 +13486,7 @@ table.dataTable {
 }
 
 .vdp-datepicker__calendar{
-  box-shadow: 0px 10px 20px rgba(108, 39, 255, 0.3);
+  box-shadow: var(--box_shadow);
   min-width: 160px;
   background: var(--bg_white)fff;
   border: 0 !important;
@@ -13628,7 +13627,7 @@ table.dataTable {
   background: -moz-linear-gradient(90deg, var(--gradient_1) 0%, var(--gradient_3) 100%) !important;
   background: -o-linear-gradient(90deg, var(--gradient_1) 0%, var(--gradient_3) 100%) !important;
   background: linear-gradient(90deg, var(--gradient_1) 0%, var(--gradient_3) 100%) !important;
-  box-shadow: 0px 10px 20px rgba(108, 39, 255, 0.3);
+  box-shadow: var(--box_shadow);
   color :  var(--text_white);
   color :  var(--text_white) !important;
   border-radius: 50% !important;
@@ -13655,7 +13654,7 @@ table.dataTable {
   background: -moz-linear-gradient(90deg, var(--gradient_1) 0%, var(--gradient_3) 100%) !important;
   background: -o-linear-gradient(90deg, var(--gradient_1) 0%, var(--gradient_3) 100%) !important;
   background: linear-gradient(90deg, var(--gradient_1) 0%, var(--gradient_3) 100%) !important;
-  box-shadow: 0px 10px 20px rgba(108, 39, 255, 0.3);
+  box-shadow: var(--box_shadow);
   color :  var(--text_white);
   color :  var(--text_white) !important;
   border-radius: 4px !important;
@@ -14623,7 +14622,7 @@ html[dir="rtl"] .menu_popUp_list_wrapper .popUp_single_wrap .popup_single_item u
 	z-index: inherit;
 }
 .vs__dropdown-menu {
-	box-shadow: 0px 10px 20px rgba(108, 39, 255, 0.3);
+	box-shadow: var(--box_shadow);
 	border: 0 !important;
 }
 html[dir="rtl"] .vs__dropdown-option{

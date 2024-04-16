@@ -52,7 +52,7 @@ $setting  = generalSetting()
         }
 
         input:checked + .slider {
-            background: linear-gradient(90deg, var(--gradient_1) 0%, #c738d8 51%, var(--gradient_1) 100%);
+            background: var(--primary-color);
         }
 
         input:focus + .slider {
@@ -90,7 +90,7 @@ $setting  = generalSetting()
     @php
     $settings = $setting;
     @endphp
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('system_settings.header_option')</h1>
@@ -203,7 +203,7 @@ $setting  = generalSetting()
                             <div class="row">
                             
                             
-                                <div class="col-lg-4">
+                                <div class="col-lg-4 py-2">
                                     <div class="d-flex align-items-center justify-content-left">
                                         
                                         <span style="font-size: 17px; padding-right: 15px;">@lang('common.dashboard')  </span>
@@ -211,7 +211,7 @@ $setting  = generalSetting()
                                     
                                     </div>
                                 </div>
-                                <div class="col-lg-2">
+                                <div class="col-lg-2 py-2">
                                     @if(Illuminate\Support\Facades\Config::get('app.app_sync'))
                                         
                                     <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="No action For Demo "> 
@@ -249,7 +249,51 @@ $setting  = generalSetting()
                                         @endif
                                     @endif
                                 </div>
-                                <div class="col-lg-4">
+                                <div class="col-lg-4 py-2">
+                                    <div class="d-flex align-items-center justify-content-left">
+
+                                        <span style="font-size: 17px; padding-right: 15px;">@lang('system_settings.language')   </span>
+
+                                    
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 py-2">
+                                    @if(Illuminate\Support\Facades\Config::get('app.app_sync'))
+                                        
+                                    <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="No action For Demo ">
+                                        @php
+                                            if(@$settings->website_btn == 0){
+                                                    $permission_id='status-change';
+                                            }else{
+                                                    $permission_id='status-disable';
+                                            }
+                                        @endphp
+                                        @if(userPermission($permission_id)) 
+                                         <label class="switch_toggle">
+                                            <input type="checkbox"
+                                                class="switch-website_btn_demo" {{@$settings->website_btn == 0? '':'checked'}}>
+                                            <span class="slider round"></span>
+                                        </label>
+                                        @endif
+                                        </span>
+                                    @else
+                                     <label class="switch_toggle">
+                                        @php
+                                            if(@$settings->lang_btn == 0){
+                                                    $permission_id='lang-enable';
+                                            }else{
+                                                    $permission_id='lang-disable';
+                                            }
+                                        @endphp
+                                        @if(userPermission($permission_id))
+                                        <input type="checkbox"
+                                            class="switch_lang_btn" {{@$settings->lang_btn == 0? '':'checked'}}>
+                                        <span class="slider round"></span>
+                                    </label>
+                                        @endif
+                                    @endif
+                                </div>
+                                {{-- <div class="col-lg-4 py-2">
                                     <div class="d-flex align-items-center justify-content-left">
 
                                         <span style="font-size: 17px; padding-right: 15px;">@lang('system_settings.style')  </span>
@@ -258,7 +302,7 @@ $setting  = generalSetting()
                                     
                                     </div>
                                 </div>
-                                <div class="col-lg-2">
+                                <div class="col-lg-2 py-2">
                                     @if(Illuminate\Support\Facades\Config::get('app.app_sync'))
                                         
                                     <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="No action For Demo ">
@@ -295,10 +339,10 @@ $setting  = generalSetting()
                                         </label>
                                         @endif
                                     @endif
-                                </div>
+                                </div> --}}
                             </div>
                             <div class="row mt-20">
-                                <div class="col-lg-4">
+                                {{-- <div class="col-lg-4 py-2">
                                     <div class="d-flex align-items-center justify-content-left">
 
                                         <span style="font-size: 17px; padding-right: 15px;">@lang('reports.report')   </span>
@@ -306,7 +350,7 @@ $setting  = generalSetting()
                                     
                                     </div>
                                 </div>
-                                <div class="col-lg-2">
+                                <div class="col-lg-2 py-2">
                                     @if(Illuminate\Support\Facades\Config::get('app.app_sync'))
                                         
                                     <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="No action For Demo "> 
@@ -343,14 +387,14 @@ $setting  = generalSetting()
                                         </label>
                                         @endif
                                     @endif
-                                </div>
-                                {{-- <div class="col-lg-4">
+                                </div> --}}
+                                {{-- <div class="col-lg-4 py-2">
                                     <div class="d-flex align-items-center justify-content-center">
                                         <span style="font-size: 17px; padding-right: 15px;">@lang('system_settings.ltl_rtl')  </span>
                                     
                                     </div>
                                 </div>
-                                <div class="col-lg-2">
+                                <div class="col-lg-2 py-2">
                                     @if(Illuminate\Support\Facades\Config::get('app.app_sync'))
                                         
                                     <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="No action For Demo ">
@@ -389,50 +433,7 @@ $setting  = generalSetting()
                                         @endif
                                         @endif
                                 </div> --}}
-                                    <div class="col-lg-4">
-                                        <div class="d-flex align-items-center justify-content-left">
-    
-                                            <span style="font-size: 17px; padding-right: 15px;">@lang('system_settings.language')   </span>
-    
-                                        
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-2">
-                                        @if(Illuminate\Support\Facades\Config::get('app.app_sync'))
-                                            
-                                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="No action For Demo ">
-                                            @php
-                                                if(@$settings->website_btn == 0){
-                                                        $permission_id='status-change';
-                                                }else{
-                                                        $permission_id='status-disable';
-                                                }
-                                            @endphp
-                                            @if(userPermission($permission_id)) 
-                                             <label class="switch_toggle">
-                                                <input type="checkbox"
-                                                    class="switch-website_btn_demo" {{@$settings->website_btn == 0? '':'checked'}}>
-                                                <span class="slider round"></span>
-                                            </label>
-                                            @endif
-                                            </span>
-                                        @else
-                                         <label class="switch_toggle">
-                                            @php
-                                                if(@$settings->lang_btn == 0){
-                                                        $permission_id='lang-enable';
-                                                }else{
-                                                        $permission_id='lang-disable';
-                                                }
-                                            @endphp
-                                            @if(userPermission($permission_id))
-                                            <input type="checkbox"
-                                                class="switch_lang_btn" {{@$settings->lang_btn == 0? '':'checked'}}>
-                                            <span class="slider round"></span>
-                                        </label>
-                                            @endif
-                                        @endif
-                                    </div>
+                                   
                             </div>
                     </div>
                     </div>
@@ -442,3 +443,4 @@ $setting  = generalSetting()
         </div>
     </section>
 @endsection
+

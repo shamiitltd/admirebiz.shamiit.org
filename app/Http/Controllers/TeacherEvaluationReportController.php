@@ -193,7 +193,8 @@ class TeacherEvaluationReportController extends Controller
     public function teacherPanelEvaluationReport()
     {
         try {
-            $teacherEvaluations = TeacherEvaluation::where('teacher_id', Auth::user()->id)->with('studentRecord')->get();
+            $staffId = SmStaff::where('user_id', auth()->user()->id)->select('id')->first();
+            $teacherEvaluations = TeacherEvaluation::where('teacher_id', $staffId->id)->with('studentRecord')->get();
             return view('backEnd.teacherEvaluation.report.teacher_panel_evaluation_report', compact('teacherEvaluations'));
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');

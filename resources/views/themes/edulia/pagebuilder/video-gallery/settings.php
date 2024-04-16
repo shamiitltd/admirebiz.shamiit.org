@@ -44,20 +44,6 @@ return [
                 1 => '12 video gallery in a row',
             ],
             'default' => 4,
-        ],
-        [
-            'id' => 'video_gallery_sorting',
-            'type' => 'select',
-            'class' => '',
-            'label_title' => __('edulia.video_gallery_sorting'),
-            'label_desc' => __('edulia.which_order_video_galleries'),
-            'options' => [
-                'asc' => 'Ascending',
-                'desc' => 'Descending',
-                'randomly' => 'Randomly',
-            ],
-            'default' => 'asc',
-            'value' => 'asc',
-        ],
+        ]
     ]
 ];

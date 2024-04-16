@@ -42,8 +42,8 @@ class AddTeacherEvaluationSidebarmenu extends Migration
                     'teacher-approved-evaluation-report' => array(
                         'module' => null,
                         'sidebar_menu' => null,
-                        'name' => 'Approved Evaluation Report',
-                        'lang_name' => 'teacherEvaluation.approved_evaluation_report',
+                        'name' => 'Approved Report',
+                        'lang_name' => 'teacherEvaluation.approved_report',
                         'icon' => null,
                         'svg' => null,
                         'route' => 'teacher-approved-evaluation-report',
@@ -94,8 +94,8 @@ class AddTeacherEvaluationSidebarmenu extends Migration
                     'teacher-pending-evaluation-report' => array(
                         'module' => null,
                         'sidebar_menu' => null,
-                        'name' => 'Pending Evaluation Report',
-                        'lang_name' => 'teacherEvaluation.pending_evaluation_report',
+                        'name' => 'Pending Report',
+                        'lang_name' => 'teacherEvaluation.pending_report',
                         'icon' => null,
                         'svg' => null,
                         'route' => 'teacher-pending-evaluation-report',
@@ -171,8 +171,8 @@ class AddTeacherEvaluationSidebarmenu extends Migration
                     'teacher-wise-evaluation-report' => array(
                         'module' => null,
                         'sidebar_menu' => null,
-                        'name' => 'Wise Evaluation Report',
-                        'lang_name' => 'teacherEvaluation.teacher_wise_evaluation_report',
+                        'name' => 'Teacher Wise Report',
+                        'lang_name' => 'teacherEvaluation.teacher_wise_report',
                         'icon' => null,
                         'svg' => null,
                         'route' => 'teacher-wise-evaluation-report',

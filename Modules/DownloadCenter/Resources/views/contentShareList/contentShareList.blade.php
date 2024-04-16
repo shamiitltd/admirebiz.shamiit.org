@@ -76,7 +76,7 @@
     </style>
 @endpush
 @section('mainContent')
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('downloadCenter.shared_content') </h1>
@@ -92,115 +92,117 @@
         <div class="container-fluid p-0">
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="row">
-                        <div class="col-lg-4 no-gutters">
-                            <div class="main-title">
-                                <h3 class="mb-0">@lang('downloadCenter.shared_content_list')</h3>
+                    <div class="white-box">
+                        <div class="row">
+                            <div class="col-lg-4 no-gutters">
+                                <div class="main-title">
+                                    <h3 class="mb-15">@lang('downloadCenter.shared_content_list')</h3>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <x-table>
-                                <table id="table_id" class="table Crm_table_active3" cellspacing="0" width="100%">
-                                    <thead>
-                                        <tr>
-                                            <th>@lang('downloadCenter.sl')</th>
-                                            <th>@lang('downloadCenter.title')</th>
-                                            <th>@lang('downloadCenter.send_to')</th>
-                                            <th>@lang('downloadCenter.share_date')</th>
-                                            <th>@lang('downloadCenter.valid_upto')</th>
-                                            <th>@lang('downloadCenter.shared_by')</th>
-                                            <th>@lang('downloadCenter.description')</th>
-                                            <th>@lang('common.action')</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($sharedContents as $key => $sharedContent)
-                                            @php
-                                                $send_type = '';
-                                                if ($sharedContent->send_type == 'G') {
-                                                    $send_type = 'Group';
-                                                } elseif ($sharedContent->send_type == 'I') {
-                                                    $send_type = 'Individual';
-                                                } elseif ($sharedContent->send_type == 'C') {
-                                                    $send_type = 'Class';
-                                                } else {
-                                                    $send_type = 'Public';
-                                                }
-                                            @endphp
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <x-table>
+                                    <table id="table_id" class="table Crm_table_active3" cellspacing="0" width="100%">
+                                        <thead>
                                             <tr>
-                                                <td>{{ $key + 1 }}</td>
-                                                <td>{{ $sharedContent->title }}</td>
-                                                <td>{{ $send_type }}</td>
-                                                <td>{{ $sharedContent->share_date }}</td>
-                                                <td>{{ $sharedContent->valid_upto }}</td>
-                                                <td>{{ $sharedContent->user->full_name }}</td>
-                                                <td>{{ $sharedContent->description ? $sharedContent->description : 'No Description' }}
-                                                </td>
-                                                <td>
-                                                    <x-drop-down>
-                                                        @if ($sharedContent->url)
-                                                            <a class="modalLink dropdown-item"
-                                                                title="@lang('downloadCenter.shared_content_link')"
-                                                                href="{{ route('download-center.content-share-link-modal', [$sharedContent->id]) }}">
-                                                                @lang('downloadCenter.link')
-                                                            </a>
-                                                        @endif
-                                                        <a class="modalLink dropdown-item"
-                                                            data-modal-size="large-modal"
-                                                            title="@lang('downloadCenter.view_shared_content')"
-                                                            href="{{ route('download-center.content-view-link-modal', [$sharedContent->id]) }}">
-                                                            @lang('common.view')
-                                                        </a>
-                                                        @if (auth()->user()->role_id != 2)
-                                                            <a class="dropdown-item" data-toggle="modal"
-                                                                data-target="#deleteModal{{ @$sharedContent->id }}"
-                                                                href="#">
-                                                                @lang('common.delete')
-                                                            </a>
-                                                        @endif
-                                                    </x-drop-down>
-                                                </td>
+                                                <th>@lang('downloadCenter.sl')</th>
+                                                <th>@lang('downloadCenter.title')</th>
+                                                <th>@lang('downloadCenter.send_to')</th>
+                                                <th>@lang('downloadCenter.share_date')</th>
+                                                <th>@lang('downloadCenter.valid_upto')</th>
+                                                <th>@lang('downloadCenter.shared_by')</th>
+                                                <th>@lang('downloadCenter.description')</th>
+                                                <th>@lang('common.action')</th>
                                             </tr>
-                                            {{-- Start Delete Modal --}}
-                                            <div class="modal fade admin-query"
-                                                id="deleteModal{{ @$sharedContent->id }}">
-                                                <div class="modal-dialog modal-dialog-centered">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h4 class="modal-title">
-                                                                @lang('downloadCenter.delete_shared_content')
-                                                            </h4>
-                                                            <button type="button" class="close" data-dismiss="modal">
-                                                                &times;
-                                                            </button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <div class="text-center">
-                                                                <h4>@lang('common.are_you_sure_to_delete')</h4>
-                                                            </div>
-                                                            <div class="mt-40 d-flex justify-content-between">
-                                                                <button type="button" class="primary-btn tr-bg"
-                                                                    data-dismiss="modal">
-                                                                    @lang('common.cancel')
-                                                                </button>
-                                                                <a href="{{ route('download-center.content-share-list-delete', [@$sharedContent->id]) }}"
-                                                                    class="text-light">
-                                                                    <button class="primary-btn fix-gr-bg" type="submit">
-                                                                        @lang('common.delete')
-                                                                    </button>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($sharedContents as $key => $sharedContent)
+                                                @php
+                                                    $send_type = '';
+                                                    if ($sharedContent->send_type == 'G') {
+                                                        $send_type = 'Group';
+                                                    } elseif ($sharedContent->send_type == 'I') {
+                                                        $send_type = 'Individual';
+                                                    } elseif ($sharedContent->send_type == 'C') {
+                                                        $send_type = 'Class';
+                                                    } else {
+                                                        $send_type = 'Public';
+                                                    }
+                                                @endphp
+                                                <tr>
+                                                    <td>{{ $key + 1 }}</td>
+                                                    <td>{{ $sharedContent->title }}</td>
+                                                    <td>{{ $send_type }}</td>
+                                                    <td>{{ $sharedContent->share_date }}</td>
+                                                    <td>{{ $sharedContent->valid_upto }}</td>
+                                                    <td>{{ $sharedContent->user->full_name }}</td>
+                                                    <td>{{ $sharedContent->description ? $sharedContent->description : 'No Description' }}
+                                                    </td>
+                                                    <td>
+                                                        <x-drop-down>
+                                                            @if ($sharedContent->url)
+                                                                <a class="modalLink dropdown-item"
+                                                                    title="@lang('downloadCenter.shared_content_link')"
+                                                                    href="{{ route('download-center.content-share-link-modal', [$sharedContent->id]) }}">
+                                                                    @lang('downloadCenter.link')
                                                                 </a>
+                                                            @endif
+                                                            <a class="modalLink dropdown-item"
+                                                                data-modal-size="large-modal"
+                                                                title="@lang('downloadCenter.view_shared_content')"
+                                                                href="{{ route('download-center.content-view-link-modal', [$sharedContent->id]) }}">
+                                                                @lang('common.view')
+                                                            </a>
+                                                            @if (auth()->user()->role_id != 2)
+                                                                <a class="dropdown-item" data-toggle="modal"
+                                                                    data-target="#deleteModal{{ @$sharedContent->id }}"
+                                                                    href="#">
+                                                                    @lang('common.delete')
+                                                                </a>
+                                                            @endif
+                                                        </x-drop-down>
+                                                    </td>
+                                                </tr>
+                                                {{-- Start Delete Modal --}}
+                                                <div class="modal fade admin-query"
+                                                    id="deleteModal{{ @$sharedContent->id }}">
+                                                    <div class="modal-dialog modal-dialog-centered">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h4 class="modal-title">
+                                                                    @lang('downloadCenter.delete_shared_content')
+                                                                </h4>
+                                                                <button type="button" class="close" data-dismiss="modal">
+                                                                    &times;
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <div class="text-center">
+                                                                    <h4>@lang('common.are_you_sure_to_delete')</h4>
+                                                                </div>
+                                                                <div class="mt-40 d-flex justify-content-between">
+                                                                    <button type="button" class="primary-btn tr-bg"
+                                                                        data-dismiss="modal">
+                                                                        @lang('common.cancel')
+                                                                    </button>
+                                                                    <a href="{{ route('download-center.content-share-list-delete', [@$sharedContent->id]) }}"
+                                                                        class="text-light">
+                                                                        <button class="primary-btn fix-gr-bg" type="submit">
+                                                                            @lang('common.delete')
+                                                                        </button>
+                                                                    </a>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            {{-- End Delete Modal --}}
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </x-table>
+                                                {{-- End Delete Modal --}}
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </x-table>
+                            </div>
                         </div>
                     </div>
                 </div>

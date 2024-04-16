@@ -39,9 +39,17 @@ class SmExamSchedule extends Model
     }
     public function section()
     {
-        return $this->belongsTo('App\SmSection', 'section_id', 'id');
+        if (moduleStatusCheck('University')) {
+            return $this->belongsTo('App\SmSection', 'un_section_id', 'id');
+        } else {
+            return $this->belongsTo('App\SmSection', 'section_id', 'id');
+        }  
     }
 
+    public function unSemesterLabel()
+    {
+        return $this->belongsTo('Modules\University\Entities\UnSemesterLabel', 'un_semester_label_id', 'id')->withDefault();
+    }
     public function classRoom()
     {
         return $this->belongsTo('App\SmClassRoom', 'room_id', 'id');
@@ -49,7 +57,11 @@ class SmExamSchedule extends Model
 
     public function subject()
     {
-        return $this->belongsTo('App\SmSubject', 'subject_id', 'id');
+        if(moduleStatusCheck('University')){
+            return $this->belongsTo('Modules\University\Entities\UnSubject', 'un_subject_id', 'id');
+        }else{
+            return $this->belongsTo('App\SmSubject', 'subject_id', 'id');
+        }
     }
     public function teacher()
     {

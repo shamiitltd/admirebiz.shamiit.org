@@ -2,12 +2,14 @@
 namespace App\Providers;
 
 use App\SmParent;
+use App\Models\Plugin;
 use App\SmNotification;
 use App\SmGeneralSettings;
 use App\Models\CustomMixin;
 use Spatie\Valuestore\Valuestore;
 use App\Models\MaintenanceSetting;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Builder;
@@ -28,6 +30,7 @@ class AppServiceProvider extends ServiceProvider
     {
         
         try{
+            Paginator::useBootstrapFour();
             Builder::defaultStringLength(191);
     
             view()->composer('backEnd.partials.parents_sidebar', function ($view) {
@@ -57,6 +60,34 @@ class AppServiceProvider extends ServiceProvider
                         'notifications' => SmNotification::notifications(),
                     ];
                     $view->with($data);
+            });
+
+
+            view()->composer(['plugins.tawk_to'], function ($view) {
+                $data =[
+                    'agent' => new \Jenssegers\Agent\Agent(),
+                    'tawk_setting' => Plugin::where('name','tawk')->where('school_id',app('school')->id)->first()
+                ];
+                $view->with($data);
+            });
+
+            view()->composer(['backEnd.partials.menu', 'layouts.pb-site', 'frontEnd.home.front_master'], function ($view) {
+                $pluginCheck = Plugin::whereIn('name',['tawk', 'messenger'])->where('school_id',app('school')->id)->get();
+                $tawk = $pluginCheck->where('name', 'tawk')->first();
+                $messenger = $pluginCheck->where('name', 'messenger')->first();
+                $data = [
+                    'position' => $tawk ? $tawk->position : null,
+                    'messenger_position' => $messenger ? $messenger->position : null,
+                ];
+                $view->with($data);
+            });
+
+            view()->composer(['plugins.messenger'], function ($view) {
+                $data =[
+                    'agent' => new \Jenssegers\Agent\Agent(),
+                    'messenger_setting' => Plugin::where('name','messenger')->where('school_id',app('school')->id)->first()
+                ];
+                $view->with($data);
             });
 
             if(Storage::exists('.app_installed') && Storage::get('.app_installed')){

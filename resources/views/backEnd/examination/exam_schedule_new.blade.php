@@ -3,7 +3,7 @@
     @lang('exam.exam_schedule')
 @endsection
 @section('mainContent')
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('exam.exam_schedule')</h1>
@@ -18,24 +18,24 @@
     <section class="admin-visitor-area">
         <div class="container-fluid p-0">
             <div class="row">
-                <div class="col-lg-8 col-md-6">
-                    <div class="main-title">
-                        <h3 class="mb-30">@lang('common.select_criteria')</h3>
-                    </div>
-                </div>
-                @if (userPermission('exam_schedule_create'))
-                    <div class="col-lg-4 text-md-right text-left col-md-6 mb-30-lg">
-                        <a href="{{ route('exam_schedule_create') }}" class="primary-btn small fix-gr-bg">
-                            <span class="ti-plus pr-2"></span>
-                            @lang('exam.add_exam_schedule')
-                        </a>
-                    </div>
-                @endif
-            </div>
-            <div class="row">
                 <div class="col-lg-12">
 
                     <div class="white-box">
+                        <div class="row">
+                            <div class="col-lg-8 col-md-6">
+                                <div class="main-title">
+                                    <h3 class="mb-15">@lang('common.select_criteria')</h3>
+                                </div>
+                            </div>
+                            @if (userPermission('exam_schedule_create'))
+                                <div class="col-lg-4 text-md-right text-left col-md-6 mb-30-lg">
+                                    <a href="{{ route('exam_schedule_create') }}" class="primary-btn small fix-gr-bg">
+                                        <span class="ti-plus pr-2"></span>
+                                        @lang('exam.add_exam_schedule')
+                                    </a>
+                                </div>
+                            @endif
+                        </div>
                         {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'exam_schedule_report_search_new', 'method' => 'POST', 'enctype' => 'multipart/form-data']) }}
                         <div class="row">
                             <input type="hidden" name="url" id="url" value="{{ URL::to('/') }}">
@@ -105,94 +105,89 @@
     @if (isset($exam_schedules))
         <section class="mt-20">
             <div class="container-fluid p-0">
-                <div class="row mt-40">
-                    <div class="col-lg-6 col-md-6">
-                        <div class="main-title">
-                            <h3 class="mb-0">@lang('exam.exam_routine')|
-                                <small>
-                                    @lang('exam.exam'): {{ @$examName != '' ? $examName : ' ' }},
-                                    @lang('common.class'):
-                                    {{ @$search_current_class != '' ? $search_current_class->class_name : ' ' }},
-                                    @lang('common.section'):
-                                    {{ @$search_current_section != '' ? $search_current_section->section_name : 'All Sections' }},
-
-                                </small>
-                            </h3>
+                <div class="white-box mt-40">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6">
+                            <div class="main-title">
+                                <h3 class="mb-15">@lang('exam.exam_routine')|
+                                    <small>
+                                        @lang('exam.exam'): {{ @$examName != '' ? $examName : ' ' }},
+                                        @lang('common.class'):
+                                        {{ @$search_current_class != '' ? $search_current_class->class_name : ' ' }},
+                                        @lang('common.section'):
+                                        {{ @$search_current_section != '' ? $search_current_section->section_name : 'All Sections' }},
+    
+                                    </small>
+                                </h3>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-lg-6 pull-right">
-                        <div class="main-title">
-                            <div class="print_button pull-right mb-30">
-                                <a href="{{ route('exam-routine-print', [$class_id, $section_id, $exam_type_id]) }}"
-                                    class="primary-btn small fix-gr-bg pull-left" target="_blank"><i class="ti-printer">
-                                    </i> @lang('common.print')</a>
+                        <div class="col-lg-6 pull-right">
+                            <div class="main-title">
+                                <div class="print_button pull-right pb-2">
+                                    <a href="{{ route('exam-routine-print', [$class_id, $section_id, $exam_type_id]) }}"
+                                        class="primary-btn small fix-gr-bg pull-left" target="_blank"><i class="ti-printer">
+                                        </i> @lang('common.print')</a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-
-
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div id="default_table_wrapper" class="dataTables_wrapper no-footer">
-                            <x-table>
-                                <table id="default_table" class="table" cellspacing="0" width="100%">
-                                    <thead>
-                                        <tr>
-                                            <th style="width:10%;">
-                                                @lang('exam.date_&_day')
-                                            </th>
-                                            <th>@lang('common.subject')</th>
-                                            <th>@lang('common.class_Sec')</th>
-                                            <th>@lang('common.teacher')</th>
-                                            <th>@lang('common.time')</th>
-                                            <th>@lang('common.duration')</th>
-                                            <th>@lang('common.room')</th>
     
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($exam_schedules as $date => $exam_routine)
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div id="default_table_wrapper" class="dataTables_wrapper no-footer">
+                                <x-table>
+                                    <div class="table-responsive">
+                                    <table id="default_table" class="table" cellspacing="0" width="100%">
+                                        <thead>
                                             <tr>
-                                                <td>{{ dateConvert($exam_routine->date) }}
-                                                    <br>{{ Carbon::createFromFormat('Y-m-d', $exam_routine->date)->format('l') }}
-                                                </td>
-                                                <td>
-                                                    <strong>
-                                                        {{ $exam_routine->subject ? $exam_routine->subject->subject_name : '' }}
-                                                    </strong>
-                                                    {{ $exam_routine->subject ? '(' . $exam_routine->subject->subject_code . ')' : '' }}
-                                                </td>
-                                                <td>{{ $exam_routine->class ? $exam_routine->class->class_name : '' }}
-                                                    {{ $exam_routine->section ? '(' . $exam_routine->section->section_name . ')' : '' }}
-                                                </td>
-                                                <td>{{ $exam_routine->teacher ? $exam_routine->teacher->full_name : '' }}</td>
-    
-                                                <td> {{ date('h:i A', strtotime(@$exam_routine->start_time)) }} -
-                                                    {{ date('h:i A', strtotime(@$exam_routine->end_time)) }} </td>
-                                                <td>
-                                                    @php
-                                                        $duration = strtotime($exam_routine->end_time) - strtotime($exam_routine->start_time);
-                                                    @endphp
-    
-                                                    {{ timeCalculation($duration) }}
-                                                </td>
-    
-                                                <td>{{ $exam_routine->classRoom ? $exam_routine->classRoom->room_no : '' }}</td>
-    
+                                                <th style="width:10%;"> @lang('exam.date_&_day')</th>
+                                                <th>@lang('common.subject')</th>
+                                                <th>@lang('common.class_Sec')</th>
+                                                <th>@lang('common.teacher')</th>
+                                                <th>@lang('common.time')</th>
+                                                <th>@lang('common.duration')</th>
+                                                <th>@lang('common.room')</th>
                                             </tr>
-                                        @endforeach
-    
-                                    </tbody>
-                                </table>
-                            </x-table>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($exam_schedules as $date => $exam_routine)
+                                                <tr>
+                                                    <td>{{ dateConvert($exam_routine->date) }}
+                                                        <br>{{ Carbon::createFromFormat('Y-m-d', $exam_routine->date)->format('l') }}
+                                                    </td>
+                                                    <td>
+                                                        <strong>
+                                                            {{ $exam_routine->subject ? $exam_routine->subject->subject_name : '' }}
+                                                        </strong>
+                                                        {{ $exam_routine->subject ? '(' . $exam_routine->subject->subject_code . ')' : '' }}
+                                                    </td>
+                                                    <td>{{ $exam_routine->class ? $exam_routine->class->class_name : '' }}
+                                                        {{ $exam_routine->section ? '(' . $exam_routine->section->section_name . ')' : '' }}
+                                                    </td>
+                                                    <td>{{ $exam_routine->teacher ? $exam_routine->teacher->full_name : '' }}</td>
+        
+                                                    <td> {{ date('h:i A', strtotime(@$exam_routine->start_time)) }} -
+                                                        {{ date('h:i A', strtotime(@$exam_routine->end_time)) }} </td>
+                                                    <td>
+                                                        @php
+                                                            $duration = strtotime($exam_routine->end_time) - strtotime($exam_routine->start_time);
+                                                        @endphp
+        
+                                                        {{ timeCalculation($duration) }}
+                                                    </td>
+        
+                                                    <td>{{ $exam_routine->classRoom ? $exam_routine->classRoom->room_no : '' }}</td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                    </div>
+                                </x-table>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
     @endif
-
-
-
 @endsection

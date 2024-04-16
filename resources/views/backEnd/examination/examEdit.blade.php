@@ -1,9 +1,22 @@
 @extends('backEnd.master')
+@push('css')
+    <style>
+        .ti-plus:before {
+            padding: 0px 0px 0px 9px !important;
+        }
+        #firstMarkRow{
+            margin-left: 8px !important;
+        }
+        #totalMark{
+            padding-left: 0px !important;
+        }
+    </style>
+@endpush
 @section('title')
 @lang('exam.exam')
 @endsection
 @section('mainContent')
-<section class="sms-breadcrumb mb-40 white-box">
+<section class="sms-breadcrumb mb-20">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('exam.exam')</h1>
@@ -198,7 +211,7 @@
                                         </div>
                                     </td> 
                                     <td  class="border-top">
-                                         <button class="primary-btn icon-only fix-gr-bg" type="button" id="{{$i != 1? 'removeMark':''}}">
+                                         <button class="primary-btn icon-only fix-gr-bg" id="firstMarkRow" type="button" id="{{$i != 1? 'removeMark':''}}">
                                              <span class="ti-trash"></span>
                                         </button>
                                        

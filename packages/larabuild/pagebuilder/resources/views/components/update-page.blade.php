@@ -1,10 +1,10 @@
-<div class="main-title">
-    <h3 class="mb-30">
-        {{ $edit ? __('pagebuilder::pagebuilder.update_page') : __('pagebuilder::pagebuilder.add_page') }}
-    </h3>
-</div>
 <form class="tb-themeform" id="page_form">
     <div class="white-box">
+        <div class="main-title">
+            <h3 class="mb-15">
+                {{ $edit ? __('pagebuilder::pagebuilder.update_page') : __('pagebuilder::pagebuilder.add_page') }}
+            </h3>
+        </div>
         <div class="add-visitor">
             @csrf
             <fieldset>

@@ -10,7 +10,7 @@
   
 </div>
 
-<table id="" class="table school-table-style" cellspacing="0" width="100%">
+<table id="" class="table school-table-style mb-40" cellspacing="0" width="100%">
     <thead>
         <tr>
             <th>@lang('exam.subject') </th>
@@ -33,10 +33,10 @@
                     $assignDetail = Modules\University\Entities\UnSubjectAssignStudent::assignDetail($subject->un_subject_id, $subject->un_semester_label_id)
                 @endphp
                 <td> {{ @$subject->subject->subject_name . '[' . $subject->subject->subject_code . ']' }}</td>
-                <td> {{ $subject->subject->subject_type }}</td>
-                <td> {{ $assignDetail['teacher']->teacher->full_name }}</td>
-                <td> {{ $subject->subject->pass_mark ? $subject->subject->pass_mark .'%' :'' }}</td>
-                <td> {{ $subject->subject->number_of_hours }}</td>
+                <td> {{ @$subject->subject->subject_type }}</td>
+                <td> {{ @$assignDetail['teacher']->teacher->full_name }}</td>
+                <td> {{ @$subject->subject->pass_mark ? $subject->subject->pass_mark .'%' :'' }}</td>
+                <td> {{ @$subject->subject->number_of_hours }}</td>
                 <td> {{ currency_format($assignDetail['amount']) }} </td>
                 <td> {{ currency_format($subject->subject->number_of_hours * $assignDetail['amount']) }}</td>
                 <td>{{ $record->is_promote == 0 ? __('common.ongoing') : __('common.completed') }}</td>
@@ -139,6 +139,7 @@
     </tbody>
 
 </table>
+{{-- <hr> --}}
 
 @if ($record->is_promote == 0  && !$record->unSemesterLabel->unExamAttendance)
 <div class="modal fade admin-query" id="requestSubject">
@@ -164,7 +165,7 @@
                     <div class="col-lg-12 " id="selectSectionsDiv" style="margin-top: -25px;">
                         <label for="checkbox"
                             class="mb-2">@lang('university::un.assign_more_subject_for_this_student')</label>
-                        <select multiple id="selectSectionss" name="subject[]" style="width:300px">
+                        <select multiple id="selectSectionss" name="subject[]" class="multypol_check_select active position-relative">
                             @foreach ($record->withOutPreSubject as $subject)
                                 <option value="{{ $subject->id }}" >
                                 {{ $subject->subject_name 
@@ -199,3 +200,4 @@
 @endforeach
     {{ Form::close() }}
 </div>
+@include('backEnd.partials.multi_select_js')

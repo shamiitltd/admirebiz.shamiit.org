@@ -7,7 +7,7 @@
 @endpush
 
 <div role="tabpanel" class="tab-pane fade" id="studentBehaviourRecord">
-    <div class="white-box">
+    <div>
         <div class="table-responsive">
             <table class="table table-alignment" cellspacing="0"
             width="100%">

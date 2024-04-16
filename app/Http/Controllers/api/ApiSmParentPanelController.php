@@ -63,7 +63,7 @@ class ApiSmParentPanelController extends Controller
 
                 return ApiBaseMethod::sendResponse($data, null);
             }
-        } catch (\Exception$e) {
+        } catch (\Exception $e) {
             return ApiBaseMethod::sendError('Error.', $e->getMessage());
         }
     }

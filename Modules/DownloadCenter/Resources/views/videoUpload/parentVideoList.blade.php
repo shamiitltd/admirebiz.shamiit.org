@@ -85,7 +85,7 @@
     </style>
 @endpush
 @section('mainContent')
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>{{ $student_detail->full_name }} - @lang('downloadCenter.video_list') </h1>

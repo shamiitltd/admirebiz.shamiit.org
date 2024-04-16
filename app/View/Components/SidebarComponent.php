@@ -36,6 +36,7 @@ class SidebarComponent extends Component
         $data['paid_modules'] = $this->allActivePaidModules();
        
         $data['childrens'] = SmParent::myChildrens();
+        #dd($data);
         return view('components.sidebar-component', $data);
     }
 }

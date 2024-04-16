@@ -31,7 +31,10 @@ class LanguageController extends Controller
 
     public function store(SmLanguageRequest $request)
     {
-  
+        if (config('app.app_sync') == true) {
+            Toastr::error('Disabled for demo mode', 'Failed');
+            return redirect()->route('manage-currency');
+        }
         try {
             $s = new Language();
             $s->name = $request->name;
@@ -53,7 +56,10 @@ class LanguageController extends Controller
 
     public function show($id)
     {
-
+        if (config('app.app_sync') == true) {
+            Toastr::error('Disabled for demo mode', 'Failed');
+            return redirect()->route('manage-currency');
+        }
         try {
             $languages=Language::where('school_id',Auth::user()->school_id)->get();
             $editData = $languages->where('id',$id)->first();

@@ -56,7 +56,7 @@
     }
 
     input:checked + .slider {
-        background: linear-gradient(90deg, var(--gradient_1) 0%, #c738d8 51%, var(--gradient_1) 100%);
+        background: var(--primary-color);
     }
 
     input:focus + .slider {
@@ -93,7 +93,7 @@
     }
 </style>
 
-<section class="sms-breadcrumb mb-40 white-box">
+<section class="sms-breadcrumb mb-20">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1> @lang('lesson::lesson.teacher_lesson_plan_overview')</h1>

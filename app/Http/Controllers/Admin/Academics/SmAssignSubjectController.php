@@ -134,9 +134,8 @@ class SmAssignSubjectController extends Controller
 
     public function assignSubjectStore(Request $request)
     {
-
         try {
-            if ((is_null($request->subjects[0]) && is_null($request->teachers[0]))) {
+            if ($request->subjects && $request->teachers && is_null($request->subjects[0]) && is_null($request->teachers[0])) {
                 Toastr::warning('Empty data submit', 'warning');
                 return redirect()->back();
             }
@@ -237,8 +236,10 @@ class SmAssignSubjectController extends Controller
             }
             $data['class_id'] = $request->class_id;
             $data['section_id'] = $request->section_id;
-            $data['teacher_name'] = $assign_subject->teacher->full_name;
-            $this->sent_notifications('Assign_Subject', (array)$assign_subject->teacher->user_id, $data, ['Teacher']);
+            if ($request->subjects) {
+                $data['teacher_name'] = $assign_subject->teacher->full_name;
+                $this->sent_notifications('Assign_Subject', (array)$assign_subject->teacher->user_id, $data, ['Teacher']);
+            }
 
             $records = $this->studentRecordInfo($request->class_id, $request->section_id)->pluck('studentDetail.user_id');
             $this->sent_notifications('Assign_Subject', $records, $data, ['Student', 'Parent']);

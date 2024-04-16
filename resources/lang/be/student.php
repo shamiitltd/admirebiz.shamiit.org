@@ -529,4 +529,5 @@ return [
     'current_class'=>'Current Class',
     'search_by_admission_no' => 'Search by admission no' ,
     'Record already exit ,please Delete or restore'=>'Record already exit ,please Delete or restore',
+    'semester_level'=>'Semester Level',
 ];

@@ -51,3 +51,7 @@ class CreateSmLessonTopicsTable extends Migration
         Schema::dropIfExists('sm_lesson_topics');
     }
 }
+
+
+
+

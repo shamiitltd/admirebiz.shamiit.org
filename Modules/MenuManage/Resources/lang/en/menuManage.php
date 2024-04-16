@@ -390,6 +390,8 @@
     'Semester Label' => 'Semester Label',
     'Edit Fees' => 'Edit Fees Payment',
     'Delete Fees' => 'Delete Fees Payment',
+    'Subject List' => 'Subject List',
+    'Request Subject' => 'Request Subject',
 
     'InfixBiometrics' => 'InfixBiometrics',
     'Biometrics settings' => 'Biometrics settings',

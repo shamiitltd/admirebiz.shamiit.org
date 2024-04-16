@@ -163,6 +163,8 @@ class SmStudentAttendanceController extends Controller
                 $attendance->academic_id = getAcademicId();
                 $attendance->save();
 
+               
+
                 if ($request->attendance[$student] == 'P') {
                     $student_info = SmStudent::find($student);
                     $compact['attendance_date'] = $attendance->attendance_date;

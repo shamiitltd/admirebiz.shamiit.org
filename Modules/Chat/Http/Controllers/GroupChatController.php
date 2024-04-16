@@ -54,6 +54,7 @@ class GroupChatController extends Controller
         $validation = \Validator::make($request->all(), [
             'name' => 'required',
             'users' => 'required',
+            'group_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         if ($validation->fails()){

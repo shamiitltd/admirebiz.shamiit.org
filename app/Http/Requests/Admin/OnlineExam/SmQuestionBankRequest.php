@@ -23,20 +23,33 @@ class SmQuestionBankRequest extends FormRequest
      */
     public function rules()
     {
-        $maxFileSize=generalSetting()->file_size*1024;
-        return [
-            'group' => "required",
-            'class' => "required",
-            'section' => "required",
-            'question' => "required",
-            'question_type' => "required",
-            'marks' => "required",
-            'number_of_option' => "required_if:question_type,M",
-            'answer_type' => "required_if:question_type,MI",
-            'question_image' => "required_if:question_type,MI|mimes:jpg,jpeg,png|max:".$maxFileSize,
-            'number_of_optionImg' => "required_if:question_type,MI",
-            'trueOrFalse'=> 'required_if:question_type,T|in:T,F',
-            'suitable_words' => "required_if:question_type,F",
+        $maxFileSize = generalSetting()->file_size * 1024;
+
+        $rules = [
+            'group' => 'required',
+            'question' => 'required',
+            'question_type' => 'required',
+            'marks' => 'required',
+            'number_of_option' => 'required_if:question_type,M',
+            'answer_type' => 'required_if:question_type,MI',
+            'question_image' => 'required_if:question_type,MI|mimes:jpg,jpeg,png|max:' . $maxFileSize,
+            'number_of_optionImg' => 'required_if:question_type,MI',
+            'trueOrFalse' => 'required_if:question_type,T|in:T,F',
+            'suitable_words' => 'required_if:question_type,F',
         ];
+        
+        if (moduleStatusCheck('University')) {      // University Module
+            $rules['un_semester_label_id'] = 'required';
+            if ($this->id) {
+                $rules['un_section_id'] = 'required';
+            } else {
+                $rules['un_section_ids'] = 'required';
+            }
+        } else {                                    // School Module or General
+            $rules['class'] = 'required';
+            $rules['section'] = 'required';
+            $rules['section.*'] = 'required';
+        }
+        return $rules;
     }
 }

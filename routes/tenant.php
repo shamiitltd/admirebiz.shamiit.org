@@ -18,15 +18,18 @@ Route::group(['middleware' => []], function () {
         if (moduleStatusCheck('Saas') == TRUE) {
             Route::get('login', 'Auth\LoginController@loginFormTwo')->name('login');
         }
-        //  Route::get('/', 'SmFrontendController@index')->name('/');
+         Route::get('/', 'SmFrontendController@index')->name('/');
     }
 
     Route::get('login', 'Auth\LoginController@loginFormTwo')->name('login');
 
-    Route::get('/', 'SmFrontendController@index')->name('/');
+    if(!moduleStatusCheck('Saas')){
+        Route::get('/', 'SmFrontendController@index')->name('/');
+    }
+
 
     if (activeTheme() != 'edulia') {
-       
+
         Route::get('home', 'SmFrontendController@index');
         Route::get('about', 'SmFrontendController@about');
         Route::get('course', 'SmFrontendController@course');
@@ -61,10 +64,11 @@ Route::group(['middleware' => []], function () {
 
 
 
-    Route::get('view/single/notification/{id}', 'SmNotificationController@viewSingleNotification')->where('id', '[0-9]+');
+    Route::get('view/single/notification/{id}', 'SmNotificationController@viewSingleNotification')->name('view-single-notification')->where('id', '[0-9]+');
 
     Route::get('view/all/notification/{id}', 'SmNotificationController@viewAllNotification')->name('view/all/notification')->where('id', '[0-9]+');
     Route::get('notification-show/{id}', 'SmNotificationController@udpateNotification')->name('notification-show');
+    Route::get('all-notification', 'SmNotificationController@allNotification')->name('all-notification');
 
     Route::get('view/notice/{id}', 'HomeController@viewNotice')->where('id', '[0-9]+')->where('id', '[0-9]+')->name('view-notice');
     // update password
@@ -176,6 +180,7 @@ Route::group(['middleware' => []], function () {
     Route::post('about-page/update', 'SmFrontendController@aboutPageStore')->name('about-page/update');
 
     Route::post('send-message', 'SmFrontendController@sendMessage');
+    Route::get('edulia-send-message', 'SmFrontendController@sendMessage');
 
     Route::get('custom-links', 'Admin\SystemSettings\SmSystemSettingController@customLinks')->name('custom-links')->middleware('userRolePermission:custom-links');
     Route::post('custom-links-update', 'Admin\SystemSettings\SmSystemSettingController@customLinksUpdate')->name('custom-links-update')->middleware('userRolePermission:custom-links-update');
@@ -349,16 +354,25 @@ Route::group(['middleware' => []], function () {
         $routes->get('event-details/{id}', 'singleEventDetails')->name('event-details')->where('id', '[0-9]+');
         $routes->get('blog-list', 'blogList')->name('blog-list');
         $routes->post('load-more-blog-list', 'loadMoreBlogList')->name('load-more-blog-list');
+        $routes->get('speech-slider/{id}', 'singleSpeechSlider')->name('speech-slider')->where('id', '[0-9]+');
+        $routes->get('all-course-list', 'courseList')->name('all-course-list');
+        $routes->get('single-course-details/{id}', 'singleCourseDetail')->name('single-course-details');
+        $routes->get('frontend-single-student-details/{id}', 'frontendSingleStudentDetails')->name('frontend-single-student-details');
+        $routes->get('archive-list', 'archiveList')->name('archive-list');
+        $routes->get('archive-year-filter', 'archiveYearFilter')->name('archive-year-filter');
+        $routes->post('load-more-archive-list', 'loadMoreArchiveList')->name('load-more-archive-list');
+        $routes->get('book-a-visit', 'bookAVisit')->name('book-a-visit');
+        $routes->post('book-a-visit-store', 'bookAVisitStore')->name('book-a-visit-store');
+        $routes->get('donor-details/{id}', 'donorDetails')->name('donor-details');
+        $routes->get('staff-details/{id}', 'staffDetails')->name('staff-details');
         $routes->middleware(['auth', 'subdomain'])->group(function ($routes) {
             $routes->post('store-news-comment', 'storeNewsComment')->name('store-news-comment');
         });
     });
 
+
     
     Route::get('frontend-get-class', 'Admin\StudentInfo\FrontendStudentListController@ajaxFrontendClass');
     Route::get('frontend-get-section', 'Admin\StudentInfo\FrontendStudentListController@ajaxFrontendSection');
     Route::get('frontend-get-students', 'Admin\StudentInfo\FrontendStudentListController@getStudents')->name('frontend-get-students');
-
 });
-
-

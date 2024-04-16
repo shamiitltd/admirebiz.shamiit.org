@@ -1,9 +1,16 @@
 @extends('backEnd.master')
 @section('title')
+@push('css')
+    <style>
+        .check_box_table .QA_table .table tbody td:first-child {
+            padding-left: 25px !important;
+        }
+    </style>
+@endpush
 @lang('exam.marks_grade')
 @endsection
 @section('mainContent')
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('exam.marks_grade') </h1>
@@ -35,15 +42,6 @@
                 <div class="col-lg-3">
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="main-title">
-                                <h3 class="mb-30">@if(isset($marks_grade))
-                                        @lang('exam.edit_grade')
-                                    @else
-                                        @lang('exam.add_grade')
-                                    @endif
-                                  
-                                </h3>
-                            </div>
                             @if(isset($marks_grade))
                                 {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => array('marks-grade-update',$marks_grade->id), 'method' => 'PUT', 'enctype' => 'multipart/form-data']) }}
                             @else
@@ -54,6 +52,15 @@
                             @endif
                             @endif
                             <div class="white-box">
+                                <div class="main-title">
+                                    <h3 class="mb-15">@if(isset($marks_grade))
+                                            @lang('exam.edit_grade')
+                                        @else
+                                            @lang('exam.add_grade')
+                                        @endif
+                                      
+                                    </h3>
+                                </div>
                                 <div class="add-visitor">
                                     <div class="row">
                                         <div class="col-lg-12">
@@ -228,127 +235,129 @@
                 </div>
 
                 <div class="col-lg-9">
-                    <div class="row">
-                        <div class="col-lg-4 no-gutters">
-                            <div class="main-title">
-                                <h3 class="mb-0">@lang('exam.grade_list')</h3>
+                    <div class="white-box">
+                        <div class="row">
+                            <div class="col-lg-4 no-gutters">
+                                <div class="main-title">
+                                    <h3 class="mb-15">@lang('exam.grade_list')</h3>
+                                </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <x-table>
-                            <table id="table_id" class="table" cellspacing="0" width="100%">
-
-                                <thead>
-                               
-                                <tr>
-                                    <th>
-                                        @lang('common.sl')
-                                    </th>
-                                    <th>
-                                        @lang('exam.grade')
-                                    </th>
-                                    @if(generalSetting()->result_type != 'mark')
-                                    <th>
-                                        @lang('exam.gpa')
-                                    </th>
-                                    @endif 
-                                    <th>
-                                        @lang('exam.percent_from_to')
-                                    </th>
-                                    
-                                    <th>
-                                        @if(generalSetting()->result_type == 'mark')
-                                            @lang('common.description')
-                                        @else 
-                                            @lang('exam.gpa_from_to')
-                                        @endif 
-                                    </th>
+    
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <x-table>
+                                <table id="table_id" class="table" cellspacing="0" width="100%">
+    
+                                    <thead>
                                    
-                                    <th>
-                                        @lang('common.action')
-                                    </th>
-                                </tr>
-                                </thead>
-
-                                <tbody>
-                                    @php
-                                        $i=1;
-                                    @endphp
-                                @foreach($marks_grades as $marks_grade)
                                     <tr>
-                                        <td>
-                                            {{ @$i++}}
-                                        </td>
-                                        <td>
-                                            {{ @$marks_grade->grade_name}}
-                                        </td>
+                                        <th>
+                                            @lang('common.sl')
+                                        </th>
+                                        <th>
+                                            @lang('exam.grade')
+                                        </th>
                                         @if(generalSetting()->result_type != 'mark')
-                                        <td>
-                                            {{ @$marks_grade->gpa}}
-                                        </td>
+                                        <th>
+                                            @lang('exam.gpa')
+                                        </th>
                                         @endif 
-                                        <td>
-                                            {{ @$marks_grade->percent_from}}-{{ @$marks_grade->percent_upto}}%
-                                        </td>
-                                       
-                                        <td>
+                                        <th>
+                                            @lang('exam.percent_from_to')
+                                        </th>
+                                        
+                                        <th>
                                             @if(generalSetting()->result_type == 'mark')
-                                            {{ @$marks_grade->description}}
+                                                @lang('common.description')
                                             @else 
-                                            {{ @$marks_grade->from}}-{{ @$marks_grade->up}}
+                                                @lang('exam.gpa_from_to')
                                             @endif 
-                                            
-                                        </td>
-                                        
-
-                                        
-                                        <td>
-                                            <x-drop-down>
-                                                   @if(userPermission('marks-grade-edit'))
-
-                                                   <a class="dropdown-item" href="{{route('marks-grade-edit', [$marks_grade->id
-                                                    ])}}">@lang('common.edit')</a>
-                                                   @endif
-                                                   @if(userPermission('marks-grade-delete'))
-
-                                                   <a class="dropdown-item" data-toggle="modal"
-                                                       data-target="#deleteMarksGradeModal{{@$marks_grade->id}}"
-                                                       href="#">@lang('common.delete')</a>
-                                               @endif
-                                            </x-drop-down>
-                                        </td>
+                                        </th>
+                                       
+                                        <th>
+                                            @lang('common.action')
+                                        </th>
                                     </tr>
-                                    <div class="modal fade admin-query" id="deleteMarksGradeModal{{@$marks_grade->id}}">
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h4 class="modal-title">@lang('exam.delete_grade')</h4>
-                                                    <button type="button" class="close" data-dismiss="modal">&times;
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div class="text-center">
-                                                        <h4>@lang('common.are_you_sure_to_delete')</h4>
+                                    </thead>
+    
+                                    <tbody>
+                                        @php
+                                            $i=1;
+                                        @endphp
+                                    @foreach($marks_grades as $marks_grade)
+                                        <tr>
+                                            <td>
+                                                {{ @$i++}}
+                                            </td>
+                                            <td>
+                                                {{ @$marks_grade->grade_name}}
+                                            </td>
+                                            @if(generalSetting()->result_type != 'mark')
+                                            <td>
+                                                {{ @$marks_grade->gpa}}
+                                            </td>
+                                            @endif 
+                                            <td>
+                                                {{ @$marks_grade->percent_from}}-{{ @$marks_grade->percent_upto}}%
+                                            </td>
+                                           
+                                            <td>
+                                                @if(generalSetting()->result_type == 'mark')
+                                                {{ @$marks_grade->description}}
+                                                @else 
+                                                {{ @$marks_grade->from}}-{{ @$marks_grade->up}}
+                                                @endif 
+                                                
+                                            </td>
+                                            
+    
+                                            
+                                            <td>
+                                                <x-drop-down>
+                                                       @if(userPermission('marks-grade-edit'))
+    
+                                                       <a class="dropdown-item" href="{{route('marks-grade-edit', [$marks_grade->id
+                                                        ])}}">@lang('common.edit')</a>
+                                                       @endif
+                                                       @if(userPermission('marks-grade-delete'))
+    
+                                                       <a class="dropdown-item" data-toggle="modal"
+                                                           data-target="#deleteMarksGradeModal{{@$marks_grade->id}}"
+                                                           href="#">@lang('common.delete')</a>
+                                                   @endif
+                                                </x-drop-down>
+                                            </td>
+                                        </tr>
+                                        <div class="modal fade admin-query" id="deleteMarksGradeModal{{@$marks_grade->id}}">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">@lang('exam.delete_grade')</h4>
+                                                        <button type="button" class="close" data-dismiss="modal">&times;
+                                                        </button>
                                                     </div>
-                                                    <div class="mt-40 d-flex justify-content-between">
-                                                        <button type="button" class="primary-btn tr-bg"
-                                                                data-dismiss="modal">@lang('common.cancel')</button>
-                                                        {{ Form::open(['route' => array('marks-grade-delete',$marks_grade->id), 'method' => 'DELETE', 'enctype' => 'multipart/form-data']) }}
-                                                        <button class="primary-btn fix-gr-bg"
-                                                                type="submit">@lang('common.delete')</button>
-                                                        {{ Form::close() }}
+                                                    <div class="modal-body">
+                                                        <div class="text-center">
+                                                            <h4>@lang('common.are_you_sure_to_delete')</h4>
+                                                        </div>
+                                                        <div class="mt-40 d-flex justify-content-between">
+                                                            <button type="button" class="primary-btn tr-bg"
+                                                                    data-dismiss="modal">@lang('common.cancel')</button>
+                                                            {{ Form::open(['route' => array('marks-grade-delete',$marks_grade->id), 'method' => 'DELETE', 'enctype' => 'multipart/form-data']) }}
+                                                            <button class="primary-btn fix-gr-bg"
+                                                                    type="submit">@lang('common.delete')</button>
+                                                            {{ Form::close() }}
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                @endforeach
-                                </tbody>
-                            </table>
-                            </x-table>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                                </x-table>
+                            </div>
                         </div>
                     </div>
                 </div>

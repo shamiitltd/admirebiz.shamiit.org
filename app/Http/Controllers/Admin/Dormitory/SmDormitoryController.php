@@ -35,7 +35,7 @@ class SmDormitoryController extends Controller
                       
             return view('backEnd.dormitory.student_dormitory_report', compact('classes', 'students', 'dormitories'));
         }catch (\Exception $e) {
-             ;
+             
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();
         }

@@ -11,7 +11,7 @@
         }
 
         .badge {
-            background: linear-gradient(90deg, var(--gradient_1) 0%, #c738d8 51%, var(--gradient_1) 100%);
+            background: var(--primary-color);
             color: #fff;
             padding: 5px 10px;
             border-radius: 30px;
@@ -80,7 +80,7 @@
         }
     @endphp
 
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('student.student_details')</h1>
@@ -115,351 +115,347 @@
 
                 <!-- Start Student Details -->
                 <div class="col-lg-9 student-details up_admin_visitor">
-                    <ul class="nav nav-tabs tabs_scroll_nav" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link {{ $type == '' && Session::get('studentDocuments') == '' ? 'active' : '' }} "
-                                href="#studentProfile" role="tab" data-toggle="tab">@lang('student.profile')</a>
-                        </li>
-
-                        @if (generalSetting()->fees_status == 0)
+                    <div class="white-box">
+                        <ul class="nav nav-tabs tabs_scroll_nav mb-10" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link" href="#studentFees" role="tab"
-                                    data-toggle="tab">@lang('fees.fees')</a>
+                                <a class="nav-link {{ $type == '' && Session::get('studentDocuments') == '' ? 'active' : '' }} "
+                                    href="#studentProfile" role="tab" data-toggle="tab">@lang('student.profile')</a>
                             </li>
-                        @endif
-                        @if (isMenuAllowToShow('leave'))
-                            <li class="nav-item">
-                                <a class="nav-link" href="#leaves" role="tab" data-toggle="tab">@lang('leave.leave')</a>
-                            </li>
-                        @endif
-                        @if (isMenuAllowToShow('examination'))
-                            <li class="nav-item">
-                                <a class="nav-link" href="#studentExam" role="tab"
-                                    data-toggle="tab">@lang('exam.exam')</a>
-                            </li>
-                        @endif
-                        @if (moduleStatusCheck('University'))
-                            <li class="nav-item">
-                                <a class="nav-link" href="#studentExamTranscript" role="tab"
-                                    data-toggle="tab">@lang('university::un.transcript')</a>
-                            </li>
-                        @endif
-
-                        <li class="nav-item">
-                            <a class="nav-link {{ Session::get('studentDocuments') == 'active' ? 'active' : '' }}"
-                                href="#studentDocuments" role="tab" data-toggle="tab">@lang('student.document')</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {{ Session::get('studentRecord') == 'active' ? 'active' : '' }} "
-                                href="#studentRecord" role="tab" data-toggle="tab">@lang('student.record')</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {{ $type == 'studentTimeline' ? 'active' : '' }} " href="#studentTimeline"
-                                role="tab" data-toggle="tab">@lang('student.timeline')</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {{ Session::get('studentAttendance') == 'active' ? 'active' : '' }} "
-                                href="#studentAttendance" role="tab" data-toggle="tab">@lang('student.student_attendance')</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {{ Session::get('subjectAttendance') == 'active' ? 'active' : '' }} "
-                                href="#subjectAttendance" role="tab" data-toggle="tab">@lang('student.subject_attendance')</a>
-                        </li>
-                        @if (moduleStatusCheck('BehaviourRecords'))
-                            <li class="nav-item mt-10">
-                                <a class="nav-link {{ Session::get('studentBehaviourRecord') == 'active' ? 'active' : '' }} "
-                                    href="#studentBehaviourRecord" role="tab" data-toggle="tab">@lang('student.behaviour_record')</a>
-                            </li>
-                        @endif
-                        @if (generalSetting()->result_type == 'mark')
-                            <li class="nav-item mt-10">
-                                <a class="nav-link {{ $type == 'mark' ? 'active' : '' }} " href="#mark" role="tab"
-                                    data-toggle="tab">@lang('exam.marksheet')</a>
-                            </li>
-                        @endif
-
-                        @if (moduleStatusCheck('University'))
-                            <li class="nav-item">
-                                <a class="nav-link {{ $type == 'assign_subject' ? 'active' : '' }} " href="#studentSubject"
-                                    role="tab" data-toggle="tab">@lang('university::un.subject')</a>
-                            </li>
-                        @endif
-
-                        <li class="nav-item edit-button">
-                            @if (userPermission('student_edit'))
-                                <a href="{{ route('student_edit', [@$student_detail->id]) }}"
-                                    class="primary-btn small fix-gr-bg">@lang('common.edit')
-                                </a>
+    
+                            @if (generalSetting()->fees_status == 0)
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#studentFees" role="tab"
+                                        data-toggle="tab">@lang('fees.fees')</a>
+                                </li>
                             @endif
-                        </li>
-                    </ul>
-
-
-                    <!-- Tab panes -->
-                    <div class="tab-content">
-
-                        <!-- Start Profile Tab -->
-                        @include('backEnd.studentInformation.inc._profile_tab')
-                        <!-- End Profile Tab -->
-
-                        <!-- Start Fees Tab -->
-                        @include('backEnd.studentInformation.inc._fees_tab')
-                        <!-- End Fees Tab -->
-
-                        <!-- Start leave Tab -->
-                        @include('backEnd.studentInformation.inc._leave_tab')
-                        <!-- End leave Tab -->
-
-                        <!-- Start Exam Tab -->
-                        @include('backEnd.studentInformation.inc._exam_tab')
-                        <!-- End Exam Tab -->
-
-                        @if (moduleStatusCheck('University'))
-                            <div role="tabpanel" class="tab-pane fade" id="studentExamTranscript">
-                                @includeIf('university::exam.partials._examTabView')
-                            </div>
-                        @endif
-
-                        <!-- Start Documents Tab -->
-                        @include('backEnd.studentInformation.inc._document_tab')
-                        <!-- End Documents Tab -->
-
-                        <!-- Start reocrd Tab -->
-                        <div role="tabpanel"
-                            class="tab-pane fade {{ Session::get('studentRecord') == 'active' ? 'show active' : '' }}"
-                            id="studentRecord">
-                            <div class="white-box">
-                                <div class="text-right mb-20">
-                                    @if (userPermission(1201))
-                                        <button class="primary-btn-small-input primary-btn small fix-gr-bg" type="button"
-                                            data-toggle="modal" data-target="#assignClass"> <span
-                                                class="ti-plus pr-2"></span> @lang('common.add')</button>
-                                    @endif
+                            @if (isMenuAllowToShow('leave'))
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#leaves" role="tab" data-toggle="tab">@lang('leave.leave')</a>
+                                </li>
+                            @endif
+                            @if (isMenuAllowToShow('examination'))
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#studentExam" role="tab"
+                                        data-toggle="tab">@lang('exam.exam')</a>
+                                </li>
+                            @endif
+                            @if (moduleStatusCheck('University'))
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#studentExamTranscript" role="tab"
+                                        data-toggle="tab">@lang('university::un.transcript')</a>
+                                </li>
+                            @endif
+    
+                            <li class="nav-item">
+                                <a class="nav-link {{ Session::get('studentDocuments') == 'active' ? 'active' : '' }}"
+                                    href="#studentDocuments" role="tab" data-toggle="tab">@lang('student.document')</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ Session::get('studentRecord') == 'active' ? 'active' : '' }} "
+                                    href="#studentRecord" role="tab" data-toggle="tab">@lang('student.record')</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ $type == 'studentTimeline' ? 'active' : '' }} " href="#studentTimeline"
+                                    role="tab" data-toggle="tab">@lang('student.timeline')</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ Session::get('studentAttendance') == 'active' ? 'active' : '' }} "
+                                    href="#studentAttendance" role="tab" data-toggle="tab">@lang('student.student_attendance')</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ Session::get('subjectAttendance') == 'active' ? 'active' : '' }} "
+                                    href="#subjectAttendance" role="tab" data-toggle="tab">@lang('student.subject_attendance')</a>
+                            </li>
+                            @if (moduleStatusCheck('BehaviourRecords'))
+                                <li class="nav-item">
+                                    <a class="nav-link {{ Session::get('studentBehaviourRecord') == 'active' ? 'active' : '' }} "
+                                        href="#studentBehaviourRecord" role="tab" data-toggle="tab">@lang('student.behaviour_record')</a>
+                                </li>
+                            @endif
+                            @if (generalSetting()->result_type == 'mark')
+                                <li class="nav-item">
+                                    <a class="nav-link {{ $type == 'mark' ? 'active' : '' }} " href="#mark" role="tab"
+                                        data-toggle="tab">@lang('exam.marksheet')</a>
+                                </li>
+                            @endif
+    
+                            @if (moduleStatusCheck('University'))
+                                <li class="nav-item">
+                                    <a class="nav-link {{ $type == 'assign_subject' ? 'active' : '' }} " href="#studentSubject"
+                                        role="tab" data-toggle="tab">@lang('university::un.subject')</a>
+                                </li>
+                            @endif
+    
+                            <li class="nav-item edit-button">
+                                @if (userPermission('student_edit'))
+                                    <a href="{{ route('student_edit', [@$student_detail->id]) }}"
+                                        class="primary-btn small fix-gr-bg">@lang('common.edit')
+                                    </a>
+                                @endif
+                            </li>
+                        </ul>
+    
+    
+                        <!-- Tab panes -->
+                        <div class="tab-content">
+    
+                            <!-- Start Profile Tab -->
+                            @include('backEnd.studentInformation.inc._profile_tab')
+                            <!-- End Profile Tab -->
+    
+                            <!-- Start Fees Tab -->
+                            @include('backEnd.studentInformation.inc._fees_tab')
+                            <!-- End Fees Tab -->
+    
+                            <!-- Start leave Tab -->
+                            @include('backEnd.studentInformation.inc._leave_tab')
+                            <!-- End leave Tab -->
+    
+                            <!-- Start Exam Tab -->
+                            @include('backEnd.studentInformation.inc._exam_tab')
+                            <!-- End Exam Tab -->
+    
+                            @if (moduleStatusCheck('University'))
+                                <div role="tabpanel" class="tab-pane fade" id="studentExamTranscript">
+                                    @includeIf('university::exam.partials._examTabView')
                                 </div>
-                                <table id="" class="table simple-table table-responsive school-table"
-                                    cellspacing="0">
-                                    <thead class="d-block">
-                                        <tr class="d-flex">
-                                            @if (moduleStatusCheck('University'))
-                                                <th class="col-2">@lang('university::un.session')</th>
-                                                <th class="col-3">@lang('university::un.faculty_department')</th>
-                                                <th class="col-3">@lang('university::un.semester(label)')</th>
-                                            @else
-                                                <th class="col-3">@lang('common.class')</th>
-                                                <th class="col-3">@lang('common.section')</th>
-                                            @endif
-                                            @if ($setting->multiple_roll == 1)
-                                                <th class="col-2">@lang('student.id_number')</th>
-                                            @endif
-                                            <th class="col-2">@lang('student.action')</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="d-block">
-                                        @foreach ($records->where('active_status', 1) as $record)
+                            @endif
+    
+                            <!-- Start Documents Tab -->
+                            @include('backEnd.studentInformation.inc._document_tab')
+                            <!-- End Documents Tab -->
+    
+                            <!-- Start reocrd Tab -->
+                            <div role="tabpanel"
+                                class="tab-pane fade {{ Session::get('studentRecord') == 'active' ? 'show active' : '' }}"
+                                id="studentRecord">
+                                <div>
+                                    <div class="text-right mb-20">
+                                        @if (userPermission(1201))
+                                            <button class="primary-btn-small-input primary-btn small fix-gr-bg" type="button"
+                                                data-toggle="modal" data-target="#assignClass"> <span
+                                                    class="ti-plus pr-2"></span> @lang('common.add')</button>
+                                        @endif
+                                    </div>
+                                    <table id="" class="table simple-table table-responsive school-table"
+                                        cellspacing="0">
+                                        <thead class="d-block">
                                             <tr class="d-flex">
                                                 @if (moduleStatusCheck('University'))
-                                                    <td class="col-2">{{ $record->unSession->name }}</td>
-                                                    <td class="col-3">
-                                                        {{ $record->unFaculty->name . '(' . $record->unDepartment->name . ')' }}
-                                                        @if ($record->is_default)
-                                                            <span
-                                                                class="badge fix-gr-bg">{{ __('common.default') }}</span>
-                                                        @endif
-                                                    </td>
-                                                    <td class="col-3">
-                                                        {{ $record->unSemester->name . '(' . $record->unSemesterLabel->name . ')' }}
-                                                    </td>
+                                                    <th class="col-2">@lang('university::un.session')</th>
+                                                    <th class="col-3">@lang('university::un.faculty_department')</th>
+                                                    <th class="col-3">@lang('university::un.semester(label)')</th>
                                                 @else
-                                                    <td class="col-3">
-                                                        {{ $record->class->class_name }}
-                                                        @if ($record->is_default)
-                                                            <span
-                                                                class="badge fix-gr-bg">{{ __('common.default') }}</span>
+                                                    <th class="col-3">@lang('common.class')</th>
+                                                    <th class="col-3">@lang('common.section')</th>
+                                                @endif
+                                                @if ($setting->multiple_roll == 1)
+                                                    <th class="col-2">@lang('student.id_number')</th>
+                                                @endif
+                                                <th class="col-{{$setting->multiple_roll == 1 ? 2 : 4}}" style="text-align: center">@lang('student.action')</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="d-block">
+                                            @foreach ($records->where('active_status', 1) as $record)
+                                                <tr class="d-flex">
+                                                    @if (moduleStatusCheck('University'))
+                                                        <td class="col-2">{{ $record->unSession->name }}</td>
+                                                        <td class="col-3">
+                                                            {{ $record->unFaculty->name . '(' . $record->unDepartment->name . ')' }}
+                                                            @if ($record->is_default)
+                                                                <span
+                                                                    class="badge fix-gr-bg">{{ __('common.default') }}</span>
+                                                            @endif
+                                                        </td>
+                                                        <td class="col-3">
+                                                            {{ $record->unSemester->name . '(' . $record->unSemesterLabel->name . ')' }}
+                                                        </td>
+                                                    @else
+                                                        <td class="col-3">
+                                                            {{ $record->class->class_name }}
+                                                            @if ($record->is_default)
+                                                                <span
+                                                                    class="badge fix-gr-bg">{{ __('common.default') }}</span>
+                                                            @endif
+                                                        </td>
+                                                        <td class="col-3">
+                                                            {{ $record->section->section_name }}
+                                                        </td>
+                                                    @endif
+    
+                                                    @if ($setting->multiple_roll == 1)
+                                                        <td class="col-2">{{ $record->roll_no }}</td>
+                                                    @endif
+                                                    <td class="col-{{$setting->multiple_roll == 1 ? 2 : 4}}" style="text-align: center">
+                                                        @if ($record->is_promote == 0)
+                                                            <a class="primary-btn icon-only fix-gr-bg modalLink"
+                                                                data-modal-size="small-modal"
+                                                                title="@if (moduleStatusCheck('University')) @lang('university::un.assign_faculty_department')
+                                                                    @else 
+                                                                        @lang('student.assign_class') @endif"
+                                                                href="{{ route('student_assign_edit', [@$record->student_id, @$record->id]) }}"><span
+                                                                    class="ti-pencil"></span></a>
+                                                            <a href="#" class="primary-btn icon-only fix-gr-bg"
+                                                                data-toggle="modal"
+                                                                data-target="#deleteRecord_{{ $record->id }}">
+                                                                <span class="ti-trash"></span>
+                                                            </a>
                                                         @endif
                                                     </td>
-                                                    <td class="col-3">
-                                                        {{ $record->section->section_name }}
-                                                    </td>
-                                                @endif
-
-                                                @if ($setting->multiple_roll == 1)
-                                                    <td class="col-2">{{ $record->roll_no }}</td>
-                                                @endif
-                                                <td class="col-2">
-                                                    @if ($record->is_promote == 0)
-                                                        <a class="primary-btn icon-only fix-gr-bg modalLink"
-                                                            data-modal-size="small-modal"
-                                                            title="@if (moduleStatusCheck('University')) @lang('university::un.assign_faculty_department')
-                                                                @else 
-                                                                    @lang('student.assign_class') @endif"
-                                                            href="{{ route('student_assign_edit', [@$record->student_id, @$record->id]) }}"><span
-                                                                class="ti-pencil"></span></a>
-                                                        <a href="#" class="primary-btn icon-only fix-gr-bg"
-                                                            data-toggle="modal"
-                                                            data-target="#deleteRecord_{{ $record->id }}">
-                                                            <span class="ti-trash"></span>
+                                                </tr>
+                                                <div class="modal fade admin-query" id="deleteRecord_{{ $record->id }}">
+                                                    <div class="modal-dialog modal-dialog-centered">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h4 class="modal-title">@lang('common.delete')</h4>
+                                                                <button type="button" class="close"
+                                                                    data-dismiss="modal">&times;</button>
+                                                            </div>
+                                                            <form action="{{ route('student.record.delete') }}"
+                                                                method="POST">
+                                                                @csrf
+                                                                <div class="modal-body">
+                                                                    <div class="text-center">
+                                                                        <h4>@lang('student.Are you sure you want to move the following record to the trash?')</h4>
+                                                                    </div>
+                                                                    <input type="checkbox" id="record{{ @$record->id }}"
+                                                                        class="common-checkbox form-control{{ @$errors->has('record') ? ' is-invalid' : '' }}"
+                                                                        name="type">
+                                                                    <label
+                                                                        for="record{{ @$record->id }}">{{ __('student.Skip the trash and permanently delete the record') }}</label>
+                                                                    <input type="hidden" name="student_id"
+                                                                        value="{{ $record->student_id }}">
+                                                                    <input type="hidden" name="record_id"
+                                                                        value="{{ $record->id }}">
+                                                                    <div class="mt-40 d-flex justify-content-between">
+                                                                        <button type="button" class="primary-btn tr-bg"
+                                                                            data-dismiss="modal">@lang('common.cancel')</button>
+                                                                        <button type="submit"
+                                                                            class="primary-btn fix-gr-bg">@lang('common.delete')</button>
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                {{-- Record delete --}}
+                                                {{-- edit record --}}
+                                            @endforeach
+                                            {{-- end edit record --}}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- End reocrd Tab -->
+    
+                            <!-- Start Timeline Tab -->
+                            <div role="tabpanel" class="tab-pane fade" id="studentTimeline">
+                                <div>
+                                    <div class="text-right mb-20">
+                                        <button type="button" data-toggle="modal" data-target="#add_timeline_madal"
+                                            class="primary-btn tr-bg text-uppercase bord-rad">
+                                            @lang('common.add')
+                                            <span class="pl ti-plus"></span>
+                                        </button>
+                                    </div>
+                                    @foreach ($timelines as $timeline)
+                                        <div class="student-activities">
+                                            <div class="single-activity">
+                                                <h4 class="title text-uppercase">
+                                                    {{ $timeline->date != '' ? dateConvert($timeline->date) : '' }}</h4>
+                                                <div class="sub-activity-box d-flex">
+                                                    <h6 class="time text-uppercase">10.30 pm</h6>
+                                                    <div class="sub-activity">
+                                                        <h5 class="subtitle text-uppercase"> {{ $timeline->title }}</h5>
+                                                        <p>
+                                                            {{ $timeline->description }}
+                                                        </p>
+                                                    </div>
+    
+                                                    <div class="close-activity">
+    
+                                                        <a class="primary-btn icon-only fix-gr-bg" data-toggle="modal"
+                                                            data-target="#deleteTimelineModal{{ $timeline->id }}"
+                                                            href="#">
+                                                            <span class="ti-trash text-white"></span>
                                                         </a>
-                                                    @endif
-                                                </td>
-                                            </tr>
-                                            <div class="modal fade admin-query" id="deleteRecord_{{ $record->id }}">
+    
+                                                        @if (file_exists($timeline->file))
+                                                            <a href="{{ url($timeline->file) }}"
+                                                                class="primary-btn tr-bg text-uppercase bord-rad" download>
+                                                                @lang('common.download')<span class="pl ti-download"></span>
+                                                            </a>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal fade admin-query" id="deleteTimelineModal{{ $timeline->id }}">
                                                 <div class="modal-dialog modal-dialog-centered">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
                                                             <h4 class="modal-title">@lang('common.delete')</h4>
-                                                            <button type="button" class="close"
-                                                                data-dismiss="modal">&times;</button>
-                                                        </div>
-                                                        <form action="{{ route('student.record.delete') }}"
-                                                            method="POST">
-                                                            @csrf
-                                                            <div class="modal-body">
-                                                                <div class="text-center">
-                                                                    <h4>@lang('student.Are you sure you want to move the following record to the trash?')</h4>
-                                                                </div>
-                                                                <input type="checkbox" id="record{{ @$record->id }}"
-                                                                    class="common-checkbox form-control{{ @$errors->has('record') ? ' is-invalid' : '' }}"
-                                                                    name="type">
-                                                                <label
-                                                                    for="record{{ @$record->id }}">{{ __('student.Skip the trash and permanently delete the record') }}</label>
-                                                                <input type="hidden" name="student_id"
-                                                                    value="{{ $record->student_id }}">
-                                                                <input type="hidden" name="record_id"
-                                                                    value="{{ $record->id }}">
-                                                                <div class="mt-40 d-flex justify-content-between">
-                                                                    <button type="button" class="primary-btn tr-bg"
-                                                                        data-dismiss="modal">@lang('common.cancel')</button>
-                                                                    <button type="submit"
-                                                                        class="primary-btn fix-gr-bg">@lang('common.delete')</button>
-                                                                </div>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            {{-- Record delete --}}
-                                            {{-- edit record --}}
-                                        @endforeach
-                                        {{-- end edit record --}}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <!-- End reocrd Tab -->
-
-                        <!-- Start Timeline Tab -->
-                        <div role="tabpanel"
-                            class="tab-pane fade"
-                            id="studentTimeline">
-                            <div class="white-box">
-                                <div class="text-right mb-20">
-                                    <button type="button" data-toggle="modal" data-target="#add_timeline_madal"
-                                        class="primary-btn tr-bg text-uppercase bord-rad">
-                                        @lang('common.add')
-                                        <span class="pl ti-plus"></span>
-                                    </button>
-                                </div>
-                                @foreach ($timelines as $timeline)
-                                    <div class="student-activities">
-                                        <div class="single-activity">
-                                            <h4 class="title text-uppercase">
-                                                {{ $timeline->date != '' ? dateConvert($timeline->date) : '' }}</h4>
-                                            <div class="sub-activity-box d-flex">
-                                                <h6 class="time text-uppercase">10.30 pm</h6>
-                                                <div class="sub-activity">
-                                                    <h5 class="subtitle text-uppercase"> {{ $timeline->title }}</h5>
-                                                    <p>
-                                                        {{ $timeline->description }}
-                                                    </p>
-                                                </div>
-
-                                                <div class="close-activity">
-
-                                                    <a class="primary-btn icon-only fix-gr-bg" data-toggle="modal"
-                                                        data-target="#deleteTimelineModal{{ $timeline->id }}"
-                                                        href="#">
-                                                        <span class="ti-trash text-white"></span>
-                                                    </a>
-
-                                                    @if (file_exists($timeline->file))
-                                                        <a href="{{ url($timeline->file) }}"
-                                                            class="primary-btn tr-bg text-uppercase bord-rad" download>
-                                                            @lang('common.download')<span class="pl ti-download"></span>
-                                                        </a>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="modal fade admin-query" id="deleteTimelineModal{{ $timeline->id }}">
-                                            <div class="modal-dialog modal-dialog-centered">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h4 class="modal-title">@lang('common.delete')</h4>
-                                                        <button type="button" class="close" data-dismiss="modal">
-                                                            &times;
-                                                        </button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <div class="text-center">
-                                                            <h4>@lang('common.are_you_sure_to_delete')</h4>
-                                                        </div>
-
-                                                        <div class="mt-40 d-flex justify-content-between">
-                                                            <button type="button" class="primary-btn tr-bg"
-                                                                data-dismiss="modal">@lang('common.cancel')
+                                                            <button type="button" class="close" data-dismiss="modal">
+                                                                &times;
                                                             </button>
-                                                            <a class="primary-btn fix-gr-bg"
-                                                                href="{{ route('delete_timeline', [$timeline->id]) }}">
-                                                                @lang('common.delete')</a>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="text-center">
+                                                                <h4>@lang('common.are_you_sure_to_delete')</h4>
+                                                            </div>
+    
+                                                            <div class="mt-40 d-flex justify-content-between">
+                                                                <button type="button" class="primary-btn tr-bg"
+                                                                    data-dismiss="modal">@lang('common.cancel')
+                                                                </button>
+                                                                <a class="primary-btn fix-gr-bg"
+                                                                    href="{{ route('delete_timeline', [$timeline->id]) }}">
+                                                                    @lang('common.delete')</a>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                @endforeach
-                            </div>
-                        </div>
-                        <!-- End Timeline Tab -->
-
-                        <!-- Start Attendance Tab -->
-                        @include('backEnd.studentInformation.inc._student_attendance_tab')
-                        <!-- End Attendance Tab -->
-
-                        <!-- Start Attendance Tab -->
-                        @include('backEnd.studentInformation.inc._subject_attendance_tab')
-                        <!-- End Attendance Tab -->
-
-                        <!-- Start Behaviour Records Tab -->
-                        @if (moduleStatusCheck('BehaviourRecords'))
-                            @include('backEnd.studentInformation.inc._student_behaviour_record_tab')
-                        @endif
-                        <!-- End Behaviour Records Tab -->
-                        {{-- start marksheet tab  --}}
-                        @if (generalSetting()->result_type == 'mark')
-                            <div role="tabpanel"
-                                class="tab-pane fade {{ Session::get('mark') == 'active' ? 'show active' : '' }}"
-                                id="mark">
-                                <div class="white-box">
-                                    @foreach ($records as $record)
-                                        @includeIf('backend.studentInformation.inc.finalMarkSheet')
                                     @endforeach
                                 </div>
                             </div>
-                        @endif
-                        {{-- end marksheet tab  --}}
+                            <!-- End Timeline Tab -->
+    
+                            <!-- Start Attendance Tab -->
+                            @include('backEnd.studentInformation.inc._student_attendance_tab')
+                            <!-- End Attendance Tab -->
+    
+                            <!-- Start Attendance Tab -->
+                            @include('backEnd.studentInformation.inc._subject_attendance_tab')
+                            <!-- End Attendance Tab -->
+    
+                            <!-- Start Behaviour Records Tab -->
+                            @if (moduleStatusCheck('BehaviourRecords'))
+                                @include('backEnd.studentInformation.inc._student_behaviour_record_tab')
+                            @endif
+                            <!-- End Behaviour Records Tab -->
+                            {{-- start marksheet tab  --}}
+                            @if (generalSetting()->result_type == 'mark')
+                                <div role="tabpanel"
+                                    class="tab-pane fade {{ Session::get('mark') == 'active' ? 'show active' : '' }}"
+                                    id="mark">
+                                    <div class="white-box">
+                                        @foreach ($records as $record)
+                                            @includeIf('backend.studentInformation.inc.finalMarkSheet')
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endif
+                            @if (moduleStatusCheck('University'))
+                                <div role="tabpanel" class="tab-pane fade {{ $type == 'assign_subject' ? ' active show' : '' }}" id="studentSubject">
+                                    @include('backEnd.studentInformation.inc.subject_list')
+                                </div>
+                            @endif
+                            {{-- end marksheet tab  --}}
+                        </div>
                     </div>
 
-                    {{-- @include('backEnd.studentInformation.inc._record_tab') --}}
-
-                    <!-- Start Timeline Tab -->
-                    @if (moduleStatusCheck('University'))
-                        <div role="tabpanel" class="tab-pane fade {{ $type == 'assign_subject' ? 'show active' : '' }}"
-                            id="studentSubject">
-                            @include('backEnd.studentInformation.inc.subject_list')
-                        </div>
-                    @endif
-                    <!-- End Timeline Tab -->
+                   
                 </div>
             </div>
             <!-- End Student Details -->

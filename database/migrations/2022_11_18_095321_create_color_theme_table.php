@@ -30,7 +30,7 @@ class CreateColorThemeTable extends Migration
             if($theme->title == 'Default') { 
                 $sql[] = ['theme_id'  => $theme->id, 'color_id' => 1, 'value'   => "#415094"];
                 $sql[] = ['theme_id'  => $theme->id, 'color_id' => 2, 'value'  => "#7c32ff"];
-                $sql[] = ['theme_id'  => $theme->id, 'color_id' => 3, 'value'  => "#c738d8"];
+                $sql[] = ['theme_id'  => $theme->id, 'color_id' => 3, 'value'  => "#7c32ff"];
                 $sql[] = ['theme_id'  => $theme->id, 'color_id' => 4, 'value'  => "#7c32ff"];
                 $sql[] = ['theme_id'  => $theme->id, 'color_id' => 5, 'value'  => "#828bb2"];
                 $sql[] = ['theme_id'  => $theme->id, 'color_id' => 6, 'value'  => "#828bb2"];
@@ -38,7 +38,7 @@ class CreateColorThemeTable extends Migration
                 $sql[] = ['theme_id'  => $theme->id, 'color_id' => 8, 'value'  => "#ffffff"];
                 $sql[] = ['theme_id'  => $theme->id, 'color_id' => 9, 'value'  => "#000000"];
                 $sql[] = ['theme_id'  => $theme->id, 'color_id' => 10, 'value' => "#000000"];
-                $sql[] = ['theme_id'  => $theme->id, 'color_id' => 11, 'value' => "#c738d8"];
+                $sql[] = ['theme_id'  => $theme->id, 'color_id' => 11, 'value' => "#EFF2F8"];
                 $sql[] = ['theme_id'  => $theme->id, 'color_id' => 12, 'value' => "#ffffff"];
                 $sql[] = ['theme_id'  => $theme->id, 'color_id' => 13, 'value' => "#51A351"];
                 $sql[] = ['theme_id'  => $theme->id, 'color_id' => 14, 'value' => "#E09079"];
@@ -46,9 +46,9 @@ class CreateColorThemeTable extends Migration
                 $sql[] = ['theme_id'  => $theme->id, 'color_id' => 16, 'value' => "#415094"];
                 $sql[] = ['theme_id'  => $theme->id, 'color_id' => 17, 'value'  => "#222222"];
                 $sql[] = ['theme_id'  => $theme->id, 'color_id' => 18, 'value'  => "#415094"];
-                $sql[] = ['theme_id'  => $theme->id, 'color_id' => 19, 'value'  => "transparent"];
-                $sql[] = ['theme_id'  => $theme->id, 'color_id' => 20, 'value'  => "#4c5c9b"];
-                $sql[] = ['theme_id'  => $theme->id, 'color_id' => 21, 'value'  => "#415094"];
+                $sql[] = ['theme_id'  => $theme->id, 'color_id' => 19, 'value'  => "#0d0e12"];
+                $sql[] = ['theme_id'  => $theme->id, 'color_id' => 20, 'value'  => "#ffffff"];
+                $sql[] = ['theme_id'  => $theme->id, 'color_id' => 21, 'value'  => "#ffffff"];
                 $sql[] = ['theme_id'  => $theme->id, 'color_id' => 29, 'value'  => "#415094"];
         
             }

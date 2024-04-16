@@ -253,6 +253,8 @@ class SmStudentReportController extends Controller
         } else {
             $validator = Validator::make($input, [
                 'class_id' => 'required'
+            ],[
+                'class_id' => 'The Class field is required.'
             ]);
         }
 
@@ -391,11 +393,10 @@ class SmStudentReportController extends Controller
             $students = $students->whereIn('id', $student_ids)->with('recordClass.class', 'parents', 'promotion', 'session')->where('academic_id', getAcademicId())->where('school_id', Auth::user()->school_id)->get();
 
             $years = SmStudent::select('admission_date')->where('active_status', 1)
-                ->where('academic_id', getAcademicId())
-                ->get() ;
-                // ->distinct(function ($val) {
-                //     return Carbon::parse($val->admission_date)->format('Y');
-                // });
+                ->where('academic_id', getAcademicId())->get()
+                ->groupBy(function ($val) {
+                    return Carbon::parse($val->admission_date)->format('Y');
+                });
             $class_id = $request->class;
             $year = $request->admission_year;
             $student_id = null;
@@ -423,6 +424,41 @@ class SmStudentReportController extends Controller
             })
             ->when(!$request->academic_year, function ($query) use ($request) {
                 $query->where('academic_id', getAcademicId());
+            })->where('school_id', auth()->user()->school_id)->where('is_promote', 0)->pluck('student_id')->unique();
+
+        return $student_ids;
+    }
+
+    public static function classSectionAlumni($request)
+    {
+        $student_ids = StudentRecord::when($request->academic_year, function ($query) use ($request) {
+            $query->where('academic_id', $request->academic_year);
+        })
+            ->when($request->class, function ($query) use ($request) {
+                $query->where('class_id', $request->class);
+            })
+            ->when($request->section, function ($query) use ($request) {
+                $query->where('section_id', $request->section);
+            })
+            ->when(!$request->academic_year, function ($query) use ($request) {
+                $query->where('academic_id', getAcademicId());
+            })->where('school_id', auth()->user()->school_id)->where('is_graduate',1)->where('is_promote', 1)->pluck('student_id')->unique();
+
+        return $student_ids;
+    }
+    public static function SemesterLabelSectionStudent($request)
+    {
+        $student_ids = StudentRecord::when($request->academic_year, function ($query) use ($request) {
+            $query->where('un_academic_id', $request->academic_year);
+        })
+            ->when($request->un_semester_label_id, function ($query) use ($request) {
+                $query->where('un_semester_label_id', $request->un_semester_label_id);
+            })
+            ->when($request->un_section_id, function ($query) use ($request) {
+                $query->where('un_section_id', $request->un_section_id);
+            })
+            ->when(!$request->academic_year, function ($query) use ($request) {
+                $query->where('un_academic_id', getAcademicId());
             })->where('school_id', auth()->user()->school_id)->where('is_promote', 0)->pluck('student_id')->unique();
 
         return $student_ids;

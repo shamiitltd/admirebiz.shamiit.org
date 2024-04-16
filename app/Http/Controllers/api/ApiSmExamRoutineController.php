@@ -24,6 +24,7 @@ use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use App\Scopes\StatusAcademicSchoolScope;
 use Illuminate\Support\Facades\Validator;
+use App\SmExam;
 
 class ApiSmExamRoutineController extends Controller
 {
@@ -252,12 +253,16 @@ class ApiSmExamRoutineController extends Controller
                 ->first();
 
             $records = $student_detail->studentRecords;
-
-
-            $exam_types = SmExamType::withoutGlobalScope(StatusAcademicSchoolScope::class, GlobalAcademicScope::class)->where('school_id', $student_detail->school_id)
+            
+            $class_ids = $records->pluck('class_id') ? $records->pluck('class_id') : [] ;
+            $section_ids = $records->pluck('section_id') ? $records->pluck('section_id') : [];
+            
+             $exam_type_ids = SmExam::withoutGlobalScope(StatusAcademicSchoolScope::class, GlobalAcademicScope::class)->where('school_id', $student_detail->school_id)
                 ->where('academic_id', SmAcademicYear::API_ACADEMIC_YEAR($student_detail->school_id))
+                ->whereIn('class_id', $class_ids)->whereIn('section_id',$section_ids)
+                ->where('active_status', 1)->pluck('exam_type_id');
 
-                ->where('active_status', 1)->get(['id', 'title']);
+            $exam_types = SmExamType::whereIn('id', $exam_type_ids)->get(['id', 'title']);
             return response()->json(compact('exam_types', 'student_detail'));
         } catch (\Exception $e) {
             return ApiBaseMethod::sendError('Error.', $e->getMessage());
@@ -312,12 +317,14 @@ class ApiSmExamRoutineController extends Controller
 
         }
     }
+    
     public function examRoutineReportSearch(Request $request)
     {
         try {
             $input = $request->all();
             $validator = Validator::make($input, [
                 'exam' => 'required',
+                'student_id' => 'required'
             ]);
 
             if ($validator->fails()) {
@@ -327,7 +334,7 @@ class ApiSmExamRoutineController extends Controller
             }
 
             $student_detail = SmStudent::with('studentRecords')->select('id', 'full_name', 'user_id')
-                ->where('user_id', Auth::id())
+                ->where('id', $request->student_id)
                 ->first();
 
 

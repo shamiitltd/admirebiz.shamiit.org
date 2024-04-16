@@ -2,7 +2,12 @@
 
 namespace App\Console\Commands;
 
+use App\InfixModuleManager;
 use Illuminate\Console\Command;
+use Nwidart\Modules\Facades\Module;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Storage;
 
 class ResetApplicationCommand extends Command
 {
@@ -30,6 +35,25 @@ class ResetApplicationCommand extends Command
         parent::__construct();
     }
 
+    protected $modules = [
+        'Zoom',
+        'ParentRegistration',
+        'RazorPay',
+        'Jitsi',
+        'XenditPayment',
+        'KhaltiPayment',
+        'Raudhahpay',
+        'InfixBiometrics',
+        'Gmeet',
+        'PhonePay',
+        'AiContent',
+        'WhatsappSupport',
+        'Certificate',
+        'InAppLiveClass',
+        'MercadoPago',
+        'BBB',
+    ];
+
     /**
      * Execute the console command.
      *
@@ -38,9 +62,50 @@ class ResetApplicationCommand extends Command
     public function handle()
     {
         $this->call('down');
+        $this->createAppResetFile();
+        $this->deativateActivatedModule();
+        $this->call('optimize:clear');
         $this->call('migrate:fresh', ['--force' => true, '--seed' => true]);
+        $this->moduleAcivate();
         $this->call('optimize:clear');
         $this->call('clear:log-files');
+        $this->generateNewKey();
+        $this->deleteAppResetFile();
         $this->call('up');
+    }
+    public function createAppResetFile()
+    {
+        Storage::put('.app_resetting', '');
+        Storage::put('.reset_log', now()->toDateTimeString());
+    }
+    protected function deleteAppResetFile()
+    {
+        Storage::delete('.app_resetting');
+    }
+    protected function generateNewKey()
+    {
+        Artisan::call('key:generate', ['--force' => true]);
+    }
+    protected function deativateActivatedModule()
+    {
+        foreach ($this->modules as $data) {
+            $m = Module::find($data);
+            if ($m) {
+                $m->disable();
+            }
+        }
+    }
+    protected function moduleAcivate()
+    {
+        foreach ($this->modules as $data) {
+            $module = InfixModuleManager::where('name', $data)->first();
+            $module->purchase_code = 986532741;
+            $module->save();
+
+            config(['app.app_sync' => false]);
+            $controller = new \App\Http\Controllers\Admin\SystemSettings\SmAddOnsController();
+            $controller->moduleAddOnsEnable($data);
+            config(['app.app_sync' => true]);
+        }
     }
 }

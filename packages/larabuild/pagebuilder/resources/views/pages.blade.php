@@ -58,6 +58,9 @@
         .page-list-table tbody tr:last-child td {
             border-bottom: 0;
         }
+        .tk-skeletonwrap{
+            filter: none;
+        }
     </style>
 @endpush
 @extends('backEnd.master')
@@ -66,12 +69,13 @@
 @endsection
 @section(config('pagebuilder.section'))
 @section('mainContent')
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>{{ __('front_settings.page_list') }}</h1>
                 <div class="bc-pages">
                     <a href="{{ route('dashboard') }}">@lang('common.dashboard')</a>
+                    <a href="#">@lang('front_settings.frontend_cms')</a>
                     <a href="#">{{ __('front_settings.page_list') }}</a>
                 </div>
             </div>
@@ -89,16 +93,18 @@
                     </div>
                 </div>
                 <div class="col-lg-8">
-                    <div class="tb-dhb-mainheading">
-                        <div class="main-title">
-                            <h3 class="mb-30">
-                                {{ __('front_settings.page_list') }}
-                            </h3>
+                    <div class="white-box">
+                        <div class="tb-dhb-mainheading">
+                            <div class="main-title">
+                                <h3 class="mb-15">
+                                    {{ __('front_settings.page_list') }}
+                                </h3>
+                            </div>
                         </div>
-                    </div>
-                    <div class="tb-disputetable" id="pages_list">
-                        @component('pagebuilder::components.pages-skeleton')
-                        @endcomponent
+                        <div class="tb-disputetable" id="pages_list">
+                            @component('pagebuilder::components.pages-skeleton')
+                            @endcomponent
+                        </div>
                     </div>
                 </div>
             </div>
@@ -126,7 +132,7 @@
                         <button type="button" class="primary-btn tr-bg" data-dismiss="modal">@lang('common.cancel')</button>
                         <form id="page_form_delete_page">
                             <input type="hidden" name="pageIdForPageDelete" value="">
-                            <button class="primary-btn fix-gr-bg" type="submit">@lang('common.delete')</button>
+                            <button class="primary-btn fix-gr-bg" id="aoraPageDelete" type="submit">@lang('common.delete')</button>
                         </form>
                     </div>
                 </div>
@@ -299,7 +305,7 @@
                         data.error.forEach(function(item) {
                             message += item + "<br />";
                         });
-                        console.log(message);
+                       
                         toastr.error(message, 'Error', {
                             timeOut: 5000,
                         });
@@ -333,12 +339,7 @@
                             timeOut: 5000,
                         });
                     } else {
-                        let message = '';
-                        data.error.forEach(function(item) {
-                            message += item + "<br />";
-                        });
-                        console.log(message);
-                        toastr.error(message, 'Error', {
+                        toastr.error(data.error, 'Error', {
                             timeOut: 5000,
                         });
                     }

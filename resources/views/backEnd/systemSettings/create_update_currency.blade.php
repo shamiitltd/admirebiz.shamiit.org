@@ -3,7 +3,7 @@
 @lang('system_settings.manage_currency')
 @endsection 
 @section('mainContent')
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@if(isset($editData))

@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\Notification;
 use Modules\RolePermission\Entities\InfixRole;
 use App\Notifications\LeaveApprovedNotification;
 use App\Http\Requests\Admin\Leave\SmApproveLeaveRequest;
+use App\SmStudent;
 
 class SmApproveLeaveController extends Controller
 {

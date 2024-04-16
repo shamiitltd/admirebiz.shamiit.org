@@ -19,7 +19,7 @@ class CreateUsersTable extends Migration
             $table->increments('id');
             $table->string('full_name', 192)->nullable();
             $table->string('username', 192)->nullable();
-            $table->string('phone_number', 191)->nullable();
+            $table->string('phone_number',191)->nullable();
             $table->string('email', 192)->nullable();
             $table->string('password', 100)->nullable();
             $table->string('usertype', 210)->nullable();
@@ -42,7 +42,7 @@ class CreateUsersTable extends Migration
 
             $table->integer('school_id')->nullable()->default(1)->unsigned();
             $table->foreign('school_id')->references('id')->on('sm_schools')->onDelete('cascade');
-
+            
             $table->integer('role_id')->nullable()->unsigned();
             $table->foreign('role_id')->references('id')->on('infix_roles')->onDelete('cascade');
             $table->enum('is_administrator', ['yes', 'no'])->default('no');
@@ -66,7 +66,7 @@ class CreateUsersTable extends Migration
             $user->updated_by   = 1;
             $user->school_id   = 1;
             $user->role_id   = 1;
-            $user->full_name = 'Super Admin';
+            $user->full_name = 'admin';
             $user->email     = 'admin@infixedu.com';
             $user->is_administrator     = 'yes';
             $user->username  = 'admin@infixedu.com';

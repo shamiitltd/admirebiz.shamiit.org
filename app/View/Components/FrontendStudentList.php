@@ -35,7 +35,7 @@ class FrontendStudentList extends Component
             $q->where('class_id', request('class'));
         })
         ->where('school_id', app('school')->id)->pluck('student_id');
-        $students = SmStudent::whereIn('id',$student_ids)->get();
+        $students = SmStudent::whereIn('id',$student_ids)->with('parents', 'bloodGroup', 'studentRecord.class', 'studentRecord.section')->get();
         $req_data = [] ;
         $req_data['class'] = SmClass::find(request('class'));
         $req_data['section'] = SmSection::find(request('section'));

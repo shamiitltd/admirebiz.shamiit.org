@@ -5,7 +5,7 @@
 @section('mainContent')
 @php  $setting = generalSetting(); if(!empty($setting->currency_symbol)){ $currency = $setting->currency_symbol; }else{ $currency = '$'; } @endphp
 
-<section class="sms-breadcrumb mb-40 white-box">
+<section class="sms-breadcrumb mb-20">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('fees.search_fees_payment')</h1>
@@ -82,7 +82,7 @@
                                     <span class="text-danger">{{ $errors->first('date_from') }}</span>
                                 </div>
                             </div>
-                            @includeIf('university::common.session_faculty_depart_academic_semester_level',  ['hide'=>['USUB'],'required'=> ['US','UF','UD','UA','USN','US','USL'], 'dept_mt'=>'mt-25', 'ac_mt'=>'mt-25'])
+                            @includeIf('university::common.session_faculty_depart_academic_semester_level',  ['hide'=>['USUB'],'required'=> ['US','UF','UD','UA','USN','US','USL'], 'dept_mt'=>'mt-15', 'ac_mt'=>'mt-15'])
                             @else
                             <div class="col-lg-2 mt-30-md">
                                 <div class="primary_input">
@@ -147,7 +147,7 @@
                             </div>
                             @endif
 
-                            <div class="col-lg-4 ">
+                            <div class="col-lg-4 {{moduleStatusCheck('University') ? 'mt-15' : ''}} ">
                                 <label class="primary_input_label" for="">@lang('common.search_by_name'), @lang('student.admission_no'),@lang('student.roll_no')</label>
                                 <div class="primary_input">
                                     <input class="primary_input_field form-control" type="text" name="keyword">
@@ -170,43 +170,45 @@
                    
         <div class="row mt-40">
             <div class="col-lg-12">
-                <div class="row">
-                    <div class="col-lg-4 no-gutters">
-                        <div class="main-title">
-                            <h3 class="mb-0"> @lang('fees.payment_ID_Details')</h3>
+                <div class="white-box">
+                    <div class="row">
+                        <div class="col-lg-4 no-gutters">
+                            <div class="main-title">
+                                <h3 class="mb-15"> @lang('fees.payment_ID_Details')</h3>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12">
-                        <x-table>
-                            <table id="table_id" class="table data-table" cellspacing="0" width="100%">
-                                <thead>
-                                    <tr>
-                                        <th>@lang('fees.payment_id')</th>
-                                        <th>@lang('common.date')</th>
-                                        <th>@lang('common.name')</th>
-                                        @if(moduleStatusCheck('University'))
-                                            <th>@lang('university::un.semester_label')</th>
-                                            <th>@lang('university::un.installment')</th>
-                                        @else
-                                            <th>@lang('common.class')</th>
-                                        @endif
-                                        @if(directFees())
-                                            <th>@lang('fees.installment')</th>
-                                        @else
-                                            <th>@lang('fees.fees_type')</th>
-                                        @endif
-                                        <th>@lang('fees.mode')</th>
-                                        <th>@lang('fees.amount') ({{generalSetting()->currency_symbol}}) </th>
-                                        <th>@lang('common.action')</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-    
-                                </tbody>
-                            </table>
-                        </x-table>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <x-table>
+                                <table id="table_id" class="table data-table" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th>@lang('fees.payment_id')</th>
+                                            <th>@lang('common.date')</th>
+                                            <th>@lang('common.name')</th>
+                                            @if(moduleStatusCheck('University'))
+                                                <th>@lang('university::un.semester_label')</th>
+                                                <th>@lang('university::un.installment')</th>
+                                            @else
+                                                <th>@lang('common.class')</th>
+                                            @endif
+                                            @if(directFees())
+                                                <th>@lang('fees.installment')</th>
+                                            @else
+                                                <th>@lang('fees.fees_type')</th>
+                                            @endif
+                                            <th>@lang('fees.mode')</th>
+                                            <th>@lang('fees.amount') ({{generalSetting()->currency_symbol}}) </th>
+                                            <th>@lang('common.action')</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+        
+                                    </tbody>
+                                </table>
+                            </x-table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -214,10 +216,7 @@
         
     </div>
 </section>
-@endsection
-
 @include('backEnd.partials.date_picker_css_js')
-
 @include('backEnd.partials.data_table_js')
 @include('backEnd.partials.server_side_datatable')
 
@@ -248,6 +247,9 @@
         </div>
     </div>
 </div>
+@endsection
+
+
 
 @push('script')  
 

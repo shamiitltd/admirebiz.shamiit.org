@@ -2,6 +2,7 @@
 @section('title')
     @lang('academics.class_routine_create')
 @endsection
+@section('mainContent')
 <style>
     .nice-select.bb .current {
         bottom: 10px;
@@ -68,8 +69,7 @@
         margin-left: 0;
     }
 </style>
-@section('mainContent')
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('academics.class_routine_create')</h1>
@@ -83,17 +83,18 @@
     </section>
     <section class="admin-visitor-area">
         <div class="container-fluid p-0">
+            <div class="white-box">
             <div class="row">
                 <div class="col-lg-8 col-md-6">
                     <div class="main-title">
-                        <h3 class="mb-30">@lang('common.select_criteria') </h3>
+                        <h3 class="mb-15">@lang('common.select_criteria') </h3>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-lg-12">
 
-                    <div class="white-box">
+                    <div>
                         {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'class_routine_new', 'method' => 'get', 'enctype' => 'multipart/form-data', 'id' => 'search_student']) }}
                         <div class="row">
 
@@ -158,16 +159,18 @@
                     </div>
                 </div>
             </div>
+            </div>
         </div>
     </section>
 
     @if (isset($sm_weekends))
-        <section class="mt-20">
+        <section class="mt-40">
             <div class="container-fluid p-0">
-                <div class="row mt-40">
+                <div class="white-box">
+                <div class="row">
                     <div class="col-lg-6 col-md-6">
                         <div class="main-title">
-                            <h3 class="mb-30">@lang('academics.class_routine_create')</h3>
+                            <h3 class="mb-15">@lang('academics.class_routine_create')</h3>
                         </div>
                     </div>
                     <div class="col-lg-6 pull-right">
@@ -178,8 +181,8 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-lg-12 student-details up_admin_visitor">
-                        <ul class="nav nav-tabs tabs_scroll_nav mb-4" role="tablist" id="tabs_ul">
+                    <div class="col-lg-12 student-details up_admin_visitor mt-0">
+                        <ul class="nav nav-tabs tabs_scroll_nav mb-4 mt-2" role="tablist" id="tabs_ul">
                             <input type="hidden" name="routine_class_id" id="routine_class_id"
                                 value="{{ $class_id }}">
                             <input type="hidden" name="routine_section_id" id="routine_section_id"
@@ -204,12 +207,12 @@
                             <!-- Start day wise routine  Tab -->
 
                             <div role="tabpanel" class="tab-pane fade show active">
-                                {{-- <div class="white-box dloader" id=select_class_routine_loader>
+                                <div class="white-box dloader" id=select_class_routine_loader>
                                     <div class="dloader_style mt-2 text-center">
                                         <img class="dloader_img_style"
                                             src="{{ asset('public/backEnd/img/demo_wait.gif') }}" alt="loader">
                                     </div>
-                                </div> --}}
+                                </div>
                                 <div id="show_routine">
 
                                 </div>
@@ -221,6 +224,7 @@
 
                         </div>
                     </div>
+                </div>
                 </div>
             </div>
         </section>

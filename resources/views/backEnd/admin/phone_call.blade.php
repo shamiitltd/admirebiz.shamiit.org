@@ -10,7 +10,7 @@
             top: 30px !important;
     }
     </style>
-    <section class="sms-breadcrumb mb-40 white-box up_breadcrumb">
+    <section class="sms-breadcrumb mb-20 up_breadcrumb">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('admin.phone_call_log')</h1>
@@ -35,19 +35,9 @@
                 </div>
             @endif
             <div class="row">
-                <div class="col-lg-3">
+                <div class="col-lg-4 col-xl-3">
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="main-title">
-                                <h3 class="mb-30">
-                                    @if (isset($phone_call_log))
-                                        @lang('admin.edit_phone_call')
-                                    @else
-                                        @lang('admin.add_phone_call')
-                                    @endif
-
-                                </h3>
-                            </div>
                             @if (isset($phone_call_log))
                                 {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => ['phone-call_update', @$phone_call_log->id], 'method' => 'PUT', 'enctype' => 'multipart/form-data']) }}
                             @else
@@ -56,6 +46,16 @@
                                 @endif
                             @endif
                             <div class="white-box">
+                                <div class="main-title">
+                                    <h3 class="mb-15">
+                                        @if (isset($phone_call_log))
+                                            @lang('admin.edit_phone_call')
+                                        @else
+                                            @lang('admin.add_phone_call')
+                                        @endif
+    
+                                    </h3>
+                                </div>
                                 <div class="add-visitor">
                                     <div class="row">
 
@@ -243,35 +243,37 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-9">
-                        <div class="row">
-                            <div class="col-lg-4 no-gutters">
-                                <div class="main-title">
-                                    <h3 class="mb-0">@lang('admin.phone_call_list')</h3>
+                    <div class="col-lg-8 col-xl-9">
+                        <div class="white-box">
+                            <div class="row">
+                                <div class="col-lg-4 no-gutters">
+                                    <div class="main-title">
+                                        <h3 class="mb-15">@lang('admin.phone_call_list')</h3>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <x-table>
-                                    <table id="table_id" class="table data-table" cellspacing="0" width="100%">
-                                        <thead>
-                                            <tr>
-                                                <th>@lang('common.name')</th>
-                                                <th>@lang('common.phone')</th>
-                                                <th>@lang('common.date')</th>
-                                                <th>@lang('admin.follow_up_date')</th>
-                                                <th>@lang('admin.call_duration')</th>
-                                                <th>@lang('common.description')</th>
-                                                <th>@lang('admin.call_type')</th>
-                                                <th>@lang('common.actions')</th>
-                                            </tr>
-                                        </thead>
-
-                                        <tbody>
-                                        </tbody>
-                                    </table>
-                                </x-table>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <x-table>
+                                        <table id="table_id" class="table data-table" cellspacing="0" width="100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>@lang('common.name')</th>
+                                                    <th>@lang('common.phone')</th>
+                                                    <th>@lang('common.date')</th>
+                                                    <th>@lang('admin.follow_up_date')</th>
+                                                    <th>@lang('admin.call_duration')</th>
+                                                    <th>@lang('common.description')</th>
+                                                    <th>@lang('admin.call_type')</th>
+                                                    <th>@lang('common.actions')</th>
+                                                </tr>
+                                            </thead>
+    
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </x-table>
+                                </div>
                             </div>
                         </div>
                     </div>

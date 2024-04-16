@@ -3,7 +3,7 @@
 @lang('common.class')
 @endsection
 @section('mainContent')
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('common.class')</h1>
@@ -33,15 +33,6 @@
                 <div class="col-lg-3">
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="main-title">
-                                <h3 class="mb-30">@if(isset($sectionId))
-                                        @lang('academics.edit_class')
-                                    @else
-                                        @lang('academics.add_class')
-                                    @endif
-                                   
-                                </h3>
-                            </div>
                             @if(isset($sectionId))
                                 {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'class_update', 'method' => 'POST']) }}
                             @else
@@ -51,6 +42,15 @@
                                 @endif
                             @endif
                             <div class="white-box">
+                                <div class="main-title">
+                                    <h3 class="mb-15">@if(isset($sectionId))
+                                            @lang('academics.edit_class')
+                                        @else
+                                            @lang('academics.add_class')
+                                        @endif
+                                       
+                                    </h3>
+                                </div>
                                 <div class="add-visitor">
                                     <div class="row">
                                         <div class="col-lg-12"> 
@@ -147,103 +147,105 @@
                 </div>
 
                 <div class="col-lg-9">
-                    <div class="row">
-                        <div class="col-lg-4 no-gutters">
-                            <div class="main-title">
-                                <h3 class="mb-0">@lang('academics.class_list')</h3>
+                    <div class="white-box">
+                        <div class="row">
+                            <div class="col-lg-4 no-gutters">
+                                <div class="main-title">
+                                    <h3 class="mb-15">@lang('academics.class_list')</h3>
+                                </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <x-table>
-                                <table id="table_id" class="table Crm_table_active3" cellspacing="0" width="100%">
-
-                                    <thead>
-                                
-                                    <tr>
-                                        <th>@lang('common.class')</th>
-                                        <th>@lang('common.section')</th>
-                                        @if (@generalSetting()->result_type == 'mark')
-                                        <th>@lang('exam.pass_mark')</th>
-                                        @endif 
-                                        <th>@lang('student.students')</th>
-                                        <th>@lang('common.action')</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    @foreach($classes as $class)
+    
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <x-table>
+                                    <table id="table_id" class="table Crm_table_active3" cellspacing="0" width="100%">
+    
+                                        <thead>
+                                    
                                         <tr>
-                                            <td valign="top">{{@$class->class_name}}</td>
-                                            <td> 
-                                                @if(@$class->groupclassSections)
-                                                    @foreach ($class->groupclassSections as $section)
-                                                     <a href="{{route('sorting_student_list_section',[$class->id,$section->sectionName->id])}}">{{@$section->sectionName->section_name}}-({{total_no_records($class->id, $section->sectionName->id)}})</a> 
-                                                     {{ !$loop->last ? ', ':'' }}
-                                                    @endforeach
-                                                @endif
-                                            </td>
+                                            <th>@lang('common.class')</th>
+                                            <th>@lang('common.section')</th>
                                             @if (@generalSetting()->result_type == 'mark')
-                                            <td>
-                                                {{$class->pass_mark}}
-                                            </td>
-                                            @endif
-                                            <td>
-                                                <a href="{{route('sorting_student_list',[$class->id])}}">{{$class->records_count}}</a>
-                                            </td>
-    
-    
-                                            <td valign="top">
-                                                @php
-                                                    $routeList = [
-                                                        userPermission('class_edit') ?
-                                                            '<a class="dropdown-item"
-                                                               href="'.route('class_edit', [@$class->id]).'">'.__('common.edit').'</a>' : null,
-                                                        
-                                                        userPermission('class_delete') ? 
-                                                            '<a class="dropdown-item" data-toggle="modal"
-                                                               data-target="#deleteClassModal'.$class->id.'"
-                                                               href="'.route('class_delete', [@$class->id]).'">'.__('common.delete').'</a>' : null,
-    
-                                                        ];
-                                                @endphp
-                                                <x-drop-down-action-component :routeList="$routeList" />
-                                            </td>
+                                            <th>@lang('exam.pass_mark')</th>
+                                            @endif 
+                                            <th>@lang('student.students')</th>
+                                            <th>@lang('common.action')</th>
                                         </tr>
-    
-                                        <div class="modal fade admin-query" id="deleteClassModal{{@$class->id}}">
-                                            <div class="modal-dialog modal-dialog-centered">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h4 class="modal-title">@lang('academics.delete_class')</h4>
-                                                        <button type="button" class="close" data-dismiss="modal">&times;
-                                                        </button>
-                                                    </div>
-    
-                                                    <div class="modal-body">
-                                                        <div class="text-center">
-                                                            <h4>@lang('common.are_you_sure_to_delete')</h4>
+                                        </thead>
+                                        <tbody>
+                                        @foreach($classes as $class)
+                                            <tr>
+                                                <td valign="top">{{@$class->class_name}}</td>
+                                                <td> 
+                                                    @if(@$class->groupclassSections)
+                                                        @foreach ($class->groupclassSections as $section)
+                                                         <a href="{{route('sorting_student_list_section',[$class->id,$section->sectionName->id])}}">{{@$section->sectionName->section_name}}-({{total_no_records($class->id, $section->sectionName->id)}})</a> 
+                                                         {{ !$loop->last ? ', ':'' }}
+                                                        @endforeach
+                                                    @endif
+                                                </td>
+                                                @if (@generalSetting()->result_type == 'mark')
+                                                <td>
+                                                    {{$class->pass_mark}}
+                                                </td>
+                                                @endif
+                                                <td>
+                                                    <a href="{{route('sorting_student_list',[$class->id])}}">{{$class->records_count}}</a>
+                                                </td>
+        
+        
+                                                <td valign="top">
+                                                    @php
+                                                        $routeList = [
+                                                            userPermission('class_edit') ?
+                                                                '<a class="dropdown-item"
+                                                                   href="'.route('class_edit', [@$class->id]).'">'.__('common.edit').'</a>' : null,
+                                                            
+                                                            userPermission('class_delete') ? 
+                                                                '<a class="dropdown-item" data-toggle="modal"
+                                                                   data-target="#deleteClassModal'.$class->id.'"
+                                                                   href="'.route('class_delete', [@$class->id]).'">'.__('common.delete').'</a>' : null,
+        
+                                                            ];
+                                                    @endphp
+                                                    <x-drop-down-action-component :routeList="$routeList" />
+                                                </td>
+                                            </tr>
+        
+                                            <div class="modal fade admin-query" id="deleteClassModal{{@$class->id}}">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title">@lang('academics.delete_class')</h4>
+                                                            <button type="button" class="close" data-dismiss="modal">&times;
+                                                            </button>
                                                         </div>
-    
-                                                        <div class="mt-40 d-flex justify-content-between">
-                                                            <button type="button" class="primary-btn tr-bg"
-                                                                    data-dismiss="modal">@lang('common.cancel')</button>
-                                                            <a href="{{route('class_delete', [$class->id])}}"
-                                                               class="text-light">
-                                                                <button class="primary-btn fix-gr-bg"
-                                                                        type="submit">@lang('common.delete')</button>
-                                                            </a>
+        
+                                                        <div class="modal-body">
+                                                            <div class="text-center">
+                                                                <h4>@lang('common.are_you_sure_to_delete')</h4>
+                                                            </div>
+        
+                                                            <div class="mt-40 d-flex justify-content-between">
+                                                                <button type="button" class="primary-btn tr-bg"
+                                                                        data-dismiss="modal">@lang('common.cancel')</button>
+                                                                <a href="{{route('class_delete', [$class->id])}}"
+                                                                   class="text-light">
+                                                                    <button class="primary-btn fix-gr-bg"
+                                                                            type="submit">@lang('common.delete')</button>
+                                                                </a>
+                                                            </div>
                                                         </div>
+        
                                                     </div>
-    
                                                 </div>
                                             </div>
-                                        </div>
-                                    @endforeach
-                                    </tbody>
-                                </table>
-                            </x-table>
+                                        @endforeach
+                                        </tbody>
+                                    </table>
+                                </x-table>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -4,7 +4,7 @@
 @endsection
 
 @section('mainContent')
-    <section class="sms-breadcrumb mb-40 white-box up_breadcrumb">
+    <section class="sms-breadcrumb mb-20 up_breadcrumb">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('admin.postal_dispatch')</h1>
@@ -32,16 +32,6 @@
                 <div class="col-lg-3">
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="main-title">
-                                <h3 class="mb-30">
-                                    @if (isset($postal_dispatch))
-                                        @lang('admin.edit_postal_dispatch')
-                                    @else
-                                        @lang('admin.add_postal_dispatch')
-                                    @endif
-
-                                </h3>
-                            </div>
                             @if (isset($postal_dispatch))
                                 {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => ['postal-dispatch_update', @$postal_dispatch->id], 'method' => 'PUT', 'enctype' => 'multipart/form-data']) }}
                             @else
@@ -50,6 +40,16 @@
                                 @endif
                             @endif
                             <div class="white-box">
+                                <div class="main-title">
+                                    <h3 class="mb-15">
+                                        @if (isset($postal_dispatch))
+                                            @lang('admin.edit_postal_dispatch')
+                                        @else
+                                            @lang('admin.add_postal_dispatch')
+                                        @endif
+    
+                                    </h3>
+                                </div>
                                 <input type="hidden" name="id"
                                     value="{{ isset($postal_dispatch) ? $postal_dispatch->id : '' }}">
                                 <div class="add-visitor">
@@ -220,34 +220,36 @@
                     </div>
 
                     <div class="col-lg-9">
-                        <div class="row">
-                            <div class="col-lg-4 no-gutters">
-                                <div class="main-title">
-                                    <h3 class="mb-0">@lang('admin.postal_dispatch_list')</h3>
+                        <div class="white-box">
+                            <div class="row">
+                                <div class="col-lg-4 no-gutters">
+                                    <div class="main-title">
+                                        <h3 class="mb-15">@lang('admin.postal_dispatch_list')</h3>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <x-table>
-                                    <table id="table_id" class="table data-table" cellspacing="0" width="100%">
-                                        <thead>
-
-                                            <tr>
-                                                <th>@lang('admin.to_title')</th>
-                                                <th>@lang('common.reference_no')</th>
-                                                <th>@lang('common.address')</th>
-                                                <th>@lang('admin.from_title')</th>
-                                                <th>@lang('common.note')</th>
-                                                <th>@lang('common.date')</th>
-                                                <th>@lang('common.actions')</th>
-                                            </tr>
-                                        </thead>
-
-                                        <tbody>
-                                        </tbody>
-                                    </table>
-                                </x-table>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <x-table>
+                                        <table id="table_id" class="table data-table" cellspacing="0" width="100%">
+                                            <thead>
+    
+                                                <tr>
+                                                    <th>@lang('admin.to_title')</th>
+                                                    <th>@lang('common.reference_no')</th>
+                                                    <th>@lang('common.address')</th>
+                                                    <th>@lang('admin.from_title')</th>
+                                                    <th>@lang('common.note')</th>
+                                                    <th>@lang('common.date')</th>
+                                                    <th>@lang('common.actions')</th>
+                                                </tr>
+                                            </thead>
+    
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </x-table>
+                                </div>
                             </div>
                         </div>
                     </div>

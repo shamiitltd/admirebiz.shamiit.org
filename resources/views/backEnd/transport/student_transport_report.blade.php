@@ -5,7 +5,7 @@
 @section('mainContent')
 @php  @$setting = generalSetting();  if(!empty(@$setting->currency_symbol)){ @$currency = @$setting->currency_symbol; }else{ @$currency = '$'; }   @endphp 
 
-<section class="sms-breadcrumb mb-40 white-box">
+<section class="sms-breadcrumb mb-20">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('transport.student_transport_report')</h1>
@@ -20,23 +20,25 @@
 <section class="admin-visitor-area up_admin_visitor">
     <div class="container-fluid p-0">
             <div class="row">
-                <div class="col-lg-4 col-md-6">
-                    <div class="main-title">
-                        <h3 class="mb-30">@lang('common.select_criteria')</h3>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
                 <div class="col-lg-12">
                    
                     <div class="white-box">
+
+                        <div class="row">
+                            <div class="col-lg-4 col-md-6">
+                                <div class="main-title">
+                                    <h3 class="mb-15">@lang('common.select_criteria')</h3>
+                                </div>
+                            </div>
+                        </div>
+
                         {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'student_transport_report_store', 'method' => 'POST', 'enctype' => 'multipart/form-data', 'id' => 'search_student']) }}
                             <div class="row">
                                 <input type="hidden" name="url" id="url" value="{{URL::to('/')}}">
                                 @if(moduleStatusCheck('University'))
                                 @includeIf('university::common.session_faculty_depart_academic_semester_level',['required'=>['USN','UD','UA','US','USL','USEC'], 'hide' => ['USUB']])
                                 @else 
-                                <div class="col-lg-3 mt-30">
+                                <div class="col-lg-3">
                                     <label class="primary_input_label" for="">
                                         {{ __('common.class') }}
                                             <span class="text-danger"> *</span>
@@ -53,7 +55,7 @@
                                         </span>
                                     @endif
                                 </div>
-                                <div class="col-lg-3 mt-30" id="select_section_div">
+                                <div class="col-lg-3" id="select_section_div">
                                     <label class="primary_input_label" for="">
                                         {{ __('common.section') }}
                                             <span class="text-danger"> *</span>
@@ -77,7 +79,7 @@
                                     @endif
                                 </div>
                                 @endif 
-                                <div class="col-lg-3 mt-25">
+                                <div class="col-lg-3">
                                     <label class="primary_input_label" for="">
                                         {{ __('transport.route') }}
                                             <span class="text-danger"> *</span>
@@ -94,7 +96,7 @@
                                         </span>
                                     @endif
                                 </div>
-                                <div class="col-lg-3 mt-25">
+                                <div class="col-lg-3">
                                     <label class="primary_input_label" for="">
                                         {{ __('transport.vehicle') }}
                                             <span class="text-danger"> *</span>
@@ -125,39 +127,41 @@
           
             <div class="row mt-40">
                 <div class="col-lg-12">
-                    <div class="row">
-                        <div class="col-lg-6 no-gutters">
-                            <div class="main-title">
-                                <h3 class="mb-30">@lang('transport.student_transport_report')</h3>
+                    <div class="white-box">
+                        <div class="row">
+                            <div class="col-lg-6 no-gutters">
+                                <div class="main-title">
+                                    <h3 class="mb-15">@lang('transport.student_transport_report')</h3>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <x-table>
-                            <table id="table_id" class="table data-table" cellspacing="0" width="100%">
-                                <thead>
-                                   
-                                    <tr>
-                                        <th>Si</th>
-                                        <th>@lang('student.admission_no')</th>
-                                        <th>@lang('student.student_name')</th>
-                                        <th>@lang('common.mobile')</th>
-                                        <th>@lang('student.father_name')</th>
-                                        <th>@lang('student.father_phone')</th>
-                                        <th>@lang('transport.route_title')</th>
-                                        <th>@lang('transport.vehicle_number')</th>
-                                        <th>@lang('transport.driver_name')</th>
-                                        <th>@lang('transport.driver_contact')</th>
-                                        <th>@lang('transport.fare')({{generalSetting()->currency_symbol}})</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-                                    
-                                </tbody>
-                            </table>
-                            </x-table>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <x-table>
+                                <table id="table_id" class="table data-table" cellspacing="0" width="100%">
+                                    <thead>
+                                       
+                                        <tr>
+                                            <th>Si</th>
+                                            <th>@lang('student.admission_no')</th>
+                                            <th>@lang('student.student_name')</th>
+                                            <th>@lang('common.mobile')</th>
+                                            <th>@lang('student.father_name')</th>
+                                            <th>@lang('student.father_phone')</th>
+                                            <th>@lang('transport.route_title')</th>
+                                            <th>@lang('transport.vehicle_number')</th>
+                                            <th>@lang('transport.driver_name')</th>
+                                            <th>@lang('transport.driver_contact')</th>
+                                            <th>@lang('transport.fare')({{generalSetting()->currency_symbol}})</th>
+                                        </tr>
+                                    </thead>
+    
+                                    <tbody>
+                                        
+                                    </tbody>
+                                </table>
+                                </x-table>
+                            </div>
                         </div>
                     </div>
                 </div>

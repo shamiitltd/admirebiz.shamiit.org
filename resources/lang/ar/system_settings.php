@@ -482,5 +482,19 @@
         'If_student_do_not_pay_fees_bfore_due_date_login_restricted_student_&_parent' => 'If Student Do Not Pay Fees Before Due Date, Login Restricted Student & Parent From System',
         'due_fees_login_restrictation' => 'Due Fees Login Restriction',
         'notification_setting' => 'Notification Setting',
+        'Tawk To Chat Setting' => 'Tawk To Chat Setting',
+        'Tawk To Chat' => 'Tawk To Chat',
+        'Short Code' => 'Short Code',
+        'disable_for_admin_panel' => 'Disable for admin panel',
+        'disable_for_frontend' => 'Disable for frontend',
+        'showing_page' => 'Showing page',
+        'only_homepage' => 'Only homepage',
+        'all_page' => 'All page',
+        'show_admin_panel' => 'Show on admin panel',
+        'show_website' => 'Show on frontend',
+        'Messenger Chat' => 'Messenger Chat',
+        'Tawk To Chat' => 'Tawk To Chat',
+
+    
     ];
     

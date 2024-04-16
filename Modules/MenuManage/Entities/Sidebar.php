@@ -11,11 +11,7 @@ class Sidebar extends Model
     use HasFactory;
 
     protected $guarded = ['id'];
-    
-    protected static function newFactory()
-    {
-        return \Modules\MenuManage\Database\factories\SidebarFactory::new();
-    }
+ 
     public function permissionInfo()
     {
         return $this->belongsTo(Permission::class, 'permission_id', 'id')->withDefault();

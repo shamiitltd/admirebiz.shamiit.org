@@ -23,7 +23,6 @@ class ParentMiddleware
         }
         session_start();
         $role_id = Session::get('role_id');
-
         if ($role_id == 3) {
             return $next($request);
         } elseif ($role_id != "") {

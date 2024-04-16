@@ -281,7 +281,7 @@
     color: #fff;
     position: fixed;
     right: 30px;
-    bottom: 90px;
+    bottom: 50px;
     cursor: pointer;
     z-index: 100;
 }
@@ -333,4 +333,8 @@
 }
 .whats_app_popup_input .input-group {
     display: flex!important;
+}
+.whats_app_members {
+    max-height: 200px;
+    overflow: auto;
 }

@@ -3,7 +3,7 @@
 @lang('fees.bank_payment')
 @endsection
 @section('mainContent')
-<section class="sms-breadcrumb mb-40 white-box up_breadcrumb">
+<section class="sms-breadcrumb mb-20 up_breadcrumb">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('fees.bank_payment')</h1>
@@ -18,17 +18,16 @@
 
 <section class="admin-visitor-area up_admin_visitor">
     <div class="container-fluid p-0">
-        
-         <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-6">
-                    <div class="main-title mt_0_sm mt_0_md">
-                        <h3 class="mb-30">@lang('common.select_criteria') </h3>
-                    </div>
-                </div>
-            </div>
             <div class="row">
                 <div class="col-lg-12">
                     <div class="white-box">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="main-title mt_0_sm mt_0_md">
+                                    <h3 class="mb-15">@lang('common.select_criteria') </h3>
+                                </div>
+                            </div>
+                        </div>
                         {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'bank-payment-slips', 'method' => 'POST', 'enctype' => 'multipart/form-data', 'id' => 'search_studentA']) }}
                             <input type="hidden" id="class" name="class_id" value="{{@$class_id}}">
                             <input type="hidden" id="section" name="section_id" value="{{@$section_id}}">
@@ -38,7 +37,8 @@
                         @if(moduleStatusCheck('University'))
                         <div class="row">
                             @includeIf('university::common.session_faculty_depart_academic_semester_level',['required' => ['USN','UF', 'UD', 'UA', 'US', 'USL'], 'hide' => ['USUB']])
-                            <div class="col-lg-3 col-md-3 mt-25">
+                            <div class="col-lg-3 col-md-3 mt-15">
+                                <label for="">@lang('common.status')</label>
                                 <select class="primary_select  form-control{{ $errors->has('approve_status') ? ' is-invalid' : '' }}" name="approve_status">
                                     <option data-display="@lang('common.status')" value="">@lang('common.status')</option>
                                     <option value="0" {{isset($approve_status)? ($approve_status == 0? 'selected': ''):'' }}>@lang('common.pending')</option>
@@ -141,42 +141,44 @@
             {{-- @if(isset($bank_slips)) --}}
             <div class="row mt-40">
                 <div class="col-lg-12">
-                    <div class="row">
-                        <div class="col-lg-4 no-gutters">
-                            <div class="main-title">
-                                <h3 class="mb-0">  @lang('fees.bank_payment_list')</h3>
+                    <div class="white-box">
+                        <div class="row">
+                            <div class="col-lg-4 no-gutters">
+                                <div class="main-title">
+                                    <h3 class="mb-15">  @lang('fees.bank_payment_list')</h3>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <x-table>
-                                <table id="table_id" class="table data-table" cellspacing="0" width="100%">
-                                    <thead>
-                                        <tr>
-                                            <th>@lang('student.admission_no')</th>
-                                            <th>@lang('student.student_name')</th>
-                                            @if(moduleStatusCheck('University'))
-                                            <th>@lang('university::un.installment')</th>
-                                            @elseif(directFees())
-                                            <th>@lang('fees.installment')</th>
-                                            @else
-                                            <th>@lang('fees.fees_type')</th>
-                                            @endif 
-                                            <th>@lang('common.date')</th>
-                                            <th>@lang('accounts.amount')</th>
-                                            <th>@lang('accounts.bank')</th>
-                                            <th>@lang('common.note')</th>
-                                            <th>@lang('accounts.slip')</th>
-                                            <th>@lang('common.status')</th>
-                                            <th>@lang('common.actions')</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    
-                                    </tbody>
-                                </table>
-                            </x-table>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <x-table>
+                                    <table id="table_id" class="table data-table" cellspacing="0" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th>@lang('student.admission_no')</th>
+                                                <th>@lang('student.student_name')</th>
+                                                @if(moduleStatusCheck('University'))
+                                                <th>@lang('university::un.installment')</th>
+                                                @elseif(directFees())
+                                                <th>@lang('fees.installment')</th>
+                                                @else
+                                                <th>@lang('fees.fees_type')</th>
+                                                @endif 
+                                                <th>@lang('common.date')</th>
+                                                <th>@lang('accounts.amount')</th>
+                                                <th>@lang('accounts.bank')</th>
+                                                <th>@lang('common.note')</th>
+                                                <th>@lang('accounts.slip')</th>
+                                                <th>@lang('common.status')</th>
+                                                <th>@lang('common.actions')</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        
+                                        </tbody>
+                                    </table>
+                                </x-table>
+                            </div>
                         </div>
                     </div>
                 </div>

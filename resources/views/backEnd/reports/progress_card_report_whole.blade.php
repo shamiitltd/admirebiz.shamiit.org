@@ -15,7 +15,7 @@
     border: 1px solid #a2a8c5 !important;
 }
 </style>
-<section class="sms-breadcrumb mb-40 white-box">
+<section class="sms-breadcrumb mb-20">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('reports.progress_card_report')</h1>

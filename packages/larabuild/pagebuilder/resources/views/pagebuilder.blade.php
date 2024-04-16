@@ -238,8 +238,8 @@
 
     function setPageSettings(){
         var mainArray = {
-            'grids':[],
-            'section_data':[],
+            'grids': [],
+            'section_data': [],
         };
         var currentSectionData = currentSectionStyles = [];
         var directory = null;
@@ -252,14 +252,16 @@
         iframe.find('.griddable').each(function(index, item) {
             let _this = jQuery(this); 
             let cols = _this.data('cols');
-            let  data =[];
-            cols.forEach(function(col, index){
-                let _col = _this.find('.droppable').eq(index);
 
-                if(_col.length){
+            if (Array.isArray(cols)) {
+                let data = [];
 
-                    
-                    data[index] = [];
+                cols.forEach(function(col, index){
+                    let _col = _this.find('.droppable').eq(index);
+
+                    if(_col.length){
+                        data[index] = [];
+
                         if(_col.find('.sectionable').length > 0) {
                             _col.find('.sectionable').each(function(sectionIndex,section){
                                 data[index].push({
@@ -280,18 +282,21 @@
                                 });
                             }
                         }
-                    } 
-                   
-            });
-            mainArray.grids.push({
-                'grid': _this.data('grid-name'),
-                'position':index,
-                'grid_id': _this.attr('id'),
-                'data':data
-            });
+                    }
+                });
+
+                mainArray.grids.push({
+                    'grid': _this.data('grid-name'),
+                    'position':index,
+                    'grid_id': _this.attr('id'),
+                    'data':data
+                });
+            } else {
+                console.error("The 'cols' variable is not an array.");
+            }
         });
 
-        mainArray.section_data = window.sectionData;
+    mainArray.section_data = window.sectionData;
 
         let section_id = $('#current-section-id').val();
         let grid_id = $('#current-grid-id').val();

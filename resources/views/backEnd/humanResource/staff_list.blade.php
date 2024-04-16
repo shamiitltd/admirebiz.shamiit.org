@@ -43,7 +43,7 @@
             }
 
             input:checked+.slider {
-                background: linear-gradient(90deg, var(--gradient_1) 0%, #c738d8 51%, var(--gradient_1) 100%);
+                background: var(--primary-color);
             }
 
             input:focus+.slider {
@@ -72,7 +72,7 @@
                         } */
         </style>
     @endpush
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('hr.staff_list')</h1>
@@ -87,25 +87,25 @@
     <section class="admin-visitor-area up_admin_visitor">
         <div class="container-fluid p-0">
             <div class="row">
-                <div class="col-lg-8 col-md-6 col-6">
-                    <div class="main-title xs_mt_0 mt_0_sm">
-                        <h3 class="mb-30">@lang('common.select_criteria') </h3>
-                    </div>
-                </div>
-
-                @if (userPermission('addStaff'))
-                    <div class="col-lg-4 text-md-right text-left col-md-6 mb-30-lg col-6 text_sm_right">
-                        <a href="{{ route('addStaff') }}" class="primary-btn small fix-gr-bg">
-                            <span class="ti-plus pr-2"></span>
-                            @lang('hr.add_staff')
-                        </a>
-                    </div>
-                @endif
-            </div>
-
-            <div class="row">
                 <div class="col-lg-12">
                     <div class="white-box">
+                        <div class="row">
+                            <div class="col-lg-8 col-md-6 col-6">
+                                <div class="main-title xs_mt_0 mt_0_sm">
+                                    <h3 class="mb-15">@lang('common.select_criteria') </h3>
+                                </div>
+                            </div>
+            
+                            @if (userPermission('addStaff'))
+                                <div class="col-lg-4 text-md-right text-left col-md-6 mb-30-lg col-6 text_sm_right">
+                                    <a href="{{ route('addStaff') }}" class="primary-btn small fix-gr-bg">
+                                        <span class="ti-plus pr-2"></span>
+                                        @lang('hr.add_staff')
+                                    </a>
+                                </div>
+                            @endif
+                        </div>
+
                         {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'searchStaff', 'method' => 'POST', 'enctype' => 'multipart/form-data']) }}
                         <div class="row">
                             <input type="hidden" name="role_id" id="role_id" value="{{ @$data['role_id'] }}">
@@ -160,34 +160,36 @@
             </div>
                 <div class="row mt-40 full_wide_table">
                     <div class="col-lg-12">
-                        <div class="row">
-                            <div class="col-lg-4 no-gutters">
-                                <div class="main-title">
-                                    <h3 class="mb-0">@lang('hr.staff_list')</h3>
+                        <div class="white-box">
+                            <div class="row">
+                                <div class="col-lg-4 no-gutters">
+                                    <div class="main-title">
+                                        <h3 class="mb-15">@lang('hr.staff_list')</h3>
+                                    </div>
                                 </div>
                             </div>
+                            <x-table>
+                                <table id="table_id" class="table data-table no-footer dtr-inline collapsed" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th>@lang('hr.staff_no')</th>
+                                            <th>@lang('common.name')</th>
+                                            <th>@lang('hr.role')</th>
+                                            <th>@lang('hr.department')</th>
+                                            <th>@lang('hr.designation')</th>
+                                            <th>@lang('common.mobile')</th>
+                                            <th>@lang('common.email')</th>
+                                            <th>@lang('common.status')</th>
+                                            <th>@lang('common.action')</th>
+                                        </tr>
+                                    </thead>
+        
+                                    <tbody>
+                                
+                                    </tbody>
+                                </table>
+                            </x-table>
                         </div>
-                        <x-table>
-                            <table id="table_id" class="table data-table no-footer dtr-inline collapsed" cellspacing="0" width="100%">
-                                <thead>
-                                    <tr>
-                                        <th>@lang('hr.staff_no')</th>
-                                        <th>@lang('common.name')</th>
-                                        <th>@lang('hr.role')</th>
-                                        <th>@lang('hr.department')</th>
-                                        <th>@lang('hr.designation')</th>
-                                        <th>@lang('common.mobile')</th>
-                                        <th>@lang('common.email')</th>
-                                        <th>@lang('common.status')</th>
-                                        <th>@lang('common.action')</th>
-                                    </tr>
-                                </thead>
-    
-                                <tbody>
-                            
-                                </tbody>
-                            </table>
-                        </x-table>
                     </div>
                     </div>
                 </div>

@@ -9,12 +9,27 @@
 @push('css')
     <style>
         .badge {
-            background: linear-gradient(90deg, var(--gradient_1) 0%, #c738d8 51%, var(--gradient_1) 100%);
+            background: var(--primary-color);
             color: #fff;
             padding: 5px 10px;
             border-radius: 30px;
             display: inline-block;
             font-size: 8px;
+        }
+        .icon-only [class*="ti-"]{
+            color: #fff;
+            font-size: 14px;
+        }
+        .icon-only:hover [class*="ti-"]{
+            color: #fff!important;
+        }
+
+        .table thead td{
+            text-align: left;
+        }
+
+        .table tbody td {
+            padding: 10px 12px 10px 12px;
         }
     </style>
 @endpush
@@ -43,7 +58,7 @@
         }
     @endphp
 
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>
@@ -65,12 +80,6 @@
                             @endif
                         </a>
                 @endif
-
-                <div class="bc-pages">
-                    <a href="{{ url('dashboard') }}">@lang('common.dashboard')</a>
-                    <a href="{{ route('student_list') }}">@lang('student.student_list')</a>
-                    <a href="#">@lang('student.assign_class')</a>
-                </div>
             </div>
         </div>
     </section>
@@ -90,65 +99,68 @@
                                 data-toggle="modal" data-target="#assignClass"> <span class="ti-plus pr-2"></span>
                                 @lang('common.add')</button>
                         </div>
-                        <table id="" class="table simple-table table-responsive school-table"
+                        <div class="table-responsive">
+                        <table id="" class="table simple-table school-table"
                             cellspacing="0">
-                            <thead class="d-block">
-                                <tr class="d-flex">
-                                    @php
-                                        $div = generalSetting()->multiple_roll == 1 ? 'col-3' : 'col-4';
-                                    @endphp
+                            <thead>
+                                <tr >
                                     @if (moduleStatusCheck('University'))
-                                        <th class="col-3">@lang('university::un.faculty') (@lang('university::un.department'))</th>
-                                        <th class="col-3">@lang('university::un.semester_label')</th>
-                                        <th class="col-3">@lang('common.section')</th>
+                                        <th>@lang('university::un.faculty') (@lang('university::un.department'))</th>
+                                        <th>@lang('university::un.semester_label')</th>
+                                        <th>@lang('common.section')</th>
                                     @else
-                                        <th class="{{ $div }}">@lang('common.class')</th>
-                                        <th class="{{ $div }}">@lang('common.section')</th>
+                                        <th>@lang('common.class')</th>
+                                        <th>@lang('common.section')</th>
                                     @endif
                                     @if (generalSetting()->multiple_roll == 1)
-                                        <th class="{{ $div }}">@lang('student.id_number')</th>
+                                        <th>@lang('student.id_number')</th>
                                     @endif
-                                    <th class="{{ $div }}">@lang('student.action')</th>
+                                    <th>@lang('student.action')</th>
                                 </tr>
                             </thead>
 
-                            <tbody class="d-block">
+                            <tbody>
                                 @foreach ($student_records as $record)
-                                    <tr class="d-flex">
-                                        <td class="{{ $div }}">
-                                            {{ moduleStatusCheck('University') ? $record->unFaculty->name : $record->class->class_name }}
-                                            @if ($record->is_default)
-                                                <span class="badge fix-gr-bg">
-                                                    {{ __('common.default') }}
-                                                </span>
-                                            @endif
-                                        </td>
-                                        <td class="{{ $div }}">
-                                            {{ moduleStatusCheck('University') ? $record->unDepartment->name : $record->section->section_name }}
-                                        </td>
-                                        {{-- <td class="col-3">
-                                            {{ @$record->unSection->section_name }}
-                                        </td> --}}
-                                        {{-- @else --}}
-                                        {{-- <td class="col-3">
-                                            {{ @$record->class->class_name}} 
-                                            @if ($record->is_default) 
-                                                <span class="badge fix-gr-bg">
-                                                    {{ __('common.default') }}
-                                                </span>
-                                            @endif
-                                        </td>
-                                        <td class="col-3">
-                                            {{ @$record->section->section_name }}
-                                        </td> --}}
+                                    <tr >
+                                        @if(moduleStatusCheck('University'))
+                                            <td>
+                                                {{@$record->unFaculty->name}}
+                                                <br>
+                                                ({{ moduleStatusCheck('University') ? $record->unDepartment->name : $record->section->section_name }})
 
-                                        {{-- @endif  --}}
+                                                @if ($record->is_default)
+                                                    <span class="badge fix-gr-bg">
+                                                        {{ __('common.default') }}
+                                                    </span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                {{@$record->unSemesterLabel->name}}
+                                            </td>
+                                            <td>
+                                                {{@$record->section->section_name}}
+                                            </td>
+                                        @else
+                                            <td>
+                                                {{@$record->class->class_name}}
+
+                                                @if ($record->is_default)
+                                                    <span class="badge fix-gr-bg">
+                                                        {{ __('common.default') }}
+                                                    </span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                {{@$record->section->section_name}}
+                                            </td>
+                                        @endif
 
                                         @if (generalSetting()->multiple_roll == 1)
-                                            <td class="{{ $div }}">{{ $record->roll_no }}</td>
+                                            <td>{{ $record->roll_no }}</td>
                                         @endif
-                                        <td class="{{ $div }}">
+                                        <td>
 
+                                            <div class="d-flex gap-10">
                                             <a class="primary-btn icon-only fix-gr-bg modalLink"
                                                 data-modal-size="small-modal"
                                                 title=" @if (moduleStatusCheck('University')) @lang('university::un.assign_faculty_department')
@@ -160,6 +172,7 @@
                                                 data-target="#deleteRecord_{{ $record->id }}">
                                                 <span class="ti-trash"></span>
                                             </a>
+                                            </div>
                                         </td>
                                     </tr>
 
@@ -208,6 +221,7 @@
                                 {{-- end edit record --}}
                             </tbody>
                         </table>
+                        </div>
                     </div>
                 </div>
                 <!-- End Student Details -->

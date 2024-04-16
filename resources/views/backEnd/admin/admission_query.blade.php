@@ -5,7 +5,7 @@
 @endsection
 
 @section('mainContent')
-    <section class="sms-breadcrumb mb-40 white-box up_breadcrumb">
+    <section class="sms-breadcrumb mb-20 up_breadcrumb">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('admin.admission_query')</h1>
@@ -19,22 +19,9 @@
     </section>
     <section class="admin-visitor-area up_admin_visitor">
         <div class="container-fluid p-0">
-            <div class="row align-items-center">
-                <div class="col-lg-8 col-md-6 col-6">
-                    <div class="main-title">
-                        <h3 class="mb-30">@lang('admin.select_criteria')</h3>
-                    </div>
-                </div>
-                <div class="col-lg-4 text-md-right col-md-6 mb-30-lg col-6 text-right ">
-                    @if (userPermission('admission_query_store_a'))
-                        <button class="primary-btn-small-input primary-btn small fix-gr-bg" type="button"
-                            data-toggle="modal" data-target="#addQuery">
-                            <span class="ti-plus pr-2"></span>
-                            @lang('common.add')
-                        </button>
-                    @endif
-                </div>
-            </div>
+            {{-- <div class="row align-items-center">
+                
+            </div> --}}
             {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'admission-query-search', 'method' => 'POST', 'enctype' => 'multipart/form-data', 'id' => 'infix_form']) }}
             <div class="row">
                 <div class="col-lg-12">
@@ -42,7 +29,22 @@
                         <div class="row">
                             <input type="hidden" name="url" id="url" value="{{ URL::to('/') }}">
 
+                            <div class="col-lg-8 col-md-6 col-6">
+                                <div class="main-title">
+                                    <h3 class="mb-15">@lang('admin.select_criteria')</h3>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 text-md-right col-md-6 mb-30-lg col-6 text-right ">
+                                @if (userPermission('admission_query_store_a'))
+                                    <button class="primary-btn-small-input primary-btn small fix-gr-bg" type="button"
+                                        data-toggle="modal" data-target="#addQuery">
+                                        <span class="ti-plus pr-2"></span>
+                                        @lang('common.add')
+                                    </button>
+                                @endif
+                            </div>
 
+                            
                             <div class="col-lg-3">
                                 <div class="primary_input mb-15">
                                     <label class="primary_input_label" for="">@lang('admin.date_from') <span
@@ -142,12 +144,12 @@
                 </div>
             </div>
             {{ Form::close() }}
-            <div class="row mt-40">
-                <div class="col-lg-12">
+            <div class="row mt-40 mx-0 white-box">
+                <div class="col-lg-12 p-0">
                     <div class="row">
                         <div class="col-lg-4 no-gutters">
                             <div class="main-title">
-                                <h3 class="mb-0">@lang('admin.query_list')</h3>
+                                <h3 class="mb-15">@lang('admin.query_list')</h3>
                             </div>
                         </div>
                     </div>

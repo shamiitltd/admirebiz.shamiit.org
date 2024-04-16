@@ -4,7 +4,7 @@
 @endsection
 @section('mainContent')
 
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('dormitory.dormitory_list')</h1>
@@ -34,15 +34,6 @@
                 <div class="col-lg-3">
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="main-title">
-                                <h3 class="mb-30">
-                                    @if (isset($dormitory_list))
-                                        @lang('dormitory.edit_dormitory')
-                                    @else
-                                        @lang('dormitory.add_dormitory')
-                                    @endif
-                                </h3>
-                            </div>
                             @if (isset($dormitory_list))
                                 {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => ['dormitory-list-update', $dormitory_list->id], 'method' => 'PUT', 'enctype' => 'multipart/form-data']) }}
                             @else
@@ -51,6 +42,15 @@
                                
                             @endif
                             <div class="white-box">
+                                <div class="main-title">
+                                    <h3 class="mb-15">
+                                        @if (isset($dormitory_list))
+                                            @lang('dormitory.edit_dormitory')
+                                        @else
+                                            @lang('dormitory.add_dormitory')
+                                        @endif
+                                    </h3>
+                                </div>
                                 <div class="add-visitor">
                                     <div class="row">
                                         <div class="col-lg-12">
@@ -164,77 +164,79 @@
                     </div>
                 </div>
                 <div class="col-lg-9">
-                    <div class="row">
-                        <div class="col-lg-4 no-gutters">
-                            <div class="main-title">
-                                <h3 class="mb-0"> @lang('dormitory.dormitory_list')</h3>
+                    <div class="white-box">
+                        <div class="row">
+                            <div class="col-lg-4 no-gutters">
+                                <div class="main-title">
+                                    <h3 class="mb-15"> @lang('dormitory.dormitory_list')</h3>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <x-table>
-                                <table id="table_id" class="table" cellspacing="0" width="100%">
-                                    <thead>
-                                        <tr>
-                                            <th>@lang('common.sl')</th>
-                                            <th>@lang('dormitory.dormitory_name')</th>
-                                            <th>@lang('common.type')</th>
-                                            <th>@lang('dormitory.address')</th>
-                                            <th>@lang('dormitory.intake') </th>
-                                            <th>@lang('common.action')</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($dormitory_lists as $key => $dormitory_list)
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <x-table>
+                                    <table id="table_id" class="table" cellspacing="0" width="100%">
+                                        <thead>
                                             <tr>
-                                                <td>{{ $key + 1 }}</td>
-                                                <td>{{ @$dormitory_list->dormitory_name }}</td>
-                                                <td>{{ @$dormitory_list->type == 'B' ? 'Boys' : 'Girls' }}</td>
-                                                <td>{{ @$dormitory_list->address }}</td>
-                                                <td>{{ @$dormitory_list->intake }}</td>
-                                                <td>
-                                                    <x-drop-down>
-                                                        
-                                                            <a class="dropdown-item"
-                                                                href="{{ route('dormitory-list-edit', [$dormitory_list->id]) }}">@lang('common.edit')</a>
-                                                       
-                                                            <a class="dropdown-item" data-toggle="modal"
-                                                                data-target="#deleteDormitoryListModal{{ @$dormitory_list->id }}"
-                                                                href="#">@lang('common.delete')</a>
-                                                       
-                                                    </x-drop-down>
-                                                </td>
+                                                <th>@lang('common.sl')</th>
+                                                <th>@lang('dormitory.dormitory_name')</th>
+                                                <th>@lang('common.type')</th>
+                                                <th>@lang('dormitory.address')</th>
+                                                <th>@lang('dormitory.intake') </th>
+                                                <th>@lang('common.action')</th>
                                             </tr>
-                                            <div class="modal fade admin-query"
-                                                id="deleteDormitoryListModal{{ @$dormitory_list->id }}">
-                                                <div class="modal-dialog modal-dialog-centered">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h4 class="modal-title">@lang('dormitory.delete_dormitory')</h4>
-                                                            <button type="button" class="close"
-                                                                data-dismiss="modal">&times;</button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <div class="text-center">
-                                                                <h4>@lang('common.are_you_sure_to_delete')</h4>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($dormitory_lists as $key => $dormitory_list)
+                                                <tr>
+                                                    <td>{{ $key + 1 }}</td>
+                                                    <td>{{ @$dormitory_list->dormitory_name }}</td>
+                                                    <td>{{ @$dormitory_list->type == 'B' ? 'Boys' : 'Girls' }}</td>
+                                                    <td>{{ @$dormitory_list->address }}</td>
+                                                    <td>{{ @$dormitory_list->intake }}</td>
+                                                    <td>
+                                                        <x-drop-down>
+                                                            
+                                                                <a class="dropdown-item"
+                                                                    href="{{ route('dormitory-list-edit', [$dormitory_list->id]) }}">@lang('common.edit')</a>
+                                                           
+                                                                <a class="dropdown-item" data-toggle="modal"
+                                                                    data-target="#deleteDormitoryListModal{{ @$dormitory_list->id }}"
+                                                                    href="#">@lang('common.delete')</a>
+                                                           
+                                                        </x-drop-down>
+                                                    </td>
+                                                </tr>
+                                                <div class="modal fade admin-query"
+                                                    id="deleteDormitoryListModal{{ @$dormitory_list->id }}">
+                                                    <div class="modal-dialog modal-dialog-centered">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h4 class="modal-title">@lang('dormitory.delete_dormitory')</h4>
+                                                                <button type="button" class="close"
+                                                                    data-dismiss="modal">&times;</button>
                                                             </div>
-                                                            <div class="mt-40 d-flex justify-content-between">
-                                                                <button type="button" class="primary-btn tr-bg"
-                                                                    data-dismiss="modal">@lang('common.cancel')</button>
-                                                                {{ Form::open(['route' => ['dormitory-list-delete', $dormitory_list->id], 'method' => 'DELETE', 'enctype' => 'multipart/form-data']) }}
-                                                                <button class="primary-btn fix-gr-bg"
-                                                                    type="submit">@lang('common.delete')</button>
-                                                                {{ Form::close() }}
+                                                            <div class="modal-body">
+                                                                <div class="text-center">
+                                                                    <h4>@lang('common.are_you_sure_to_delete')</h4>
+                                                                </div>
+                                                                <div class="mt-40 d-flex justify-content-between">
+                                                                    <button type="button" class="primary-btn tr-bg"
+                                                                        data-dismiss="modal">@lang('common.cancel')</button>
+                                                                    {{ Form::open(['route' => ['dormitory-list-delete', $dormitory_list->id], 'method' => 'DELETE', 'enctype' => 'multipart/form-data']) }}
+                                                                    <button class="primary-btn fix-gr-bg"
+                                                                        type="submit">@lang('common.delete')</button>
+                                                                    {{ Form::close() }}
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </x-table>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </x-table>
+                            </div>
                         </div>
                     </div>
                 </div>

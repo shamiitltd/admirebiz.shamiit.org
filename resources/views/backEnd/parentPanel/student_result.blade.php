@@ -16,7 +16,7 @@
     </style>
 @endpush
 @section('mainContent')
-<section class="sms-breadcrumb mb-40 white-box">
+<section class="sms-breadcrumb mb-20">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('exam.exam_result')</h1>
@@ -44,7 +44,7 @@
                     <div class="student-meta-top"></div>
                     <img class="student-meta-img img-100" src="{{ file_exists(@$student_detail->student_photo) ? asset($student_detail->student_photo) : asset('public/uploads/staff/demo/student.jpg')}}" alt="">
                     <div class="white-box radius-t-y-0">
-                        <div class="single-meta mt-10">
+                        <div class="single-meta mt-50">
                             <div class="d-flex justify-content-between">
                                 <div class="name">
                                     @lang('student.student_name')

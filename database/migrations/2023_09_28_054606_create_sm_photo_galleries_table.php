@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('feature_image')->nullable();
             $table->string('gallery_image')->nullable();
             $table->boolean('is_publish')->default(true);
+            $table->integer('position')->default(0);
             $table->integer('school_id')->nullable()->default(1)->unsigned();
             $table->foreign('school_id')->references('id')->on('sm_schools')->onDelete('cascade');
             $table->timestamps();
@@ -28,44 +29,44 @@ return new class extends Migration
         DB::table('sm_photo_galleries')->insert([
             [
                 'parent_id' => Null,
-                'name' => 'Gallery One',
+                'name' => 'Pre-Primary',
                 'description' => "Fusce semper, nibh eu sollicitudin imperdiet, dolo",
-                'feature_image' => "public/uploads/photo_gallery/gallery-1.jpg",
+                'feature_image' => "public/uploads/theme/edulia/photo_gallery/gallery-1.jpg",
                 'gallery_image' => Null,
             ],
             [
                 'parent_id' => Null,
-                'name' => 'Gallery Two',
+                'name' => 'Kindergarden',
                 'description' => "Fusce semper, nibh eu sollicitudin imperdiet, dolo",
-                'feature_image' => "public/uploads/photo_gallery/gallery-1.jpg",
+                'feature_image' => "public/uploads/theme/edulia/photo_gallery/gallery-1.jpg",
                 'gallery_image' => Null,
             ],
             [
                 'parent_id' => Null,
-                'name' => 'Gallery Three',
+                'name' => 'Celebration',
                 'description' => "Fusce semper, nibh eu sollicitudin imperdiet, dolo",
-                'feature_image' => "public/uploads/photo_gallery/gallery-1.jpg",
+                'feature_image' => "public/uploads/theme/edulia/photo_gallery/gallery-1.jpg",
                 'gallery_image' => Null,
             ],
             [
                 'parent_id' => Null,
-                'name' => 'Gallery Four',
+                'name' => 'Recreation Centre',
                 'description' => "Fusce semper, nibh eu sollicitudin imperdiet, dolo",
-                'feature_image' => "public/uploads/photo_gallery/gallery-1.jpg",
+                'feature_image' => "public/uploads/theme/edulia/photo_gallery/gallery-1.jpg",
                 'gallery_image' => Null,
             ],
             [
                 'parent_id' => Null,
-                'name' => 'Gallery Five',
+                'name' => 'Facilities',
                 'description' => "Fusce semper, nibh eu sollicitudin imperdiet, dolo",
-                'feature_image' => "public/uploads/photo_gallery/gallery-1.jpg",
+                'feature_image' => "public/uploads/theme/edulia/photo_gallery/gallery-1.jpg",
                 'gallery_image' => Null,
             ],
             [
                 'parent_id' => Null,
-                'name' => 'Gallery Six',
+                'name' => 'Activities',
                 'description' => "Fusce semper, nibh eu sollicitudin imperdiet, dolo",
-                'feature_image' => "public/uploads/photo_gallery/gallery-1.jpg",
+                'feature_image' => "public/uploads/theme/edulia/photo_gallery/gallery-1.jpg",
                 'gallery_image' => Null,
             ],
         ]);

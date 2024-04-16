@@ -8,25 +8,29 @@
             margin-top: 50px;
         }
 
-        table.dataTable thead .sorting_asc::after,
+        table.dataTable thead .sorting_desc::after,
+        table.dataTable thead .sorting_asc:after,
         table.dataTable thead .sorting::after {
             top: 10px !important;
             left: 15px !important;
         }
 
-        .ti-calendar:before {
-            position: relative !important;
-            bottom: 47px !important;
-            left: 305px !important;
+        .input-right-icon button {
+            position: absolute;
+            right: 14px;
+            bottom: 20px;
         }
+
         table.dataTable thead th {
             padding-left: 30px !important;
         }
-        table.dataTable tbody th, table.dataTable tbody td {
+
+        table.dataTable tbody th,
+        table.dataTable tbody td {
             padding: 20px 10px 20px 18px !important;
         }
     </style>
-    <section class="sms-breadcrumb mb-40 white-box up_breadcrumb">
+    <section class="sms-breadcrumb mb-20 up_breadcrumb">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('admin.manage_admin')</h1>
@@ -93,7 +97,7 @@
                                                         name="next_follow_up_date" readonly="true"
                                                         value="{{ date('m/d/Y', strtotime(@$admission_query->next_follow_up_date)) }}">
 
-                                                    
+
                                                 </div>
                                             </div>
                                             <button class="" type="button">
@@ -102,13 +106,13 @@
                                                 </label>
                                             </button>
                                             @if ($errors->has('next_follow_up_date'))
-                                                        <span
-                                                            class="text-danger">{{ @$errors->first('next_follow_up_date') }}</span>
-                                                    @endif
+                                                <span
+                                                    class="text-danger">{{ @$errors->first('next_follow_up_date') }}</span>
+                                            @endif
                                         </div>
                                     </div>
 
-                                   
+
                                     <div class="col-lg-4">
                                         <label class="primary_input_label" for="">@lang('common.status') <span
                                                 class="text-danger"> *</span> </label>
@@ -133,7 +137,7 @@
 
                                             @if ($errors->has('response'))
                                                 <span class="text-danger">
-                                                  {{ @$errors->first('response') }}
+                                                    {{ @$errors->first('response') }}
                                                 </span>
                                             @endif
                                         </div>
@@ -240,10 +244,10 @@
                 <div class="col-lg-4 mt-45">
                     <div class="student-meta-box">
                         <div class="white-box radius-t-y-0 student-details">
-                            <div class="single-meta mt-10">
+                            <div class="single-meta mt-50">
                                 <h3 class="mb-30">@lang('common.details') </h3>
                             </div>
-                            <div class="single-meta mt-10">
+                            <div class="single-meta mt-50">
                                 <div class="d-flex justify-content-between">
                                     <div class="name">
                                         @lang('common.created_by'):

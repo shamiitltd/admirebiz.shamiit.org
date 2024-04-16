@@ -10,7 +10,7 @@
                 <td>{{ date('d/m/Y', strtotime($data->publish_date)) }}</td>
                 @if ($data->calendar_file)
                     <td class="pdf_download_option">
-                        <a href="{{ url($data->calendar_file) }}">
+                        <a href="{{ asset($data->calendar_file) }}">
                             <i class="fas fa-download"></i> @lang('edulia.download')
                         </a>
                     </td>

@@ -12,7 +12,7 @@
 }
 </style>
 
-<section class="sms-breadcrumb mb-40 white-box">
+<section class="sms-breadcrumb mb-20">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>
@@ -45,52 +45,54 @@
 
 <section class="admin-visitor-area up_st_admin_visitor mt-20">
     <div class="container-fluid p-0">
-        <div class="row">
-            <div class="col-lg-12">
-                <x-table>
-                    <table id="table_id" class="table data-table" cellspacing="0" width="100%">
-                        <thead>
-                            <tr>
-                                <th>@lang('common.sl')</th>
-                                <th>@lang('common.name')</th>
-                                <th>@lang('wallet::wallet.method')</th>
-                                <th>@lang('wallet::wallet.amount')</th>
-                                <th>@lang('common.status')</th>
-                                <th>@lang('wallet::wallet.note')</th>
-                                @if (isset($status) && $status =='reject')
-                                    <th>@lang('wallet::wallet.reject_note')</th>
-                                @endif
-                                <th>@lang('common.file')</th>
-                                <th>@lang('common.date')</th>
-                                @if (isset($status) && $status =='approve')
-                                    <th>@lang('wallet::wallet.approve_date')</th>
-                                @elseif (isset($status) && $status =='reject')
-                                    <th>@lang('wallet::wallet.reject_date')</th>
-                                @elseif (isset($status) && $status =='pending')
-                                    <th>@lang('common.action')</th>
-                                @endif
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td class="walletAmount"></td>
-                                <td class="walletAmount"></td>
-                                <td class="walletAmount">@lang('exam.result')</td>
-                                <td class="walletAmount">{{currency_format($walletTotalAmounts)}}</td>
-                                <td class="walletAmount"></td>
-                                <td class="walletAmount"></td>
-                                <td class="walletAmount"></td>
-                                <td class="walletAmount"></td>
-                                <td class="walletAmount"></td>
-                                @if (isset($status) && $status =='reject')
+        <div class="white-box">
+            <div class="row mt-40">
+                <div class="col-lg-12">
+                    <x-table>
+                        <table id="table_id" class="table data-table" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>@lang('common.sl')</th>
+                                    <th>@lang('common.name')</th>
+                                    <th>@lang('wallet::wallet.method')</th>
+                                    <th>@lang('wallet::wallet.amount')</th>
+                                    <th>@lang('common.status')</th>
+                                    <th>@lang('wallet::wallet.note')</th>
+                                    @if (isset($status) && $status =='reject')
+                                        <th>@lang('wallet::wallet.reject_note')</th>
+                                    @endif
+                                    <th>@lang('common.file')</th>
+                                    <th>@lang('common.date')</th>
+                                    @if (isset($status) && $status =='approve')
+                                        <th>@lang('wallet::wallet.approve_date')</th>
+                                    @elseif (isset($status) && $status =='reject')
+                                        <th>@lang('wallet::wallet.reject_date')</th>
+                                    @elseif (isset($status) && $status =='pending')
+                                        <th>@lang('common.action')</th>
+                                    @endif
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                            <tfoot>
+                                <tr>
                                     <td class="walletAmount"></td>
-                                @endif
-                            </tr>
-                        </tfoot>
-                    </table>
-                </x-table>
+                                    <td class="walletAmount"></td>
+                                    <td class="walletAmount">@lang('exam.result')</td>
+                                    <td class="walletAmount">{{currency_format($walletTotalAmounts)}}</td>
+                                    <td class="walletAmount"></td>
+                                    <td class="walletAmount"></td>
+                                    <td class="walletAmount"></td>
+                                    <td class="walletAmount"></td>
+                                    <td class="walletAmount"></td>
+                                    @if (isset($status) && $status =='reject')
+                                        <td class="walletAmount"></td>
+                                    @endif
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </x-table>
+                </div>
             </div>
         </div>
     </div>

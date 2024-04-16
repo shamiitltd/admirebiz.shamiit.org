@@ -6,7 +6,7 @@ table.dataTable {
 	background: #ffffff;
 	padding: 40px 30px;
 	border-radius: 5px;
-	box-shadow: 0px 10px 15px rgba(236, 208, 244, 0.3);
+	box-shadow: var(--box_shadow);
 	margin: 0 auto;
 	clear: both;
 	border-collapse: separate;
@@ -358,16 +358,24 @@ table.dataTable td {
 @media (max-width: 1665px) {
 	.dataTables_filter > label {
 		/*left: 44%;*/
-		min-width: 280px;
+		min-width: 160px;
 	}
 }
 @media (max-width: 1200px) and (min-width: 992px) {
 	.dataTables_filter > label {
-		max-width: 200px;
-		min-width: 180px;
+		max-width: 160px;
+		min-width: 160px;
 		left: 36%;
 	}
 }
+
+@media (max-width: 767px){
+	.dataTables_filter > label{
+		position: initial;
+		transform: translateX(0)!important;
+	}
+}
+
 .dataTables_filter > label:before {
 	content: '';
 	position: absolute;
@@ -461,7 +469,7 @@ table.dataTable td {
 	background: -moz-linear-gradient(90deg, #7c32ff 0%, #c738d8 100%);
 	background: -o-linear-gradient(90deg, #7c32ff 0%, #c738d8 100%);
 	background: linear-gradient(90deg, #7c32ff 0%, #c738d8 100%);
-	box-shadow: 0px 10px 20px rgba(108, 39, 255, 0.3);
+	box-shadow: var(--box_shadow);
 }
 .dataTables_wrapper .dataTables_paginate .paginate_button.disabled,
 .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover,
@@ -481,7 +489,7 @@ table.dataTable td {
 	background: -moz-linear-gradient(90deg, #7c32ff 0%, #c738d8 100%);
 	background: -o-linear-gradient(90deg, #7c32ff 0%, #c738d8 100%);
 	background: linear-gradient(90deg, #7c32ff 0%, #c738d8 100%);
-	box-shadow: 0px 10px 20px rgba(108, 39, 255, 0.3);
+	box-shadow: var(--box_shadow);
 }
 .dataTables_wrapper .dataTables_paginate .paginate_button:active {
 	color: #ffffff !important;
@@ -491,7 +499,7 @@ table.dataTable td {
 	background: -moz-linear-gradient(90deg, #7c32ff 0%, #c738d8 100%);
 	background: -o-linear-gradient(90deg, #7c32ff 0%, #c738d8 100%);
 	background: linear-gradient(90deg, #7c32ff 0%, #c738d8 100%);
-	box-shadow: 0px 10px 20px rgba(108, 39, 255, 0.3);
+	box-shadow: var(--box_shadow);
 }
 .dataTables_wrapper .dataTables_paginate .ellipsis {
 	padding: 0 1em;

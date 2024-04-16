@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use IntlChar;
 use App\SmStudent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -49,14 +50,23 @@ class SmSearchController extends Controller
   public function dashboardStudentSearch(Request $request)
   {
     try {
-      return SmStudent::when(is_string($request->search), function ($q) use ($request) {
-        $q->where('full_name', 'like', '%' . $request->search . '%');
-      })->get()
+      if(is_string($request->search)){
+        $nameOrAdmissionNo = $request->search;
+      }
+      if(preg_match('~[0-9]+~', $request->search)){
+        $nameOrAdmissionNo = (int)$request->search;
+      }
+      return SmStudent::when(is_numeric($nameOrAdmissionNo), function ($q) use ($nameOrAdmissionNo) {
+        $q->where('admission_no', $nameOrAdmissionNo);
+      })
+      ->when(is_string($nameOrAdmissionNo), function ($q) use ($nameOrAdmissionNo) {
+        $q->where('full_name', 'like', '%' . $nameOrAdmissionNo . '%');
+      })
+      ->get()
         ->map(function ($value) {
           return [
             'name' => $value->full_name,
             'route' => route('student_view', $value->id),
-            // student_view
           ];
         });
     } catch (\Exception $e) {

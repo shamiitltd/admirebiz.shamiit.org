@@ -1,3 +1,13 @@
+@php
+    $generalSetting = generalSetting();
+    $is_registration_permission = false;
+    if (moduleStatusCheck('ParentRegistration')) {
+        $reg_setting = Modules\ParentRegistration\Entities\SmRegistrationSetting::where('school_id', $generalSetting->school_id)->first();
+        $is_registration_position = $reg_setting ? $reg_setting->position : null;
+        $is_registration_permission = $reg_setting ? $reg_setting->registration_permission == 1 : false;
+    }
+@endphp
+
 <div class="heading_mobile_menu_top">
     <ul>
         <li>
@@ -29,7 +39,7 @@
                     <ul>
                         @foreach ($menu->childs as $key => $sub_menu)
                             <li class="has-submenu">
-                                <a data-submenu="Events_{{$sub_menu->id}}" {{ $sub_menu->is_newtab ? 'target="_blank"' : '' }}
+                                <a @if(count($sub_menu->childs) > 0) data-submenu="Events_{{$sub_menu->id}}" @endif {{ $sub_menu->is_newtab ? 'target="_blank"' : '' }}
                                     @if ($sub_menu->type == 'dPages') 
                                         href="{{ route('view-page', $sub_menu->link) }}" 
                                     @endif
@@ -71,7 +81,7 @@
                                         <ul>
                                             @foreach ($sub_menu->childs as $key => $child_sub_menu)
                                                 <li>
-                                                    <a {{ $child_sub_menu->is_newtab ? 'target="_blank"' : '' }}
+                                                    <a  {{ $child_sub_menu->is_newtab ? 'target="_blank"' : '' }}
                                                         @if ($child_sub_menu->type == 'dPages') 
                                                             href="{{ route('view-page', $child_sub_menu->link) }}" 
                                                         @endif
@@ -144,4 +154,9 @@
             </li>
         @endif
     @endforeach
+    @if (moduleStatusCheck('ParentRegistration') && $is_registration_permission && $is_registration_permission == 1)
+        <li class='has-submenu'>
+            <a href="{{ route('parentregistration/registration', $reg_setting->url) }}"> {{ __('edulia.student_registration')}} </a>
+        </li>
+    @endif 
 </ul>

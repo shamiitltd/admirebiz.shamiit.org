@@ -16,6 +16,7 @@ class SmAddIncome extends Model
         static::addGlobalScope(new ActiveStatusSchoolScope);
 
     }    
+    protected $guerded = ['id']; 
     protected $casts = [ 'date' => 'date' ]; 
     
     public function incomeHeads()

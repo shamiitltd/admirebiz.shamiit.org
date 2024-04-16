@@ -14,7 +14,7 @@ class SmPhotoGalleryController extends Controller
     public function index()
     {
         try {
-            $photoGalleries = SmPhotoGallery::where('parent_id', '=', null)->where('school_id', app('school')->id)->get();
+            $photoGalleries = SmPhotoGallery::where('parent_id', '=', null)->where('school_id', app('school')->id)->orderBy('position', 'asc')->get();
             return view('backEnd.frontSettings.photo_gallery.photo_gallery', compact('photoGalleries'));
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');
@@ -34,7 +34,7 @@ class SmPhotoGalleryController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
         try {
-            $destination =  'public/uploads/photo_gallery/';
+            $destination =  'public/uploads/theme/edulia/photo_gallery/';
             $feature_image = fileUpload($request->feature_image, $destination);
             $mainGallery = new SmPhotoGallery();
             $mainGallery->name = $request->name;
@@ -62,7 +62,7 @@ class SmPhotoGalleryController extends Controller
     public function edit($id)
     {
         try {
-            $photoGalleries = SmPhotoGallery::where('parent_id', '=', null)->where('school_id', app('school')->id)->get();
+            $photoGalleries = SmPhotoGallery::where('parent_id', '=', null)->where('school_id', app('school')->id)->orderBy('position', 'asc')->get();
             $add_photo_galleries = SmPhotoGallery::where('parent_id', '!=', null)->where('parent_id', $id)->where('school_id', app('school')->id)->get();
             $add_photo_gallery = SmPhotoGallery::find($id);
             return view('backEnd.frontSettings.photo_gallery.photo_gallery', compact('photoGalleries', 'add_photo_gallery', 'add_photo_galleries'));
@@ -91,7 +91,7 @@ class SmPhotoGalleryController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
         try {
-            $destination =  'public/uploads/photo_gallery/';
+            $destination =  'public/uploads/theme/edulia/photo_gallery/';
             $mainGallery = SmPhotoGallery::find($request->id);
             $mainGallery->name = $request->name;
             $mainGallery->description = $request->description;
@@ -143,7 +143,17 @@ class SmPhotoGalleryController extends Controller
     public function delete($id)
     {
         try {
-            $photoGallery = SmPhotoGallery::where('id', $id)->first();
+            $photoGallery = SmPhotoGallery::find($id);
+            $galleryImages = SmPhotoGallery::where('parent_id', $photoGallery->id)->get();
+            foreach($galleryImages as $img){
+                if($img && file_exists($img->gallery_image)){
+                    unlink($img->gallery_image);
+                }
+                $img->delete();
+            }
+            if($photoGallery && file_exists($photoGallery->feature_image)){
+                unlink($photoGallery->feature_image);
+            }
             $photoGallery->delete();
             Toastr::success('Deleted successfully', 'Success');
             return redirect()->back();
@@ -166,8 +176,11 @@ class SmPhotoGalleryController extends Controller
     {
         try {
             $galleryImage = SmPhotoGallery::find($id);
-            $photoGalleries = SmPhotoGallery::where('parent_id', '!=', null)->where('parent_id', $galleryImage->parent_id)->where('school_id', app('school')->id)->get();
+            $photoGalleries = SmPhotoGallery::where('parent_id', '!=', null)->where('parent_id', $galleryImage->parent_id)->where('school_id', app('school')->id)->orderBy('position', 'asc')->get();
             $html = view('backEnd.frontSettings.photo_gallery.photo_gallery_view_modal', compact('photoGalleries'))->render();
+            if($galleryImage && file_exists($galleryImage->gallery_image)){
+                unlink($galleryImage->gallery_image);
+            }
             $galleryImage->delete();
             return response()->json(['message' => 'Successful', 'html' => $html]);
         } catch (\Exception $e) {

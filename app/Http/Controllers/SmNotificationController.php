@@ -65,9 +65,22 @@ class SmNotificationController extends Controller{
         }
          return SmNotification::findOrFail($id);
     }
-
+	
     public function viewNotice($id){
 		Toastr::error('Operation Failed', 'Failed');
 		return redirect()->back();
     }
+	public function allNotification(){
+		try {
+			$notifications = SmNotification::where('role_id', auth()->user()->role_id)
+				->where('user_id', auth()->user()->id)
+				->where('is_read', 0)
+				->where('active_status', 1)
+				->paginate(10);
+			return view('backEnd.notification_list.notification_list', compact('notifications'));
+		} catch (\Throwable $th) {
+			Toastr::error('Operation Failed', 'Failed');
+			return redirect()->back();
+		}
+	}
 }

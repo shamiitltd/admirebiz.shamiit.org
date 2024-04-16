@@ -279,7 +279,7 @@ class SmLessonController extends Controller
 
         if (Auth::user()->role_id == 4) {
             $data['lessons'] = SmLesson::with('lessons', 'class', 'section', 'subject')
-            ->whereIn('subject_id', $subjects)->statusCheck()
+            ->whereIn('subject_id', $subjects)->statusCheck()->groupBy(['class_id','section_id','subject_id'])
             ->get();
         } else {
             $data['lessons'] = SmLesson::with('lessons', 'class', 'section', 'subject')

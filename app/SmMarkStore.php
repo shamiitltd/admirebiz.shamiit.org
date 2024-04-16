@@ -3,8 +3,10 @@
 namespace App;
 
 use App\Scopes\AcademicSchoolScope;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Modules\University\Entities\UnSubject;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Modules\University\Entities\UnSemesterLabel;
 
 class SmMarkStore extends Model
 {
@@ -15,7 +17,12 @@ class SmMarkStore extends Model
     }
     
     public function class(){
-        return $this->belongsTo('App\SmClass', 'class_id', 'id');
+        if(moduleStatusCheck('University')){
+            return $this->belongsTo(UnSemesterLabel::class, 'un_semester_label_id', 'id');
+        }else{
+            return $this->belongsTo('App\SmClass', 'class_id', 'id');
+        }
+        
     }
      public function section()
     {
@@ -24,7 +31,11 @@ class SmMarkStore extends Model
 
     public function subjectName()
     {
-        return $this->belongsTo('App\SmSubject', 'subject_id', 'id');
+        if(moduleStatusCheck('University')){
+            return $this->belongsTo(UnSubject::class, 'un_subject_id', 'id');
+        }else{
+            return $this->belongsTo('App\SmSubject', 'subject_id', 'id');
+        }
     }
  
     public static function get_mark_by_part($student_id, $exam_id, $class_id, $section_id, $subject_id, $exam_setup_id, $record_id){

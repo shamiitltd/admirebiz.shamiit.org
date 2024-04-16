@@ -171,7 +171,7 @@
                         "is_array": "0"
                     },
                     "facilities_description": {
-                        "value": "<p>Explore new skills, deepen existing passions, and get lost creativity what you find just might surprise and inspire you. Explore new skills deepen existing passions.<\/p><p><br><\/p><p>What you find just might surprise and inspire you with so much to explore isn\u2019t existing passions, and get lost in creativity.<br><\/p>",
+                        "value": "<p>Enjoy hassle-free commuting with our dedicated bus transportation service. We prioritize safety, comfort, and punctuality to ensure a smooth journey for students to and from the school<br><\/p>",
                         "is_array": "0"
                     }
                 }
@@ -211,7 +211,7 @@
                     },
                     "facilities_image_upload": {
                         "value": [
-                            "{\"type\":\"image\",\"name\":\"facilities-img-2.jpg\",\"path\":\"optionbuilder\/uploads\/755311-10-2023_0203pmfacilities-img-2.jpg\",\"mime\":\"jpg\",\"size\":29509,\"thumbnail\":\"[App_url]/public\/storage\/optionbuilder\/uploads\/755311-10-2023_0203pmfacilities-img-2.jpg\"}"
+                            "{\"type\":\"image\",\"name\":\"facilities-img-2.jpg\",\"path\":\"optionbuilder\\\/uploads\\\/755311-10-2023_0203pmfacilities-img-2.jpg\",\"mime\":\"jpg\",\"size\":29509,\"thumbnail\":\"[App_url]/public\\\/storage\\\/optionbuilder\\\/uploads\\\/755311-10-2023_0203pmfacilities-img-2.jpg\"}"
                         ],
                         "is_array": "1"
                     },
@@ -220,7 +220,7 @@
                         "is_array": "0"
                     },
                     "facilities_description": {
-                        "value": "<p>Explore new skills, deepen existing passions, and get lost creativity what you find just might surprise and inspire you.<\/p><p><br><\/p><p><br><\/p><p><br><\/p>",
+                        "value": "<p>Experience education in a modern setting with our air-conditioned smart classrooms. Equipped with cutting-edge technology, these classrooms facilitate interactive and engaging learning, providing students with a dynamic academic environment<\/p><p><br><\/p><p><br><\/p><p><br><\/p>",
                         "is_array": "0"
                     }
                 }
@@ -260,7 +260,7 @@
                     },
                     "facilities_image_upload": {
                         "value": [
-                            "{\"type\":\"image\",\"name\":\"facilities-img-4.jpg\",\"path\":\"optionbuilder\/uploads\/547811-10-2023_0202pmfacilities-img-4.jpg\",\"mime\":\"jpg\",\"size\":86190,\"thumbnail\":\"[App_url]/public\/storage\/optionbuilder\/uploads\/547811-10-2023_0202pmfacilities-img-4.jpg\"}"
+                            "{\"type\":\"image\",\"name\":\"facilities-img-4.jpg\",\"path\":\"optionbuilder\\\/uploads\\\/547811-10-2023_0202pmfacilities-img-4.jpg\",\"mime\":\"jpg\",\"size\":86190,\"thumbnail\":\"[App_url]/public\\\/storage\\\/optionbuilder\\\/uploads\\\/547811-10-2023_0202pmfacilities-img-4.jpg\"}"
                         ],
                         "is_array": "1"
                     },
@@ -269,7 +269,7 @@
                         "is_array": "0"
                     },
                     "facilities_description": {
-                        "value": "Explore new skills, deepen existing passions, and get lost creativity what you find just might surprise and inspire you. Explore new skills deepen existing passions. What you find just might surprise and inspire you with so much to explore isn\u2019t existing passions, and get lost in creativity.",
+                        "value": "<span class=\" author-d-1gg9uz65z1iz85zgdz68zmqkz84zo2qowz80zsz78zz72zz122zz85zauz85zz84zz80zz65zz88zqj38z87zz67zez72ziz70zaaxz85zfsz81za\">Step into a world of knowledge in our world-class library. Boasting an extensive collection of books, digital resources, and a serene atmosphere, our library serves as a hub for research, study, and the joy of reading.<\/span>",
                         "is_array": "0"
                     }
                 }
@@ -309,7 +309,7 @@
                     },
                     "facilities_image_upload": {
                         "value": [
-                            "{\"type\":\"image\",\"name\":\"facilities-img-3.jpg\",\"path\":\"optionbuilder\/uploads\/345011-10-2023_0202pmfacilities-img-3.jpg\",\"mime\":\"jpg\",\"size\":30738,\"thumbnail\":\"[App_url]/public\/storage\/optionbuilder\/uploads\/345011-10-2023_0202pmfacilities-img-3.jpg\"}"
+                            "{\"type\":\"image\",\"name\":\"facilities-img-3.jpg\",\"path\":\"optionbuilder\\\/uploads\\\/345011-10-2023_0202pmfacilities-img-3.jpg\",\"mime\":\"jpg\",\"size\":30738,\"thumbnail\":\"[App_url]/public\\\/storage\\\/optionbuilder\\\/uploads\\\/345011-10-2023_0202pmfacilities-img-3.jpg\"}"
                         ],
                         "is_array": "1"
                     },
@@ -318,7 +318,7 @@
                         "is_array": "0"
                     },
                     "facilities_description": {
-                        "value": "Explore new skills, deepen existing passions, and get lost creativity what you find just might surprise and inspire you. Explore new skills deepen existing passions. What you find just might surprise and inspire you with so much to explore isn\u2019t existing passions, and get lost in creativity.",
+                        "value": "<span class=\" author-d-1gg9uz65z1iz85zgdz68zmqkz84zo2qowz80zsz78zz72zz122zz85zauz85zz84zz80zz65zz88zqj38z87zz67zez72ziz70zaaxz85zfsz81za\">Immerse yourself in hands-on learning in our state-of-the-art laboratories. From science experiments to technological exploration, our labs are designed to foster curiosity and innovation, enabling students to apply theoretical knowledge in practical scenarios<\/span>",
                         "is_array": "0"
                     }
                 }
@@ -353,11 +353,11 @@
             "368a0764ab": {
                 "settings": {
                     "page_heading_title": {
-                        "value": "Outreach, Exposure and International Exchange Program",
+                        "value": "Outreach, Exposure, and International Exchange Program at Infix Edu",
                         "is_array": "0"
                     },
                     "page_heading_sub_title": {
-                        "value": "Explore new skills, deepen existing passions, and get lost creativity What you find just might surprise and inspire you with so much to explore isn\u2019t existing passions, and get lost in creativity.",
+                        "value": "Explore new skills, deepen passions, and get lost in creativity with Infix Edu. Uncover surprises and find inspiration in a myriad of exploration opportunities.",
                         "is_array": "0"
                     }
                 }

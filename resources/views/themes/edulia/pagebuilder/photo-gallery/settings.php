@@ -44,20 +44,6 @@ return [
                 1 => '12 photo gallery in a row',
             ],
             'default' => 4,
-        ],
-        [
-            'id' => 'photo_gallery_sorting',
-            'type' => 'select',
-            'class' => '',
-            'label_title' => __('edulia.photo_gallery_sorting'),
-            'label_desc' => __('edulia.which_order_galleries'),
-            'options' => [
-                'asc' => 'Ascending',
-                'desc' => 'Descending',
-                'randomly' => 'Randomly',
-            ],
-            'default' => 'asc',
-            'value' => 'asc',
-        ],
+        ]
     ]
 ];

@@ -25,7 +25,7 @@ trait CustomFields
         if (count($fields)) {
             foreach ($fields as $field) {
                 $field_rule = [];
-                $field->required ? ($form_name != 'school_registration' && is_show('custom_field') ? array_push($field_rule, 'required'):null) : array_push($field_rule, 'nullable');
+                $field->required ? (is_show('custom_field') ? array_push($field_rule, 'required'):null) : array_push($field_rule, 'nullable');
                 if($field->type == "fileInput"){
 
                     if (gv($custom_fields, $field->label)){

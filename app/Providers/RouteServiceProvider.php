@@ -47,6 +47,7 @@ class RouteServiceProvider extends ServiceProvider
         $this->mapTeacherRoutes();
         $this->mapConfigureRoutes();
         $this->mapPageBuilderRoutes();
+        $this->mapGraduateRoutes();
     }
 
     
@@ -80,6 +81,13 @@ class RouteServiceProvider extends ServiceProvider
         Route::middleware(['web','2fa'])
              ->namespace($this->namespace)
              ->group(base_path('routes/teacher.php'));
+    }
+
+    protected function mapGraduateRoutes()
+    {
+        Route::middleware(['web','2fa'])
+             ->namespace($this->namespace)
+             ->group(base_path('routes/graduate.php'));
     }
 
     protected function mapPageBuilderRoutes()

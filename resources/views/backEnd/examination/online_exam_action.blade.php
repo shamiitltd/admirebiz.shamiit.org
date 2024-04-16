@@ -49,19 +49,17 @@
                 href="{{ route('online_exam_result', [$row->id]) }}">@lang('exam.result')</a>
         @endif
     @endif
-    </div>
+    <!-- </div> -->
     @if (empty($is_set_online_exam_questions))
         @if (userPermission('manage_online_exam_question'))
-            <a class="ml-3" href="{{ route('manage_online_exam_question', [$row->id]) }}">
-                <button class="primary-btn small bg-success text-white border-0">@lang('exam.set_question')
-                </button>
+            <a href="{{ route('manage_online_exam_question', [$row->id]) }}" class="dropdown-item">
+                @lang('exam.set_question')
             </a>
         @endif
     @else
         @if ($row->status == 0)
-            <a class="ml-3" href="{{ route('online_exam_publish', [$row->id]) }}">
-                <button class="primary-btn small bg-success text-white border-0">@lang('exam.published_now')
-                </button>
+            <a href="{{ route('online_exam_publish', [$row->id]) }}" class="dropdown-item">
+               @lang('exam.published_now')
             </a>
         @endif
     @endif

@@ -24,7 +24,7 @@ class MeritListReportRequest extends FormRequest
                 'un_semester_id' => 'required',
                 'un_semester_label_id' => 'required',
                 'exam_type' => 'required',
-                'student_id' => 'required',
+                // 'student_id' => 'required',
             ];
         } else {
             $rules +=[

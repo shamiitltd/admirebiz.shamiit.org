@@ -24,15 +24,14 @@ class UserFactory extends Factory
     public $i     = 0;
     public function definition()
     {
-        $emailUserName = 'user_' . uniqid() . '@infixedu.com';
-        $i = $this->i++;
-        return [
-            'full_name' => $this->faker->firstNameMale ?? $this->faker->firstNameFemale,
-            'email' => $emailUserName,
-            'username' => $emailUserName,
-            'role_id'   => rand(4, 9),
-            'is_administrator'     => 'no',
-            'password' => Hash::make('123456'),
+        $i=$this->i++;
+        return [ 
+            'full_name' => $this->faker->firstNameMale ?? $this->faker->firstNameFemale, 
+            'email'=>'user_'.$i.'@infixedu.com', 
+            'username'=>'user_'.$i.'@infixedu.com', 
+            'role_id'   => $this->faker->numberBetween(4, 9) ?? 4,         
+            'is_administrator'     => 'no',            
+            'password' => Hash::make('123456'),      
         ];
     }
 }

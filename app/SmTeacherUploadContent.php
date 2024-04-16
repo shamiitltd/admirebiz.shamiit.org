@@ -11,14 +11,6 @@ class SmTeacherUploadContent extends Model
 {
     use HasFactory;
 
-    protected $casts = [
-        'id' => 'integer',
-        'available_for_admin' => 'integer',
-        'available_for_all_classes' => 'integer',
-        'class' => 'integer',
-        'section' => 'integer'
-    ];
-
     protected static function boot()
     {
         parent::boot();

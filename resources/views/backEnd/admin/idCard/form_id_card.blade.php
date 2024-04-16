@@ -4,7 +4,7 @@
         top: 8px;
     }
 </style>
-<div class="white-box">
+<div>
     <div class="add-visitor">
         <div class="row">
             <div class="col-lg-12">
@@ -29,6 +29,7 @@
         <div class="row mt-25">
             <div class="col-lg-12">
                 <div class="primary_input">
+                    <label class="primary_input_label" for="">@lang('admin.layout')</label>
                     <select class="primary_select  form-control{{ $errors->has('page_layout_style') ? ' is-invalid' : '' }}" name="page_layout_style" id="pageLayoutStyle">
                         <option value="horizontal" {{isset($id_card)? ($id_card->page_layout_style == "horizontal"? 'selected':''):''}}>@lang('admin.vertical')</option>
                         <option value="vertical" {{isset($id_card)? ($id_card->page_layout_style == "vertical"? 'selected':''):''}}>@lang('admin.horizontal')</option>
@@ -47,6 +48,7 @@
             <div class="row flex-grow-1 d-flex justify-content-between input-right-icon">
                 <div class="col">
                     <div class="primary_input">
+                        <label class="primary_input_label" for="">@lang('admin.background_image')</label>
                         <input
                             class="primary_input_field form-control{{ $errors->has('background_img') ? ' is-invalid' : '' }}"
                             type="text" id="placeholderFileFiveName"
@@ -60,7 +62,7 @@
                         @endif
                     </div>
                 </div>
-                <div class="col-auto">
+                <div class="col-auto mt-30">
                     <button class="primary-btn-small-input cust-margin id_card_button" type="button">
                         <label class="primary-btn small fix-gr-bg" for="document_file_5">@lang('common.browse')</label>
                         <input type="file" class="d-none" name="background_img" id="document_file_5"
@@ -69,7 +71,7 @@
                     </button>
                 </div>
             </div>
-            <button class="primary-btn icon-only fix-gr-bg id_card_button" type="button" id="deleteBackImg">
+            <button class="primary-btn icon-only fix-gr-bg id_card_button mt-30" type="button" id="deleteBackImg">
                 <span class="ti-trash"></span>
             </button>
         </div>
@@ -77,6 +79,7 @@
         <div class="row mt-25">
             <div class="col-lg-12">
                 <div class="primary_input">
+                    <label class="primary_input_label" for="">@lang('admin.applicable_user')</label>
                     <select
                         class="primary_select  form-control{{ $errors->has('applicable_user') ? ' is-invalid' : '' }}"
                         name="applicable_user[]" id="applicableUser">
@@ -179,6 +182,7 @@
             <div class="row flex-grow-1 d-flex justify-content-between input-right-icon">
                 <div class="col">
                     <div class="primary_input">
+                        <label class="primary_input_label" for="">@lang('admin.profile_image')</label>
                         <input
                             class="primary_input_field form-control{{ $errors->has('profile_image') ? ' is-invalid' : '' }}"
                             type="text" id="placeholderFileSixName"
@@ -192,7 +196,7 @@
                         @endif
                     </div>
                 </div>
-                <div class="col-auto">
+                <div class="col-auto mt-30">
                     <button class="primary-btn-small-input cust-margin id_card_button" type="button">
                         <label class="primary-btn small fix-gr-bg" for="document_file_6">@lang('common.browse')</label>
                         <input type="file" class="d-none" name="profile_image" id="document_file_6"
@@ -201,7 +205,7 @@
                     </button>
                 </div>
             </div>
-            <button class="primary-btn icon-only fix-gr-bg id_card_button" type="button" id="deleteProImg">
+            <button class="primary-btn icon-only fix-gr-bg id_card_button mt-30" type="button" id="deleteProImg">
                 <span class="ti-trash"></span>
             </button>
         </div>
@@ -352,6 +356,7 @@
             <div class="row flex-grow-1 d-flex justify-content-between input-right-icon">
                 <div class="col">
                     <div class="primary_input">
+                        <label class="primary_input_label" for="">@lang('admin.logo')</label>
                         <input class="primary_input_field form-control{{ $errors->has('logo') ? ' is-invalid' : '' }}" type="text" id="placeholderFileThreeName" placeholder="{{isset($id_card)? ($id_card->logo != ""? getFilePath3($id_card->logo): trans('admin.logo')):trans('admin.logo') }}"
                             readonly>
 
@@ -362,7 +367,7 @@
                         @endif 
                     </div>
                 </div>
-                <div class="col-auto">
+                <div class="col-auto mt-30">
                     <button class="primary-btn-small-input cust-margin id_card_button" type="button">
                         <label class="primary-btn small fix-gr-bg" for="document_file_3">@lang('common.browse')</label>
                         <input type="file" class="d-none" name="logo" id="document_file_3"
@@ -371,7 +376,7 @@
                     </button>
                 </div>
             </div>
-            <button class="primary-btn icon-only fix-gr-bg id_card_button" type="button" id="deleteLogoImg">
+            <button class="primary-btn icon-only fix-gr-bg id_card_button mt-30" type="button" id="deleteLogoImg">
                 <span class="ti-trash"></span>
             </button>
         </div>
@@ -380,6 +385,7 @@
             <div class="row flex-grow-1 d-flex justify-content-between input-right-icon">
                 <div class="col">
                     <div class="primary_input">
+                        <label class="primary_input_label" for="">@lang('admin.signature')</label>
                         <input
                             class="primary_input_field form-control{{ $errors->has('signature') ? ' is-invalid' : '' }}"
                             type="text" id="placeholderFileFourName"
@@ -393,7 +399,7 @@
                         @endif
                     </div>
                 </div>
-                <div class="col-auto">
+                <div class="col-auto mt-30">
                     <button class="primary-btn-small-input cust-margin id_card_button" type="button">
                         <label class="primary-btn small fix-gr-bg" for="document_file_4">@lang('common.browse')</label>
                         <input type="file" class="d-none" name="signature" id="document_file_4"
@@ -402,7 +408,7 @@
                     </button>
                 </div>
             </div>
-            <button class="primary-btn icon-only fix-gr-bg id_card_button" type="button" id="deleteSignImg">
+            <button class="primary-btn icon-only fix-gr-bg id_card_button mt-30" type="button" id="deleteSignImg">
                 <span class="ti-trash"></span>
             </button>
         </div>

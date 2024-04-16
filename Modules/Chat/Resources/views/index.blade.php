@@ -8,7 +8,7 @@
             <div class="row justify-content-center">
                 <div class="col-12">
                     <div class="chat_main_wrapper">
-                        <div class="chat_flow_list_wrapper ">
+                        <div class="chat_flow_list_wrapper white-box mb-3">
                             <div class="box_header">
                                 <div class="main-title">
                                     <h3 class="m-0">@lang('chat::chat.chat_list')</h3>

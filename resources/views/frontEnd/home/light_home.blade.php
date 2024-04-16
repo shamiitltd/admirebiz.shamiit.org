@@ -264,4 +264,3 @@
 
     <!--================ End Testimonial Area =================-->
 @endsection
-{{-- @include('whatsappsupport::partials._popup') --}}

@@ -46,7 +46,7 @@
     }
 
     input:checked + .slider {
-        background: linear-gradient(90deg, var(--gradient_1) 0%, #c738d8 51%, var(--gradient_1) 100%);
+        background: var(--primary-color);
     }
 
     input:focus + .slider {
@@ -83,7 +83,7 @@
     }
 </style>
 
-<section class="sms-breadcrumb mb-40 white-box">
+<section class="sms-breadcrumb mb-20">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('common.weekend')</h1>
@@ -99,58 +99,60 @@
     <div class="container-fluid p-0">
         <div class="row">      
             <div class="col-lg-12">
-              <div class="row">
-                <div class="col-lg-4 no-gutters">
-                    <div class="main-title mt_4">
-                        <h3 class="mb-30">@lang('system_settings.day_list')</h3>
+              <div class="white-box">
+                <div class="row">
+                    <div class="col-lg-4 no-gutters">
+                        <div class="main-title mt_4">
+                            <h3 class="mb-15">@lang('system_settings.day_list')</h3>
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="row">
-
-                <div class="col-lg-12">
-                    <table id="" class="table school-table-style" cellspacing="0" width="100%">
-
-                        <thead>
-                            
+    
+                <div class="row">
+    
+                    <div class="col-lg-12">
+                        <table id="" class="table school-table-style" cellspacing="0" width="100%">
+    
+                            <thead>
+                                
+                                <tr>
+                                    <th>@lang('common.name')</th>
+                                    <th>@lang('common.weekend')</th>
+                                    <th>@lang('common.action')</th>
+                                </tr>
+                            </thead>
+    
+                        <tbody>
+                            @foreach($weekends as $weekend)
                             <tr>
-                                <th>@lang('common.name')</th>
-                                <th>@lang('common.weekend')</th>
-                                <th>@lang('common.action')</th>
+                                <td>{{@$weekend->name}}</td>
+                                <td>
+                                    @if(@$weekend->is_weekend == 1)
+                                    <button class="primary-btn small fix-gr-bg">
+                                        yes
+                                    </button>
+                                    @else
+                                        {{'No'}}
+                                    @endif
+    
+    
+                                </td>
+                                <td>
+                                     <label class="switch_toggle">
+                                    <input type="checkbox" data-id="{{$weekend->id}}"
+                                            class="weekend_switch_btn" {{@$weekend->is_weekend == 0? '':'checked'}}>
+                                        <span class="slider round"></span>
+                                    </label>
+    
+    
+                                </td>
                             </tr>
-                        </thead>
-
-                    <tbody>
-                        @foreach($weekends as $weekend)
-                        <tr>
-                            <td>{{@$weekend->name}}</td>
-                            <td>
-                                @if(@$weekend->is_weekend == 1)
-                                <button class="primary-btn small fix-gr-bg">
-                                    yes
-                                </button>
-                                @else
-                                    {{'No'}}
-                                @endif
-
-
-                            </td>
-                            <td>
-                                 <label class="switch_toggle">
-                                <input type="checkbox" data-id="{{$weekend->id}}"
-                                        class="weekend_switch_btn" {{@$weekend->is_weekend == 0? '':'checked'}}>
-                                    <span class="slider round"></span>
-                                </label>
-
-
-                            </td>
-                        </tr>
-                
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
+                    
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+              </div>
         </div>
     </div>
 </div>

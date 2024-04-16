@@ -10,20 +10,21 @@ class SendEmailSmsRequest extends FormRequest
     {
         return true;
     }
-    
+
     public function rules()
     {
         $rules = [
             'email_sms_title' => "required",
             'send_through' => "required",
             'description' => "required",
-            'role'=>"required_if:selectTab,G|array",
-            'role_id'=>"required_if:selectTab,I",
-            'message_to_individual'=>"required_with:role_id|array",
+            'role' => "required_if:selectTab,G|array",
+            'role_id' => "required_if:selectTab,I",
+            'class_id' => "required_if:selectTab,C",
+            'message_to_individual' => "required_with:role_id|array",
         ];
 
         if (moduleStatusCheck('University')) {
-            if($this->selectTab == "C"){
+            if ($this->selectTab == "C") {
                 $rules += [
                     'un_session_id' => 'required',
                     'un_faculty_id' => 'nullable',
@@ -33,17 +34,26 @@ class SendEmailSmsRequest extends FormRequest
                     'un_semester_label_id' => 'required',
                     'un_section_id' => 'nullable',
                 ];
-            }else{
+            } else {
                 $rules += [];
             }
         } else {
-            $rules +=[
-                'class_id'=>"required_without:selectTab",
-                'message_to_section'=>"required_with:class_id|array",
-                'selectTab'=>'sometimes|nullable'
+            $rules += [
+                'class_id' => "required_if:selectTab,C",
+                'message_to_section' => "required_with:class_id|array",
+                'selectTab' => 'sometimes|nullable'
             ];
         }
         return $rules;
+    }
+    public function messages()
+    {
+        return [
+            'email_sms_title.reuired' => 'The Title field is required.',
+            'role.required_if' => 'The Role field is required.',
+            'role_id.required_if' => 'The Role field is required.',
+            'class_id.required_if' => 'The Class field is required.',
+        ];
     }
 
     public function attributes()
@@ -61,8 +71,8 @@ class SendEmailSmsRequest extends FormRequest
                 'un_section_id' => "section",
             ];
         } else {
-            $rules +=[
-                'class_ids'=>"class",
+            $rules += [
+                'class_ids' => "class",
             ];
         }
         return $rules;

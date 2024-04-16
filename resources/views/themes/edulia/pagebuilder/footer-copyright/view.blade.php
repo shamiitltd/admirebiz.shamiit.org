@@ -3,9 +3,7 @@
         <div class="row">
             <div class="col-md-8">
                 <div class="footer_copyright_inner">
-                    <p style="color: {{pagesetting('footer-copyright-bg-color')}}">
-                        {{ pagesetting('footer-copy-right-text') }}
-                    </p>
+                    {{ pagesetting('footer-copy-right-text') }}
                 </div>
             </div>
             <div class="col-md-4 text-end">

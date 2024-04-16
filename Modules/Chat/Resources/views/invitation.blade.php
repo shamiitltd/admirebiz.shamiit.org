@@ -7,14 +7,14 @@
         <div class="container-fluid p-0">
             <div class="row justify-content-center">
                 <div class="col-xl-6">
-                    <div class="chat_flow_list_wrapper ">
-                        <div class="box_header">
-                            <div class="main-title">
-                                <h3 class="m-0">@lang('chat::chat.your_requests')</h3>
-                            </div>
-                        </div>
+                    <div class="chat_flow_list_wrapper  white-box">
                         <!-- chat_list  -->
                         <div class="chat_flow_list crm_full_height">
+                            <div class="box_header">
+                                <div class="main-title">
+                                    <h3 class="m-0">@lang('chat::chat.your_requests')</h3>
+                                </div>
+                            </div>
                             <div class="chat_flow_list_inner">
                                 <ul>
                                     @forelse($ownRequest as $myRequest)
@@ -57,14 +57,14 @@
                     </div>
                 </div>
                 <div class="col-xl-6">
-                    <div class="chat_flow_list_wrapper">
-                        <div class="box_header">
-                            <div class="main-title">
-                                <h3 class="m-0">@lang('chat::chat.people_requests_you_to_connect')</h3>
-                            </div>
-                        </div>
+                    <div class="chat_flow_list_wrapper white-box">
                         <!-- chat_list  -->
-                        <div class="chat_flow_list crm_full_height">
+                        <div class="chat_flow_list crm_full_height ">
+                            <div class="box_header">
+                                <div class="main-title">
+                                    <h3 class="m-0">@lang('chat::chat.people_requests_you_to_connect')</h3>
+                                </div>
+                            </div>
                             <div class="chat_flow_list_inner">
                                 <ul>
                                     @forelse($peopleRequest as $request)
@@ -118,14 +118,14 @@
             </div>
             <div class="row mt-5">
                 <div class="col-xl-6">
-                    <div class="chat_flow_list_wrapper ">
-                        <div class="box_header">
-                            <div class="main-title">
-                                <h3 class="m-0">@lang('chat::chat.connection_connected_with_you')</h3>
-                            </div>
-                        </div>
+                    <div class="chat_flow_list_wrapper  white-box">
                         <!-- chat_list  -->
                         <div class="chat_flow_list crm_full_height">
+                            <div class="box_header">
+                                <div class="main-title">
+                                    <h3 class="m-0">@lang('chat::chat.connection_connected_with_you')</h3>
+                                </div>
+                            </div>
                             <div class="chat_flow_list_inner">
                                 <ul>
                                     @forelse($connectedPeoples as $request)

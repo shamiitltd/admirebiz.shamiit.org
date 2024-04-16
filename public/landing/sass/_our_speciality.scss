@@ -117,7 +117,7 @@
             @extend %text_color;
             margin-bottom: 20px;
             display: inline-block;
-            text-shadow: 0px 10px 20px rgba(108, 39, 255, 0.3);
+            text-shadow: var(--box_shadow);
 
          }
       }

@@ -17,8 +17,8 @@ return new class extends Migration
         Schema::create(config('optionbuilder.db_prefix').'settings', function (Blueprint $table) {
             $table->string('section');
             $table->string('key');
-            $table->primary(['section', 'key']);
-            $table->unique(['section', 'key']);
+            // $table->primary(['section', 'key']);
+            // $table->unique(['section', 'key']);
             $table->text('value')->nullable();
         });
     }

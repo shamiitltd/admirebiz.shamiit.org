@@ -23,6 +23,7 @@
     }
     .update_sidebar img {
         max-width: 40px !important;
+        object-fit: contain;
     }
     #sidebar_menu{
         ul li ul {
@@ -100,7 +101,7 @@
                 }
                 > a{
                     // width: 240px;
-                    background: #415094;
+                    background: transparent;
                     .nav_icon_small{
                         display: inline-block;
                         }

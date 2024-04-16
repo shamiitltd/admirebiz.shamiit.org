@@ -60,29 +60,6 @@
                     </div>
                     <div id="livesearch" style="display: none;"></div>
                 </div>
-                <div class="header_middle d-none">
-                    <div class="select_style d-flex">
-                        @if (generalSetting()->website_btn == 1)
-                            <a target="_blank" class="primary-btn white mr-10 tab_hide"
-                                href="{{ url('/') }}/home">@lang('common.website')</a>
-                        @endif
-                        @if (generalSetting()->dashboard_btn == 1)
-                            @if (Auth::user()->role_id == $coltroller_role)
-                                <a class="primary-btn white mr-10 tab_hide"
-                                    href="{{ route('admin-dashboard') }}">@lang('common.dashboard')</a>
-                            @endif
-                        @endif
-                        @if (generalSetting()->report_btn == 1)
-                            @if (Auth::user()->role_id == $coltroller_role)
-                                <a class="primary-btn white mr-10 tab_hide"
-                                    href="{{ route('student_report') }}">@lang('reports.reports')</a>
-                            @endif
-                        @endif
-                        {{-- <div class="border_1px tab_hide"></div> --}}
-
-
-                    </div>
-                </div>
                 <div class="header_right d-flex justify-content-between align-items-center">
                     <div class="serach_field-area mr-10">
                         <div class="search_inner">
@@ -111,7 +88,7 @@
                         @endforeach
                     </select>
 
-                    @if (@$styles && Auth::user()->role_id == 1)
+                    {{-- @if (@$styles && Auth::user()->role_id == 1)
                         @if (generalSetting()->style_btn == 1)
                             <select class="nice_Select bgLess mb-0 infix_theme_style" id="infix_theme_style">
                                 <option data-display="@lang('common.select_style')"
@@ -125,14 +102,14 @@
                                 @endforeach
                             </select>
                         @endif
-                    @endif
+                    @endif --}}
                     @if (generalSetting()->lang_btn == 1)
                         <select class="nice_Select bgLess mb-0 languageChange" id="languageChange">
                             <option data-display="@lang('common.select_language')"
                                 value="0">@lang('common.select_language')
                             </option>
                             @foreach ($languages as $lang)
-                                <option data-display="{{ $lang->native }}" value="{{ $lang->language_universal }}"
+                                <option data-display="{{ $lang->language_universal }}" value="{{ $lang->language_universal }}"
                                     {{ $lang->language_universal == userLanguage() ? 'selected' : '' }}>
                                     {{ $lang->native }}</option>
                             @endforeach
@@ -167,7 +144,7 @@
                         <li class="scroll_notification_list">
                             <a class="pulse theme_color bell_notification_clicker show_notifications" href="#">
                                 <!-- bell   -->
-                                <i class="fa fa-bell"></i>
+                                <img src="{{asset('public/backEnd/assets/img/icons/notification.svg')}}" alt="">
 
                                 <!--/ bell   -->
                                 <span
@@ -187,12 +164,18 @@
                                             <div class="notify_thumb">
                                                 <i class="fa fa-bell"></i>
                                             </div>
-                                            <a href="#" class="unread_notification" title="Mark As Read"
+                                            <a href="#" class="unread_notification flex-grow-1" title="Mark As Read"
                                                 data-notification_id="{{ $notification->id }}">
                                                 <div class="notify_content">
-                                                    <h5>{{ date('h.i a', strtotime($notification->created_at)) }}</h5>
-                                                    <p>{!! strip_tags(\Illuminate\Support\Str::limit(@$notification->message, 70, $end = '...')) !!}</p>
+                                                    <p class="notification_title">{!! strip_tags(\Illuminate\Support\Str::limit(@$notification->message, 70, $end = '...')) !!}</p>
                                                 </div>
+                                            </a>
+                                            <h5 class="notification_time text-nowrap">{{ formatedDate($notification->created_at) }}</h5>
+                                            <a href="{{ route('view-single-notification', $notification->id) }}">
+                                                <svg width="20" height="20" class="notification_close_icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <circle opacity="0.5" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"></circle>
+                                                    <path d="M14.5 9.50002L9.5 14.5M9.49998 9.5L14.5 14.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+                                                </svg>
                                             </a>
                                         </div>
                                     @empty
@@ -202,11 +185,10 @@
                                 </div>
                                 <div class="nofity_footer">
                                     <div class="submit_button text-center pt_20">
-                                        {{-- <a href=""
-                                           class="primary-btn radius_30px text_white  fix-gr-bg">{{__('common.See More')}}</a>
-                                        --}}
                                         <a href="{{ route('view/all/notification', Auth()->user()->id) }}"
                                             class="primary-btn radius_30px text_white  fix-gr-bg mark-all-as-read">{{ __('common.mark_all_as_read') }}</a>
+                                        <a href="{{ route('all-notification') }}"
+                                            class="primary-btn radius_30px text_white  fix-gr-bg see_all_notification">{{ __('common.see_more') }}</a>
                                     </div>
                                 </div>
                             </div>
@@ -216,6 +198,32 @@
 
 
                     </ul>
+
+                    <div class="redirect_links">
+                        <div class="select_style d-flex">
+                            @if (generalSetting()->website_btn == 1)
+                                <a target="_blank" class=" mr-10 tab_hide"
+                                    href="{{ url('/') }}"><img src="{{asset('public/backEnd/assets/img/icons/globe.svg')}}" alt=""></a>
+                            @endif
+                            {{-- @if (generalSetting()->dashboard_btn == 1)
+                                @if (Auth::user()->role_id == $coltroller_role)
+                                    <a class="primary-btn white mr-10 tab_hide"
+                                        href="{{ route('admin-dashboard') }}">@lang('common.dashboard')</a>
+                                @endif
+                            @endif --}}
+                            @if (generalSetting()->report_btn == 1)
+                                @if (Auth::user()->role_id == $coltroller_role)
+                                    <a class="mr-10 tab_hide"
+                                        href="{{ route('student_report') }}"><img src="{{asset('public/backEnd/assets/img/icons/report.svg')}}" alt=""></a>
+                                @endif
+                            @endif
+                            {{-- <div class="border_1px tab_hide"></div> --}}
+    
+    
+                        </div>
+                    </div>
+
+                    
                     <div class="profile_info">
 
                         <div class="user_avatar_div">
@@ -225,7 +233,7 @@
                         </div>
 
                         <div class="profile_info_iner">
-                            <p> {{ Auth::user()->email }}</p>
+                            <p class="email"> {{ Auth::user()->email }}</p>
                             <h5>{{ Auth::user()->full_name }} @if (isset(Auth::user()->wallet_balance))
                                     @if (Auth::user()->role_id == 2 || Auth::user()->role_id == 3)
                                         <p class="message">
@@ -247,29 +255,29 @@
                                 @endif
                                 @if (Auth::user()->role_id == '2' && Auth::user()->is_saas == 0)
                                     <a href="{{ route('student-profile') }}">
-
+                                        <img src="{{asset('public/backEnd/assets/img/icons/profile.svg')}}" class="mr-1" alt="">
                                         @lang('common.view_profile')
-                                        <span class="ti-user"></span>
+                                        {{-- <span class="ti-user"></span> --}}
                                     </a>
                                 @elseif(Auth::user()->role_id != '3' && Auth::user()->is_saas == 0 && Auth::user()->staff)
                                     <a href="{{ route('viewStaff', Auth::user()->staff->id) }}">
-
+                                        <img src="{{asset('public/backEnd/assets/img/icons/profile.svg')}}" alt="">
                                         @lang('common.view_profile')
-                                        <span class="ti-user"></span>
+                                        {{-- <span class="ti-user"></span> --}}
                                     </a>
                                 @endif
                                 @if (config('app.app_sync') && auth()->user()->role_id != 1)
                                     @if (auth()->user()->staff && auth()->user()->staff->parent_id && auth()->user()->role_id == 3)
                                         <a href="{{ route('viewAsRole') }}">
 
+                                            <img src="{{asset('public/backEnd/assets/img/icons/key.svg')}}" alt="" class="mr-1">
                                             @lang('common.VIEW_AS_' . strtoupper(auth()->user()->staff->previousRole->name))
-                                            <span style="margin-left: 3px;" class="ti-key"></span>
                                         </a>
                                     @elseif(auth()->user()->staff && auth()->user()->staff->parent_id)
                                         <a href="{{ route('viewAsParent') }}">
 
+                                            <img src="{{asset('public/backEnd/assets/img/icons/key.svg')}}" alt="" class="mr-1">
                                             @lang('common.VIEW_AS_PARENT')
-                                            <span style="margin-left: 3px;" class="ti-key"></span>
                                         </a>
                                     @endif
                                 @endif
@@ -279,18 +287,19 @@
                                         Auth::user()->is_saas == 0)
 
                                     <a href="{{ route('viewAsSuperadmin') }}">
+                                        <img src="{{asset('public/backEnd/assets/img/icons/key.svg')}}" alt="">
 
                                         @if (Session::get('isSchoolAdmin') == true)
                                             @lang('common.view_as_saas_admin')
                                         @else
                                             @lang('common.view_as_school_admin')
                                         @endif
-                                        <span style="margin-left: 3px;" class="ti-key"></span>
                                     </a>
                                 @endif
                                 <a href="{{ route('updatePassowrd') }}">
-
-                                    @lang('common.password')<span style="margin-left: 3px;" class="ti-key"></span>
+                                    <img src="{{asset('public/backEnd/assets/img/icons/password.svg')}}" alt="">
+                                    @lang('common.password')
+                                    {{-- <span style="margin-left: 3px;" class="ti-key"></span> --}}
                                 </a>
 
 
@@ -298,9 +307,9 @@
                                     onclick="event.preventDefault();
 
                                               document.getElementById('logout-form').submit();">
-
+                                    <img src="{{asset('public/backEnd/assets/img/icons/logout.svg')}}" alt="">
                                     @lang('common.logout')
-                                    <span class="ti-unlock"></span>
+                                    {{-- <span class="ti-unlock"></span> --}}
                                 </a>
 
                                 <form id="logout-form"
@@ -325,6 +334,134 @@
     @include('whatsappsupport::partials._popup')
 @endif
 
+<style>
+    .messengerContainer:hover {
+        cursor: pointer;
+    }
+</style>
+@if($messenger_position == 'right') 
+    <style>
+        .messengerContainer {
+            position: fixed;
+            bottom: 85px;
+            right: 22px;
+            width: 48px;
+            height: 45px;
+            border-radius: 50%;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            z-index: 3;
+            box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;
+        }
+    </style>
+@elseif($messenger_position == 'left') 
+    <style>
+        .messengerContainer {
+            position: fixed;
+            bottom: 85px;
+            width: 48px;
+            height: 45px;
+            left: 22px;
+            border-radius: 50%;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            z-index: 3;
+            box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;
+        }
+    </style>
+@endif
 
+@php
+    $school_id = @Auth::user()->school_id;
+    $tawk_is_enable = @App\Models\Plugin::where('school_id', $school_id)->where('name', 'tawk')->first()->is_enable;
+    $messenger_is_enable = @App\Models\Plugin::where('school_id', $school_id)->where('name', 'messenger')->first()->is_enable;
+@endphp
+
+@if ($tawk_is_enable == 1)
+    <div class="tawk-min-container tawk-test">
+        <script type="text/javascript">
+            var Tawk_API=Tawk_API||{},
+            Tawk_LoadStart=new Date();
+            (function(){ var s1=document.createElement("script"),
+            s0=document.getElementsByTagName("script")[0];
+            s1.async=true; s1.src=`https://embed.tawk.to/@include('plugins.tawk_to')`;
+            s1.charset='UTF-8'; s1.setAttribute('crossorigin','*');
+            s0.parentNode.insertBefore(s1,s0); })();
+        </script>
+    </div>  
+@endif
+
+@if ($messenger_is_enable == 1)
+    <div class="messengerContainer">
+        <!-- Messenger Chat Plugin Code -->
+        <div id="fb-root"></div>
+
+        <!-- Your Chat Plugin code -->
+        <div id="fb-customer-chat" class="fb-customerchat">
+        </div>
+
+        <script>
+        var chatbox = document.getElementById('fb-customer-chat');
+        chatbox.setAttribute("page_id", "@include('plugins.messenger')");
+        chatbox.setAttribute("attribution", "biz_inbox");
+        </script>
+
+        <!-- Your SDK code -->
+        <script>
+        window.fbAsyncInit = function() {
+            FB.init({
+            xfbml            : true,
+            version          : 'v18.0'
+            });
+        };
+
+        (function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+        </script>
+    </div>
+@endif
+
+<script>
+    var position = '{{ $position }}';
+    var tawkposition = '';
+
+    if(position == 'left'){
+        tawkposition = 'bl';
+    }else{
+        tawkposition = 'br';
+    }
+	var Tawk_API = Tawk_API || {};
+
+	Tawk_API.customStyle = {
+		visibility : {
+			desktop : {
+				position : tawkposition,
+				xOffset : 0,
+				yOffset : 20
+			},
+			mobile : {
+				position : tawkposition,
+				xOffset : 0,
+				yOffset : 0
+			},
+			bubble : {
+				rotate : '0deg',
+			 	xOffset : -20,
+			 	yOffset : 0
+			}
+		}
+	};
+</script>
 @section('script')
 @endsection

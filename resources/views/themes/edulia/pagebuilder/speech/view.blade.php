@@ -1,6 +1,6 @@
-<div class="mt-md-5">
+<div class="mt-md-5 px-4">
     @if (!empty(pagesetting('speech_heading')))
-        <h1 class="text-center mb-5 speech-title">{{ pagesetting('speech_heading') }}</h1>
+        <h1 class="text-center mb-3 mb-md-5 mt-5 speech-title">{{ pagesetting('speech_heading') }}</h1>
     @endif
     <div class="row align-items-center single-speech">
         <div class="col-md-12">

@@ -1,7 +1,7 @@
 @pushonce(config('pagebuilder.site_style_var'))
     <link rel="stylesheet" href="{{ asset('public/theme/edulia/packages/carousel/owl.carousel.min.css') }}">
 @endpushonce
-<section class="section_padding_bottom tesimonials">
+<section class="section_padding tesimonials about">
     <div class="container">
         <div class="row">
             <div class="col-md-12 text-center">

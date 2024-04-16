@@ -5,6 +5,7 @@ use App\SmGeneralSettings;
 use App\Models\FrontResult;
 use App\SmHeaderMenuManager;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Database\Schema\Blueprint;
@@ -38,7 +39,6 @@ return new class extends Migration
                 if ($file_data) {
                     $check_exist  = DB::table(config('pagebuilder.db_prefix', 'infixedu__') . 'pages')->where('school_id', 1)->where('slug', $file_data['slug'])->first();
                     if (!$check_exist) {
-
                         DB::table(config('pagebuilder.db_prefix', 'infixedu__') . 'pages')->insert(
                             [
                                 'name' => $file_data['name'],
@@ -48,6 +48,7 @@ return new class extends Migration
                                 'settings' => json_encode($file_data['settings']),
                                 'home_page' => $file_data['home_page'],
                                 'status' => 'published',
+                                'is_default' => 1,
                                 'school_id' => 1
                             ]
                         );
@@ -57,109 +58,436 @@ return new class extends Migration
         }
 
 
-        $builderPages = DB::table(config('pagebuilder.db_prefix', 'infixedu__') . 'pages')->whereIn('slug', ['home', 'aboutus-page', 'course', 'blog', 'gallery', 'result'])->get();
-        foreach ($builderPages as $builderPage) {
-            $data = new SmHeaderMenuManager();
-            $data->type = 'sPages';
-            $data->element_id = $builderPage->id;
-            $data->title = $builderPage->name;
-            $data->link = '/' . $builderPage->slug;
-            $data->theme = 'edulia';
-            $data->school_id = $builderPage->school_id;
-            if ($builderPage->slug == 'home') {
-                $data->position = 1;
-            } elseif ($builderPage->slug == 'aboutus-page') {
-                $data->position = 2;
-            } elseif ($builderPage->slug == 'course') {
-                $data->position = 3;
-            } elseif ($builderPage->slug == 'gallery') {
-                $data->position = 5;
-            } elseif ($builderPage->slug == 'result') {
-                $data->position = 6;
-            }
-            $data->save();
+        // Header Menu manage Start
+        $datas = 
+          array (
+              array (
+                'type' => 'sPages',
+                'element_id' => 12,
+                'title' => 'Home',
+                'link' => '/home',
+                'position' => 1,
+                'show' => 0,
+                'is_newtab' => 0,
+                'theme' => 'edulia',
+                'school_id' => 1,
+                'created_at' => '2024-01-05T07:37:19.000000Z',
+                'updated_at' => '2024-01-05T07:40:14.000000Z',
+                'childs' => 
+                array (
+                ),
+              ),
+            
+              array (
+                'type' => 'sPages',
+                'element_id' => 2,
+                'title' => 'About',
+                'link' => '/aboutus-page',
+                'position' => 2,
+                'show' => 0,
+                'is_newtab' => 0,
+                'theme' => 'edulia',
+                'school_id' => 1,
+                'created_at' => '2024-01-05T07:37:52.000000Z',
+                'updated_at' => '2024-01-05T07:40:14.000000Z',
+                'childs' => 
+                array (
+                ),
+              ),
+            
+              array (
+                'type' => 'sPages',
+                'element_id' => 5,
+                'title' => 'Course',
+                'link' => '/course',
+                'position' => 3,
+                'show' => 0,
+                'is_newtab' => 0,
+                'theme' => 'edulia',
+                'school_id' => 1,
+                'created_at' => '2024-01-05T07:38:04.000000Z',
+                'updated_at' => '2024-01-05T07:40:14.000000Z',
+                'childs' => 
+                array (
+                ),
+              ),
+
+              array (
+                'type' => 'customLink',
+                'element_id' => NULL,
+                'title' => 'Blog',
+                'link' => url('/blog-list'),
+                'position' => 4,
+                'show' => 0,
+                'is_newtab' => 0,
+                'theme' => 'edulia',
+                'school_id' => 1,
+                'created_at' => '2024-01-05T07:38:04.000000Z',
+                'updated_at' => '2024-01-05T07:40:14.000000Z',
+                'childs' => 
+                array (
+                ),
+              ),
+            
+              array (
+                'type' => 'sPages',
+                'element_id' => 10,
+                'title' => 'Gallery',
+                'link' => '/gallery',
+                'position' => 5,
+                'show' => 0,
+                'is_newtab' => 0,
+                'theme' => 'edulia',
+                'school_id' => 1,
+                'created_at' => '2024-01-05T07:38:17.000000Z',
+                'updated_at' => '2024-01-05T07:40:14.000000Z',
+                'childs' => 
+                array (
+                ),
+              ),
+            
+              array (
+                'type' => 'sPages',
+                'element_id' => 15,
+                'title' => 'Result',
+                'link' => '/result',
+                'position' => 6,
+                'show' => 0,
+                'is_newtab' => 0,
+                'theme' => 'edulia',
+                'school_id' => 1,
+                'created_at' => '2024-01-05T07:38:30.000000Z',
+                'updated_at' => '2024-01-05T07:40:14.000000Z',
+                'childs' => 
+                array (
+                ),
+              ),
+              
+              array (
+                'type' => 'sPages',
+                'element_id' => 22,
+                'title' => 'Contact',
+                'link' => '/contact-us',
+                'position' => 7,
+                'show' => 0,
+                'is_newtab' => 0,
+                'theme' => 'edulia',
+                'school_id' => 1,
+                'created_at' => '2024-01-05T07:43:22.000000Z',
+                'updated_at' => '2024-01-05T07:43:22.000000Z',
+                'childs' => 
+                array (
+                ),
+              ),
+              array (
+                'type' => 'customLink',
+                'element_id' => NULL,
+                'title' => 'Others',
+                'link' => NULL,
+                'position' => 8,
+                'show' => 0,
+                'is_newtab' => 0,
+                'theme' => 'edulia',
+                'school_id' => 1,
+                'created_at' => '2024-01-05T07:38:39.000000Z',
+                'updated_at' => '2024-01-05T07:40:14.000000Z',
+                'childs' => 
+                array (
+                  array (
+              
+                    'type' => 'customLink',
+                    'element_id' => NULL,
+                    'title' => 'Student',
+                    'link' => NULL,
+                    'position' => 1,
+                    'show' => 0,
+                    'is_newtab' => 0,
+                    'theme' => 'edulia',
+                    'school_id' => 1,
+                    'created_at' => '2024-01-05T07:39:55.000000Z',
+                    'updated_at' => '2024-01-05T07:40:21.000000Z',
+                    'childs' => 
+                    array (
+                      array (
+                  
+                        'type' => 'sPages',
+                        'element_id' => 16,
+                        'title' => 'Student List',
+                        'link' => '/student-lists',
+              
+                        'position' => 1,
+                        'show' => 0,
+                        'is_newtab' => 0,
+                        'theme' => 'edulia',
+                        'school_id' => 1,
+                        'created_at' => '2024-01-05T07:39:32.000000Z',
+                        'updated_at' => '2024-01-05T07:40:27.000000Z',
+                        'childs' => 
+                        array (
+                        ),
+                      ),
+                    ),
+                  ),
+                  array (
+              
+                    'type' => 'customLink',
+                    'element_id' => NULL,
+                    'title' => 'Teacher',
+                    'link' => NULL,
+                    'position' => 2,
+                    'show' => 0,
+                    'is_newtab' => 0,
+                    'theme' => 'edulia',
+                    'school_id' => 1,
+                    'created_at' => '2024-01-05T07:40:03.000000Z',
+                    'updated_at' => '2024-01-05T07:40:36.000000Z',
+                    'childs' => 
+                    array ( 
+                      array (
+                  
+                        'type' => 'sPages',
+                        'element_id' => 21,
+                        'title' => 'Teacher List',
+                        'link' => '/teacher-lists',
+              
+                        'position' => 1,
+                        'show' => 0,
+                        'is_newtab' => 0,
+                        'theme' => 'edulia',
+                        'school_id' => 1,
+                        'created_at' => '2024-01-05T07:39:32.000000Z',
+                        'updated_at' => '2024-01-05T07:40:45.000000Z',
+                        'childs' => 
+                        array (
+                        ),
+                      ),
+                    ),
+                  ),
+                  
+                  array (
+                    'type' => 'sPages',
+                    'element_id' => 3,
+                    'title' => 'Academic Calendar',
+                    'link' => '/academic-calendars',
+                    'position' => 4,
+                    'show' => 0,
+                    'is_newtab' => 0,
+                    'theme' => 'edulia',
+                    'school_id' => 1,
+                    'created_at' => '2024-01-05T07:39:32.000000Z',
+                    'updated_at' => '2024-01-05T07:40:53.000000Z',
+                    'childs' => 
+                    array (
+                    ),
+                  ),
+                  array (
+                    'type' => 'customLink',
+                    'element_id' => NULL,
+                    'title' => 'Routine',
+                    'link' => NULL,
+                    'position' => 5,
+                    'show' => 0,
+                    'is_newtab' => 0,
+                    'theme' => 'edulia',
+                    'school_id' => 1,
+                    'created_at' => '2024-01-05T07:39:47.000000Z',
+                    'updated_at' => '2024-01-05T07:41:27.000000Z',
+                    'childs' => 
+                    array (
+                      array (
+                        'type' => 'sPages',
+                        'element_id' => 4,
+                        'title' => 'Class Routine',
+                        'link' => '/class-routines',
+              
+                        'position' => 1,
+                        'show' => 0,
+                        'is_newtab' => 0,
+                        'theme' => 'edulia',
+                        'school_id' => 1,
+                        'created_at' => '2024-01-05T07:39:32.000000Z',
+                        'updated_at' => '2024-01-05T07:41:30.000000Z',
+                        'childs' => 
+                        array (
+                        ),
+                      ),
+                      array (
+                        'type' => 'sPages',
+                        'element_id' => 7,
+                        'title' => 'Exam Routine',
+                        'link' => '/exam-routine',
+              
+                        'position' => 2,
+                        'show' => 0,
+                        'is_newtab' => 0,
+                        'theme' => 'edulia',
+                        'school_id' => 1,
+                        'created_at' => '2024-01-05T07:39:32.000000Z',
+                        'updated_at' => '2024-01-05T07:41:35.000000Z',
+                        'childs' => 
+                        array (
+                        ),
+                      ),
+                    ),
+                  ),
+                  array (
+              
+                    'type' => 'sPages',
+                    'element_id' => 6,
+                    'title' => 'Events',
+                    'link' => '/events',
+                    'position' => 6,
+                    'show' => 0,
+                    'is_newtab' => 0,
+                    'theme' => 'edulia',
+                    'school_id' => 1,
+                    'created_at' => '2024-01-05T07:39:32.000000Z',
+                    'updated_at' => '2024-01-05T07:41:35.000000Z',
+                    'childs' => 
+                    array (
+                    ),
+                  ),
+                  array (
+              
+                    'type' => 'sPages',
+                    'element_id' => 8,
+                    'title' => 'Facilities',
+                    'link' => '/facilities',
+                    'position' => 7,
+                    'show' => 0,
+                    'is_newtab' => 0,
+                    'theme' => 'edulia',
+                    'school_id' => 1,
+                    'created_at' => '2024-01-05T07:39:32.000000Z',
+                    'updated_at' => '2024-01-05T07:41:35.000000Z',
+                    'childs' => 
+                    array (
+                    ),
+                  ),
+                  array (
+              
+                    'type' => 'sPages',
+                    'element_id' => 13,
+                    'title' => 'Individual Result',
+                    'link' => '/individual-result',
+                    'position' => 8,
+                    'show' => 0,
+                    'is_newtab' => 0,
+                    'theme' => 'edulia',
+                    'school_id' => 1,
+                    'created_at' => '2024-01-05T07:39:32.000000Z',
+                    'updated_at' => '2024-01-05T07:41:35.000000Z',
+                    'childs' => 
+                    array (
+                    ),
+                  ),
+                  array (
+              
+                    'type' => 'sPages',
+                    'element_id' => 14,
+                    'title' => 'Noticeboard',
+                    'link' => '/noticeboard',
+                    'position' => 9,
+                    'show' => 0,
+                    'is_newtab' => 0,
+                    'theme' => 'edulia',
+                    'school_id' => 1,
+                    'created_at' => '2024-01-05T07:39:32.000000Z',
+                    'updated_at' => '2024-01-05T07:41:35.000000Z',
+                    'childs' => 
+                    array (
+                    ),
+                  ),
+                  array (
+              
+                    'type' => 'sPages',
+                    'element_id' => 17,
+                    'title' => 'Tuition Fees',
+                    'link' => '/tuition-fees',
+                    'position' => 10,
+                    'show' => 0,
+                    'is_newtab' => 0,
+                    'theme' => 'edulia',
+                    'school_id' => 1,
+                    'created_at' => '2024-01-05T07:39:32.000000Z',
+                    'updated_at' => '2024-01-05T07:41:35.000000Z',
+                    'childs' => 
+                    array (
+                    ),
+                  ),
+                  array (
+                    'type' => 'sPages',
+                    'element_id' => 18,
+                    'title' => 'Donor List',
+                    'link' => '/donor-list',
+                    'position' => 11,
+                    'show' => 0,
+                    'is_newtab' => 0,
+                    'theme' => 'edulia',
+                    'school_id' => 1,
+                    'created_at' => '2024-01-05T07:39:32.000000Z',
+                    'updated_at' => '2024-01-05T07:41:35.000000Z',
+                    'childs' => 
+                    array (
+                    ),
+                  ),
+                  array (
+                    'type' => 'sPages',
+                    'element_id' => 19,
+                    'title' => 'Book a Visit',
+                    'link' => '/book-a-visit',
+                    'position' => 12,
+                    'show' => 0,
+                    'is_newtab' => 0,
+                    'theme' => 'edulia',
+                    'school_id' => 1,
+                    'created_at' => '2024-01-05T07:39:32.000000Z',
+                    'updated_at' => '2024-01-05T07:41:35.000000Z',
+                    'childs' => 
+                    array (
+                    ),
+                  ),
+                  array (
+                    'type' => 'sPages',
+                    'element_id' => 20,
+                    'title' => 'Form Download',
+                    'link' => '/form-download-list',
+                    'position' => 13,
+                    'show' => 0,
+                    'is_newtab' => 0,
+                    'theme' => 'edulia',
+                    'school_id' => 1,
+                    'created_at' => '2024-01-05T07:39:32.000000Z',
+                    'updated_at' => '2024-01-05T07:41:35.000000Z',
+                    'childs' => 
+                    array (
+                    ),
+                  ),
+                  array (
+                    'type' => 'customLink',
+                    'element_id' => NULL,
+                    'title' => 'Archive',
+                    'link' => url('/archive-list'),
+                    'position' => 14,
+                    'show' => 0,
+                    'is_newtab' => 0,
+                    'theme' => 'edulia',
+                    'school_id' => 1,
+                    'created_at' => '2024-01-05T07:38:04.000000Z',
+                    'updated_at' => '2024-01-05T07:40:14.000000Z',
+                    'childs' => 
+                    array (
+                    ),
+                  ),
+                ),
+              ),
+          );
+        foreach($datas as $data){
+            insertMenuManage($data);
         }
 
-
-        $othersData = new SmHeaderMenuManager();
-        $othersData->type = 'customLink';
-        $othersData->element_id = NULL;
-        $othersData->title = 'Others';
-        $othersData->link = NULL;
-        $othersData->position = 7;
-        $othersData->theme =  'edulia';
-        $othersData->school_id = 1;
-        $othersData->save();
-
-        $blogData = new SmHeaderMenuManager();
-        $blogData->type = 'customLink';
-        $blogData->element_id = NULL;
-        $blogData->title = 'Blog';
-        $blogData->link = url('/blog-list');
-        $blogData->position = 4;
-        $blogData->theme =  'edulia';
-        $blogData->school_id = 1;
-        $blogData->save();
-
-        $builderPagesDatas = DB::table(config('pagebuilder.db_prefix', 'infixedu__') . 'pages')->whereIn('slug', ['academic-calendars', 'class-routines', 'events', 'exam-routine', 'facilities', 'noticeboard', 'student-lists', 'individual-result', 'tuition-fees'])->get();
-        foreach ($builderPagesDatas as $key => $otherPage) {
-            $storeData = new SmHeaderMenuManager();
-            $storeData->type = 'sPages';
-            $storeData->position = $key + 1;
-            $storeData->element_id = $otherPage->id;
-            $storeData->title = $otherPage->name;
-            $storeData->parent_id = $othersData->id;
-            $storeData->link = '/' . $otherPage->slug;
-            $storeData->theme = 'edulia';
-            $storeData->school_id = $otherPage->school_id;
-            $storeData->save();
-        }
-
-        
+        // Header Menu manage End
         Artisan::call('storage:link');
-
-        DB::table('sm_notice_boards')->insert([
-            [
-                'notice_title' => 'This is a sample notice 1',
-                'notice_message' => 'This a demo notice',
-                'notice_date' => date("Y-m-d"),
-                'publish_on' => date("Y-m-d"),
-                'inform_to' => "[1]",
-                'is_published' => 1,
-            ],
-            [
-                'notice_title' => 'This is another sample notice 2',
-                'notice_message' => 'This a demo notice',
-                'notice_date' => date("Y-m-d"),
-                'publish_on' => date("Y-m-d"),
-                'inform_to' => "[1]",
-                'is_published' => 1,
-            ],
-            [
-                'notice_title' => 'This is another sample notice 3',
-                'notice_message' => 'This a demo notice',
-                'notice_date' => date("Y-m-d"),
-                'publish_on' => date("Y-m-d"),
-                'inform_to' => "[1]",
-                'is_published' => 1,
-            ],
-            [
-                'notice_title' => 'This is another sample notice 4',
-                'notice_message' => 'This a demo notice',
-                'notice_date' => date("Y-m-d"),
-                'publish_on' => date("Y-m-d"),
-                'inform_to' => "[1]",
-                'is_published' => 1,
-            ],
-            [
-                'notice_title' => 'This is another sample notice 5',
-                'notice_message' => 'This a demo notice',
-                'notice_date' => date("Y-m-d"),
-                'publish_on' => date("Y-m-d"),
-                'inform_to' => "[1]",
-                'is_published' => 1,
-            ],
-        ]);
 
         $frontResultDatas = [
             'Science' => 'public/uploads/front_result/sci.jpg', 
@@ -178,6 +506,8 @@ return new class extends Migration
 
         Artisan::call('optimize:clear');
     }
+
+
 
     public function down(): void
     {

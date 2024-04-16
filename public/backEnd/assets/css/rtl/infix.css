@@ -243,7 +243,7 @@ creator:rashed;
     background: #ffffff;
     padding: 40px 30px;
     border-radius: 10px;
-    box-shadow: 0px 10px 15px rgba(236, 208, 244, 0.3);
+    box-shadow: var(--box_shadow);
     margin: 0 auto;
     clear: both;
     border-collapse: separate;
@@ -269,7 +269,7 @@ creator:rashed;
     background: #ffffff;
     padding: 15px 24px;
     border-radius: 10px;
-    box-shadow: 0px 10px 15px rgba(236, 208, 244, 0.3);
+    box-shadow: var(--box_shadow);
     margin: 0 auto;
     clear: both;
     border-collapse: separate;
@@ -292,7 +292,7 @@ creator:rashed;
     background: #ffffff;
     padding: 10px 30px;
     border-radius: 10px;
-    box-shadow: 0px 10px 15px rgba(236, 208, 244, 0.3);
+    box-shadow: var(--box_shadow);
 }
 
 .tt{

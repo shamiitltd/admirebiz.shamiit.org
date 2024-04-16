@@ -26,6 +26,11 @@ class SmHomeSliderController extends Controller
     }
     public function store(Request $request)
     {
+        if(config('app.app_sync')){
+            Toastr::error('Restricted in demo mode');
+            return back();
+        }
+
         $maxFileSize = generalSetting()->file_size * 1024;
         $input = $request->all();
         $validator = Validator::make($input, [
@@ -35,7 +40,7 @@ class SmHomeSliderController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
         try {
-            $destination =  'public/uploads/home_slider/';
+            $destination =  'public/uploads/theme/edulia/home_slider/';
             $image = fileUpload($request->image, $destination);
             $homeSlider = new HomeSlider();
             $homeSlider->image = $image;
@@ -63,6 +68,10 @@ class SmHomeSliderController extends Controller
     }
     public function update(Request $request)
     {
+        if(config('app.app_sync')){
+            Toastr::error('Restricted in demo mode');
+            return back();
+        }
         $maxFileSize = generalSetting()->file_size * 1024;
         $input = $request->all();
         if ($input['id']) {
@@ -79,7 +88,7 @@ class SmHomeSliderController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
         try {
-            $destination =  'public/uploads/home_slider/';
+            $destination =  'public/uploads/theme/edulia/home_slider/';
             $homeSlider = HomeSlider::find($request->id);
             $homeSlider->image = fileUpdate($homeSlider->image, $request->image, $destination);
             $homeSlider->link = $request->link;
@@ -106,7 +115,10 @@ class SmHomeSliderController extends Controller
     public function delete($id)
     {
         try {
-            $homeSlider = HomeSlider::where('id', $id)->first();
+            $homeSlider = HomeSlider::find($id);
+            if($homeSlider && file_exists($homeSlider->image)){
+                unlink($homeSlider->image);
+            }
             $homeSlider->delete();
             Toastr::success('Deleted successfully', 'Success');
             return redirect()->back();

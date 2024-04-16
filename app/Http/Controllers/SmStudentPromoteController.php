@@ -21,6 +21,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Scopes\StatusAcademicSchoolScope;
 use Illuminate\Validation\ValidationException;
 use App\Http\Controllers\Admin\StudentInfo\SmStudentAdmissionController;
+use App\Models\Graduate;
+use Illuminate\Support\Facades\Validator;
 
 class SmStudentPromoteController extends Controller
 {
@@ -44,7 +46,6 @@ class SmStudentPromoteController extends Controller
                 return view('backEnd.studentInformation.student_promote_with_exam', compact('sessions', 'classes', 'exams'));
             }
         } catch (\Throwable $th) {
-            //throw $th;
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();
         }
@@ -52,8 +53,6 @@ class SmStudentPromoteController extends Controller
 
     public function studentCurrentSearch(Request $request)
     {
-
-        //  return $request->all();
         $request->validate([
             'current_session' => 'required',
             'promote_session' => 'required',
@@ -99,8 +98,6 @@ class SmStudentPromoteController extends Controller
                 ->where('school_id', Auth::user()->school_id)
                 ->get();
 
-
-            // return $classes;
             if (empty($classes)) {
                 Toastr::error('No Class found For Next Academic Year', 'Failed');
                 return redirect('student-promote');
@@ -119,8 +116,6 @@ class SmStudentPromoteController extends Controller
             $search_current_academic_year = SmAcademicYear::find($request->current_session);
             $search_promote_academic_year = SmAcademicYear::find($request->promote_session);
             $sections = $search_current_class ? $search_current_class->classSection : [];
-
-            // return $search_info;
             if (empty($students)) {
                 Toastr::error('No result found', 'Failed');
                 return redirect('student-promote');
@@ -146,129 +141,465 @@ class SmStudentPromoteController extends Controller
         return response()->json($exist_roll_number);
     }
 
+    // public function old_promote(Request $request)
+        // {
+        //     #old_code
+        //      #dd($request->all());
+        //     // $request->validate([
+        //     //     'promote_session' => 'required',
+        //     //     'promote.*.class' => 'required',
+        //     //     'promote.*.section' => 'required_with:promote.*.student',
+        //     //     'promote.*.roll_number' => 'sometimes|nullable|integer',
+        //     // ], [
+        //     //     'promote.*.section' => 'The Section field is required when Student is present.',
+        //     // ]);
+
+        //     // $validator=Validator::make()
+        //     $isGraduateSelected = isset($request->is_graduate) && $request->is_graduate == 1;
+
+        //     $validationRules = [
+        //         'promote_session' => $isGraduateSelected ? 'nullable' : 'required',
+        //         'promote.*.class' => $isGraduateSelected ? 'nullable' : 'required',
+        //         'promote.*.section' => $isGraduateSelected ? 'nullable' : 'required',
+        //         'promote.*.roll_number' => 'sometimes|nullable|integer',
+        //     ];
+
+        //     // $customMessages = [
+        //     //     'promote.*.section.required' => 'The Section field is required when Student is present.',
+        //     // ];
+            
+        //     $request->validate($validationRules);
+
+        //     try {
+        //         if (empty($request->promote)) {
+        //             Toastr::error('Please Select Student', 'Failed');
+        //             return back();
+        //         }
+        //         foreach ($request->promote as $student_id => $student_data) {
+        //             // if (!gv($student_data, 'student') || !gv($student_data, 'class') || !gv($student_data, 'section')) {
+        //             //     continue;
+        //             // }
+        //             if (gv($student_data, 'student') && gv($student_data, 'class') && !is_null(gv($student_data, 'section'))) {            
+        //                 $roll_number = gv($student_data, 'roll_number');
+        //                 $student_record = StudentRecord::where('student_id', $student_id)
+        //                     ->where('class_id', gv($student_data, 'class'))
+        //                     ->where('section_id', gv($student_data, 'section'))
+        //                     ->where('academic_id', $request->promote_session)
+        //                     ->where('school_id', Auth::user()->school_id)
+        //                     ->where('is_promote', 0)
+        //                     ->first();
+                
+        //                 $exit_record = $student_record;
+        //                 if ($roll_number) {
+        //                     $exist_roll_number = $exit_record;
+        //                     if ($exist_roll_number) {
+        //                         throw ValidationException::withMessages(['promote.' . $student_id . '.roll_number' => 'Roll no already exist']);
+        //                     }
+        //                 } else {
+        //                     $roll_number = StudentRecord::where('class_id', (int)gv($student_data, 'class'))
+        //                         ->where('section_id', (int)gv($student_data, 'section'))->where('academic_id', $request->promote_session)
+        //                         ->where('school_id', Auth::user()->school_id)->max('roll_no') + 1;
+        //                 }
+                
+        //                 $current_student = SmStudent::where('id', $student_id)->first();
+        //                 $pre_record = StudentRecord::where('student_id', $student_id)
+        //                     ->where('class_id', $request->pre_class)
+        //                     ->where('section_id', $request->pre_section)
+        //                     ->where('academic_id', $request->current_session)
+        //                     ->where('school_id', Auth::user()->school_id)
+        //                     ->first();
+                
+        //                     if (!$exit_record) {
+        //                         $student_promote = new SmStudentPromotion();
+        //                         $student_promote->student_id = $student_id;
+
+        //                         $student_promote->previous_class_id = $request->pre_class;
+        //                         $student_promote->current_class_id = gv($student_data, 'class');
+
+        //                         $student_promote->previous_session_id = $request->current_session;
+        //                         $student_promote->current_session_id = $request->promote_session;
+
+        //                         $student_promote->previous_section_id = $request->pre_section;
+        //                         $student_promote->current_section_id = gv($student_data, 'section');
+
+        //                         $student_promote->admission_number = $current_student->admission_no;
+        //                         $student_promote->student_info = $current_student->toJson();
+        //                         $student_promote->merit_student_info = $current_student->toJson();
+        //                         $student_promote->previous_roll_number = $pre_record->roll_no;
+        //                         $student_promote->current_roll_number = $roll_number;
+        //                         $student_promote->academic_id = $request->promote_session;
+        //                         $student_promote->result_status = gv($student_data, 'result') ? gv($student_data, 'result') : 'F';
+        //                         $student_promote->save();
+
+        //                         $teacherInfo = SmAssignClassTeacher::where('class_id', $student_promote->current_class_id)->where('section_id', $student_promote->current_section_id)->first();
+        //                         $data['class'] = gv($student_data, 'class');
+        //                         $data['section'] = gv($student_data, 'section');
+        //                         if (!is_null($teacherInfo)) {
+        //                             foreach ($teacherInfo->classTeachers as $teacher) {
+        //                                 $data['teacher_name'] = $teacher->teacher->full_name;
+        //                                 $this->sent_notifications('Student_Promote', [$teacher->teacher->user_id], $data, ['Teacher']);
+        //                             }
+        //                         };
+        //                         $this->sent_notifications('Student_Promote', [$current_student->user_id], $data, ['Student', 'Parent']);
+
+
+        //                         $insertStudentRecord = new SmStudentAdmissionController;
+        //                         $result = $insertStudentRecord->insertStudentRecord($request->merge([
+        //                             'student_id' => gv($student_data, 'student'),
+        //                             'roll_number' => $roll_number,
+        //                             'class' => gv($student_data, 'class'),
+        //                             'section' => gv($student_data, 'section'),
+        //                             'session' => $request->promote_session,
+        //                         ]));
+
+        //                         $groups = \Modules\Chat\Entities\Group::where([
+        //                             'class_id' => $request->pre_class,
+        //                             'section_id' => $request->pre_section,
+        //                             'academic_id' => $request->current_session,
+        //                             'school_id' => auth()->user()->school_id
+        //                         ])->get();
+        //                         if ($current_student) {
+        //                             $user = $current_student->user;
+        //                             foreach ($groups as $group) {
+        //                                 removeGroupUser($group, $user->id);
+        //                             }
+        //                         }
+
+        //                         $pre_record->is_promote = 1;
+        //                         $pre_record->save();
+        //                     }
+                
+        //                 $compact['user_email'] = $pre_record->studentDetail->email;
+        //                 @send_sms($pre_record->studentDetail->mobile, 'student_promote', $compact);
+
+        //             } elseif (is_null(gv($student_data, 'section'))) {
+        //                 $student_record = StudentRecord::where('student_id', $student_id)
+        //                     ->where('school_id', Auth::user()->school_id)
+        //                     ->where('is_promote', 0)
+        //                     ->first();
+            
+        //                 if ($student_record) {
+        //                     $student_record->is_graduate = 1;
+        //                     $student_record->is_promote  = 1;
+        //                     $student_record->save();
+                
+        //                     $graduate = new Graduate();
+        //                     $graduate->student_id   = $student_record->student_id;
+        //                     $graduate->record_id    = $student_record->id;
+        //                     $graduate->class_id     = $student_record->class_id;
+        //                     $graduate->section_id   = $student_record->section_id;
+        //                     $graduate->un_session_id= $student_record->session_id;
+        //                     $graduate->school_id    = Auth::user()->school_id;
+        //                     $graduate->created_by   = Auth::id();
+        //                     $graduate->created_at   = now();
+        //                     $graduate->save();
+        //                 } else {
+        //                     Toastr::error('Student Not Found', 'Failed');
+        //                     return back();
+        //                 }
+        //             }
+        //         }
+        //         Toastr::success('Operation Successful', 'Success');
+        //         return back();
+        //     } catch (\Exception $e) {
+        //         Toastr::error('Operation Failed', 'Failed');
+        //         return redirect()->back();
+        //     }
+            
+        //     // try {
+        //     //         if (empty($request->promote)) {
+        //     //             Toastr::error('Please Select Student', 'Failed');
+        //     //             return back();
+        //     //         }
+
+        //     //         foreach ($request->promote as $student_id => $student_data) {
+        //     //             if (!gv($student_data, 'student') || !gv($student_data, 'class') || !gv($student_data, 'section')) {
+        //     //                 continue;
+        //     //             }
+                    
+        //     //             $roll_number = gv($student_data, 'roll_number');
+        //     //             $student_record = StudentRecord::where('student_id', $student_id)
+        //     //                 ->where('class_id', gv($student_data, 'class'))
+        //     //                 ->where('section_id', gv($student_data, 'section'))
+        //     //                 ->where('academic_id', $request->promote_session)
+        //     //                 ->where('school_id', Auth::user()->school_id)
+        //     //                 ->where('is_promote', 0)
+        //     //                 ->first();
+
+        //     //             $exit_record = $student_record;
+        //     //             if ($roll_number) {
+        //     //                 $exist_roll_number = $exit_record;
+        //     //                 if ($exist_roll_number) {
+        //     //                     throw ValidationException::withMessages(['promote.' . $student_id . '.roll_number' => 'Roll no already exist']);
+        //     //                 }
+        //     //             } else {
+        //     //                 $roll_number = StudentRecord::where('class_id', (int)gv($student_data, 'class'))
+        //     //                     ->where('section_id', (int)gv($student_data, 'section'))->where('academic_id', $request->promote_session)
+        //     //                     ->where('school_id', Auth::user()->school_id)->max('roll_no') + 1;
+        //     //             }
+
+        //     //             $current_student = SmStudent::where('id', $student_id)->first();
+        //     //             $pre_record = StudentRecord::where('student_id', $student_id)
+        //     //                 ->where('class_id', $request->pre_class)
+        //     //                 ->where('section_id', $request->pre_section)
+        //     //                 ->where('academic_id', $request->current_session)
+        //     //                 ->where('school_id', Auth::user()->school_id)
+        //     //                 ->first();
+
+
+        //     //             if (!$exit_record) {
+
+        //     //                 $student_promote = new SmStudentPromotion();
+        //     //                 $student_promote->student_id = $student_id;
+
+        //     //                 $student_promote->previous_class_id = $request->pre_class;
+        //     //                 $student_promote->current_class_id = gv($student_data, 'class');
+
+        //     //                 $student_promote->previous_session_id = $request->current_session;
+        //     //                 $student_promote->current_session_id = $request->promote_session;
+
+        //     //                 $student_promote->previous_section_id = $request->pre_section;
+        //     //                 $student_promote->current_section_id = gv($student_data, 'section');
+
+        //     //                 $student_promote->admission_number = $current_student->admission_no;
+        //     //                 $student_promote->student_info = $current_student->toJson();
+        //     //                 $student_promote->merit_student_info = $current_student->toJson();
+        //     //                 $student_promote->previous_roll_number = $pre_record->roll_no;
+        //     //                 $student_promote->current_roll_number = $roll_number;
+        //     //                 $student_promote->academic_id = $request->promote_session;
+        //     //                 $student_promote->result_status = gv($student_data, 'result') ? gv($student_data, 'result') : 'F';
+        //     //                 $student_promote->save();
+
+        //     //                 $teacherInfo = SmAssignClassTeacher::where('class_id', $student_promote->current_class_id)->where('section_id', $student_promote->current_section_id)->first();
+        //     //                 $data['class'] = gv($student_data, 'class');
+        //     //                 $data['section'] = gv($student_data, 'section');
+        //     //                 if (!is_null($teacherInfo)) {
+        //     //                     foreach ($teacherInfo->classTeachers as $teacher) {
+        //     //                         $data['teacher_name'] = $teacher->teacher->full_name;
+        //     //                         $this->sent_notifications('Student_Promote', [$teacher->teacher->user_id], $data, ['Teacher']);
+        //     //                     }
+        //     //                 };
+        //     //                 $this->sent_notifications('Student_Promote', [$current_student->user_id], $data, ['Student', 'Parent']);
+
+
+        //     //                 $insertStudentRecord = new SmStudentAdmissionController;
+        //     //                 $result = $insertStudentRecord->insertStudentRecord($request->merge([
+        //     //                     'student_id' => gv($student_data, 'student'),
+        //     //                     'roll_number' => $roll_number,
+        //     //                     'class' => gv($student_data, 'class'),
+        //     //                     'section' => gv($student_data, 'section'),
+        //     //                     'session' => $request->promote_session,
+        //     //                 ]));
+
+        //     //                 $groups = \Modules\Chat\Entities\Group::where([
+        //     //                     'class_id' => $request->pre_class,
+        //     //                     'section_id' => $request->pre_section,
+        //     //                     'academic_id' => $request->current_session,
+        //     //                     'school_id' => auth()->user()->school_id
+        //     //                 ])->get();
+        //     //                 if ($current_student) {
+        //     //                     $user = $current_student->user;
+        //     //                     foreach ($groups as $group) {
+        //     //                         removeGroupUser($group, $user->id);
+        //     //                     }
+        //     //                 }
+
+        //     //                 $pre_record->is_promote = 1;
+        //     //                 $pre_record->save();
+        //     //             }
+
+        //     //             $compact['user_email'] = $pre_record->studentDetail->email;
+        //     //             @send_sms($pre_record->studentDetail->mobile, 'student_promote', $compact);
+                    
+        //     //         }
+
+        //     //         foreach ($request->promote as $student_id => $student_data) {
+        //     //             if (is_null(gv($student_data, 'section'))) {
+        //     //                 break;
+        //     //             }                        
+        //     //             $student_record = StudentRecord::where('student_id', $student_id)
+        //     //                 ->where('school_id', Auth::user()->school_id)
+        //     //                 ->where('is_promote', 0)
+        //     //                 ->first();
+                
+        //     //             if ($student_record) {
+        //     //                 $student_record->is_graduate = 1;
+        //     //                 $student_record->is_promote  = 1;
+        //     //                 $student_record->save();
+
+        //     //                 $graduate = new Graduate();
+        //     //                 $graduate->student_id   = $student_record->student_id;
+        //     //                 $graduate->record_id    = $student_record->id;
+        //     //                 $graduate->class_id     = $student_record->class_id;
+        //     //                 $graduate->section_id   = $student_record->section_id;
+        //     //                 $graduate->un_session_id= $student_record->session_id;
+        //     //                 $graduate->school_id    = Auth::user()->school_id;
+        //     //                 $graduate->created_by   = Auth::id();
+        //     //                 $graduate->created_at   = now();
+        //     //                 $graduate->save();
+
+        //     //             } else {
+        //     //                 Toastr::error('Student Not Found', 'Failed');
+        //     //                 return back();
+        //     //             }
+        //     //         }
+                    
+        //     //             Toastr::success('Marked As Graduate Students', 'Success');
+        //     //             return back();
+                
+
+        //     //     Toastr::success('Operation successful', 'Success');
+        //     //     return back();
+        //     // } catch (\Exception $e) {
+        //     //     Toastr::error('Operation Failed', 'Failed');
+        //     //     return redirect()->back();
+        //     // }
+    // }
+
     public function promote(Request $request)
     {
+        $isGraduateSelected = isset($request->is_graduate) && $request->is_graduate == 1;
+            $validationRules = [
+            'promote_session' => $isGraduateSelected ? 'nullable' : 'required',
+            'promote.*.class' => $isGraduateSelected ? 'nullable' : 'required',
+            'promote.*.section' => $isGraduateSelected ? 'nullable' : 'required',
+            'promote.*.roll_number' => $isGraduateSelected ? 'nullable' : 'required',
+        ];
 
-        //   return $request->all();
-        $request->validate([
-            'promote_session' => 'required',
-            'promote.*.class' => 'required',
-            'promote.*.section' => 'required_with:promote.*.student',
-            'promote.*.roll_number' => 'sometimes|nullable|integer',
-        ], [
-            'promote.*.section' => 'The Section field is required when Student is present.',
-        ]);
-
-        // $validator=Validator::make()
+        $request->validate($validationRules);
 
         try {
-            //code...
-            if (empty($request->promote)) {
-                Toastr::error('Please Select Student', 'Failed');
-                return back();
-            }
             foreach ($request->promote as $student_id => $student_data) {
-                if (!gv($student_data, 'student') || !gv($student_data, 'class') || !gv($student_data, 'section')) {
-                    continue;
-                }
-
-                $roll_number = gv($student_data, 'roll_number');
-                $student_record = StudentRecord::where('student_id', $student_id)
-                    ->where('class_id', gv($student_data, 'class'))
-                    ->where('section_id', gv($student_data, 'section'))
-                    ->where('academic_id', $request->promote_session)
-                    ->where('school_id', Auth::user()->school_id)
-                    ->where('is_promote', 0)
-                    ->first();
-
-                $exit_record = $student_record;
-                if ($roll_number) {
-                    $exist_roll_number = $exit_record;
-                    if ($exist_roll_number) {
-                        throw ValidationException::withMessages(['promote.' . $student_id . '.roll_number' => 'Roll no already exist']);
-                    }
-                } else {
-                    $roll_number = StudentRecord::where('class_id', (int)gv($student_data, 'class'))
-                        ->where('section_id', (int)gv($student_data, 'section'))->where('academic_id', $request->promote_session)
-                        ->where('school_id', Auth::user()->school_id)->max('roll_no') + 1;
-                }
-
-                $current_student = SmStudent::where('id', $student_id)->first();
-                $pre_record = StudentRecord::where('student_id', $student_id)
-                    ->where('class_id', $request->pre_class)
-                    ->where('section_id', $request->pre_section)
-                    ->where('academic_id', $request->current_session)
-                    ->where('school_id', Auth::user()->school_id)
-                    ->first();
-
-
-                if (!$exit_record) {
-
-                    $student_promote = new SmStudentPromotion();
-                    $student_promote->student_id = $student_id;
-
-                    $student_promote->previous_class_id = $request->pre_class;
-                    $student_promote->current_class_id = gv($student_data, 'class');
-
-                    $student_promote->previous_session_id = $request->current_session;
-                    $student_promote->current_session_id = $request->promote_session;
-
-                    $student_promote->previous_section_id = $request->pre_section;
-                    $student_promote->current_section_id = gv($student_data, 'section');
-
-                    $student_promote->admission_number = $current_student->admission_no;
-                    $student_promote->student_info = $current_student->toJson();
-                    $student_promote->merit_student_info = $current_student->toJson();
-                    $student_promote->previous_roll_number = $pre_record->roll_no;
-                    $student_promote->current_roll_number = $roll_number;
-                    $student_promote->academic_id = $request->promote_session;
-                    $student_promote->result_status = gv($student_data, 'result') ? gv($student_data, 'result') : 'F';
-                    $student_promote->save();
-
-                    $teacherInfo = SmAssignClassTeacher::where('class_id', $student_promote->current_class_id)->where('section_id', $student_promote->current_section_id)->first();
-                    $data['class'] = gv($student_data, 'class');
-                    $data['section'] = gv($student_data, 'section');
-                    if (!is_null($teacherInfo)) {
-                        foreach ($teacherInfo->classTeachers as $teacher) {
-                            $data['teacher_name'] = $teacher->teacher->full_name;
-                            $this->sent_notifications('Student_Promote', [$teacher->teacher->user_id], $data, ['Teacher']);
+                if ( gv($student_data, 'student') && gv($student_data, 'class') && gv($student_data, 'section')) {
+                    $roll_number = gv($student_data, 'roll_number');
+                    $student_record = StudentRecord::where('student_id', $student_id)
+                        ->where('class_id', gv($student_data, 'class'))
+                        ->where('section_id', gv($student_data, 'section'))
+                        ->where('academic_id', $request->promote_session)
+                        ->where('school_id', Auth::user()->school_id)
+                        ->where('is_promote', 0)
+                        ->first();
+            
+                    $exit_record = $student_record;
+                    if ($roll_number) {
+                        $exist_roll_number = $exit_record;
+                        if ($exist_roll_number) {
+                            throw ValidationException::withMessages(['promote.' . $student_id . '.roll_number' => 'Roll no already exist']);
                         }
-                    };
-                    $this->sent_notifications('Student_Promote', [$current_student->user_id], $data, ['Student', 'Parent']);
-
-
-                    $insertStudentRecord = new SmStudentAdmissionController;
-                    $result = $insertStudentRecord->insertStudentRecord($request->merge([
-                        'student_id' => gv($student_data, 'student'),
-                        'roll_number' => $roll_number,
-                        'class' => gv($student_data, 'class'),
-                        'section' => gv($student_data, 'section'),
-                        'session' => $request->promote_session,
-
-                    ]));
-
-                    $groups = \Modules\Chat\Entities\Group::where([
-                        'class_id' => $request->pre_class,
-                        'section_id' => $request->pre_section,
-                        'academic_id' => $request->current_session,
-                        'school_id' => auth()->user()->school_id
-                    ])->get();
-                    if ($current_student) {
-                        $user = $current_student->user;
-                        foreach ($groups as $group) {
-                            removeGroupUser($group, $user->id);
-                        }
+                    } else {
+                        $roll_number = StudentRecord::where('class_id', (int)gv($student_data, 'class'))
+                            ->where('section_id', (int)gv($student_data, 'section'))->where('academic_id', $request->promote_session)
+                            ->where('school_id', Auth::user()->school_id)->max('roll_no') + 1;
                     }
+            
+                    $current_student = SmStudent::where('id', $student_id)->first();
+                    $pre_record = StudentRecord::where('student_id', $student_id)
+                        ->where('class_id', $request->pre_class)
+                        ->where('section_id', $request->pre_section)
+                        ->where('academic_id', $request->current_session)
+                        ->where('school_id', Auth::user()->school_id)
+                        ->first();
+            
+                        if (!$exit_record) {
+                            $student_promote = new SmStudentPromotion();
+                            $student_promote->student_id = $student_id;
 
-                    $pre_record->is_promote = 1;
-                    $pre_record->save();
+                            $student_promote->previous_class_id = $request->pre_class;
+                            $student_promote->current_class_id = gv($student_data, 'class');
+
+                            $student_promote->previous_session_id = $request->current_session;
+                            $student_promote->current_session_id = $request->promote_session;
+
+                            $student_promote->previous_section_id = $request->pre_section;
+                            $student_promote->current_section_id = gv($student_data, 'section');
+
+                            $student_promote->admission_number = $current_student->admission_no;
+                            $student_promote->student_info = $current_student->toJson();
+                            $student_promote->merit_student_info = $current_student->toJson();
+                            $student_promote->previous_roll_number = $pre_record->roll_no;
+                            $student_promote->current_roll_number = $roll_number;
+                            $student_promote->academic_id = $request->promote_session;
+                            $student_promote->result_status = gv($student_data, 'result') ? gv($student_data, 'result') : 'F';
+                            $student_promote->save();
+
+                            $teacherInfo = SmAssignClassTeacher::where('class_id', $student_promote->current_class_id)->where('section_id', $student_promote->current_section_id)->first();
+                            $data['class'] = gv($student_data, 'class');
+                            $data['section'] = gv($student_data, 'section');
+                            if (!is_null($teacherInfo)) {
+                                foreach ($teacherInfo->classTeachers as $teacher) {
+                                    $data['teacher_name'] = $teacher->teacher->full_name;
+                                    $this->sent_notifications('Student_Promote', [$teacher->teacher->user_id], $data, ['Teacher']);
+                                }
+                            };
+                            $this->sent_notifications('Student_Promote', [$current_student->user_id], $data, ['Student', 'Parent']);
+
+
+                            $insertStudentRecord = new SmStudentAdmissionController;
+                            $result = $insertStudentRecord->insertStudentRecord($request->merge([
+                                'student_id' => gv($student_data, 'student'),
+                                'roll_number' => $roll_number,
+                                'class' => gv($student_data, 'class'),
+                                'section' => gv($student_data, 'section'),
+                                'session' => $request->promote_session,
+                            ]));
+
+                            $groups = \Modules\Chat\Entities\Group::where([
+                                'class_id' => $request->pre_class,
+                                'section_id' => $request->pre_section,
+                                'academic_id' => $request->current_session,
+                                'school_id' => auth()->user()->school_id
+                            ])->get();
+
+                            if ($current_student) {
+                                $user = $current_student->user;
+                                foreach ($groups as $group) {
+                                    removeGroupUser($group, $user->id);
+                                }
+                            }
+                            $pre_record->is_promote = 1;
+                            $pre_record->save();
+                        }
+            
+                    $compact['user_email'] = $pre_record->studentDetail->email;
+                    @send_sms($pre_record->studentDetail->mobile, 'student_promote', $compact);
                 }
 
-                $compact['user_email'] = $pre_record->studentDetail->email;
-                @send_sms($pre_record->studentDetail->mobile, 'student_promote', $compact);
+                if (gv($student_data, 'student') && is_null(gv($student_data, 'section'))) {
+                    $student_record = StudentRecord::where('student_id', $student_id)
+                        ->where('school_id', Auth::user()->school_id)
+                        ->where('is_promote', 0)
+                        ->first();
+
+                    if ($student_record) {
+                        $student_record->is_graduate = 1;
+                        $student_record->is_promote = 1;
+                        $student_record->save();
+
+                        $graduate = new Graduate();
+                        $graduate->student_id = $student_record->student_id;
+                        $graduate->record_id = $student_record->id;
+
+                        $graduate->school_id = Auth::user()->school_id;
+                        $graduate->created_by = Auth::id();
+                        $graduate->created_at = now();
+                        if (moduleStatusCheck('University')) {
+                            $graduate->un_session_id = $student_record->session_id;
+                            $graduate->un_faculty_id = $student_record->un_faculty_id;
+                            $graduate->un_department_id = $student_record->un_department_id;
+                        } else {
+                            $graduate->class_id = $student_record->class_id;
+                            $graduate->section_id = $student_record->section_id;
+                            $graduate->session_id = $student_record->session_id;
+                        }
+                        $graduate->save();
+                    } else {
+                        Toastr::error('Student Not Found', 'Failed');
+                        return back();
+                    }
+                }
             }
 
-            Toastr::success('Operation successful', 'Success');
+            Toastr::success('Operation Successful', 'Success');
             return back();
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');
@@ -276,10 +607,9 @@ class SmStudentPromoteController extends Controller
         }
     }
 
+
     public function studentSearchWithExam(Request $request)
     {
-
-        // return $request->all();
         $request->validate([
             'current_session' => 'required',
             'promote_session' => 'required',

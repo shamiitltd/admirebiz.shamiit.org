@@ -3,7 +3,7 @@
     @lang('communicate.add_notice')
 @endsection
 @section('mainContent')
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('communicate.add_notice')</h1>
@@ -15,25 +15,27 @@
             </div>
         </div>
     </section>
+
     <section class="admin-visitor-area up_admin_visitor">
         @if (userPermission('add-notice'))
             <div class="container-fluid p-0">
-                <div class="row">
-                    <div class="col-lg-4 col-md-6 col-5">
-                        <div class="main-title mt-0">
-                            <h3 class="mb-30">@lang('communicate.add_notice')</h3>
-                        </div>
-                    </div>
-                    <div class="ml-auto col-lg-8 text-right col-md-6 col-7">
-                        <a href="{{ route('notice-list') }}" class="primary-btn small fix-gr-bg">
-                            @lang('communicate.notice_board')
-                        </a>
-                    </div>
-                </div>
                 {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'save-notice-data', 'method' => 'POST', 'enctype' => 'multipart/form-data']) }}
                 <div class="row">
                     <div class="col-lg-12">
+
                         <div class="white-box">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-6 col-5">
+                                    <div class="main-title mt-0">
+                                        <h3 class="mb-15">@lang('communicate.add_notice')</h3>
+                                    </div>
+                                </div>
+                                <div class="ml-auto col-lg-8 text-right col-md-6 col-7">
+                                    <a href="{{ route('notice-list') }}" class="primary-btn small fix-gr-bg">
+                                        @lang('communicate.notice_board')
+                                    </a>
+                                </div>
+                            </div>
                             <div class="">
                                 <input type="hidden" name="url" id="url" value="{{ URL::to('/') }}">
                                 <div class="row">
@@ -45,27 +47,35 @@
                                                 class="primary_input_field form-control{{ $errors->has('notice_title') ? ' is-invalid' : '' }}"
                                                 type="text" name="notice_title" autocomplete="off"
                                                 value="{{ isset($leave_type) ? $leave_type->type : '' }}">
+
+
                                             @if ($errors->has('notice_title'))
                                                 <span class="text-danger">
                                                     {{ $errors->first('notice_title') }}
                                                 </span>
                                             @endif
                                         </div>
+
                                         <div class="primary_input mt-0">
-                                            <label class="primary_input_label d-flex" for="">@lang('communicate.notice')
-                                                @if (moduleStatusCheck('AiContent'))
-                                                    @include('aicontent::inc.button')
-                                                @endif
-                                            </label>
-                                            <textarea class="generated-text primary_input_field form-control" cols="0" rows="5" name="notice_message"
+                                            <label class="primary_input_label" for="">@lang('communicate.notice')
+                                                <span></span> </label>
+                                            <textarea class="primary_input_field form-control" cols="0" rows="5" name="notice_message"
                                                 id="article-ckeditor"></textarea>
+
+
                                         </div>
+
+
                                         <div class="primary_input mt-15">
                                             <input type="checkbox" id="is_published" class="common-checkbox" value="1"
                                                 name="is_published">
                                             <label for="is_published">@lang('communicate.is_published_web_site')</label>
                                         </div>
+
+
                                     </div>
+
+
                                     <div class="col-lg-5">
                                         <div class="row">
                                             <div class="col-lg-12">
@@ -127,6 +137,7 @@
                                                 </div>
                                             </div>
                                         </div>
+
                                         <div class="row">
                                             <div class="col-lg-12">
                                                 <label class="primary_input_label"

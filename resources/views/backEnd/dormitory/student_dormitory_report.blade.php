@@ -3,7 +3,7 @@
 @lang('dormitory.student_dormitory_report')
 @endsection
 @section('mainContent')
-<section class="sms-breadcrumb mb-40 white-box">
+<section class="sms-breadcrumb mb-20">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('dormitory.student_dormitory_report')</h1>
@@ -18,16 +18,16 @@
 <section class="admin-visitor-area up_admin_visitor">
     <div class="container-fluid p-0">
             <div class="row">
-                <div class="col-lg-4 col-md-6">
-                    <div class="main-title">
-                        <h3 class="mb-30">@lang('common.select_criteria') </h3>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
                 <div class="col-lg-12">
                    
                     <div class="white-box">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-6">
+                                <div class="main-title">
+                                    <h3 class="mb-15">@lang('common.select_criteria') </h3>
+                                </div>
+                            </div>
+                        </div>
                         {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'student_dormitory_report_store', 'method' => 'POST', 'enctype' => 'multipart/form-data', 'id' => 'search_student']) }}
                             <div class="row">
                                 <input type="hidden" name="url" id="url" value="{{URL::to('/')}}">
@@ -91,74 +91,76 @@
             {{-- @if(isset($students)) --}}
                 <div class="row mt-40">
                     <div class="col-lg-12">
-                        <div class="row">
-                            <div class="col-lg-6 no-gutters">
-                                <div class="main-title">
-                                    <h3 class="mb-0"> @lang('dormitory.student_dormitory_report')</h3>
+                        <div class="white-box">
+                            <div class="row">
+                                <div class="col-lg-6 no-gutters">
+                                    <div class="main-title">
+                                        <h3 class="mb-15"> @lang('dormitory.student_dormitory_report')</h3>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <x-table>
-                                <table id="table_id" class="table" cellspacing="0" width="100%">
-                                    <thead>
-
-                                        <tr>
-                                            @if(!moduleStatusCheck('University'))
-                                                <th>@lang('common.class_Sec')</th>
-                                            @endif
-                                            <th> @lang('student.admission_no')</th>
-                                            <th> @lang('student.student_name')</th>
-                                            <th> @lang('common.mobile')</th>
-                                            <th>@lang('student.guardian_phone')</th>
-                                            <th>@lang('dormitory.dormitory_name')</th>
-                                            <th>@lang('dormitory.room_number')</th>
-                                            <th>@lang('dormitory.room_type')</th>
-                                            <th>@lang('dormitory.cost_per_bed')</th>
-                                        </tr>
-                                    </thead>
-
-                                    <tbody>
-
-                                        @foreach($students as $student)
-
-                                        <tr>
-                                            @if(!moduleStatusCheck('University'))
-                                            <td>
-                                                @if(isset($class_id))
-                                                @php if(!empty($student->recordClass)){ echo $student->recordClass->class->class_name; }else { echo ''; } @endphp
-                                                @if(isset($section_id))
-
-                                                {{$student->recordSection != ""? $student->recordSection->section->section_name:""}}
-                                                @else
-                                                (@foreach ($student->recordClasses as $section)
-                                                {{$section->section->section_name}} {{ !$loop->last ? ', ':'' }}
-                                                @endforeach)
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <x-table>
+                                    <table id="table_id" class="table" cellspacing="0" width="100%">
+                                        <thead>
+    
+                                            <tr>
+                                                @if(!moduleStatusCheck('University'))
+                                                    <th>@lang('common.class_Sec')</th>
                                                 @endif
-
-                                               @else
-                                               @foreach ($student->studentRecords as $record)
-                                               {{__('common.class') }} : {{ $record->class->class_name}}({{ $record->section->section_name}}) {{ !$loop->last ? ', ':'' }} <br>
-                                                @endforeach
-                                               @endif
-                                                <input type="hidden" name="id[]" value="{{@$student->student_id}}">
-                                            </td>
-                                            @endif
-
-                                            <td>{{@$student->admission_no}}</td>
-                                            <td>{{@$student->full_name}}</td>
-                                            <td>{{@$student->mobile}}</td>
-                                            <td>{{@$student->parents->guardians_mobile}}</td>
-                                            <td>{{ @$student->dormitory != ""? @$student->dormitory->dormitory_name: ''}}</td>
-                                            <td>{{ @$student->room != ""? @$student->room->name: ''}}</td>
-                                            <td>{{ @$student->room != ""? @$student->room->roomType->type: ''}}</td>
-                                            <td>{{ @$student->room != ""? number_format( (float) @$student->room->cost_per_bed, 2, '.', ''): ''}}</td>
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                                </x-table>
+                                                <th> @lang('student.admission_no')</th>
+                                                <th> @lang('student.student_name')</th>
+                                                <th> @lang('common.mobile')</th>
+                                                <th>@lang('student.guardian_phone')</th>
+                                                <th>@lang('dormitory.dormitory_name')</th>
+                                                <th>@lang('dormitory.room_number')</th>
+                                                <th>@lang('dormitory.room_type')</th>
+                                                <th>@lang('dormitory.cost_per_bed')</th>
+                                            </tr>
+                                        </thead>
+    
+                                        <tbody>
+    
+                                            @foreach($students as $student)
+    
+                                            <tr>
+                                                @if(!moduleStatusCheck('University'))
+                                                <td>
+                                                    @if(isset($class_id))
+                                                    @php if(!empty($student->recordClass)){ echo $student->recordClass->class->class_name; }else { echo ''; } @endphp
+                                                    @if(isset($section_id))
+    
+                                                    {{$student->recordSection != ""? $student->recordSection->section->section_name:""}}
+                                                    @else
+                                                    (@foreach ($student->recordClasses as $section)
+                                                    {{$section->section->section_name}} {{ !$loop->last ? ', ':'' }}
+                                                    @endforeach)
+                                                    @endif
+    
+                                                   @else
+                                                   @foreach ($student->studentRecords as $record)
+                                                   {{__('common.class') }} : {{ $record->class->class_name}}({{ $record->section->section_name}}) {{ !$loop->last ? ', ':'' }} <br>
+                                                    @endforeach
+                                                   @endif
+                                                    <input type="hidden" name="id[]" value="{{@$student->student_id}}">
+                                                </td>
+                                                @endif
+    
+                                                <td>{{@$student->admission_no}}</td>
+                                                <td>{{@$student->full_name}}</td>
+                                                <td>{{@$student->mobile}}</td>
+                                                <td>{{@$student->parents->guardians_mobile}}</td>
+                                                <td>{{ @$student->dormitory != ""? @$student->dormitory->dormitory_name: ''}}</td>
+                                                <td>{{ @$student->room != ""? @$student->room->name: ''}}</td>
+                                                <td>{{ @$student->room != ""? @$student->room->roomType->type: ''}}</td>
+                                                <td>{{ @$student->room != ""? number_format( (float) @$student->room->cost_per_bed, 2, '.', ''): ''}}</td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                    </x-table>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -13,7 +13,7 @@
     <div class="requirements">
         <div class="row">
             <div class="col-md-12">
-                <h4>Serviver Requirements </h4>
+                <h4>Server Requirements </h4>
                 <hr class="mt-0">
             </div>
             @foreach ($server_checks as $server)

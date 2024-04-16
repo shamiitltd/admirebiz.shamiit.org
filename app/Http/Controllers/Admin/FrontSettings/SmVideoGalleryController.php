@@ -17,7 +17,7 @@ class SmVideoGalleryController extends Controller
     public function index()
     {
         try {
-            $videoGalleries = SmVideoGallery::where('school_id', app('school')->id)->get();
+            $videoGalleries = SmVideoGallery::where('school_id', app('school')->id)->orderBy('position', 'asc')->get();
             return view('backEnd.frontSettings.video_gallery.video_gallery', compact('videoGalleries'));
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');
@@ -56,7 +56,7 @@ class SmVideoGalleryController extends Controller
     public function edit($id)
     {
         try {
-            $videoGalleries = SmVideoGallery::where('school_id', app('school')->id)->get();
+            $videoGalleries = SmVideoGallery::where('school_id', app('school')->id)->orderBy('position', 'asc')->get();
             $add_video_gallery = SmVideoGallery::find($id);
             return view('backEnd.frontSettings.video_gallery.video_gallery', compact('videoGalleries', 'add_video_gallery'));
         } catch (\Exception $e) {

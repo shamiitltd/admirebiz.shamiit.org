@@ -4,7 +4,7 @@
 @endsection
 
 @section('mainContent')
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('exam.setup_exam_rule')</h1>
@@ -23,11 +23,6 @@
                 <div class="col-lg-6">
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="main-title">
-                                <h3 class="mb-30">
-                                    @lang('exam.setup_final_exam_rule')
-                                </h3>
-                            </div>
                             @if($edit_data > 1)
                                 {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => array('custom-result-setting/update'), 'method' => 'PUT', 'enctype' => 'multipart/form-data']) }}
                             @else
@@ -36,6 +31,11 @@
                                 @endif
                             @endif
                             <div class="white-box">
+                                <div class="main-title">
+                                    <h3 class="mb-15">
+                                        @lang('exam.setup_final_exam_rule')
+                                    </h3>
+                                </div>
                                 <div class="add-visitor">
                                     <div class="row mb-40 ">
                                         @php
@@ -51,7 +51,7 @@
                                                         </p>
                                                     </div>
                                                     <div class="col-lg-5">
-                                                        <div class="ml-20">
+                                                        <div class="">
                                                             <div class="row">
                                                                 <div class="col-lg-12">
                                                                     <div class="primary_input ">
@@ -75,7 +75,7 @@
                                                     </strong>
                                                 </div>
                                                 <div class="col-lg-5">
-                                                    <div class="radio-btn-flex ml-20">
+                                                    <div class="radio-btn-flex ">
                                                         <div class="row">
                                                             <div class="col-lg-12">
                                                                 <div class="primary_input ">
@@ -116,12 +116,12 @@
                     </div>
                 </div>
                 <div class="col-lg-6">
-                    <div class="main-title">
-                        <h3 class="mb-30">
-                            @lang('exam.mark_contribution')
-                        </h3>
-                    </div>
                     <div class="white-box">
+                        <div class="main-title">
+                            <h3 class="mb-15">
+                                @lang('exam.mark_contribution')
+                            </h3>
+                        </div>
                         <table class="table" cellspacing="0" width="100%">
                             <thead>
                             <tr class="border-bottom">
@@ -155,14 +155,14 @@
                     </div>
                 </div>
             </div>
-            <div class="row mt-25">
+            <div class="row mt-40">
                 <div class="col-lg-6">                    
-                    <div class="main-title">
-                        <h3 class="mb-30">
-                            @lang('exam.do you want to skip this step for mark register/store')
-                        </h3>
-                    </div>
-                    <div class="white-box">     
+                    <div class="white-box">
+                        <div class="main-title">
+                            <h3 class="mb-15">
+                                @lang('exam.do you want to skip this step for mark register/store')
+                            </h3>
+                        </div>     
                         {!! Form::open(['route' => 'exam.step.skip.update', 'method'=>'POST']) !!}                     
                             <div class="row">
                                 <div class="col-lg-12">
@@ -197,12 +197,12 @@
                 </div>
 
                 <div class="col-lg-6">
-                    <div class="main-title">
-                        <h3 class="mb-30">
-                            @lang('exam.merit_list_contribution_using')
-                        </h3>
-                    </div>
                     <div class="white-box">
+                        <div class="main-title">
+                            <h3 class="mb-15">
+                                @lang('exam.merit_list_contribution_using')
+                            </h3>
+                        </div>
                         <div class="d-flex flex-wrap radio-btn-flex">
                             <div class="mr-30">
                                 <input type="radio" name="trueOrFalse" id="totalMark" value="total_mark" class="common-radio relationButton" {{isset($meritListSettings)? $meritListSettings->merit_list_setting == "total_mark"? 'checked': '' : 'checked'}}>
@@ -224,13 +224,13 @@
             <div class="row">
 
 
-                <div class="col-lg-12">
-                    <div class="main-title">
-                        <h3 class="mt-30 mb-30">
-                            @lang('exam.result_print_style')
-                        </h3>
-                    </div>
+                <div class="col-lg-12 mt-40">
                     <div class="white-box">
+                        <div class="main-title">
+                            <h3 class="mb-15">
+                                @lang('exam.result_print_style')
+                            </h3>
+                        </div>
                         <div class="d-flex flex-wrap radio-btn-flex">
                             <div class="mr-30">
                                 <input type="checkbox" name="profile_image" id="profileImage" value="image" class="common-radio relationButtonPrint" {{isset($meritListSettings)? $meritListSettings->profile_image == "image"? 'checked': '' : 'checked'}}>

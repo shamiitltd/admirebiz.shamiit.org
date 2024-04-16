@@ -307,7 +307,7 @@ return [
     'pading_left'=>'Padding left',
     'use'=>'Use',
     'variable_for_showing_static_profile_image'=>'Variable For Showing Static Profile Image',
-    'no_of_person'=>'No Of Person',
+    'no_of_person'=>'No of Person',
     'actions'=>'Actions',
     'supported'=>'Supported',
     'delete_conformation'=>'Delete Conformation'

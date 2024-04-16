@@ -25,7 +25,7 @@ use Modules\Wallet\Entities\WalletTransaction;
 use Modules\Fees\Entities\FmFeesTransactionChield;
 use Modules\CcAveune\Http\Controllers\CcAveuneController;
 use Modules\Fees\Http\Controllers\FeesExtendedController;
-
+use Modules\ToyyibPay\Http\Controllers\ToyyibPayController;
 class StudentFeesController extends Controller
 {
     public function studentFeesList()
@@ -222,7 +222,7 @@ class StudentFeesController extends Controller
                 }
 
                 if ($request->add_wallet > 0) {
-                    $user->wallet_balance = $user->wallet_balance + $request->add_wallet;
+                    $user->wallet_balance = $user->wallet_balance/ + $request->add_wallet;
                     $user->update();
         
                     $addPayment = new WalletTransaction();
@@ -364,7 +364,30 @@ class StudentFeesController extends Controller
                 }elseif($data['payment_method'] == 'CcAveune'){
                     $ccAvenewPaymentController = new CcAveuneController();
                     $ccAvenewPaymentController->studentFeesPay($data['amount'] , $data['transcationId'], $data['type']);
-                }else{
+                }elseif($data['payment_method'] == 'ToyyibPay'){
+                    if(moduleStatusCheck('ToyyibPay')){
+                        $toyyibPayController = new ToyyibPayController();
+                        $data = [
+                            'amount' => $request->total_paid_amount,
+                            'transcationId' => $storeTransaction->id,
+                            'type' => 'Fees',
+                            'student_id' => $request->student_id,
+                            'user_id' => $storeTransaction->user_id,
+                            'service_charge' => chargeAmount($request->payment_method, $request->total_paid_amount),
+                            'invoice_id' => $request->invoice_id,
+                            'payment_method' => $request->payment_method,
+                            'invoice_id' => $request->invoice_id
+
+                        ];
+                        $data_store = $toyyibPayController->studentFeesPay($data);
+                        return redirect($data_store);
+                    }else {
+                        Toastr::error('ToyyibPay Module Not Active', 'Failed');
+                        return redirect()->back();
+                    }
+                }
+                
+                else{
                     $classMap = config('paymentGateway.'.$data['payment_method']);
                     $make_payment = new $classMap();
                     $url = $make_payment->handle($data);

@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class SmExpertTeacher extends Model
 {
     use HasFactory;
+    protected $guarded = ['id'];
+    public function staff()
+    {
+        return $this->belongsTo('App\SmStaff', 'staff_id', 'id')->withDefault();
+    }
 }

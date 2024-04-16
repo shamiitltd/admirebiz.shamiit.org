@@ -29,7 +29,7 @@ class CreateSmGeneralSettingsTable extends Migration
             $table->integer('promotionSetting')->nullable()->default(0);
             $table->string('logo')->nullable();
             $table->string('favicon')->nullable();
-            $table->string('system_version')->nullable()->default('7.2.0');
+            $table->string('system_version')->nullable()->default('8.2.0');
             $table->integer('active_status')->nullable()->default(1);
             $table->string('currency_code')->nullable()->default('USD');
             $table->string('language_name')->nullable()->default('en');
@@ -105,7 +105,7 @@ class CreateSmGeneralSettingsTable extends Migration
             $table->integer('Raudhahpay')->default(0)->nullable();
             $table->integer('AppSlider')->default(1)->nullable();
             $table->integer('BehaviourRecords')->default(0)->nullable();
-            $table->integer('DownloadCenter')->default(0)->nullable();
+            $table->integer('DownloadCenter')->default(1)->nullable();
             $table->integer('AiContent')->default(0)->nullable();
             $table->integer('WhatsappSupport')->default(0)->nullable();
             $table->integer('InAppLiveClass')->default(0)->nullable();
@@ -130,6 +130,7 @@ class CreateSmGeneralSettingsTable extends Migration
             $table->boolean('due_fees_login')->default(0)->comment("1 = Login restricted by due date , 0 = No Restriction ");
             $table->boolean('two_factor')->default(0)->comment("1 = Enable , 0 = Disable");
             $table->string('active_theme')->default('edulia');
+            $table->string('queue_connection')->default('database');
         });
 
 
@@ -151,7 +152,7 @@ class CreateSmGeneralSettingsTable extends Migration
                 'session_id' => 1,
                 'week_start_id' => 3,
                 'time_zone_id' => 51,
-                'software_version' => '7.2.0',
+                'software_version' => '8.2.0',
                 'system_activated_date' => date('Y-m-d'),
                 'last_update' => date('Y-m-d'),
                 'system_domain' => url('/'),

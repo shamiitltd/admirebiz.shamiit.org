@@ -1,6 +1,10 @@
 @extends(config('pagebuilder.site_layout'), ['edit' => false])
+@pushonce(config('pagebuilder.site_style_var'))
+    <link rel="stylesheet" href="{{ asset('public/theme/edulia/packages/photoswipe/photoswipe.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('public/theme/edulia/packages/photoswipe/default-skin.min.css') }}">
+@endpushonce
 @section(config('pagebuilder.site_section'))
-{{headerContent()}}
+    {{ headerContent() }}
     <section class="bradcrumb_area">
         <div class="container">
             <div class="row">
@@ -29,7 +33,7 @@
                     </div>
                     <div class="row" data-pswp>
                         <div class="col-md-12">
-                            <a href='assets/img/gallery/large/1.png'
+                            <a href='{{ asset($gallery_feature->feature_image) }}'
                                 class="gallery_details_item gallery_details_img_preview"><img
                                     src="{{ asset($gallery_feature->feature_image) }}"
                                     alt=""></a>
@@ -45,18 +49,16 @@
             </div>
         </div>
     </section>
-    {{footerContent()}}
+    {{ footerContent() }}
 @endsection
 @pushonce(config('pagebuilder.site_script_var'))
+    <script src="{{ asset('public/theme/edulia/packages/photoswipe/photoswipe.min.js') }}"></script>
+    <script src="{{ asset('public/theme/edulia/packages/photoswipe/photoswipe-ui-default.min.js') }}"></script>
+    <script src="{{ asset('public/theme/edulia/packages/photoswipe/photoswipe-simplify.min.js') }}"></script>
     <script>
-        $(document).ready(function() {
-            $(document).on('click', '.newsReplyBtn', function(e) {
-                e.preventDefault();
-                var commentId = $(this).data('comment-id');
-                $('.replyDiv_' + commentId).slideToggle();
-                $('.normalComment').slideToggle();
-                $('.replyDiv_' + commentId).find('.parentId').val(commentId);
-            })
-        })
+        photoswipeSimplify.init({
+            history: false,
+            focus: false,
+        });
     </script>
 @endpushonce

@@ -431,24 +431,19 @@ class SmExamRoutineController extends Controller
             return redirect()->back();
         }
     }
-
-    public function examRoutineReportSearch(Request $request)
+    function universityExamRoutineReportSearch($request)
     {
+        // dd($request->all());
         $request->validate([
             'exam' => 'required',
-            'class' => 'required',
-            'section' => 'sometimes|nullable',
+            'un_semester_label_id' => 'required',
+            'un_section_id' => 'sometimes|nullable',
         ]);
 
         try {
-
-
-            $classes = SmClass::get();
-            $exams = SmExam::get();
-            $class_id = $request->class ? $request->class : 0;
-            $section_id = $request->section ? $request->section : 0;
+            $class_id = $request->un_semester_label_id;
+            $section_id = $request->un_section_id;
             $exam_id = $request->exam;
-
             $exam_types = SmExamType::get();
 
             $exam_schedules = SmExamSchedule::where('school_id', Auth::user()->school_id)
@@ -456,25 +451,72 @@ class SmExamRoutineController extends Controller
                 ->when($request->exam, function ($query) use ($request) {
                     $query->where('exam_term_id', $request->exam);
                 })
-                ->when($request->class, function ($query) use ($request) {
-                    $query->where('class_id', $request->class);
+                ->when($request->un_semester_label_id, function ($query) use ($request) {
+                    $query->where('un_semester_label_id', $request->un_semester_label_id);
                 })
-                ->when($request->section, function ($query) use ($request) {
-                    $query->where('section_id', $request->section);
+                ->when($request->un_section_id, function ($query) use ($request) {
+                    $query->where('un_section_id', $request->un_section_id);
                 })
                 ->get();
 
             $exam_type_id = $request->exam;
 
             $examName     = SmExamType::where('id', $request->exam)->first()->title;
-            $search_current_class   = SmClass::find($request->class);
-            $search_current_section = SmSection::find($request->section);
 
-            return view('backEnd.reports.exam_routine_report', compact('classes', 'exams', 'exam_schedules', 'class_id', 'section_id', 'exam_id', 'exam_types', 'exam_type_id', 'examName', 'search_current_class', 'search_current_section'));
+            return view('backEnd.reports.exam_routine_report', compact('exam_schedules', 'class_id', 'section_id', 'exam_id', 'exam_type_id', 'examName', 'exam_types'));
         } catch (\Exception $e) {
-
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();
+        }
+    }
+
+    public function examRoutineReportSearch(Request $request)
+    {
+        if (moduleStatusCheck('University')) {
+            return $this->universityExamRoutineReportSearch($request);
+        } else {
+            $request->validate([
+                'exam' => 'required',
+                'class' => 'required',
+                'section' => 'sometimes|nullable',
+            ]);
+
+            try {
+
+
+                $classes = SmClass::get();
+                $exams = SmExam::get();
+                $class_id = $request->class ? $request->class : 0;
+                $section_id = $request->section ? $request->section : 0;
+                $exam_id = $request->exam;
+
+                $exam_types = SmExamType::get();
+
+                $exam_schedules = SmExamSchedule::where('school_id', Auth::user()->school_id)
+
+                    ->when($request->exam, function ($query) use ($request) {
+                        $query->where('exam_term_id', $request->exam);
+                    })
+                    ->when($request->class, function ($query) use ($request) {
+                        $query->where('class_id', $request->class);
+                    })
+                    ->when($request->section, function ($query) use ($request) {
+                        $query->where('section_id', $request->section);
+                    })
+                    ->get();
+
+                $exam_type_id = $request->exam;
+
+                $examName     = SmExamType::where('id', $request->exam)->first()->title;
+                $search_current_class   = SmClass::find($request->class);
+                $search_current_section = SmSection::find($request->section);
+
+                return view('backEnd.reports.exam_routine_report', compact('classes', 'exams', 'exam_schedules', 'class_id', 'section_id', 'exam_id', 'exam_types', 'exam_type_id', 'examName', 'search_current_class', 'search_current_section'));
+            } catch (\Exception $e) {
+
+                Toastr::error('Operation Failed', 'Failed');
+                return redirect()->back();
+            }
         }
     }
 
@@ -871,35 +913,26 @@ class SmExamRoutineController extends Controller
         }
     }
 
-
-    public function examRoutinePrint($class_id, $section_id, $exam_term_id)
+    function universityExamRoutinePrint($un_semester_label_id, $un_section_id, $exam_term_id)
     {
         try {
             $exam_type_id   = $exam_term_id;
             $exam_type      = SmExamType::find($exam_type_id)->title;
             $academic_id    = SmExamType::find($exam_type_id)->academic_id;
             $academic_year  = SmAcademicYear::find($academic_id);
-            $class_name     = $class_id != 0 ? SmClass::find($class_id)->class_name : 'All Classes';
-            $section_name   = $section_id != 0 ? SmSection::find($section_id)->section_name : 'All Sections';
+            $class_name     = $un_semester_label_id != 0 ? UnSemesterLabel::find($un_semester_label_id)->name : 'All Classes';
+            $section_name   = $un_section_id != 0 ? SmSection::find($un_section_id)->section_name : 'All Sections';
             $exam_schedules = SmExamSchedule::where('school_id', Auth::user()->school_id)
                 ->when($exam_term_id, function ($query) use ($exam_term_id) {
                     $query->where('exam_term_id', $exam_term_id);
                 })
-                ->when($class_id != 0, function ($query) use ($class_id) {
-                    $query->where('class_id', $class_id);
+                ->when($un_semester_label_id != 0, function ($query) use ($un_semester_label_id) {
+                    $query->where('un_semester_label_id', $un_semester_label_id);
                 })
-                ->when($section_id != 0, function ($query) use ($section_id) {
-                    $query->where('section_id', $section_id);
+                ->when($un_section_id != 0, function ($query) use ($un_section_id) {
+                    $query->where('un_section_id', $un_section_id);
                 })
                 ->get();
-
-            // return view('backEnd.examination.exam_schedule_print', [
-            //     'exam_schedules' => $exam_schedules,
-            //     'exam_type' => $exam_type,
-            //     'class_name' => $class_name,
-            //     'academic_year' => $academic_year,
-            //     'section_name' => $section_name,
-            // ]);
             $print = request()->print;
             return view(
                 'backEnd.examination.exam_schedule_print',
@@ -929,6 +962,70 @@ class SmExamRoutineController extends Controller
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();
+        }
+    }
+
+    public function examRoutinePrint($class_id, $section_id, $exam_term_id)
+    {
+        if (moduleStatusCheck('University')) {
+            return $this->universityExamRoutinePrint($class_id, $section_id, $exam_term_id);
+        } else {
+            try {
+                $exam_type_id   = $exam_term_id;
+                $exam_type      = SmExamType::find($exam_type_id)->title;
+                $academic_id    = SmExamType::find($exam_type_id)->academic_id;
+                $academic_year  = SmAcademicYear::find($academic_id);
+                $class_name     = $class_id != 0 ? SmClass::find($class_id)->class_name : 'All Classes';
+                $section_name   = $section_id != 0 ? SmSection::find($section_id)->section_name : 'All Sections';
+                $exam_schedules = SmExamSchedule::where('school_id', Auth::user()->school_id)
+                    ->when($exam_term_id, function ($query) use ($exam_term_id) {
+                        $query->where('exam_term_id', $exam_term_id);
+                    })
+                    ->when($class_id != 0, function ($query) use ($class_id) {
+                        $query->where('class_id', $class_id);
+                    })
+                    ->when($section_id != 0, function ($query) use ($section_id) {
+                        $query->where('section_id', $section_id);
+                    })
+                    ->get();
+
+                // return view('backEnd.examination.exam_schedule_print', [
+                //     'exam_schedules' => $exam_schedules,
+                //     'exam_type' => $exam_type,
+                //     'class_name' => $class_name,
+                //     'academic_year' => $academic_year,
+                //     'section_name' => $section_name,
+                // ]);
+                $print = request()->print;
+                return view(
+                    'backEnd.examination.exam_schedule_print',
+                    [
+                        'exam_schedules' => $exam_schedules,
+                        'exam_type' => $exam_type,
+                        'class_name' => $class_name,
+                        'academic_year' => $academic_year,
+                        'section_name' => $section_name,
+                        'print' => $print,
+                    ]
+                );
+
+                $pdf = Pdf::loadView(
+                    'backEnd.examination.exam_schedule_print',
+                    [
+                        'exam_schedules' => $exam_schedules,
+                        'exam_type' => $exam_type,
+                        'class_name' => $class_name,
+                        'academic_year' => $academic_year,
+                        'section_name' => $section_name,
+
+
+                    ]
+                )->setPaper('A4', 'landscape');
+                return $pdf->stream('EXAM_SCHEDULE.pdf');
+            } catch (\Exception $e) {
+                Toastr::error('Operation Failed', 'Failed');
+                return redirect()->back();
+            }
         }
     }
 

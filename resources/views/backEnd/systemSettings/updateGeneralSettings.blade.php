@@ -3,7 +3,7 @@
 @lang('system_settings.general_settings')
 @endsection
 @section('mainContent')
-<section class="sms-breadcrumb mb-40 white-box">
+<section class="sms-breadcrumb mb-20">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('system_settings.update_general_settings')</h1>
@@ -16,15 +16,6 @@
 </section>
 <section class="admin-visitor-area">
     <div class="container-fluid p-0">
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="main-title">
-                    <h3 class="mb-30">
-                        @lang('common.update')
-                   </h3>
-                </div>
-            </div>
-        </div>
         @if(Illuminate\Support\Facades\Config::get('app.app_sync'))
             {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'admin-dashboard', 'method' => 'GET', 'enctype' => 'multipart/form-data']) }}
         @else
@@ -35,10 +26,17 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="white-box">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="main-title">
+                                <h3 class="mb-15">
+                                    @lang('common.update')
+                               </h3>
+                            </div>
+                        </div>
+                    </div>
                     <div class="">
                         <input type="hidden" name="url" id="url" value="{{URL::to('/')}}">
-
-
                         <div class="row mb-30">
                             <div class="col-lg-4">
                                 <div class="primary_input">
@@ -323,9 +321,9 @@
                         </div>
                         <div class="row mb-30">
                             
-                            <div class="col-lg-6 d-flex relation-button">
+                            <div class="col-lg-6 d-flex relation-button flex-wrap gap-20 mb-15">
                                 <p class="text-uppercase mb-0">@lang('student.multiple_roll_number')</p>
-                                <div class="d-flex radio-btn-flex ml-30">
+                                <div class="d-flex radio-btn-flex">
                                     <div class="mr-20">
                                         <input type="radio" name="multiple_roll" id="roll_yes" value="1" class="common-radio relationButton" {{@$editData->multiple_roll == "1"? 'checked': ''}}>
                                         <label for="roll_yes">@lang('common.enable')</label>
@@ -336,9 +334,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-6 d-flex relation-button">
+                            <div class="col-lg-6 d-flex relation-button flex-wrap gap-20 mb-15">
                                 <p class="text-uppercase mb-0">@lang('system_settings.promossion_without_exam')</p>
-                                <div class="d-flex radio-btn-flex ml-30">
+                                <div class="d-flex radio-btn-flex">
                                     <div class="mr-20">
                                         <input type="radio" name="promotionSetting" id="relationMother" value="0" class="common-radio relationButton" {{@$editData->promotionSetting == "0"? 'checked': ''}}>
                                         <label for="relationMother">@lang('common.enable')</label>
@@ -352,9 +350,9 @@
                         </div>
                         @if(moduleStatusCheck('Lms'))
                         <div class="row mb-30">
-                            <div class="col-lg-6 d-flex relation-button">
+                            <div class="col-lg-6 d-flex relation-button flex-wrap gap-20 mb-15">
                                 <p class="text-uppercase mb-0">@lang('lms::lms.lms_checkout_option')</p>
-                                <div class="d-flex radio-btn-flex ml-30 mt-1">
+                                <div class="d-flex radio-btn-flex mt-1">
                                     <div class="mr-20">
                                         <input type="radio" name="lms_checkout" id="lms_checkout_on" value="1" class="common-radio relationButton" {{@$editData->lms_checkout == "1"? 'checked': ''}}>
                                         <label for="lms_checkout_on">@lang('system_settings.enable')</label>
@@ -371,7 +369,7 @@
                         <div class="row mb-30 ">
                             <div class="col-lg-6">
                                 <p class="text-uppercase mb-2">@lang('system_settings.subject_attendance_layout')</p>
-                                <div class="d-flex radio-btn-flex">
+                                <div class="d-flex radio-btn-flex flex-wrap row-gap-24">
                                     <div class="mr-20">
                                         {{-- <label for=""> --}}
                                             <input type="radio" name="attendance_layout" id="first_layout" value="1" class="common-radio relationButton attendance_layout"  {{@$editData->attendance_layout == "1"? 'checked': ''}}>
@@ -388,7 +386,7 @@
                                         </div>
                                 </div>
                             </div>
-                            @if(moduleStatusCheck('Fees'))
+                            @if(moduleStatusCheck('Fees') && !moduleStatusCheck('University'))
                             <div class="col-lg-6">
                                 <p class="text-uppercase mb-2">@lang('fees::feesModule.new_fees_module')</p>
                                 <div class="d-flex radio-btn-flex">
@@ -429,13 +427,15 @@
                              </div>
                         
                             </div>
+                   
                             @endif
+                        </div>
 
                             @if(!moduleStatusCheck('University'))
                                 <div class="row mb-30 mt-30">
-                                    <div class="col-lg-12 d-flex relation-button">
+                                    <div class="col-lg-12 d-flex relation-button flex-wrap gap-20 mb-15">
                                         <p class="text-uppercase mb-0">@lang('fees.school_fees_payment_installment_enable')</p>
-                                        <div class="d-flex radio-btn-flex ml-30">
+                                        <div class="d-flex radio-btn-flex">
                                             <div class="mr-20">
                                                 <input type="radio" name="direct_fees_assign" id="direct_fees_enable" value="1" class="common-radio relationButton" {{@$editData->direct_fees_assign == "1"? 'checked': ''}}>
                                                 <label for="direct_fees_enable">@lang('system_settings.enable')</label>
@@ -472,9 +472,9 @@
                                 </div>
                             @endif
                             <div class="row mb-30">
-                                <div class="col-lg-6 d-flex relation-button">
+                                <div class="col-lg-6 d-flex relation-button flex-wrap gap-20 mb-15">
                                     <p class="text-uppercase mb-0">@lang('system_settings.result_type')</p>
-                                    <div class="d-flex radio-btn-flex ml-30">
+                                    <div class="d-flex radio-btn-flex">
                                         <div class="mr-20">
                                             <input type="radio" name="result_type" id="gpa" value="gpa" class="common-radio relationButton" {{@$editData->result_type == "gpa"? 'checked': ''}}>
                                             <label for="gpa">@lang('system_settings.gpa')</label>
@@ -485,9 +485,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-6 d-flex relation-button">
+                                <div class="col-lg-6 d-flex relation-button flex-wrap gap-20 mb-15">
                                     <p class="text-uppercase mb-0">@lang('system_settings.student_admission')</p>
-                                    <div class="d-flex radio-btn-flex ml-30">
+                                    <div class="d-flex radio-btn-flex">
                                         <div class="mr-20">
                                             <input type="radio" name="with_guardian" id="with_guardian" value="1" class="common-radio relationButton" {{@$editData->with_guardian == 1 ? 'checked': ''}}>
                                             <label for="with_guardian">@lang('system_settings.with_guardian')</label>
@@ -501,9 +501,9 @@
                             </div>
 
                         <div class="row md-30 mt-30">
-                            <div class="col-lg-12 d-flex relation-button">
+                            <div class="col-lg-12 d-flex relation-button flex-wrap gap-20 mb-15">
                                 <p class="text-uppercase mb-0">@lang('system_settings.If_student_do_not_pay_fees_bfore_due_date_login_restricted_student_&_parent')</p>
-                                <div class="d-flex radio-btn-flex ml-30">
+                                <div class="d-flex radio-btn-flex">
                                     <div class="mr-20">
                                         <input type="radio" name="due_fees_login" id="login_rest_enable" value="1" class="common-radio relationButton" {{@$editData->due_fees_login == 1 ? 'checked': ''}}>
                                         <label for="login_rest_enable">@lang('system_settings.enable')</label>
@@ -517,9 +517,9 @@
                         </div>
 
                         <div class="row md-30 mt-30">
-                            <div class="col-lg-12 d-flex relation-button">
+                            <div class="col-lg-12 d-flex relation-button flex-wrap gap-20 mb-15">
                                 <p class="text-uppercase mb-0">@lang('common.global_settings_for_can_comment_and_comment_auto_approval')</p>
-                                <div class="d-flex radio-btn-flex ml-30">
+                                <div class="d-flex radio-btn-flex">
                                     <div class="mr-20">
                                         <input type="checkbox" name="auto_approve" id="newsAutoApproval" value=1 class="common-radio" {{@$editData->auto_approve == 1 ? 'checked': ''}}>
                                         <label for="newsAutoApproval">@lang('common.auto_approval_comment')</label>
@@ -533,9 +533,9 @@
                         </div>
 
                         <div class="row md-30 mt-30">
-                            <div class="col-lg-12 d-flex relation-button">
+                            <div class="col-lg-12 d-flex relation-button flex-wrap gap-20 mb-15">
                                 <p class="text-uppercase mb-0">@lang('common.Blog Search')</p>
-                                <div class="d-flex radio-btn-flex ml-30">
+                                <div class="d-flex radio-btn-flex">
                                     <div class="mr-20">
                                         <input type="radio" name="blog_search" id="bSearch" value="1" class="common-radio relationButton" {{@$editData->blog_search == 1 ? 'checked': ''}}>
                                         <label for="bSearch">@lang('system_settings.enable')</label>
@@ -549,9 +549,9 @@
                         </div>
 
                         <div class="row md-30 mt-30">
-                            <div class="col-lg-12 d-flex relation-button">
+                            <div class="col-lg-12 d-flex relation-button flex-wrap gap-20 mb-15">
                                 <p class="text-uppercase mb-0">@lang('common.Recent Blog')</p>
-                                <div class="d-flex radio-btn-flex ml-30">
+                                <div class="d-flex radio-btn-flex">
                                     <div class="mr-20">
                                         <input type="radio" name="recent_blog" id="bRecentB" value="1" class="common-radio relationButton" {{@$editData->recent_blog == 1 ? 'checked': ''}}>
                                         <label for="bRecentB">@lang('system_settings.enable')</label>
@@ -561,6 +561,23 @@
                                         <label for="bRecentBO">@lang('common.disable')</label>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+
+                        <div class="row md-30 mt-30">
+                            <div class="col-lg-5">
+                                <div class="primary_input">
+                                    <label class="primary_input_label" for="">@lang('common.Queue Connection') <span class="text-danger"> *</span></label>
+                                    <select class="primary_select  form-control{{ $errors->has('session_id') ? ' is-invalid' : '' }}" name="queue_connection" id="queueConnection">
+                                        <option value="database" {{env('QUEUE_CONNECTION') == 'database' ? 'selected' : ''}}>@lang('common.Database')</option>
+                                        <option value="sync" {{env('QUEUE_CONNECTION') == 'sync' ? 'selected' : ''}}>@lang('common.SYNC')</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row md-30 mt-30 urlshowhide d-none">
+                            <div class="col-lg-7">
+                                <pre> {{ 'cd ' . base_path() . '/ && php artisan schedule:run >> /dev/null 2>&1' }}</pre>
                             </div>
                         </div>
 
@@ -628,11 +645,17 @@
     </div>
 </div>
 <script>
+    var queueConn = $('#queueConnection').val();
+    hideshowQueue(queueConn);
     $(document).on('click', '.layout_image', function(){
         // $('.question_image_url').src(this.src);
         $('.question_image_url').attr('src',this.src);   
         $('.question_image_preview').modal('show');
-    })
+    });
+
+    $(document).on('change', '#queueConnection', function(){
+        hideshowQueue($(this).val());
+    });
 
     $('#fees_enable').change(function() {
         $('#newFees').modal('show');
@@ -641,6 +664,14 @@
     $('#direct_fees_enable').change(function() {
         $('#FeesInstallment').modal('show');
     });
+
+    function hideshowQueue(value){
+        if(value == 'database'){
+            $('.urlshowhide').removeClass('d-none');
+        }else{
+            $('.urlshowhide').addClass('d-none');
+        }
+    }
 
 </script>
 @endsection

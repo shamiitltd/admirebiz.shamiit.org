@@ -175,21 +175,19 @@ class SmApiController extends Controller
         $user = User::find($request->id);
         $data = [];
         if($user){
-            if($user->role_id == 2){
+            if($user->rol_id == 2){
                 $user->active_status = 0 ;
-                $user->save();
                 $student = $user->student;
                 $student->active_status = 0 ;
                 $student->save();
-            }
-            elseif($user->role_id==3){
+                $user->save();
+            }elseif($user->role_id==3){
                 $user->active_status = 0 ;
                 $parent = $user->parent;
                 $parent->active_status = 0 ;
                 $parent->save();
                 $user->save();
-            }
-            else{
+            }elseif($user->rol_id != 1){
                 $user->active_status = 0 ;
                 $staff = $user->staff;
                 $staff->active_status = 0 ;
@@ -1517,7 +1515,8 @@ class SmApiController extends Controller
                     $response_schools = [];
                     foreach($schools as $id => $name){
                         $response_schools[] = [
-                            'id' => $id, 'name' => $name];
+                            'id' => $id, 'name' => $name
+                        ];
                     }
                     $data = ['multiple_school' => true, 'schools' => $response_schools];
 
@@ -1531,10 +1530,6 @@ class SmApiController extends Controller
 
             if ($user != "") {
                 if (Hash::check($request->password, $user->password)) {
-                    if($user->active_status == 0){
-                        return ApiBaseMethod::sendError('Account Disabled, Please Contact with Admin');
-
-                    }
 
                     $data = [];
                     $data['multiple_school'] = false;
@@ -1546,7 +1541,6 @@ class SmApiController extends Controller
                     $role_id = $user->role_id;
                     
                     if($role_id == 2) {
-                       
                         $data['userDetails'] = DB::table('sm_students')->select('sm_students.*','sm_students.user_id as student_user_id', 'sm_students.id as s_id', 'sm_parents.*','sm_parents.user_id as parent_user_id')
                             ->leftJoin('sm_parents', 'sm_parents.id', '=', 'sm_students.parent_id')
                             ->where('sm_students.user_id', $user->id)
@@ -3820,16 +3814,20 @@ class SmApiController extends Controller
                             $parent->save();
                         }
                         try {
+
                             $student_user = User::where('school_id',$school_id)->find($student_detail->user_id);
                             $student_user->active_status = 0;
                             $student_user->save();
+
                             try {
-                                if(count($siblings) == 1) {
+
+                                if (count($siblings) == 1) {
                                     $parent_user = User::where('school_id',$school_id)->find($student_detail->parents->user_id);
                                     $parent_user->active_status = 0;
                                     $parent_user->save();
                                 }
-                                
+
+
                                 DB::commit();
 
                                 if (ApiBaseMethod::checkUrl($request->fullUrl())) {
@@ -17521,14 +17519,13 @@ class SmApiController extends Controller
             ->first();
         $teacher_id = $teacher->id;
 
-        $subjectsName = SmAssignSubject::select('subject_id', 'subject_name', 'subject_code', 'subject_type')
+        $subjectsName = DB::table('sm_assign_subjects')
             ->join('sm_subjects', 'sm_subjects.id', '=', 'sm_assign_subjects.subject_id')
+            ->select('subject_id', 'subject_name', 'subject_code', 'subject_type')
             ->where('sm_assign_subjects.active_status', 1)
             ->where('teacher_id', $teacher_id)
             ->distinct('subject_id')
             ->get();
-
-
         $subject_type = 'T=Theory, P=Practical';
         if (ApiBaseMethod::checkUrl($request->fullUrl())) {
             $data['subjectsName'] = $subjectsName->toArray();

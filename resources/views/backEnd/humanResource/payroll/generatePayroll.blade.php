@@ -14,7 +14,7 @@
     @endphp
 
 
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('hr.staffs_payroll')</h1>
@@ -29,17 +29,18 @@
     <section class="student-details mb-40">
         <div class="container-fluid p-0">
             <div class="row">
-                <div class="col-lg-4 no-gutters">
-                    <div class="main-title">
-                        <h3 class="mb-30">@lang('hr.generate_payroll')</h3>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
                 <div class="col-lg-12">
                     <div class="student-meta-box">
                        
                         <div class="white-box">
+
+                        <div class="row">
+                            <div class="col-lg-4 no-gutters">
+                                <div class="main-title">
+                                    <h3 class="mb-15">@lang('hr.generate_payroll')</h3>
+                                </div>
+                            </div>
+                        </div>
                             <div class="single-meta mt-20">
                                 <div class="row">
                                     <div class="col-lg-2 col-md-6">
@@ -275,9 +276,11 @@
         <div class="container-fluid p-0">
             <div class="row">
                 <div class="col-lg-4 no-gutters">
-                    <div class="d-flex justify-content-between mb-20">
+
+                    <div class="white-box">
+                    <div class="d-flex justify-content-between mb-15">
                         <div class="main-title">
-                            <h3>@lang('hr.earnings')</h3>
+                            <h3 class="mb-0">@lang('hr.earnings')</h3>
                         </div>
 
                         <div>
@@ -286,8 +289,6 @@
                             </button>
                         </div>
                     </div>
-
-                    <div class="white-box">
                         <table class="w-100 table-responsive" id="tableID">
                             <tbody id="addEarningsTableBody">
                                 @if ($staffDetails->lms_balance && moduleStatusCheck('Lms') == true)
@@ -335,9 +336,12 @@
                 </div>
 
                 <div class="col-lg-4 no-gutters">
-                    <div class="d-flex justify-content-between mb-20">
+
+                    <div class="white-box">
+
+                    <div class="d-flex justify-content-between mb-15">
                         <div class="main-title">
-                            <h3>@lang('hr.deductions')</h3>
+                            <h3 class="mb-0">@lang('hr.deductions')</h3>
                         </div>
 
                         <div>
@@ -346,8 +350,6 @@
                             </button>
                         </div>
                     </div>
-
-                    <div class="white-box">
                         <table class="w-100 table-responsive" id="tableDeduction">
                             <tbody id="addDeductionsTableBody">
                                 <tr id="DeductionRow0">
@@ -373,9 +375,17 @@
                 </div>
 
                 <div class="col-lg-4 no-gutters">
-                    <div class="d-flex justify-content-between mb-20">
+
+                    <input type="hidden" name="staff_id" value="{{ $staffDetails->id }}">
+                    <input type="hidden" name="payroll_month" value="{{ $payroll_month }}">
+                    <input type="hidden" name="payroll_year" value="{{ $payroll_year }}">
+
+
+                    <div class="white-box">
+
+                    <div class="d-flex justify-content-between mb-15">
                         <div class="main-title">
-                            <h3>@lang('hr.payroll_summary')</h3>
+                            <h3 class="mb-0">@lang('hr.payroll_summary')</h3>
                         </div>
 
                         <div>
@@ -384,13 +394,6 @@
                             </button>
                         </div>
                     </div>
-
-                    <input type="hidden" name="staff_id" value="{{ $staffDetails->id }}">
-                    <input type="hidden" name="payroll_month" value="{{ $payroll_month }}">
-                    <input type="hidden" name="payroll_year" value="{{ $payroll_year }}">
-
-
-                    <div class="white-box">
                         <table class="w-100 table-responsive">
                             <tbody class="d-block">
                                 <tr class="d-block">
@@ -485,7 +488,7 @@
                     
                     <div class="col-lg-12 mt-20 text-right">
                         @if (userPermission('savePayrollData'))
-                            <button class="primary-btn fix-gr-bg">
+                            <button type="submit" class="primary-btn fix-gr-bg">
                                 <span class="ti-check"></span>
                                 @lang('hr.submit')
                             </button>

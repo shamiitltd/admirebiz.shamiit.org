@@ -1,13 +1,13 @@
 {{-- <script src="{{asset('public/backEnd/')}}/js/main.js"></script> --}}
 
-<div class="container-fluid mt-30">
+<div class="container-fluid">
     <div class="student-details">
         <div class="student-meta-box">
             <div class="single-meta">
                 <div class="row">
             <div class="col-lg-12">
                 <div class="student-meta-box">
-                    <div class="white-box">
+                    {{-- <div class="white-box"> --}}
                         <div class="row">
                             <div class="col-lg-5 col-md-6">
                                 <div class="single-meta">
@@ -127,8 +127,24 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-lg-5 col-md-6">
+                                <div class="single-meta">
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-6">
+                                            <div class="value text-left">
+                                                @lang('common.file')
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6">
+                                            <div class="name">
+                                                <a href="{{$complaint->file ? asset($complaint->file) : '' }}" download>@lang('common.download')</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    {{-- </div> --}}
                 </div>
             </div>
         </div>
