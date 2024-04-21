@@ -12,7 +12,7 @@
             margin: 0 auto;
         }
     </style>
-    <section class="sms-breadcrumb mb-40 white-box up_breadcrumb">
+    <section class="sms-breadcrumb mb-20 up_breadcrumb">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('style.color_style')</h1>

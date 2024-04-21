@@ -827,6 +827,28 @@ class SmReportController extends Controller
                 $common = new ExamCommonController();
                 return $common->progressCardReportSearch((object)$request->all());
             } else {
+                $max_gpa = SmMarksGrade::where('active_status', 1)
+                        ->where('academic_id', getAcademicId())
+                        ->where('school_id', Auth::user()->school_id)
+                        ->max('gpa');
+
+                $maxgpaname = SmMarksGrade::where('active_status', 1)
+                        ->where('academic_id', getAcademicId())
+                        ->where('school_id', Auth::user()->school_id)
+                        ->where('gpa', $max_gpa)
+                        ->first();
+
+                $failgpa = SmMarksGrade::where('active_status', 1)
+                        ->where('academic_id', getAcademicId())
+                        ->where('school_id', Auth::user()->school_id)
+                        ->min('gpa');
+
+                $failgpaname = SmMarksGrade::where('active_status', 1)
+                    ->where('academic_id', getAcademicId())
+                    ->where('school_id', Auth::user()->school_id)
+                    ->where('gpa', $failgpa)
+                    ->first();
+
                 $exam_content = SmExamSetting::whereNull('exam_type')
                     ->where('active_status', 1)
                     ->where('academic_id', getAcademicId())
@@ -979,7 +1001,10 @@ class SmReportController extends Controller
                             'fail_grade',
                             'maxGrade',
                             'custom_mark_report',
-                            'exam_content'
+                            'exam_content',
+                            'failgpaname',
+                            'max_gpa',
+                            'maxgpaname',
                         ));
 
                 } else {
@@ -1002,6 +1027,27 @@ class SmReportController extends Controller
                 $common = new ExamCommonController();
                 return $common->progressCardReportPrint((object)$request->all());
             } else {
+                $max_gpa = SmMarksGrade::where('active_status', 1)
+                        ->where('academic_id', getAcademicId())
+                        ->where('school_id', Auth::user()->school_id)
+                        ->max('gpa');
+
+                $maxgpaname = SmMarksGrade::where('active_status', 1)
+                        ->where('academic_id', getAcademicId())
+                        ->where('school_id', Auth::user()->school_id)
+                        ->where('gpa', $max_gpa)
+                        ->first();
+
+                $failgpa = SmMarksGrade::where('active_status', 1)
+                        ->where('academic_id', getAcademicId())
+                        ->where('school_id', Auth::user()->school_id)
+                        ->min('gpa');
+
+                $failgpaname = SmMarksGrade::where('active_status', 1)
+                    ->where('academic_id', getAcademicId())
+                    ->where('school_id', Auth::user()->school_id)
+                    ->where('gpa', $failgpa)
+                    ->first();
                 $exam_content = SmExamSetting::withOutGlobalScopes()->whereNull('exam_type')
                     ->where('active_status', 1)
                     ->where('academic_id', $academic_id)
@@ -1136,6 +1182,9 @@ class SmReportController extends Controller
                         'marks_grade',
                         'fail_grade_name',
                         'exam_content',
+                        'failgpaname',
+                        'max_gpa',
+                        'maxgpaname',
                     )
                 );
 

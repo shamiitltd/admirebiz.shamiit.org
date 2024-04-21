@@ -56,7 +56,7 @@ class StudentLessonApiController extends Controller
                     return [
                         'id' => $value->id,
                         'name' => $value->name,
-                        'isWeekend' => (int) $value->is_weekend,
+                        'isWeekend' => $value->is_weekend,
                         'date' => $dates[$index],
                     ];
                 });
@@ -141,7 +141,7 @@ class StudentLessonApiController extends Controller
                     return [
                         'id' => $value->id,
                         'name' => $value->name,
-                        'isWeekend' => (int) $value->is_weekend,
+                        'isWeekend' => $value->is_weekend,
                         'date' => $dates[$index],
                     ];
                 });
@@ -177,7 +177,7 @@ class StudentLessonApiController extends Controller
                     return [
                         'id' => $value->id,
                         'name' => $value->name,
-                        'isWeekend' => (int) $value->is_weekend,
+                        'isWeekend' => $value->is_weekend,
                         'date' => $dates[$index],
                     ];
                 });

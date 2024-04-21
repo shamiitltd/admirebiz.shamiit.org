@@ -1,3 +1,4 @@
+<div class="table-responsive">
 <table class="table" cellspacing="0" width="100%">
     <thead>
         <tr>
@@ -26,3 +27,5 @@
         @endforeach
     </tbody>
 </table>
+
+</div>

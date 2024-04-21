@@ -7,13 +7,14 @@
 
         .preloaderr {
             border: 1px solid #ccc;
-            width: 200px;
-            height: 200px;
+            width: 100%;
+            /* height: 180px; */
             padding: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
+            aspect-ratio: 1/1;
         }
 
         #preloaderStyleDiv input[type="radio"][id^="checkbox"] {
@@ -68,8 +69,15 @@
             border: 3px solid var(--gradient_1) !important;
         }
 
+        @media (min-width: 1580px){
+            .col-xxl-2{
+                flex: 0 0 16.66666667%;
+                max-width: 16.66666667%;
+            }
+        }
+
     </style>
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>{{__('system_settings.Preloader Settings')}} </h1>
@@ -86,23 +94,21 @@
         <div class="container-fluid p-0">
             <div class="row justify-content-center">
                 <div class="col-12">
-                    <div class="box_header">
-                        <div class="main-title d-flex">
-                            <h3 class="mb-30">
-                                @lang('system_settings.Preloader Settings')
-                            </h3>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12">
                     <div class="white-box">
+                        <div class="box_header">
+                            <div class="main-title d-flex">
+                                <h3 class="mb-15">
+                                    @lang('system_settings.Preloader Settings')
+                                </h3>
+                            </div>
+                        </div>
                         <div class="row">
 
                             <div class="col-lg-12">
                                 <!-- tab-content  -->
                                 <div class="tab-content " id="myTabContent">
                                     <!-- General -->
-                                    <div class="tab-pane fade white_box_30px show active" id="Activation"
+                                    <div class="tab-pane fade show active" id="Activation"
                                          role="tabpanel" aria-labelledby="Activation-tab">
                                         <div class="main-title mb-25">
 
@@ -210,7 +216,7 @@
                                                                                for=""> {{__('system_settings.Preloader Style')}} </label>
                                                                         <div class="row pt-2">
 
-                                                                            <div class="col-md-2">
+                                                                            <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
                                                                                 <input type="radio" id="checkbox1"
                                                                                        name="preloader_style"
                                                                                        {{generalSetting()->preloader_style==1?'checked':''}}
@@ -225,7 +231,7 @@
                                                                                 </label>
                                                                             </div>
 
-                                                                            <div class="col-md-2">
+                                                                            <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
                                                                                 <input type="radio" id="checkbox2"
                                                                                        name="preloader_style"
                                                                                        {{generalSetting()->preloader_style==2?'checked':''}}
@@ -240,7 +246,7 @@
                                                                                 </label>
                                                                             </div>
 
-                                                                            <div class="col-md-2">
+                                                                            <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
                                                                                 <input type="radio" id="checkbox3"
                                                                                        name="preloader_style"
                                                                                        {{generalSetting()->preloader_style==3?'checked':''}}
@@ -257,7 +263,7 @@
                                                                                 </label>
                                                                             </div>
 
-                                                                            <div class="col-md-2">
+                                                                            <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
                                                                                 <input type="radio" id="checkbox4"
                                                                                        name="preloader_style"
                                                                                        {{generalSetting()->preloader_style==4?'checked':''}}
@@ -279,7 +285,7 @@
                                                                             </div>
 
 
-                                                                            <div class="col-md-2">
+                                                                            <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
                                                                                 <input type="radio" id="checkbox5"
                                                                                        name="preloader_style"
                                                                                        {{generalSetting()->preloader_style==5?'checked':''}}
@@ -294,7 +300,7 @@
                                                                                 </label>
                                                                             </div>
 
-                                                                            <div class="col-md-2">
+                                                                            <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
                                                                                 <input type="radio" id="checkbox6"
                                                                                        name="preloader_style"
                                                                                        {{generalSetting()->preloader_style==6?'checked':''}}
@@ -317,7 +323,7 @@
                                                                                 </label>
                                                                             </div>
 
-                                                                            <div class="col-md-2">
+                                                                            <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
                                                                                 <input type="radio" id="checkbox7"
                                                                                        name="preloader_style"
                                                                                        {{generalSetting()->preloader_style==7?'checked':''}}
@@ -340,7 +346,7 @@
                                                                                 </label>
                                                                             </div>
 
-                                                                            <div class="col-md-2">
+                                                                            <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
                                                                                 <input type="radio" id="checkbox8"
                                                                                        name="preloader_style"
                                                                                        {{generalSetting()->preloader_style==8?'checked':''}}
@@ -363,7 +369,7 @@
                                                                                 </label>
                                                                             </div>
 
-                                                                            <div class="col-md-2">
+                                                                            <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
                                                                                 <input type="radio" id="checkbox9"
                                                                                        name="preloader_style"
                                                                                        {{generalSetting()->preloader_style==9?'checked':''}}
@@ -386,7 +392,7 @@
                                                                                 </label>
                                                                             </div>
 
-                                                                            <div class="col-md-2">
+                                                                            <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
                                                                                 <input type="radio" id="checkbox10"
                                                                                        name="preloader_style"
                                                                                        {{generalSetting()->preloader_style==10?'checked':''}}
@@ -409,7 +415,7 @@
                                                                                 </label>
                                                                             </div>
 
-                                                                            <div class="col-md-2">
+                                                                            <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
                                                                                 <input type="radio" id="checkbox11"
                                                                                        name="preloader_style"
                                                                                        {{generalSetting()->preloader_style==11?'checked':''}}
@@ -432,7 +438,7 @@
                                                                                 </label>
                                                                             </div>
 
-                                                                            <div class="col-md-2">
+                                                                            <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
                                                                                 <input type="radio" id="checkbox12"
                                                                                        name="preloader_style"
                                                                                        {{generalSetting()->preloader_style==12?'checked':''}}
@@ -455,7 +461,7 @@
                                                                                 </label>
                                                                             </div>
 
-                                                                            <div class="col-md-2">
+                                                                            <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
                                                                                 <input type="radio" id="checkbox13"
                                                                                        name="preloader_style"
                                                                                        {{generalSetting()->preloader_style==13?'checked':''}}
@@ -470,7 +476,7 @@
                                                                                 </label>
                                                                             </div>
 
-                                                                            <div class="col-md-2">
+                                                                            <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
                                                                                 <input type="radio" id="checkbox14"
                                                                                        name="preloader_style"
                                                                                        {{generalSetting()->preloader_style==14?'checked':''}}
@@ -485,7 +491,7 @@
                                                                                 </label>
                                                                             </div>
 
-                                                                            <div class="col-md-2">
+                                                                            <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
                                                                                 <input type="radio" id="checkbox15"
                                                                                        name="preloader_style"
                                                                                        {{generalSetting()->preloader_style==15?'checked':''}}
@@ -500,7 +506,7 @@
                                                                                 </label>
                                                                             </div>
 
-                                                                            <div class="col-md-2">
+                                                                            <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
                                                                                 <input type="radio" id="checkbox16"
                                                                                        name="preloader_style"
                                                                                        {{generalSetting()->preloader_style==16?'checked':''}}
@@ -516,7 +522,7 @@
                                                                                 </label>
                                                                             </div>
 
-                                                                            <div class="col-md-2">
+                                                                            <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
                                                                                 <input type="radio" id="checkbox17"
                                                                                        name="preloader_style"
                                                                                        {{generalSetting()->preloader_style==17?'checked':''}}
@@ -532,7 +538,7 @@
                                                                                 </label>
                                                                             </div>
 
-                                                                            <div class="col-md-2">
+                                                                            <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
                                                                                 <input type="radio" id="checkbox18"
                                                                                        name="preloader_style"
                                                                                        {{generalSetting()->preloader_style==18?'checked':''}}
@@ -548,7 +554,7 @@
                                                                                 </label>
                                                                             </div>
 
-                                                                            <div class="col-md-2">
+                                                                            <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
                                                                                 <input type="radio" id="checkbox19"
                                                                                        name="preloader_style"
                                                                                        {{generalSetting()->preloader_style==19?'checked':''}}
@@ -564,7 +570,7 @@
                                                                                 </label>
                                                                             </div>
 
-                                                                            <div class="col-md-2">
+                                                                            <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
                                                                                 <input type="radio" id="checkbox20"
                                                                                        name="preloader_style"
                                                                                        {{generalSetting()->preloader_style==20?'checked':''}}
@@ -585,7 +591,7 @@
                                                                                 </label>
                                                                             </div>
 
-                                                                            <div class="col-md-2">
+                                                                            <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
                                                                                 <input type="radio"
                                                                                        id="checkbox21"
                                                                                        name="preloader_style"
@@ -605,7 +611,7 @@
                                                                                 </label>
                                                                             </div>
 
-                                                                            <div class="col-md-2">
+                                                                            <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
                                                                                 <input type="radio"
                                                                                        id="checkbox22"
                                                                                        name="preloader_style"
@@ -628,7 +634,7 @@
                                                                                 </label>
                                                                             </div>
 
-                                                                            <div class="col-md-2">
+                                                                            <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
                                                                                 <input type="radio"
                                                                                        id="checkbox23"
                                                                                        name="preloader_style"
@@ -648,7 +654,7 @@
                                                                                 </label>
                                                                             </div>
                                                                             {{--
-                                                                                                                                                        <div class="col-md-2">
+                                                                                                                                                        <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-6">
                                                                                                                                                             <input type="radio"
                                                                                                                                                                    id="checkbox24"
                                                                                                                                                                    name="preloader_style"

@@ -62,10 +62,14 @@ class SmExamMarkRegisterController extends Controller
         public function create()
         {
             try{
-                $exams = SmExam::get();
-    
+                //$exams = SmExam::with('examType', 'class', 'section')->get();
+                
+                $exams = SmExamType::where('active_status', 1)
+                ->where('academic_id', getAcademicId())
+                ->where('school_id', Auth::user()->school_id)
+                ->get();
+
                 $exam_types = SmExamType::get();
-    
                  if (teacherAccess()) {
                     $teacher_info=SmStaff::where('user_id',Auth::user()->id)->first();
                     $classes= $teacher_info->classes;
@@ -81,6 +85,7 @@ class SmExamMarkRegisterController extends Controller
         }
     public function search(AddMarkRequest $request)
     {
+        
         try {
             if (moduleStatusCheck('University')) {
                 $data = [];
@@ -103,7 +108,6 @@ class SmExamMarkRegisterController extends Controller
                             ->orWhereNull('un_section_id')
                             ->first();
 
-
                 $exam_id = $sm_exam->id;
                 $exam_type_id = $request->exam_type;
                 $subject_id = $request->subject_id;
@@ -111,19 +115,18 @@ class SmExamMarkRegisterController extends Controller
                 $subjectName = UnSubject::find($request->subject_id);
 
                 $assignSubjects = UnSubjectAssignStudent::query();
+                
                 $students = unFilterBySub($assignSubjects, $request)
                            ->whereHas('studentDetail', function ($q)  {
                                $q->where('active_status', 1);
-                           })->get();
-                                  
+                           })->get();   
                 $exam_schedule = SmExamSchedule::where('exam_id', $sm_exam->id)
                                 ->where('academic_id', getAcademicId())
                                 ->first();
 
                 $data['un_semester_label_id'] = $request->un_semester_label_id;
                 $interface = App::make(UnCommonRepositoryInterface::class);
-                $data = $interface->oldValueSelected($request);
-                               
+                $data = $interface->oldValueSelected($request);         
                 if ($students->count() < 1 ) {
                     Toastr::error('Student is not found in according this class and section!', 'Failed');
                     return redirect()->back();
@@ -167,25 +170,10 @@ class SmExamMarkRegisterController extends Controller
                         return redirect()->back();
                     }
                 }
-                return view('backEnd.examination.masks_register_create', compact(
-                    'students',
-                    'exam_id',
-                    'subject_id',
-                    'marks_register_subjects',
-                    'assign_subject_ids',
-                    'un_session',
-                    'un_faculty',
-                    'un_department',
-                    'un_academic',
-                    'un_semester',
-                    'un_semester_label',
-                    'subjectName',
-                    'exam_type',
-                    'exam_type_id',
-                ))->with($data);
+                // return view('backEnd.examination.masks_register_create', compact('students', 'exam_id', 'subject_id', 'marks_register_subjects', 'assign_subject_ids','un_session','un_faculty','un_department','un_academic','un_semester','un_semester_label','subjectName','exam_type','exam_type_id'))->with($data);
             } else {
                 $exam = SmExam::query();
-                $exam->where('exam_type_id', $request->exam)
+                $exam->where('id', $request->exam)
                 ->where('subject_id', $request->subject)
                 ->where('class_id', $request->class);
                 if ($request->section=='') {
@@ -210,7 +198,11 @@ class SmExamMarkRegisterController extends Controller
                     return redirect()->back();
                 }
 
-                $exams = SmExam::get();
+                $exams = SmExamType::where('active_status', 1)
+                ->where('academic_id', getAcademicId())
+                ->where('school_id', Auth::user()->school_id)
+                ->get();
+
                 $classes = SmClass::get();
                 $exam_types = SmExamType::get();
                 $exam_id = $request->exam;
@@ -219,11 +211,11 @@ class SmExamMarkRegisterController extends Controller
                 $subject_id = $request->subject;
                 $subjectNames = SmSubject::where('id', $subject_id)->first();
     
-                $exam_type = SmExamType::find($request->exam);
+                $exam_type = SmExamType::find($exam->examType->id);
                 $class = SmClass::find($request->class);
                 $section = SmSection::find($request->section);
     
-                $search_info['exam_name'] = $exam_type->title;
+                $search_info['exam_name'] = $exam->examType->title;
                 $search_info['class_name'] = $class->class_name;
                 if ($request->section !='') {
                     $search_info['section_name'] = $section->section_name;
@@ -260,7 +252,7 @@ class SmExamMarkRegisterController extends Controller
                     if($request->section !=''){
                     $marks_entry_form = SmExamSetup::with('class','section')->where(
                         [
-                            ['exam_term_id', $exam_id],
+                            ['exam_term_id', $exam->examType->id],
                             ['class_id', $class_id],
                             ['section_id', $section_id],
                             ['subject_id', $subject_id]
@@ -269,7 +261,7 @@ class SmExamMarkRegisterController extends Controller
                     }else {
                         $marks_entry_form = SmExamSetup::with('class','section')->where(
                         [
-                            ['exam_term_id', $exam_id],
+                            ['exam_term_id', $exam->examType->id],
                             ['class_id', $class_id],                    
                             ['subject_id', $subject_id]
                         ]
@@ -279,14 +271,14 @@ class SmExamMarkRegisterController extends Controller
 
                     if ($marks_entry_form->count() > 0) {
                         $number_of_exam_parts = count($marks_entry_form);
-                        return view('backEnd.examination.masks_register_create', compact('exams', 'classes', 'students', 'exam_id', 'class_id', 'section_id', 'subject_id', 'subjectNames', 'number_of_exam_parts', 'marks_entry_form', 'exam_types','search_info'));
+                        return view('backEnd.examination.masks_register_create', compact('exams', 'classes', 'students', 'exam_id', 'class_id', 'section_id', 'subject_id', 'subjectNames', 'number_of_exam_parts', 'marks_entry_form', 'exam_types', 'exam_type','search_info'));
                     } else {
                         Toastr::error('No result found or exam setup is not done!', 'Failed');
                         return redirect()->back();
                         // return redirect()->back()->with('message-danger', 'No result found or exam setup is not done!');
                     }
                 
-                    return view('backEnd.examination.masks_register_create', compact('exams', 'classes', 'students',   'exam_id', 'class_id', 'section_id', 'marks_register_subjects', 'assign_subject_ids','search_info'));
+                    // return view('backEnd.examination.masks_register_create', compact('exams', 'classes', 'students',   'exam_id', 'class_id', 'section_id', 'marks_register_subjects', 'assign_subject_ids','search_info'));
                 }
             }
         } catch (\Exception $e) {
@@ -457,7 +449,7 @@ class SmExamMarkRegisterController extends Controller
                     $section_id = $request->section_id;
                 }
                 $subject_id = $request->subject_id;
-                $exam_id = $request->exam_id;
+                $exam_id = SmExam::find($request->exam_id)->exam_type_id;
                 $counter = 0;           // Initilize by 0
         
                 foreach ($request->markStore as $record_id => $record) {
@@ -713,6 +705,7 @@ class SmExamMarkRegisterController extends Controller
             $exam_types = SmExamType::get();
     
             $exam_id = $request->exam;
+            $exam_type_id = SmExam::find($request->exam)->exam_type_id;
             $class_id = $request->class;
             $section_id = $request->section !=null ? $request->section : null;
             $subject_id = $request->subject;
@@ -763,7 +756,7 @@ class SmExamMarkRegisterController extends Controller
             } else {
                     $marks_entry_form = SmExamSetup::query();
                 if ($request->class !=null) {
-                        $marks_entry_form->where('exam_term_id', $exam_id)->where('class_id', $class_id);
+                        $marks_entry_form->where('exam_term_id', $exam_type_id)->where('class_id', $class_id);
                 }
                 if ($request->section !=null) {
                     $marks_entry_form->where('section_id', $request->section);
@@ -773,7 +766,7 @@ class SmExamMarkRegisterController extends Controller
 
                 if ($marks_entry_form->count() > 0) {
                         $number_of_exam_parts = count($marks_entry_form);
-                        return view('backEnd.examination.masks_register_search', compact('exams', 'classes', 'students', 'exam_id', 'class_id', 'section_id', 'subject_id', 'subjectNames', 'number_of_exam_parts', 'marks_entry_form', 'exam_types'));
+                        return view('backEnd.examination.masks_register_search', compact('exams', 'classes', 'students', 'exam_id', 'class_id', 'section_id', 'subject_id', 'subjectNames', 'number_of_exam_parts', 'marks_entry_form', 'exam_types', 'exam_type_id'));
                 } else {
                         Toastr::error('Sorry ! Exam setup is not set yet.', 'Failed');
                         return redirect()->back();

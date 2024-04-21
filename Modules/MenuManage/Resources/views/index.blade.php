@@ -5,15 +5,10 @@
 @push('css')
     <link rel="stylesheet" href="{{ asset('Modules/MenuManage/Resources/assets/css/style.css') }}" />
     <link rel="stylesheet" href="{{ asset('Modules/MenuManage/Resources/assets/css/icon-picker.css') }}" />
-    <style>
-        .white-box {
-            padding: 40px 10px;
-        }
-    </style>
 @endpush
 @section('mainContent')
     <div class="role_permission_wrap">
-        <div class="permission_title d-flex flex-wrap justify-content-between mb_20">
+        <div class="permission_title d-flex flex-wrap justify-content-between mb_10">
             <h4>{{ trans('menumanage::menuManage.menu_manage') }}</h4>
             <div class="">
              

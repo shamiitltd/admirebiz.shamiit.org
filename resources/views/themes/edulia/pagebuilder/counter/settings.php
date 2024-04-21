@@ -42,28 +42,12 @@ return [
             'placeholder'   => __('edulia.enter_button_title'),
         ],
         [
-            'id'            => 'view_course_link',
-            'type'          => 'text',
-            'value'         => '#',
-            'class'         => '',
-            'label_title'   => __('edulia.link'),
-            'placeholder'   => __('edulia.enter_text'),
-        ],
-        [
             'id'            => 'contact_us_button',
             'type'          => 'text',
             'value'         => 'Contact Us',
             'class'         => '',
             'label_title'   => __('edulia.contact_us_button'),
             'placeholder'   => __('edulia.enter_button_title'),
-        ],
-        [
-            'id'            => 'contact_us_link',
-            'type'          => 'text',
-            'value'         => '#',
-            'class'         => '',
-            'label_title'   => __('edulia.link'),
-            'placeholder'   => __('edulia.enter_text'),
         ],
         [
             'id'                => 'counter_list_items',

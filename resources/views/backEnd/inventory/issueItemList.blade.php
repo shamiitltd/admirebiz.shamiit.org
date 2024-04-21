@@ -3,7 +3,7 @@
     @lang('inventory.issue_item_list')
 @endsection
 @section('mainContent')
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('inventory.issue_item_list')</h1>
@@ -28,11 +28,6 @@
                 <div class="col-lg-3">
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="main-title">
-                                <h3 class="mb-30">
-                                    @lang('inventory.issue_a_item')
-                                </h3>
-                            </div>
                             @if (isset($editData))
                                 {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => ['holiday-update', $editData->id], 'method' => 'PUT', 'enctype' => 'multipart/form-data']) }}
                             @else
@@ -47,6 +42,11 @@
                                 @endif
                             @endif
                             <div class="white-box">
+                                <div class="main-title">
+                                    <h3 class="mb-15">
+                                        @lang('inventory.issue_a_item')
+                                    </h3>
+                                </div>
                                 <div class="add-visitor">
                                     <div class="row">
 
@@ -308,13 +308,14 @@
                 <div class="col-lg-9">
 
 
-                    <div class="row">
-                        <div class="col-lg-4 no-gutters">
-                            <div class="main-title">
-                                <h3 class="mb-0"> @lang('inventory.issued_item_list')</h3>
+                    <div class="white-box">
+                        <div class="row">
+                            <div class="col-lg-4 no-gutters">
+                                <div class="main-title">
+                                    <h3 class="mb-15"> @lang('inventory.issued_item_list')</h3>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
                     <div class="row">
 
@@ -374,30 +375,58 @@
                                                             <button class="primary-btn small bg-success text-white border-0">
                                                                 @lang('inventory.issued')</button>
                                                         @else
-                                                            <button
-                                                                class="primary-btn small bg-primary text-white border-0">@lang('inventory.returned')</button>
+                                                            @php
+                                                                $getMemberDetail = App\SmBook::getMemberStaffsDetails($value->issue_to);
+                                                            @endphp
                                                         @endif
-                                                    </td>
-
-                                                    <td>
-                                                        @if ($value->issue_status == 'I')
-                                                        <x-drop-down>
-                                                                    @if (userPermission('return-item-view'))
-                                                                        <a class="dropdown-item modalLink"
-                                                                            title="@lang('inventory.return_item')"
-                                                                            data-modal-size="modal-md"
-                                                                            href="{{ route('return-item-view', @$value->id) }}">@lang('inventory.return')</a>
-                                                                    @endif
-                                                        </x-drop-down>
-                                                        @endif
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        @endif
-                                    </tbody>
-                                </table>
-                            </x-table>
+    
+                                                        <!-- <td>
+                                                            @if (!empty($getMemberDetail))
+                                                                {{ $getMemberDetail->full_name }}
+                                                            @endif
+                                                        </td>
+                                                        <td data-sort="{{ strtotime($value->issue_date) }}">
+                                                            {{ $value->issue_date != '' ? dateConvert($value->issue_date) : '' }}
+    
+                                                        </td>
+                                                        <td data-sort="{{ strtotime($value->due_date) }}">
+                                                            {{ $value->due_date != '' ? dateConvert($value->due_date) : '' }}
+    
+    
+                                                        </td>
+    
+                                                        <td>{{ $value->quantity }}</td>
+                                                        <td>
+                                                            @if ($value->issue_status == 'I')
+                                                                <button class="primary-btn small bg-success text-white border-0">
+                                                                    @lang('inventory.issued')</button>
+                                                            @else
+                                                                <button
+                                                                    class="primary-btn small bg-primary text-white border-0">@lang('inventory.returned')</button>
+                                                            @endif
+                                                        </td> -->
+    
+                                                        <td>
+                                                            @if ($value->issue_status == 'I')
+                                                            <x-drop-down>
+                                                                        @if (userPermission('return-item-view'))
+                                                                            <a class="dropdown-item modalLink"
+                                                                                title="@lang('inventory.return_item')"
+                                                                                data-modal-size="modal-md"
+                                                                                href="{{ route('return-item-view', @$value->id) }}">@lang('inventory.return')</a>
+                                                                        @endif
+                                                            </x-drop-down>
+                                                            @endif
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            @endif
+                                        </tbody>
+                                    </table>
+                                </x-table>
+                            </div>
                         </div>
+                    </div>
                     </div>
                 </div>
             </div>

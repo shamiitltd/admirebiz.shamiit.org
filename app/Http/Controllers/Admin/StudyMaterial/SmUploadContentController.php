@@ -354,6 +354,7 @@ class SmUploadContentController extends Controller
                 return redirect()->back();
             }
         } catch (\Exception $e) {
+           
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();
         }

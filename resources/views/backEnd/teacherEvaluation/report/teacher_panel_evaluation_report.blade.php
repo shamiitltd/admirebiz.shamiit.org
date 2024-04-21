@@ -39,7 +39,7 @@
     @lang('teacherEvaluation.my_report')
 @endsection
 @section('mainContent')
-    <section class="sms-breadcrumb mb-0 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('teacherEvaluation.my_report')</h1>
@@ -57,10 +57,11 @@
                 <div class="col-lg-12 student-details up_admin_visitor">
                     <div class="row">
                         <div class="col-lg-12">
+                            <div class="white-box">
                             <div class="row">
                                 <div class="col-lg-4 no-gutters">
                                     <div class="main-title">
-                                        <h3 class="mb-4">@lang('teacherEvaluation.my_report') </h3>
+                                        <h3 class="mb-15">@lang('teacherEvaluation.my_report') </h3>
                                     </div>
                                 </div>
                             </div>
@@ -145,6 +146,7 @@
                                     </x-table>
 
                                 </div>
+                            </div>
                             </div>
                         </div>
                     </div>

@@ -19,12 +19,14 @@ use Illuminate\Http\Request;
 use App\Models\StudentRecord;
 use App\Traits\NotificationSend;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\FlutterAppNotification;
 use Modules\University\Entities\UnSubjectAssignStudent;
+use Modules\University\Repositories\Interfaces\UnCommonRepositoryInterface;
 use App\Http\Requests\Admin\StudentInfo\StudentSubjectWiseAttendanceStoreRequest;
 use App\Http\Requests\Admin\StudentInfo\StudentSubjectWiseAttendancSearchRequest;
 use App\Http\Requests\Admin\StudentInfo\StudentSubjectWiseAttendanceSearchRequest;
@@ -63,7 +65,23 @@ class SmSubjectAttendanceController extends Controller
             $subjects = SmAssignSubject::with('subject')->where('class_id', $input['class'])->where('section_id', $input['section'])
                 ->get();
 
-            $students = StudentRecord::with('studentDetail', 'studentDetail.DateSubjectWiseAttendances')->where('class_id', $input['class'])->where('section_id', $input['section'])->where('academic_id', getAcademicId())->where('school_id', Auth::user()->school_id)->get();
+            if(moduleStatusCheck('University') == false){
+                request()->merge([
+                    'class' => $request->class_id,
+                    'section' => $request->section_id,
+                    'subject' =>$request->subject_id
+                ]);
+            }
+
+            $students = StudentRecord::with('studentDetail', 'studentDetail.DateSubjectWiseAttendances')
+                ->whereHas('studentDetail', function ($q) {
+                    $q->where('active_status', 1);
+                })
+                ->where('class_id', $input['class'])
+                ->where('section_id', $input['section'])
+                ->where('academic_id', getAcademicId())
+                ->where('school_id', Auth::user()->school_id)
+                ->get();
 
             if (moduleStatusCheck('University')) {
                 $data['un_semester_label_id'] = $request->un_semester_label_id;
@@ -133,11 +151,12 @@ class SmSubjectAttendanceController extends Controller
                 $attendance->attendance_date = date('Y-m-d', strtotime($request->date));
                 $r = $attendance->save();
 
-                $data['class_id'] = gv($student, 'class');
-                $data['section_id'] = gv($student, 'section');
+                $student_user_id = SmStudent::find($attendance->student_id)->user_id;
+                $data['class_id'] = $attendance->class_id;
+                $data['section_id'] = $attendance->section_id;
                 $data['subject'] = $attendance->subject->subject_name;
-                $records = $this->studentRecordInfo($data['class_id'], $data['section_id'])->pluck('studentDetail.user_id');
-                $this->sent_notifications('Subject_Wise_Attendance', $records, $data, ['Student', 'Parent']);
+                $data['attendance_type'] = $attendance->attendance_type;
+                $this->sent_notifications('Subject_Wise_Attendance', [$student_user_id], $data, ['Student', 'Parent']);
 
                 // $messege = "";
                 // $date = dateConvert($attendance->attendance_date);

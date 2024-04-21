@@ -4,7 +4,7 @@
 @endsection
 @section('mainContent')
 @php  $setting = generalSetting();  if(!empty($setting->currency_symbol)){ $currency = $setting->currency_symbol; }else{ $currency = '$'; }   @endphp 
-<section class="sms-breadcrumb mb-40 white-box">
+<section class="sms-breadcrumb mb-20">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('accounts.fine_report')</h1>
@@ -33,6 +33,16 @@
                     {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'fine-report-search', 'method' => 'POST', 'enctype' => 'multipart/form-data']) }}
                         <div class="row">
                             <input type="hidden" name="url" id="url" value="{{URL::to('/')}}">
+                            @if (moduleStatusCheck('University'))
+                            @includeIf(
+                                'university::common.session_faculty_depart_academic_semester_level',
+                                ['mt' => 'mt-30', 'hide' => ['USUB'], 'required' => ['USL']]
+                            )
+                            <div class="col-md-3 mt-30">
+                                <label for="">@lang('common.date_range') </label>
+                                <input placeholder="" class="primary_input_field primary_input_field form-control" type="text" name="date_range" value="">
+                            </div>
+                            @else
                             <div class="col-md-6">
                                 <input placeholder="" class="primary_input_field primary_input_field form-control" type="text" name="date_range" value="">
                             </div>
@@ -52,6 +62,7 @@
                                     <img class="loader_img_style" src="{{asset('public/backEnd/img/demo_wait.gif')}}" alt="loader">
                                 </div>
                             </div>
+                            @endif
                             <div class="col-lg-12 mt-20 text-right">
                                 <button type="submit" class="primary-btn small fix-gr-bg">
                                     <span class="ti-search pr-2"></span>

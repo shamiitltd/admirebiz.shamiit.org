@@ -1,6 +1,14 @@
+@push('css')
+<style>
+    table tr td{
+        white-space: nowrap;
+    }
+</style>
+@endpush
+
 <div role="tabpanel" class="tab-pane fade {{ Session::get('studentDocuments') == 'active' ? 'show active' : '' }}"
     id="studentDocuments">
-    <div class="white-box">
+    <div>
         <div class="text-right mb-20">
             <button type="button" data-toggle="modal" data-target="#add_document_madal"
                 class="primary-btn tr-bg text-uppercase bord-rad">
@@ -10,21 +18,21 @@
         </div>
         <table id="" class="table simple-table table-responsive school-table"
             cellspacing="0">
-            <thead class="d-block">
-                <tr class="d-flex">
-                    <th class="col-2">@lang('student.title')</th>
-                    <th class="col-6">@lang('student.name')</th>
-                    <th class="col-4">@lang('student.action')</th>
+            <thead>
+                <tr>
+                    <th>@lang('student.title')</th>
+                    <th>@lang('student.name')</th>
+                    <th>@lang('student.action')</th>
                 </tr>
             </thead>
 
-            <tbody class="d-block">
+            <tbody>
                 @if (is_show('document_file_1'))
                     @if ($student_detail->document_file_1 != '')
-                        <tr class="d-flex">
-                            <td class="col-2">{{ $student_detail->document_title_1 }}</td>
-                            <td class="col-6">{{ showDocument(@$student_detail->document_file_1) }}</td>
-                            <td class="col-4">
+                        <tr>
+                            <td>{{ $student_detail->document_title_1 }}</td>
+                            <td>{{ showDocument(@$student_detail->document_file_1) }}</td>
+                            <td>
                                 @if (file_exists($student_detail->document_file_1))
                                     <a class="primary-btn tr-bg text-uppercase bord-rad"
                                         href="{{ url($student_detail->document_file_1) }}" download>
@@ -41,10 +49,10 @@
                 @endif
                 @if (is_show('document_file_2'))
                     @if ($student_detail->document_file_2 != '')
-                        <tr class="d-flex">
-                            <td class="col-2">{{ $student_detail->document_title_2 }}</td>
-                            <td class="col-6">{{ showDocument(@$student_detail->document_file_2) }}</td>
-                            <td class="col-4">
+                        <tr>
+                            <td>{{ $student_detail->document_title_2 }}</td>
+                            <td>{{ showDocument(@$student_detail->document_file_2) }}</td>
+                            <td>
                                 @if (file_exists($student_detail->document_file_2))
                                     <a class="primary-btn tr-bg text-uppercase bord-rad"
                                         href="{{ url($student_detail->document_file_2) }}" download>
@@ -61,10 +69,10 @@
                 @endif
                 @if (is_show('document_file_3'))
                     @if ($student_detail->document_file_3 != '')
-                        <tr class="d-flex">
-                            <td class="col-2">{{ $student_detail->document_title_3 }}</td>
-                            <td class="col-6">{{ showDocument(@$student_detail->document_file_3) }}</td>
-                            <td class="col-4">
+                        <tr>
+                            <td>{{ $student_detail->document_title_3 }}</td>
+                            <td>{{ showDocument(@$student_detail->document_file_3) }}</td>
+                            <td>
                                 @if (file_exists($student_detail->document_file_3))
                                     <a class="primary-btn tr-bg text-uppercase bord-rad"
                                         href="{{ url($student_detail->document_file_3) }}" download>
@@ -81,10 +89,10 @@
                 @endif
                 @if (is_show('document_file_4'))
                     @if ($student_detail->document_file_4 != '')
-                        <tr class="d-flex">
-                            <td class="col-2">{{ $student_detail->document_title_4 }}</td>
-                            <td class="col-6">{{ showDocument(@$student_detail->document_file_4) }}</td>
-                            <td class="col-4">
+                        <tr>
+                            <td>{{ $student_detail->document_title_4 }}</td>
+                            <td>{{ showDocument(@$student_detail->document_file_4) }}</td>
+                            <td>
                                 @if (file_exists($student_detail->document_file_4))
                                     <a class="primary-btn tr-bg text-uppercase bord-rad"
                                         href="{{ url($student_detail->document_file_4) }}" download>
@@ -133,10 +141,10 @@
                 </div>
 
                 @foreach ($student_detail->studentDocument as $document)
-                    <tr class="d-flex">
-                        <td class="col-2">{{ $document->title }}</td>
-                        <td class="col-6">{{ showDocument($document->file) }}</td>
-                        <td class="col-4">
+                    <tr>
+                        <td>{{ $document->title }}</td>
+                        <td>{{ showDocument($document->file) }}</td>
+                        <td>
                             @if (file_exists($document->file))
                                 <a class="primary-btn tr-bg text-uppercase bord-rad"
                                     href="{{ url($document->file) }}" download>

@@ -3,7 +3,7 @@
 @lang('exam.online_exam')
 @endsection
 @section('mainContent')
-<section class="sms-breadcrumb mb-40 white-box">
+<section class="sms-breadcrumb mb-20">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('exam.examinations') </h1>
@@ -62,144 +62,134 @@
                                 </div>
                             </div>
                             <div class="text-center">
+                                <table  class="" cellspacing="0" width="100%">
+                                    <tbody>
+                                        @php $j=0; @endphp
+                                        @foreach($assigned_questions as $question)
+                                            <input type="hidden" name="online_exam_id" value="{{@$question->online_exam_id}}">
+                                            <input type="hidden" name="question_ids[]" value="{{@$question->question_bank_id}}">
 
-                            
-                            <table  class="" cellspacing="0" width="100%">
-                                <tbody>
-                                    
-                                    @php $j=0; @endphp
-                                    @foreach($assigned_questions as $question)
-                                   
-                                    <input type="hidden" name="online_exam_id" value="{{@$question->online_exam_id}}">
-                                    <input type="hidden" name="question_ids[]" value="{{@$question->question_bank_id}}">
+                                        <tr>
+                                            <td width="80%" class="pt-5">
+                                                <h4>{{++$j.'.'}} {{@$question->questionBank->question}}</h4> 
+                                                @if(@$question->questionBank->type == "MI")
+                                                    <div class="qustion_banner_img">
+                                                        <img src="{{asset($question->questionBank->question_image)}}" alt="">
+                                                    </div>
+                                                @endif
+                                                @if(@$question->questionBank->type == "M")
+                                                    @php
+                                                        @$multiple_options = @$question->questionBank->questionMu;
+                                                        @$number_of_option = @$question->questionBank->questionMu->count();
+                                                        $i = 0;
+                                                    @endphp
+                                                    <div class="d-flex align-items-center justify-content-center">
+                                                        @foreach($multiple_options as $multiple_option)
+                                                        <div class="mt-20 mr-20">
+                                                            <input  data-question = "{{@$question->question_bank_id}}" type="radio" id="answer{{@$multiple_option->id}}" class="common-checkbox answer_question_mu" name="options_{{@$question->question_bank_id}}" value="{{$multiple_option->id}}" {{ $multiple_option->status ? 'checked' : '' }}>
+                                                                <label for="answer{{@$multiple_option->id}}">{{@$multiple_option->title}}</label>
+                                                        </div>
+                                                        @endforeach
+                                                    </div>
 
-                                    
-                                    <tr>
-                                        <td width="80%" class="pt-5">
-                                           <h4>{{++$j.'.'}} {{@$question->questionBank->question}}</h4> 
-                                            @if(@$question->questionBank->type == "MI")
-                                                <div class="qustion_banner_img">
-                                                    <img src="{{asset($question->questionBank->question_image)}}" alt="">
-                                                </div>
-                                            @endif
-                                            @if(@$question->questionBank->type == "M")
+                                                @elseif($question->questionBank->type == "MI")
                                                 @php
                                                     @$multiple_options = @$question->questionBank->questionMu;
                                                     @$number_of_option = @$question->questionBank->questionMu->count();
                                                     $i = 0;
                                                 @endphp
-                                                <div class="d-flex align-items-center justify-content-center">
+                                                <div class="quiestion_group">
                                                     @foreach($multiple_options as $multiple_option)
-                                                    <div class="mt-20 mr-20">
-                                                    <input  data-question = "{{@$question->question_bank_id}}" type="radio" id="answer{{@$multiple_option->id}}" class="common-checkbox answer_question_mu" name="options_{{@$question->question_bank_id}}" value="{{$multiple_option->id}}">
-                                                        <label for="answer{{@$multiple_option->id}}">{{@$multiple_option->title}}</label>
-                                                    </div>
-                                                    @endforeach
-                                                </div>
+                                                        <div class="single_question " style="background-image: url({{asset($multiple_option->title)}})">
 
-                                            @elseif($question->questionBank->type == "MI")
-                                            @php
-                                                @$multiple_options = @$question->questionBank->questionMu;
-                                                @$number_of_option = @$question->questionBank->questionMu->count();
-                                                $i = 0;
-                                            @endphp
-                                            <div class="quiestion_group">
-                                                @foreach($multiple_options as $multiple_option)
-                                                    <div class="single_question " style="background-image: url({{asset($multiple_option->title)}})">
-
-                                                        <div class="img_ovelay">
-                                                            <div class="icon">
-                                                                <i class="fa fa-check"></i>
+                                                            <div class="img_ovelay">
+                                                                <div class="icon">
+                                                                    <i class="fa fa-check"></i>
+                                                                </div>
                                                             </div>
                                                         </div>
+                                                    @endforeach
+                                                </div>
+                                                @elseif($question->questionBank->type == "T")
+                                                <div class="d-flex align-items-center justify-content-center radio-btn-flex mt-20">
+                                                    <div class="mr-30">
+                                                        <input data-question = "{{@$question->question_bank_id}}" type="radio" name="trueOrFalse_{{@$question->question_bank_id}}" id="true_{{@$question->question_bank_id}}" value="T"  class="common-radio relationButton answer_question_mu">
+                                                        <label for="true_{{$question->question_bank_id}}">@lang('exam.true')</label>
                                                     </div>
-                                                @endforeach
-                                            </div>
-                                            @elseif($question->questionBank->type == "T")
-                                            <div class="d-flex align-items-center justify-content-center radio-btn-flex mt-20">
-                                                <div class="mr-30">
-                                                    <input data-question = "{{@$question->question_bank_id}}" type="radio" name="trueOrFalse_{{@$question->question_bank_id}}" id="true_{{@$question->question_bank_id}}" value="T"  class="common-radio relationButton answer_question_mu">
-                                                    <label for="true_{{$question->question_bank_id}}">@lang('exam.true')</label>
+                                                    <div class="mr-30">
+                                                        <input  data-question ="{{@$question->question_bank_id}}" type="radio" name="trueOrFalse_{{@$question->question_bank_id}}" id="false_{{@$question->question_bank_id}}" value="F"  class="common-radio relationButton answer_question_mu">
+                                                        <label for="false_{{@$question->question_bank_id}}">@lang('exam.false')</label>
+                                                    </div>
                                                 </div>
-                                                <div class="mr-30">
-                                                    <input  data-question ="{{@$question->question_bank_id}}" type="radio" name="trueOrFalse_{{@$question->question_bank_id}}" id="false_{{@$question->question_bank_id}}" value="F"  class="common-radio relationButton answer_question_mu">
-                                                    <label for="false_{{@$question->question_bank_id}}">@lang('exam.false')</label>
-                                                </div>
-                                            </div>
-                                            @else
+                                                @else
 
-                                            @endif
+                                                @endif
 
-                                            <div class="mt-20">
-                                                @if($question->questionBank->type == "M")
-                                                @php
-                                                    $ques_bank_multiples = $question->questionBank->questionMu;
-                                                    $currect_multiple = '';
-                                                    $k = 0;
-                                                    foreach($ques_bank_multiples as $ques_bank_multiple){
-                                                    
-                                                        if(@$ques_bank_multiple->status == 1){
-                                                        $k++;
-                                                            if($k == 1){
-                                                                $currect_multiple .= $ques_bank_multiple->title;
-                                                            }else{
-                                                                $currect_multiple .= ','.$ques_bank_multiple->title;
+                                                <div class="mt-20">
+                                                    @if($question->questionBank->type == "M")
+                                                    @php
+                                                        $ques_bank_multiples = $question->questionBank->questionMu;
+                                                        $currect_multiple = '';
+                                                        $k = 0;
+                                                        foreach($ques_bank_multiples as $ques_bank_multiple){
+                                                        
+                                                            if(@$ques_bank_multiple->status == 1){
+                                                            $k++;
+                                                                if($k == 1){
+                                                                    $currect_multiple .= $ques_bank_multiple->title;
+                                                                }else{
+                                                                    $currect_multiple .= ','.$ques_bank_multiple->title;
+                                                                }
                                                             }
                                                         }
-                                                    }
-    
-                                                @endphp
-                                                <h4>[@lang('exam.currect_answer'): {{$currect_multiple}}]</h4>
+        
+                                                    @endphp
+                                                    <h4>[@lang('exam.currect_answer'): {{$currect_multiple}}]</h4>
 
-                                                @elseif(@$question->questionBank->type == "MI")
-                                @php
-                                    $ques_bank_multiples = $question->questionBank->questionMu;
-                                    $currect_multiple = '';
-                                    $k = 0;
-                                @endphp
-                                    <h4>[@lang('exam.currect_answer')]</h4>
-                                <div class="quiestion_group">
-                                    @php
+                                                    @elseif(@$question->questionBank->type == "MI")
+                                                    @php
+                                                        $ques_bank_multiples = $question->questionBank->questionMu;
+                                                        $currect_multiple = '';
+                                                        $k = 0;
+                                                    @endphp
+                                                    <h4>[@lang('exam.currect_answer')]</h4>
 
-                                    foreach($ques_bank_multiples as $ques_bank_multiple){
-                                        if ($ques_bank_multiple->status == 0) {
-                                            continue;
-                                        }
-                                    @endphp
-                                    <div class="single_question "style="background-image: url({{asset($ques_bank_multiple->title)}})">
-
-                                    <div class="img_ovelay">
-                                    
-                                        <div class="icon">
-                                            <i class="fa fa-check"></i>
-                                        </div>
-                                    </div>
-                                    </div>
-
-                                    @php
-                                    
-                                    }
-                                  
-                                    @endphp
-                                </div>
-                       
-                                                @elseif(@$question->questionBank->type == "T")
-                                                    <h4>[@lang('exam.currect_answer'): {{@$question->questionBank->trueFalse == "T"? 'True': 'False'}}]</h4>
-                                                @else 
-                                                    <h4>[@lang('exam.currect_answer'): {{@$question->questionBank->suitable_words}}]</h4>
-                                                @endif
-                                            </div>
-                                        </td>
-                                        <input type="hidden" name="marks[]" value="{{@$question->questionBank!=""?@$question->questionBank->id:""}}">
-                                        <td width="20%" class="text-right">
-
+                                                    <div class="quiestion_group">
+                                                        @php
+                                                            foreach($ques_bank_multiples as $ques_bank_multiple){
+                                                                if ($ques_bank_multiple->status == 0) {
+                                                                    continue;
+                                                                }
+                                                                @endphp
+                                                                <div class="single_question "style="background-image: url({{asset($ques_bank_multiple->title)}})">
+                                                                    <div class="img_ovelay">
+                                                                    
+                                                                        <div class="icon">
+                                                                            <i class="fa fa-check"></i>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            @php
+                                                        }
+                                                        @endphp
+                                                    </div>
+                        
+                                                    @elseif(@$question->questionBank->type == "T")
+                                                        <h4>[@lang('exam.currect_answer'): {{@$question->questionBank->trueFalse == "T"? 'True': 'False'}}]</h4>
+                                                    @else 
+                                                        <h4>[@lang('exam.currect_answer'): {{@$question->questionBank->suitable_words}}]</h4>
+                                                    @endif
+                                                </div>
+                                            </td>
+                                            <input type="hidden" name="marks[]" value="{{@$question->questionBank!=""?@$question->questionBank->id:""}}">
+                                            <td width="20%" class="text-right">
                                                 <span class="primary-btn fix-gr-bg">{{@$question->questionBank!=""?@$question->questionBank->marks:""}}</span>
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -209,11 +199,7 @@
     </div>
 </section>
 
-
-
 @endsection
-
-
 @push('script')
 
-    @endpush
+@endpush

@@ -3,7 +3,7 @@
 @lang('fees.fees_group')
 @endsection
 @section('mainContent')
-<section class="sms-breadcrumb mb-40 white-box">
+<section class="sms-breadcrumb mb-20">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('fees.fees_group')</h1>
@@ -34,16 +34,6 @@
             <div class="col-lg-3">
                 <div class="row">
                     <div class="col-lg-12">
-                        <div class="main-title">
-                            <h3 class="mb-30">
-                                @if(isset($fees_group))
-                                    @lang('fees.edit_fees_group')
-                                @else
-                                    @lang('fees.add_fees_group')
-                                @endif
-                               
-                            </h3>
-                        </div>
                         @if(isset($fees_group))
                         {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'fees_group_update',
                         'method' => 'POST', 'enctype' => 'multipart/form-data']) }}
@@ -54,6 +44,16 @@
                         @endif
                         @endif
                         <div class="white-box">
+                            <div class="main-title">
+                                <h3 class="mb-15">
+                                    @if(isset($fees_group))
+                                        @lang('fees.edit_fees_group')
+                                    @else
+                                        @lang('fees.add_fees_group')
+                                    @endif
+                                   
+                                </h3>
+                            </div>
                             <div class="add-visitor">
                                 <div class="row">
                                     <div class="col-lg-12">
@@ -112,51 +112,53 @@
 
            
             <div class="col-lg-9">
-                <div class="row">
-                    <div class="col-lg-4 no-gutters">
-                        <div class="main-title">
-                            <h3 class="mb-0"> @lang('fees.fees_group_list')</h3>
+                <div class="white-box">
+                    <div class="row">
+                        <div class="col-lg-4 no-gutters">
+                            <div class="main-title">
+                                <h3 class="mb-15"> @lang('fees.fees_group_list')</h3>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-lg-12">
-                        <x-table>
-                            <table id="table_id" class="table" cellspacing="0" width="100%">
-                                <thead>
-                                    <tr>
-                                        <th> @lang('common.name')</th>
-                                        <th> @lang('common.description')</th>
-                                        <th> @lang('common.action')</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($fees_groups as $fees_group)
-                                    <tr>
-                                        <td>{{@$fees_group->name}}</td>
-                                        <td>{{@$fees_group->description}}</td>
-                                        <td>
-                                            @php
-                                                $routeList = 
-                                                    [
-                                                    (userPermission('fees_group_edit')) ? 
-                                                        '<a class="dropdown-item" href="'.route('fees_group_edit', [$fees_group->id]).'">
-                                                            '.__('common.edit').' </a>' : null,
-                                                
-                                                    (userPermission("fees_group_delete"))&&(!@$fees_group->un_semester_label_id) ?
-                                                            '<a class="dropdown-item deleteFeesGroupModal" data-toggle="modal" data-target="#deleteFeesGroupModal" href="#" data-id="'.$fees_group->id.'">'.__('common.delete').'
-                                                            </a>' : null,                                                
-                                                    ];
-                                            @endphp
-                                            <x-drop-down-action-component :routeList="$routeList" />
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </x-table>
-
+    
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <x-table>
+                                <table id="table_id" class="table" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th> @lang('common.name')</th>
+                                            <th> @lang('common.description')</th>
+                                            <th> @lang('common.action')</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($fees_groups as $fees_group)
+                                        <tr>
+                                            <td>{{@$fees_group->name}}</td>
+                                            <td>{{@$fees_group->description}}</td>
+                                            <td>
+                                                @php
+                                                    $routeList = 
+                                                        [
+                                                        (userPermission('fees_group_edit')) ? 
+                                                            '<a class="dropdown-item" href="'.route('fees_group_edit', [$fees_group->id]).'">
+                                                                '.__('common.edit').' </a>' : null,
+                                                    
+                                                        (userPermission("fees_group_delete"))&&(!@$fees_group->un_semester_label_id) ?
+                                                                '<a class="dropdown-item deleteFeesGroupModal" data-toggle="modal" data-target="#deleteFeesGroupModal" href="#" data-id="'.$fees_group->id.'">'.__('common.delete').'
+                                                                </a>' : null,                                                
+                                                        ];
+                                                @endphp
+                                                <x-drop-down-action-component :routeList="$routeList" />
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </x-table>
+    
+                        </div>
                     </div>
                 </div>
             </div>

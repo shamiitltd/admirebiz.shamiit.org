@@ -3,7 +3,7 @@
     @lang('study.upload_content_list')
 @endsection
 @section('mainContent')
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('study.upload_content_list')</h1>
@@ -18,18 +18,9 @@
     <section class="admin-visitor-area up_admin_visitor">
         <div class="container-fluid p-0">
             <div class="row">
-                <div class="col-lg-3">
+                <div class="col-lg-4 col-xl-3">
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="main-title">
-                                <h3 class="mb-30">
-                                    @if (isset($editData))
-                                        @lang('study.edit_upload_content')
-                                    @else
-                                        @lang('study.upload_content')
-                                    @endif
-                                </h3>
-                            </div>
                             @if (isset($editData))
                                 {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'update-upload-content', @$editData->id, 'method' => 'POST', 'enctype' => 'multipart/form-data']) }}
                                 <input type="hidden" name="id" value="{{ @$editData->id }}">
@@ -39,6 +30,16 @@
                                 @endif
                             @endif
                             <div class="white-box">
+                                <div class="main-title">
+                                    <h3 class="mb-15">
+                                        @if (isset($editData))
+                                            @lang('study.edit_upload_content')
+                                        @else
+                                            @lang('study.upload_content')
+                                        @endif
+    
+                                    </h3>
+                                </div>
                                 <div class="add-visitor">
                                     <div class="row mb-25">
                                         <div class="col-lg-12 mb-30">
@@ -48,6 +49,8 @@
                                                     class="primary_input_field form-control{{ $errors->has('content_title') ? ' is-invalid' : '' }}"
                                                     type="text" name="content_title" autocomplete="off"
                                                     value="{{ isset($editData) ? @$editData->content_title : '' }}">
+
+
                                                 @if ($errors->has('content_title'))
                                                     <span class="text-danger">
                                                         {{ $errors->first('content_title') }}
@@ -130,33 +133,25 @@
                                                 </div>
                                             </div>
                                         @endif
+
                                         <div class="forStudentWrapper col-lg-12 mb-20 {{ $errors->has('class') || $errors->has('section') ? '' : @$show1 }}"
                                             id="contentDisabledDiv">
-                                            @if (moduleStatusCheck('University'))
-                                                @includeIf(
-                                                    'university::common.session_faculty_depart_academic_semester_level',
-                                                    [
-                                                        'required' => ['USN', 'UF', 'UD', 'US', 'USL'],
-                                                        'hide' => ['USUB', 'UA'],
-                                                        'row' => 1,
-                                                        'div' => 'col-lg-12',
-                                                        'mt' => 'mt-0',
-                                                    ]
-                                                )
-                                                <input type="hidden" name="un_academic_id" id="select_academic"
-                                                    value="{{ getAcademicId() }}">
-                                            @else
-                                                <div class="row">
-                                                    <div class="col-lg-12 mb-20">
-                                                        <div class="primary_input">
-                                                            <label class="primary_input_label" for="">
-                                                                {{ __('common.class') }}
+                                            @if(moduleStatusCheck('University'))
+                                            @includeIf('university::common.session_faculty_depart_academic_semester_level',['required' => ['USN','UF', 'UD', 'US', 'USL'] , 'hide' => ['USUB','UA'],'row' => 1, 'div' => 'col-lg-12', 'mt' =>'mt-0'])
+                                            <input type="hidden" name="un_academic_id" id="select_academic" value="{{getAcademicId()}}">
+                                            @else 
 
-                                                            </label>
-                                                            <select
-                                                                class="primary_select  form-control{{ $errors->has('class') ? ' is-invalid' : '' }}"
-                                                                name="class" id="classSelectStudent">
-                                                                <option data-display="@lang('common.select_class') "
+                                            <div class="row">
+                                                <div class="col-lg-12 mb-20">
+                                                    <div class="primary_input">
+                                                        <label class="primary_input_label" for="">
+                                                            {{ __('common.class') }}
+                                                                
+                                                        </label>
+                                                        <select
+                                                            class="primary_select  form-control{{ $errors->has('class') ? ' is-invalid' : '' }}"
+                                                            name="class" id="classSelectStudent">
+                                                            <option data-display="@lang('common.select_class') "
                                                                     value="">@lang('common.select')</option>
                                                                 @foreach ($classes as $class)
                                                                     <option value="{{ @$class->id }}"
@@ -171,6 +166,7 @@
                                                             @endif
                                                         </div>
                                                     </div>
+
                                                     <div class="col-lg-12 mb-20">
                                                         <div class="primary_input" id="sectionStudentDiv">
                                                             <label class="primary_input_label" for="">
@@ -206,7 +202,9 @@
                                                         </div>
                                                     </div>
                                                 </div>
+
                                             @endif
+
                                         </div>
                                         <input type="hidden" name="url" id="url"
                                             value="{{ URL::to('/') }}">
@@ -238,20 +236,22 @@
                                             </div>
                                         </div>
                                     </div>
+
+
                                     <div class="row mb-20">
                                         <div class="col-lg-12">
                                             <div class="primary_input">
-                                                <label class="primary_input_label d-flex"
-                                                    for="">@lang('study.description')
-                                                    @if (moduleStatusCheck('AiContent'))
-                                                        @include('aicontent::inc.button')
-                                                    @endif
-                                                </label>
-                                                <textarea class="primary_input_field form-control generated-text" cols="0" rows="3" name="description"
+                                                <label class="primary_input_label" for="">@lang('study.description')
+                                                    <span></span> </label>
+                                                <textarea class="primary_input_field form-control" cols="0" rows="3" name="description"
                                                     id="description">{{ @$editData->description }}</textarea>
+
+
                                             </div>
                                         </div>
                                     </div>
+
+
                                     <div class="row no-gutters input-right-icon mb-20">
                                         <div class="col-lg-12">
                                             <div class="primary_input">
@@ -260,6 +260,8 @@
                                                     class="primary_input_field form-control{{ $errors->has('source_url') ? ' is-invalid' : '' }}"
                                                     type="text" name="source_url" autocomplete="off"
                                                     value="{{ isset($editData) ? @$editData->source_url : '' }}">
+
+
                                                 @if ($errors->has('source_url'))
                                                     <span class="text-danger">
                                                         {{ $errors->first('source_url') }}
@@ -302,11 +304,11 @@
                                             <button class="primary-btn fix-gr-bg" data-toggle="tooltip"
                                                 title="{{ @$tooltip }}">
                                                 <span class="ti-check"></span>
-                                                @if (isset($editData))
-                                                    @lang('common.update')
-                                                @else
-                                                    @lang('common.save')
-                                                @endif
+                                                @if(isset($editData))
+                                                @lang('common.update')  
+                                                @else 
+                                                @lang('common.save')
+                                                @endif 
                                             </button>
                                         </div>
                                     </div>
@@ -316,38 +318,158 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-9">
-                    <div class="row">
-                        <div class="col-lg-4 no-gutters">
-                            <div class="main-title">
-                                <h3 class="mb-0"> @lang('study.upload_content_list')</h3>
+
+                <div class="col-lg-8 col-xl-9">
+                    <div class="white-box">
+                        <div class="row">
+                            <div class="col-lg-4 no-gutters">
+                                <div class="main-title">
+                                    <h3 class="mb-15"> @lang('study.upload_content_list')</h3>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <x-table>
-                                <table id="table_id" class="table data-table" cellspacing="0" width="100%">
-                                    <thead>
-                                        <tr>
-                                            <th>@lang('common.sl')</th>
-                                            <th> @lang('study.content_title')</th>
-                                            <th> @lang('common.type')</th>
-                                            <th> @lang('common.date')</th>
-                                            <th> @lang('study.available_for')</th>
-                                            @if (moduleStatusCheck('University'))
-                                                <th> @lang('university::un.semester_label')</th>
-                                                <th> @lang('common.section')</th>
-                                            @else
-                                                <th> @lang('study.classSec')</th>
-                                            @endif
-                                            <th> @lang('common.action')</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
-                            </x-table>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <x-table>
+                                    <table id="table_id" class="table data-table" cellspacing="0" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th>@lang('common.sl')</th>
+                                                <th> @lang('study.content_title')</th>
+                                                <th> @lang('common.type')</th>
+                                                <th> @lang('common.date')</th>
+                                                <th> @lang('study.available_for')</th>
+                                                @if (moduleStatusCheck('University'))
+                                                    <th> @lang('university::un.semester_label')</th>
+                                                    
+                                                @else
+                                                    <th> @lang('study.classSec')</th>
+                                                @endif
+                                                <th> @lang('common.action')</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {{-- @if (isset($uploadContents))
+                                                @foreach ($uploadContents as $key => $value)
+                                                    <tr>
+                                                        <td>{{$key+1}}</td>
+                                                        <td>{{@$value->content_title}}</td>
+                                                        <td>
+                                                            @if (@$value->content_type == 'as')
+                                                                @lang('study.assignment')
+                                                            @elseif(@$value->content_type == 'st')
+                                                                @lang('study.study_material')
+                                                            @elseif(@$value->content_type == 'sy')
+                                                                @lang('study.syllabus')
+                                                            @else
+                                                                @lang('study.other_download')
+                                                            @endif
+                                                        </td>
+                                                        <td  data-sort="{{strtotime(@$value->upload_date)}}" >
+                                                            {{@$value->upload_date != ""? dateConvert(@$value->upload_date):''}} 
+                                                        </td>
+                                                        <td>
+                                                            @if (moduleStatusCheck('University'))
+                                                                @if (@$value->available_for_admin == 1)
+                                                                    @lang('study.all_admins')
+                                                                @else
+                                                                    @lang('study.all_students_of') {{ @$value->semesterLabel->name  . '(' . @$value->undepartment->name . ')' }}
+                                                                @endif
+                                                            @else 
+                                                                @if (@$value->available_for_admin == 1)
+                                                                    @lang('study.all_admins')<br>
+                                                                @endif
+                                                                @if (@$value->available_for_all_classes == 1)
+                                                                    @lang('study.all_classes_student')
+                                                                @endif
+                                                                @if (@$value->classes != '' && $value->sections != '')
+                                                                    @lang('study.all_students_of') ({{@$value->classes->class_name.'->'.@$value->sections->section_name}})
+                                                                @endif
+                                                                @if (@$value->classes != '' && $value->section == null)
+                                                                    @lang('study.all_students_of') ({{@$value->classes->class_name.'->'}} @lang('study.all_sections'))
+                                                                @endif
+                                                            @endif 
+                                                        </td>
+                                                        <td>
+                                                            @if (moduleStatusCheck('University'))
+                                                                @if (!@$value->available_for_admin == 1)
+                                                                    {{ $value->semesterLabel->name }} -({{@$value->unAcademic->name}})
+                                                                @endif
+                                                            @else 
+                                                                @if (@$value->classes != '')
+                                                                    {{@$value->classes->class_name}}
+                                                                @endif
+                                                                @if ($value->sections != '')
+                                                                    ({{@$value->sections->section_name}})
+                                                                @endif
+                                                                @if ($value->section == null)
+                                                                    ( @lang('study.all_sections') )
+                                                                @endif
+                                                            @endif
+                                                        </td>
+                                                        @if (moduleStatusCheck('University'))
+                                                            <td>{{@$value->unSection->section_name}}</td>
+                                                        @endif
+                                                        <td>
+                                                            
+                                                            @php
+                                                            $routeList = [
+    
+                                                                '<a data-modal-size="modal-lg" title="'. __('study.view_content_details').'" class="dropdown-item modalLink" href="'.route('upload-content-view', $value->id).'">'.__('common.view').'</a>',
+                                                                    moduleStatusCheck('VideoWatch')== TRUE ?
+                                                                        '<a class="dropdown-item" href="'.url('videowatch/view-log/'.$value->id).'">'.__('study.seen').'</a>' : null,
+                                                                    
+                                                                    userPermission("upload-content-edit") ? 
+                                                                        '<a class="dropdown-item" href="'.route('upload-content-edit',$value->id).'">'.__('common.edit').'</a>':null,
+    
+                                                                    userPermission("delete-upload-content") ?
+                                                                        '<a class="dropdown-item" data-toggle="modal" data-target="#deleteApplyLeaveModal'.$value->id.'" href="#">'.__('common.delete').'</a>':null,
+    
+                                                                    userPermission("download-content-document") && $value->upload_file != "" ?
+                                                                            '<a class="dropdown-item" href="'.url($value->upload_file).'" download>
+                                                                                '.__('common.download').' 
+                                                                                <span class="pl ti-download"></span></a>'
+                                                                        :null
+                                                            ]
+                                                        @endphp
+                                                            <x-drop-down-action-component :routeList="$routeList" />
+                                                        </td>
+                                                    </tr>
+                                                    <div class="modal fade admin-query" id="deleteApplyLeaveModal{{@$value->id}}">
+                                                        <div class="modal-dialog modal-dialog-centered">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h4 class="modal-title">@lang('study.delete_upload_content')</h4>
+                                                                    <button type="button" class="close" data-dismiss="modal">
+                                                                        &times;
+                                                                    </button>
+                                                                </div>
+    
+                                                                <div class="modal-body">
+                                                                    <div class="text-center">
+                                                                        <h4>@lang('common.are_you_sure_to_delete')</h4>
+                                                                    </div>
+    
+                                                                    <div class="mt-40 d-flex justify-content-between">
+                                                                        <button type="button" class="primary-btn tr-bg"
+                                                                                data-dismiss="modal">@lang('common.cancel')</button>
+                                                                                {{ Form::open(['route' =>'delete-upload-content', 'method' => 'POST']) }}
+                                                                                    <input type="hidden" name="id" value="{{@$value->id}}">
+                                                                                    <button class="primary-btn fix-gr-bg" type="submit">@lang('common.delete')</button>
+                                                                                {{ Form::close() }}
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+    
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                            @endif --}}
+                                        </tbody>
+                                    </table>
+                                </x-table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -385,56 +507,37 @@
             </div>
         </div>
     </div>
+
     {{-- delete content modal end  --}}
 @endsection
 
 @include('backEnd.partials.date_picker_css_js')
+
 @include('backEnd.partials.data_table_js')
 @include('backEnd.partials.server_side_datatable')
-@push('script')
-    <script>
-        $(document).ready(function() {
-            $('.data-table').DataTable({
-                processing: true,
-                serverSide: true,
-                "ajax": $.fn.dataTable.pipeline({
-                    url: "{{ route('upload-content-list-datatable') }}",
-                    data: {},
-                    pages: "{{ generalSetting()->ss_page_load }}" // number of pages to cache
-
-                }),
-                columns: [{
-                        data: 'DT_RowIndex',
-                        name: 'id'
-                    },
-                    {
-                        data: 'content_title',
-                        name: 'content_title'
-                    },
-                    {
-                        data: 'type',
-                        name: 'type'
-                    },
-                    {
-                        data: 'date',
-                        name: 'date'
-                    },
-                    {
-                        data: 'avaiable',
-                        name: 'avaiable'
-                    },
-                    {
-                        data: 'class_sections',
-                        name: 'class_sections'
-                    },
-                    {
-                        data: 'action',
-                        name: 'action',
-                        orderable: false,
-                        searchable: true
-                    },
-                ],
-                bLengthChange: false,
+@push('script')  
+<script>
+   $(document).ready(function() {
+       $('.data-table').DataTable({
+                     processing: true,
+                     serverSide: true,
+                     "ajax": $.fn.dataTable.pipeline( {
+                           url: "{{route('upload-content-list-datatable')}}",
+                           data: { 
+                            },
+                           pages: "{{generalSetting()->ss_page_load}}" // number of pages to cache
+                           
+                       } ),
+                       columns: [
+                           {data: 'DT_RowIndex', name: 'id'},
+                           {data: 'content_title', name: 'content_title'},
+                           {data: 'type', name: 'type'},
+                           {data: 'date', name: 'date'},
+                           {data: 'avaiable', name: 'avaiable'},
+                           {data: 'class_sections', name: 'class_sections'},
+                           {data: 'action', name: 'action', orderable: false, searchable: true},
+                        ],
+                        bLengthChange: false,
                 bDestroy: true,
                 language: {
                     search: "<i class='ti-search'></i>",
@@ -446,14 +549,14 @@
                 },
                 dom: "Bfrtip",
                 buttons: [{
-                        extend: "copyHtml5",
-                        text: '<i class="fa fa-files-o"></i>',
-                        title: $("#logo_title").val(),
-                        titleAttr: window.jsLang('copy_table'),
-                        exportOptions: {
-                            columns: ':visible:not(.not-export-col)'
-                        },
+                    extend: "copyHtml5",
+                    text: '<i class="fa fa-files-o"></i>',
+                    title: $("#logo_title").val(),
+                    titleAttr: window.jsLang('copy_table'),
+                    exportOptions: {
+                        columns: ':visible:not(.not-export-col)'
                     },
+                },
                     {
                         extend: "excelHtml5",
                         text: '<i class="fa fa-file-excel-o"></i>',
@@ -517,7 +620,7 @@
                 }, ],
                 responsive: true,
             });
-        });
+        } );
     </script>
     <script>
         function deleteUpContent(id) {

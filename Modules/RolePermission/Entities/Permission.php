@@ -2,6 +2,7 @@
 
 namespace Modules\RolePermission\Entities;
 
+use App\GlobalVariable;
 use App\InfixModuleManager;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
@@ -29,9 +30,9 @@ class Permission extends Model
     {
         $studentParent = session()->get('role_permission_user_type');
         return $this->hasMany(Permission::class, 'parent_route', 'route')
-        ->when(!in_array($studentParent, [2,3]) , function($q){
+        ->when(!in_array($studentParent, [2,3,GlobalVariable::isAlumni()]) , function($q){
             $q->where('is_admin', 1);
-        })->when($studentParent == 2, function($q){
+        })->when($studentParent == 2 || GlobalVariable::isAlumni(), function($q){
             $q->where('is_student', 1);
         }, function($elseQ){
             $elseQ->where('is_admin', 1);
@@ -39,7 +40,7 @@ class Permission extends Model
             $q->where('is_parent', 1);
         }, function($elseQ){
             $elseQ->where('is_admin', 1);
-        })->where('status',1)
+        })
         ->with('childs');
     }
 
@@ -51,19 +52,18 @@ class Permission extends Model
     public function subModule()
     {        
         $studentParent = (int) session()->get('role_permission_user_type');
-        
+        $role_id = auth()->user()->role_id;
+
         return $this->hasMany('Modules\RolePermission\Entities\Permission','parent_route','route')
         ->whereNotNull('route')->where('route', '!=', '')       
-        ->when($studentParent == 2, function($q){
+        ->when(($studentParent == 2), function($q){
             $q->where('is_student', 1);
         })->when($studentParent == 3, function($q){
             $q->where('is_parent', 1);
-        })->when(!in_array($studentParent, [2,3]) , function($q){
-            $q->where(function($query){
-                $query->where('is_admin', 1)->orWhere('is_teacher', 1);
-            });
+        })->when(!in_array($studentParent, [2,3,GlobalVariable::isAlumni()]) , function($q){
+            $q->where('is_admin', 1)->orWhere('is_teacher', 1);
         })
-        ->where('status',1)
+        // ->whereNotIn('id', deActivePermissions())
         ->where('menu_status', 1);
     }
     public function scopeWhereNotInDeaActiveModulePermission($query)
@@ -101,11 +101,11 @@ class Permission extends Model
     {
         $role_id = auth()->user()->role_id;
         return $q->whereNotNull('route')->where('route', '!=', '')       
-        ->when($role_id == 2, function($q){
+        ->when(in_array($role_id, [2, 10]), function($q){
             $q->where('is_student', 1);
         })->when($role_id == 3, function($q){
             $q->where('is_parent', 1);
-        })->when(!in_array($role_id, [2,3]) , function($q){
+        })->when(!in_array($role_id, [2,3,GlobalVariable::isAlumni()]) , function($q){
             $q->where('is_admin', 1);
         });
     }

@@ -5,7 +5,7 @@
 @section('mainContent')
 <input type="text" hidden value="{{ @$clas->class_name }}" id="cls">
 <input type="text" hidden value="{{ @$clas->section_name->sectionName->section_name }}" id="sec">
-<section class="sms-breadcrumb mb-40 white-box">
+<section class="sms-breadcrumb mb-20">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('fees.balance_fees_report')</h1>

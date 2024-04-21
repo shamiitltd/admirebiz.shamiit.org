@@ -176,19 +176,7 @@ return new class extends Migration
             $beh_com->save(); 
         }
 
-
-        //InAppLiveClass 
-        $s = new InfixModuleManager();
-        $s->name = "InAppLiveClass";
-        $s->email = 'support@spondonit.com';
-        $s->notes = "This InAppLiveClass Module For InfixEdu . Manage Online Class and Meeting Reports.";
-        $s->version = "1.0";
-        $s->update_url = "https://spondonit.com/contact";
-        $s->is_default = 0;
-        $s->addon_url = "maito:support@spondonit.com";
-        $s->installed_domain = url('/');
-        $s->activated_date = date('Y-m-d');
-        $s->save();
+        
     }
 
     public function down(): void

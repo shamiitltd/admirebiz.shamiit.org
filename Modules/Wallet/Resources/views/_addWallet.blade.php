@@ -7,14 +7,14 @@
                 </button>
 
 
-                @if (userPermission('add-wallet-amount') || userPermission('wallet.my-wallet'))
+                {{-- @if (userPermission('add-wallet')) --}}
                     <button class="primary-btn small fix-gr-bg mr-2 ml-0 ml-md-auto" data-toggle="modal"
                         data-target="#addWalletPayment">
                         <span class="ti-plus pr-2"></span>
                         @lang('wallet::wallet.add_balance')
                     </button>
-                @endif
-                @if (userPermission('refund-wallet') || userPermission('wallet.my-wallet'))
+                {{-- @endif --}}
+                @if (userPermission('refund-wallet'))
                     <button class="primary-btn small fix-gr-bg" data-toggle="modal" data-target="#refundRequest">
                         @lang('wallet::wallet.refund_request')
                     </button>

@@ -667,7 +667,10 @@ class SmExaminationController extends Controller
     public function exam_type()
     {
         try {
-            $exams = SmExam::where('active_status', 1)->where('academic_id', getAcademicId())->where('school_id', Auth::user()->school_id)->get();
+            $exams = SmExam::where('active_status', 1)
+                ->where('academic_id', getAcademicId())
+                ->where('school_id', Auth::user()->school_id)
+                ->get();
             if (teacherAccess()) {
                 $teacher_info = SmStaff::where('user_id', Auth::user()->id)->first();
                 $classes = SmAssignSubject::where('teacher_id', $teacher_info->id)->join('sm_classes', 'sm_classes.id', 'sm_assign_subjects.class_id')
@@ -683,7 +686,10 @@ class SmExaminationController extends Controller
                     ->where('school_id', Auth::user()->school_id)
                     ->get();
             }
-            $exams_types = SmExamType::get();
+            $exams_types = SmExamType::where('active_status', 1)
+                ->where('academic_id', getAcademicId())
+                ->where('school_id', Auth::user()->school_id)
+                ->get();
             return view('backEnd.examination.exam_type', compact('exams', 'classes', 'exams_types'));
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');
@@ -700,7 +706,10 @@ class SmExaminationController extends Controller
             } else {
                 $exam_type_edit = SmExamType::where('id', $id)->first();
             }
-            $exams_types = SmExamType::get();
+            $exams_types = SmExamType::where('active_status', 1)
+                ->where('academic_id', getAcademicId())
+                ->where('school_id', Auth::user()->school_id)
+                ->get();
             return view('backEnd.examination.exam_type', compact('exam_type_edit', 'exams_types'));
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');
@@ -716,7 +725,11 @@ class SmExaminationController extends Controller
             // 'active_status' => 'required'
         ]);
         // school wise uquine validation
-        $is_duplicate = SmExamType::where('title', $request->exam_type_title)->where('id', '!=', $request->id)->first();
+        $is_duplicate = SmExamType::where('title', $request->exam_type_title)
+            ->where('id', '!=', $request->id)
+            ->where('academic_id', '!=', getAcademicId())
+            ->where('school_id', '!=', Auth::user()->school_id)
+            ->first();
         if ($is_duplicate) {
             Toastr::error('Duplicate name found!', 'Failed');
             return redirect()->back()->withInput();
@@ -1481,7 +1494,9 @@ class SmExaminationController extends Controller
 
                 $exam = SmExam::where('exam_type_id',$request->exam)
                         ->where('class_id',$request->class)
-                        ->where('section_id',$request->section)
+                        ->when($request->section, function($q)use($request){
+                            $q->where('section_id',$request->section);
+                        })
                         ->where('subject_id',$request->subject)
                         ->first();
 
@@ -1803,9 +1818,67 @@ class SmExaminationController extends Controller
         }
         return view('backEnd.examination.send_marks_by_sms', compact('exams', 'classes'));
     }
+    function universitySendSms($request){
+        $request->validate([
+            'un_session_id' => 'required',
+            'un_semester_label_id' => 'required',
+            'exam_type' => 'required',
+            'receiver'=>'required',
 
+        ]);
+        try {
+            $examType = SmExamType::find($request->exam_type);
+            $students = StudentRecord::where('un_semester_label_id',$request->un_semester_label_id)
+                ->where('un_academic_id', getAcademicId())
+                ->with('student')
+                ->get();
+            $marks = SmMarkStore::where('exam_term_id', $request->exam_type)
+                ->whereIn('student_record_id', $students->pluck('id')->toArray())
+                ->get();
+
+            $subjectMarkinfos = [];
+            foreach($marks as $mark){
+                $subjectMarkinfos [$mark->student_record_id][]= ['subject'=>$mark->subjectName->subject_name, 'mark'=>$mark->total_marks];
+            }
+            foreach($subjectMarkinfos as $key => $subjectMarkinfo){
+                $students = StudentRecord::with('student')->find($key);
+                $subjects = '';
+                $marks = '';
+                $subjectMarks = '';
+                $total_marks = 0;
+                foreach($subjectMarkinfo as $subjectMarkinf){
+                    $subjects .= $subjectMarkinf['subject']. ',';
+                    $marks .= $subjectMarkinf['mark']. ',';
+                    $total_marks += $subjectMarkinf['mark'];
+                    $subjectMarks .= $subjectMarkinf['subject'] . "-" . $subjectMarkinf['mark']. ',';
+                }
+                $compact['class_name'] = $students->unSemesterLabel->name;
+                $compact['section_name'] = $students->section->section_name;
+                $compact['user_email'] = $students->student->email;
+                $compact['marks'] = $marks;
+                $compact['total_mark'] = $total_marks;
+                $compact['subject_marks'] = $subjectMarks;
+                $compact['exam_type'] = $examType->title;
+                $compact['school_name'] = generalSetting()->school_name;
+                if($request->receiver == 'students'){
+                    @send_sms($students->student->mobile, 'exam_mark_student', $compact);
+                }else{
+                    $compact['parent_name'] = $students->student->parents->guardians_name;
+                    @send_sms($students->student->parents->guardians_mobile, 'exam_mark_parent', $compact);
+                }
+            }
+            Toastr::success('Operation successful', 'Success');
+            return redirect()->route('send_marks_by_sms');
+        } catch (\Exception $e) {
+            Toastr::error('Operation Failed', 'Failed');
+            return redirect()->back();
+        }
+    }
     public function sendMarksBySmsStore(Request $request)
     {
+      if(moduleStatusCheck('University')){
+        return $this->universitySendSms($request);
+      }else{
         $request->validate([
             'exam' => 'required',
             'class' => 'required',
@@ -1861,6 +1934,7 @@ class SmExaminationController extends Controller
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();
         }
+      }
     }
 
     public function meritListReport(Request $request)
@@ -2614,6 +2688,7 @@ class SmExaminationController extends Controller
             $input['section_id'] = $request->section;
             $input['student_id'] = $request->student;
 
+            // dd($request->all());
             if (moduleStatusCheck('University')) {
                 $exam_type = $request->exam_type;
                 $student_id = $request->student_id;
@@ -2628,9 +2703,9 @@ class SmExaminationController extends Controller
 
                 if (isset($exam_content)) {
                     $total_class_day = SmStudentAttendance::whereBetween('attendance_date', [$exam_content->start_date, $exam_content->end_date])
-                        ->where('class_id', $input['class_id'])
-                        ->where('section_id', $input['section_id'])
-                        ->where('academic_id', getAcademicId())
+                        ->where('un_semester_label_id', $request->un_semester_label_id)
+                        ->where('un_section_id', $request->un_section_id)
+                        ->where('un_academic_id', getAcademicId())
                         ->where('school_id', Auth::user()->school_id)
                         ->where('attendance_type', '!=', 'H')
                         ->get()
@@ -2641,12 +2716,11 @@ class SmExaminationController extends Controller
                     $student_attendance = SmStudentAttendance::where('student_id', $student_id)
                         ->whereBetween('attendance_date', [$exam_content->start_date, $exam_content->end_date])
                         ->whereIn('attendance_type', ["P", "L"])
-                        ->where('academic_id', getAcademicId())
+                        ->where('un_academic_id', getAcademicId())
                         ->where('school_id', Auth::user()->school_id)
                         ->count();
                 }
                 // Attendance Part Start
-
                 //Falil Grade Dynamic Start
                 $failgpa = SmMarksGrade::min('gpa');
 
@@ -2656,7 +2730,7 @@ class SmExaminationController extends Controller
                 $exams = SmExamType::get();
 
                 $exam_details = $exams->where('active_status', 1)->find($exam_type);
-
+                $examInfo=$exam_details; // For university module
                 $StudentRecord = StudentRecord::query();
                 $student_detail = universityFilter($StudentRecord, $request)
                     ->where('student_id', $student_id)
@@ -2728,7 +2802,28 @@ class SmExaminationController extends Controller
                 $un_semester = UnSemester::find($request->un_semester_id);
                 $un_semester_label = UnSemesterLabel::find($request->un_semester_label_id);
                 $un_section = SmSection::find($request->un_section_id);
+                $pass_mark=0;
+                if ($exam_details) {
+                    $pass_mark = $examInfo->average_mark;
+                } else {
+                    Toastr::warning('Exam Setup Not Complete', 'Warning');
+                    return redirect()->back();
+                }
+                // dd($un_session,$un_semester,$un_semester_label);
+                $data=[];
+                $data['semester']=$un_semester->name;
+                $data['semester_label']=$un_semester_label->name;
+                $data['session']=$un_session->name;
+                $data['requestData']['un_session_id']=$request->un_session_id;
+                $data['requestData']['un_academic_id']=$request->un_academic_id;
+                $data['requestData']['un_semester_id']=$request->un_semester_id;
+                $data['requestData']['un_semester_label_id']=$request->un_semester_label_id;
+                $data['requestData']['un_faculty_id']=$request->un_faculty_id;
+                $data['requestData']['un_department_id']=$request->un_department_id;
+                // $data['requestData']['un_subject_id']=$request->un_subject_id;
 
+                $subjectInfo='';
+                $exam_rule = CustomResultSetting::where('school_id', auth()->user()->school_id)->first();
                 //$exam_detail = SmExam::find($request->exam);
 
                 return view('backEnd.reports.mark_sheet_report_student', compact(
@@ -2745,6 +2840,10 @@ class SmExaminationController extends Controller
                     'un_semester',
                     'un_semester_label',
                     'maxGrade',
+                    'examInfo',
+                    'exam_rule',
+                    'data',
+                    'pass_mark',
                     'failgpaname',
                     'exam_type',
                     'student_id',
@@ -2926,7 +3025,7 @@ class SmExaminationController extends Controller
                     'section_id', 'exam_content', 'total_class_days', 'student_attendance', 'optional_subject_setup'));
             }
         } catch (\Exception $e) {
-            
+            dd($e);
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();
         }
@@ -3322,7 +3421,6 @@ class SmExaminationController extends Controller
     public function percentMarkSheetReport(PercentMarkSheetReportRequest $request)
     {
         try {
-
             $exams = SmExamType::get();
             $classes = SmClass::get();
             $pass_mark = 0;
@@ -3349,9 +3447,8 @@ class SmExaminationController extends Controller
                     ->first();
             }
             
-
             if ($exam) {
-                $pass_mark = $exam->pass_mark;
+                $pass_mark = $examInfo->average_mark;
             } else {
                 Toastr::warning('Exam Setup Not Complete', 'Warning');
                 return redirect()->back();
@@ -3369,7 +3466,6 @@ class SmExaminationController extends Controller
                         ->where('subject_id', $request->subject);
                 }
                 $mark_sheet = $mark_sheet->orderBy('total_marks', 'DESC')->with('studentRecords')->get();
-
                 return view('backEnd.examination.report.marksheetReport', compact('exams', 'classes', 'mark_sheet', 'examInfo', 'subjectInfo', 'classInfo', 'sectionInfo', 'pass_mark', 'exam_rule', 'data'));
             } else {
                 $mark_sheet = SmResultStore::query();
@@ -3396,7 +3492,6 @@ class SmExaminationController extends Controller
     public function percentMarksheetPrint(Request $request)
     {
         try {
-            
             $examInfo = SmExamType::find($request->exam);
             $subjectInfo = SmSubject::find($request->subject);
             $classInfo = SmClass::find($request->class);
@@ -3420,18 +3515,20 @@ class SmExaminationController extends Controller
                 ->where('subject_id',$request->subject)
                 ->first();
             }
-            $pass_mark = $exam->pass_mark;
+            $pass_mark = $examInfo->average_mark;
             $mark_sheet = SmResultStore::query();
             $mark_sheet->where('exam_type_id', $request->exam);
             if (moduleStatusCheck('University')) {
-                $mark_sheet = universityFilter($mark_sheet, $request)->where('un_subject_id', $request->un_subject_id);
+                $mark_sheet = universityFilter($mark_sheet, $request)
+                ->when($request->un_subject_id, function ($query, $request) {
+                    return $query->where('un_subject_id', $request->un_subject_id);
+                });
             } else {
                 $mark_sheet = $mark_sheet->where('class_id', $request->class)
                     ->where('section_id', $request->section)
                     ->where('subject_id', $request->subject);
             }
             $mark_sheet = $mark_sheet->orderBy('total_marks', 'DESC')->with('studentRecords')->get();
-
             $exam_rule = CustomResultSetting::where('school_id', auth()->user()->school_id)
                 ->first();
 

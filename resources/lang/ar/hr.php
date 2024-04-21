@@ -207,11 +207,6 @@ return [
     'point6' => 'If the column you are trying to import is Gender make sure that is <strong>Gender</strong> formatted :',
     'point7' => 'Marital Status',
     'point8' => 'Contract Type',
-    'point4' => 'If the column you are trying to import Department date make sure that is <strong>Department</strong> formatted :',
-    'point5' => 'If the column you are trying to import is Designation make sure that is <strong>Designation</strong> formatted :',
-    'point6' => 'If the column you are trying to import is Gender make sure that is <strong>Gender</strong> formatted :',
-    'point7' => 'Marital Type',
-    'point8' => 'Contract Status',
     'point9' => 'If the column you are trying to import is date make sure that is <strong> Date </strong>formatted in format Y-m-d (2018-06-06).',
     'custom_fields' => 'Custom fields',
     'Confirmation Required'=>'Confirmation Required',
@@ -219,4 +214,5 @@ return [
     'payment_date'=>'Payment Date',
     'partial_payment_list'=>'Partial Payment List',
     'due'=>'Due',
+    'donor_registration'=>'Donor Registration',
 ];

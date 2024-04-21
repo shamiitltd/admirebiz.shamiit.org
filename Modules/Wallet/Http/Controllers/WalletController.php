@@ -10,6 +10,9 @@ use App\SmPaymentMethhod;
 use App\SmGeneralSettings;
 use Illuminate\Http\Request;
 use App\SmPaymentGatewaySetting;
+use App\SmStudent;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Traits\NotificationSend;
 use Illuminate\Routing\Controller;
 use Brian2694\Toastr\Facades\Toastr;
@@ -19,6 +22,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Modules\Wallet\Entities\WalletTransaction;
 use Modules\CcAveune\Http\Controllers\CcAveuneController;
+use Modules\ToyyibPay\Http\Controllers\ToyyibPayController;
 
 class WalletController extends Controller
 {
@@ -26,13 +30,11 @@ class WalletController extends Controller
     public function addWalletAmount(Request $request)
     {
         $request->validate([
-            'amount' => 'required',
-            'payment_method' => 'required',
+            'amount' => 'nullable',
+            'payment_method' => 'nullable',
             'bank' => 'required_if:payment_method,Bank',
             'file' => 'mimes:jpg,jpeg,png,pdf',
         ]);
-      
-
             $url = '';
             if ($request->payment_method == "Cheque" || $request->payment_method == "Bank") {
                 $uploadFile = "";
@@ -72,7 +74,7 @@ class WalletController extends Controller
                 $data['wallet_type'] = 'diposit';
                 $data['description'] = "Wallet Amount Request";
                 $data['stripeToken'] = $request->stripeToken;
-
+                $data['student_id'] = SmStudent::where('user_id', $data['user_id'])->value('id');
                 if($data['payment_method'] == 'CcAveune'){
                     $addPayment = new WalletTransaction();
                     $addPayment->amount= $data['amount'];
@@ -85,7 +87,42 @@ class WalletController extends Controller
 
                     $ccAvenewPaymentController = new CcAveuneController();
                     $ccAvenewPaymentController->studentFeesPay($data['amount'] , $addPayment->id, $data['type']);
-                }else{
+                }
+                else if($data['payment_method'] == 'ToyyibPay') { 
+                    DB::beginTransaction();
+                
+                    try {
+                        $addPayment = new WalletTransaction();
+                        $addPayment->amount = $data['amount'];
+                        $addPayment->payment_method = $data['payment_method'];
+                        $addPayment->user_id = $data['user_id'];
+                        $addPayment->type = $data['wallet_type'];
+                        $addPayment->school_id = auth()->user()->school_id;
+                        $addPayment->academic_id = getAcademicId();
+                        $addPayment->save();
+                
+                        $toyyibPayController = new ToyyibPayController();
+                        $data = [
+                            'amount' => $data['amount'],
+                            'type' => $data['wallet_type'],
+                            'student_id' => $data['student_id'],
+                            'user_id' => $data['user_id'],
+                            'service_charge' => chargeAmount($request->payment_method, $request->total_paid_amount),
+                            'invoice_id' => $addPayment->id,
+                            'payment_method' => $request->payment_method,
+                        ];
+                        $data_store = $toyyibPayController->studentFeesPay($data);
+                        DB::commit();
+                
+                        return response()->json(['payment_link' => $data_store]);
+                    } catch (\Exception $e) {
+                        DB::rollback();
+                        Log::error($e);
+                        return response()->json(['error' => 'An error occurred while processing your request. Please try again later.'], 500);
+                    }
+                }
+                
+                else{
                     $classMap = config('paymentGateway.' . $data['payment_method']);
                     $make_payment = new $classMap();
                     $url = $make_payment->handle($data);
@@ -290,7 +327,6 @@ class WalletController extends Controller
 
     public function walletRefundRequestAjax(Request $request)
     {
-
         if($request->ajax()){
             $walletRefunds = WalletTransaction::with('userName')->where('type', 'refund')
             ->where('school_id', Auth::user()->school_id)
@@ -305,9 +341,9 @@ class WalletController extends Controller
                 if ($row->status == "pending") {
                     $btn = '<button class="primary-btn small bg-warning text-white border-0">' . app('translator')->get('common.pending') . '</button>';
                 } elseif ($row->status == "approve") {
-                    $btn = '<button class="primary-btn small bg-success text-white border-0">' . app('translator')->get('wallet::wallet.approve') . '</button>';
+                    $btn = '<button class="primary-btn small bg-success text-white border-0">' . app('translator')->get('wallet::wallet.approved') . '</button>';
                 } else {
-                    $btn = '<button class="primary-btn small bg-danger text-white border-0">' . app('translator')->get('wallet::wallet.reject') . '</button>';
+                    $btn = '<button class="primary-btn small bg-danger text-white border-0">' . app('translator')->get('wallet::wallet.rejecred') . '</button>';
                 }
                 return $btn;
             })
@@ -331,7 +367,7 @@ class WalletController extends Controller
             
             ->addColumn('file_view', function ($row) {
                 if($row->file){
-                    return '<a class="dropdown-item"  onclick="fileView(' . $row->id . ');" href="#">' . app('translator')->get('common.view') . '</a>' ;
+                    return '<a class="dropdown-item file_'.$row->id.'" data-file="'.asset($row->file).'"  onclick="fileView(' . $row->id . ');" href="#">' . app('translator')->get('common.view') . '</a>' ;
                 }
             })
             ->addColumn('refund_note', function ($row) {
@@ -606,9 +642,9 @@ class WalletController extends Controller
                             if ($row->status == 'pending'){
                                 $btn = '<button class="primary-btn small bg-warning text-white border-0">' . __('common.pending') . '</button>';
                             } elseif ($row->status == 'approve'){
-                                $btn = '<button class="primary-btn small bg-success text-white border-0">' . __('wallet::wallet.approve') . '</button>';
+                                $btn = '<button class="primary-btn small bg-success text-white border-0" style="cursor:default">' . __('wallet::wallet.approved') . '</button>';
                             } else{
-                                $btn = '<button class="primary-btn small bg-danger text-white border-0">' . __('wallet::wallet.reject') . '</button>';
+                                $btn = '<button class="primary-btn small bg-danger text-white border-0" style="cursor:default">' . __('wallet::wallet.rejected') . '</button>';
                             }
                             return $btn;
                         })

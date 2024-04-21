@@ -624,7 +624,7 @@ table.dataTable tbody td {
     border-radius: 0px 0px 10px 10px;
     margin-top: 1px;
     z-index: 9999 !important;
-    box-shadow: 0px 10px 20px rgba(108, 39, 255, 0.3);
+    box-shadow: var(--box_shadow);
 }
 
 /* line 384, G:/laragon/www/CRM_frontend/Admin_crm/public/frontend/scss/_reset.scss */
@@ -737,7 +737,7 @@ table.dataTable tbody td {
     border-radius: 0px 0px 10px 10px;
     margin-top: 1px;
     z-index: 9999 !important;
-    box-shadow: 0px 10px 20px rgba(108, 39, 255, 0.3);
+    box-shadow: var(--box_shadow);
 }
 
 /* line 473, G:/laragon/www/CRM_frontend/Admin_crm/public/frontend/scss/_reset.scss */
@@ -850,7 +850,7 @@ table.dataTable tbody td {
     border-radius: 0px 0px 10px 10px;
     margin-top: 1px;
     z-index: 9999 !important;
-    box-shadow: 0px 10px 20px rgba(108, 39, 255, 0.3);
+    box-shadow: var(--box_shadow);
 }
 
 /* line 561, G:/laragon/www/CRM_frontend/Admin_crm/public/frontend/scss/_reset.scss */
@@ -980,7 +980,7 @@ table.dataTable tbody td {
     border-radius: 0px 0px 10px 10px;
     margin-top: 1px;
     z-index: 9999 !important;
-    box-shadow: 0px 10px 20px rgba(108, 39, 255, 0.3);
+    box-shadow: var(--box_shadow);
 }
 
 /* line 660, G:/laragon/www/CRM_frontend/Admin_crm/public/frontend/scss/_reset.scss */
@@ -1093,7 +1093,7 @@ table.dataTable tbody td {
     border-radius: 0px 0px 10px 10px;
     margin-top: 1px;
     z-index: 9999 !important;
-    box-shadow: 0px 10px 20px rgba(108, 39, 255, 0.3);
+    box-shadow: var(--box_shadow);
 }
 
 /* line 748, G:/laragon/www/CRM_frontend/Admin_crm/public/frontend/scss/_reset.scss */
@@ -3572,7 +3572,7 @@ table.dataTable.dtr-inline.collapsed>tbody>tr.parent>th:first-child::before {
     border-radius: 5px 5px 10px 10px;
     border: 0px;
     padding: 15px 0px;
-    box-shadow: 0px 10px 20px rgba(108, 39, 255, 0.3);
+    box-shadow: var(--box_shadow);
     margin-top: 5px;
 }
 
@@ -4440,7 +4440,7 @@ table.dataTable.dtr-inline.collapsed>tbody>tr.parent>th:first-child::before {
     top: -14px;
     right: 10px;
     border-width: 0 15px 20px 15px;
-    border-color: transparent transparent var(--base_color) transparent;
+    border-color: transparent transparent var(--white) transparent;
 }
 
 /* line 251, G:/laragon/www/CRM_frontend/Admin_crm/public/frontend/scss/_header.scss */
@@ -7647,7 +7647,7 @@ tspan {
 
 /* line 799, G:/laragon/www/CRM_frontend/Admin_crm/public/frontend/scss/_common_component.scss */
 .CHAT_MESSAGE_POPUPBOX .CHAT_POPUP_BODY .CHATING_SENDER.CHATING_RECEIVEr .SEND_SMS_VIEW {
-    background: #C738D8;
+    background: var(--primary-color);
 }
 
 /* line 803, G:/laragon/www/CRM_frontend/Admin_crm/public/frontend/scss/_common_component.scss */
@@ -9201,7 +9201,7 @@ table.dataTable thead .sorting_desc::after {
     border-radius: 0px 0px 10px 10px;
     margin-top: 1px;
     z-index: 9999 !important;
-    box-shadow: 0px 10px 20px rgba(108, 39, 255, 0.3);
+    box-shadow: var(--box_shadow);
 }
 
 /* line 544, G:/laragon/www/CRM_frontend/Admin_crm/public/frontend/scss/_CRM_form.scss */
@@ -9609,11 +9609,7 @@ table.dataTable thead .sorting_desc::after {
 /* line 871, G:/laragon/www/CRM_frontend/Admin_crm/public/frontend/scss/_CRM_form.scss */
 .modal-content .modal-body {
     padding: 40px 30px;
-    background-image: url(../img/popup_menu_bg.png);
-    background-size: cover;
-    background-position: bottom;
     border-radius: 0px 0px 15px 15px;
-    background-repeat: no-repeat;
 }
 
 /* line 879, G:/laragon/www/CRM_frontend/Admin_crm/public/frontend/scss/_CRM_form.scss */
@@ -16918,9 +16914,7 @@ body.pos_admin .pos_page__order .posfull_table {
 
 /* line 137, G:/laragon/www/CRM_frontend/Admin_crm/public/frontend/scss/_lms_elements.scss */
 .note-modal .note-modal-header {
-    background-image: url(../img/modal-header-bg.png);
-    background-size: auto;
-    background-size: cover;
+    background: var(--primary-color);
     border-radius: 5px 5px 0px 0px;
     border: 0;
     padding: 33px 40px;

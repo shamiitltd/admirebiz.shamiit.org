@@ -19,6 +19,7 @@ use App\SmHrPayrollGenerate;
 use App\Traits\CustomFields;
 use Illuminate\Http\Request;
 use App\Models\SmCustomField;
+use App\Models\SmExpertTeacher;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
@@ -26,15 +27,15 @@ use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
 use Intervention\Image\Facades\Image;
 use App\Scopes\ActiveStatusSchoolScope;
 use Illuminate\Support\Facades\Session;
 use App\Models\SmStaffRegistrationField;
 use Modules\MultiBranch\Entities\Branch;
+use CreateSmStaffRegistrationFieldsTable;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\Admin\Hr\staffRequest;
-use CreateSmStaffRegistrationFieldsTable;
+use Illuminate\Validation\ValidationException;
 use Modules\RolePermission\Entities\InfixRole;
 
 class SmStaffController extends Controller
@@ -250,6 +251,7 @@ class SmStaffController extends Controller
                 $staff->email = $request->email;
                 $staff->school_id = Auth::user()->school_id;
                 $staff->staff_photo = session()->get('staff_photo') ?? fileUpload($request->staff_photo, $designation);
+                $staff->show_public = $request->show_public;
                 $staff->gender_id = $request->gender_id;
                 $staff->marital_status = $request->marital_status;
                 $staff->date_of_birth = date('Y-m-d', strtotime($request->date_of_birth));
@@ -293,7 +295,15 @@ class SmStaffController extends Controller
                 $results = $staff->save();
                 $staff->toArray();
                 DB::commit();
-                
+                //Expert Staff Start
+                if($request->show_public == 1){
+                    $expertTeacher = new SmExpertTeacher();
+                    $expertTeacher->staff_id = $staff->id;
+                    $expertTeacher->created_by = auth()->user()->id;
+                    $expertTeacher->school_id = auth()->user()->school_id;
+                    $expertTeacher->save();
+                }
+                //Expert Staff End
                 $user_info = [];
                 if ($request->email != "") {
                     $user_info[] = array('email' => $request->email, 'id' => $staff->id, 'slug' => 'staff');
@@ -493,29 +503,6 @@ class SmStaffController extends Controller
 
     public function staffUpdate(StaffRequest $request)
     {
-     
-        // custom field validation start
-        $validator = Validator::make($request->all(), $this->generateValidateRules("staff_registration"));
-        if ($validator->fails()) {
-            $errors = $validator->errors();
-            foreach ($errors->all() as $error) {
-                Toastr::error(str_replace('custom f.', '', $error), 'Failed');
-            }
-            return redirect()->back()->withInput();
-        }
-        // custom field validation End
-
-        // custom field validation start
-        $validator = Validator::make($request->all(), $this->generateValidateRules("staff_registration"));
-        if ($validator->fails()) {
-            $errors = $validator->errors();
-            foreach ($errors->all() as $error) {
-                Toastr::error(str_replace('custom f.', '', $error), 'Failed');
-            }
-            return redirect()->back()->withInput();
-        }
-        // custom field validation End
-
         try {
             $designation = 'public/uploads/resume/';
 
@@ -553,9 +540,12 @@ class SmStaffController extends Controller
             if ($request->filled('email')) {
                 $staff->email = $request->email;
             }
-            // if ($request->filled('staff_photo')) {
-            //     $staff->staff_photo = fileUpdate($staff->staff_photo, $request->staff_photo, $designation);
-            // }
+            if ($request->filled('staff_photo')) {
+                $staff->staff_photo = fileUpdate($staff->staff_photo, $request->staff_photo, $designation);
+            }
+            if ($request->filled('show_public')) {
+                $staff->show_public = $request->show_public;
+            }
             if ($request->filled('gender_id')) {
                 $staff->gender_id = $request->gender_id;
             }
@@ -654,7 +644,19 @@ class SmStaffController extends Controller
                 $staff->custom_field = json_encode($dataImage, true);
             }
             //Custom Field End
-
+            //Expert Staff Start
+            $expertExists = SmExpertTeacher::where('staff_id', $request->staff_id)->where('school_id', auth()->user()->school_id)->first();
+            if($request->show_public == 1 && $expertExists == null){
+                $expertTeacher = new SmExpertTeacher();
+                $expertTeacher->staff_id = $staff->id;
+                $expertTeacher->created_by = auth()->user()->id;
+                $expertTeacher->school_id = auth()->user()->school_id;
+                $expertTeacher->save();
+            }
+            if($request->show_public == 0 && $expertExists != null){
+                $expertExists->delete();
+            }
+            //Expert Staff End
             $result = $staff->update();
 
 
@@ -1030,6 +1032,10 @@ class SmStaffController extends Controller
     {
         try {
             $id = $request->id;
+            $expertStaff = SmExpertTeacher::where('staff_id', $id)->where('school_id', auth()->user()->school_id)->first();
+            if($expertStaff != null){
+                $expertStaff->delete();
+            }
             $tables = \App\tableList::getTableList('staff_id', $id);
             $tables1 = \App\tableList::getTableList('driver_id', $id);
 

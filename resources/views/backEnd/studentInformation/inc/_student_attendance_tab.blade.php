@@ -58,11 +58,6 @@
             box-shadow: inset 0 0 5px grey
         }
 
-        th {
-            padding: .5rem !important;
-            font-size: 10px !important;
-        }
-
         td {
             padding: .3rem !important;
             font-size: 12px !important;
@@ -71,14 +66,10 @@
         .dataTables_filter {
             margin-top: 30px;
         }
-
-        .dt-buttons {
-            margin-top: 30px;
-        }
     </style>
 @endpush
 <div role="tabpanel" class="tab-pane fade" id="studentAttendance">
-    <div class="white-box">
+    <div>
         @if (isset($attendance))
             <section class="student-attendance">
                 <div class="container-fluid p-0">

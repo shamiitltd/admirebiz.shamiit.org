@@ -7,17 +7,6 @@ return [
     'tab' => "General",
     'fields' => [
         [
-            'id'            => 'event_bg_img',
-            'type'          => 'file',
-            'field_desc' => __('edulia.only_allowed_and_max_size_is_3MB'),
-            'max_size' => 3, // size in MB
-            'ext' => [
-                'jpg',
-                'png',
-            ],
-            'label_title'   => __('edulia.event_background_img')
-        ],
-        [
             'id'            => 'event_img',
             'type'          => 'file',
             'field_desc' => __('edulia.only_allowed_and_max_size_is_3MB'),

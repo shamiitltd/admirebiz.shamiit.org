@@ -1,44 +1,51 @@
 @if ($paginator->hasPages())
-    <ul class="pagination" role="navigation">
-        {{-- Previous Page Link --}}
-        @if ($paginator->onFirstPage())
-            <li class="page-item disabled" aria-disabled="true" aria-label="@lang('pagination.previous')">
-                <span class="page-link" aria-hidden="true">&lsaquo;</span>
-            </li>
-        @else
-            <li class="page-item">
-                <a class="page-link" href="{{ $paginator->previousPageUrl() }}" rel="prev" aria-label="@lang('pagination.previous')">&lsaquo;</a>
-            </li>
-        @endif
-
-        {{-- Pagination Elements --}}
-        @foreach ($elements as $element)
-            {{-- "Three Dots" Separator --}}
-            @if (is_string($element))
-                <li class="page-item disabled" aria-disabled="true"><span class="page-link">{{ $element }}</span></li>
+    <div class="notification_pagination_container notification_list">
+        <ul class="d-flex justify-content-center">
+            @if ($paginator->onFirstPage())
+                <li class="pagination_item disabled" aria-disabled="true">
+                    <a class="" aria-hidden="true">
+                        <i class="ti-arrow-left"></i>
+                    </a>
+                </li>
+            @else
+                <li class="pagination_item">
+                    <a class="" href="{{ $paginator->previousPageUrl() }}" rel="prev">
+                        <i class="ti-arrow-left"></i>
+                    </a>
+                </li>
             @endif
 
-            {{-- Array Of Links --}}
-            @if (is_array($element))
-                @foreach ($element as $page => $url)
-                    @if ($page == $paginator->currentPage())
-                        <li class="page-item active" aria-current="page"><span class="page-link">{{ $page }}</span></li>
-                    @else
-                        <li class="page-item"><a class="page-link" href="{{ $url }}">{{ $page }}</a></li>
-                    @endif
-                @endforeach
-            @endif
-        @endforeach
+            @foreach ($elements as $element)
+                @if (is_string($element))
+                    <li class="pagination_item disabled" aria-disabled="true"><a href=""
+                            class="">{{ $element }}</a></li>
+                @endif
+                @if (is_array($element))
+                    @foreach ($element as $page => $url)
+                        @if ($page == $paginator->currentPage())
+                            <li class="pagination_item" aria-current="page"><a href=""
+                                    class="current ">{{ $page }}</a></li>
+                        @else
+                            <li class="pagination_item"><a href="{{ $url }}"
+                                    class="">{{ $page }}</a></li>
+                        @endif
+                    @endforeach
+                @endif
+            @endforeach
 
-        {{-- Next Page Link --}}
-        @if ($paginator->hasMorePages())
-            <li class="page-item">
-                <a class="page-link" href="{{ $paginator->nextPageUrl() }}" rel="next" aria-label="@lang('pagination.next')">&rsaquo;</a>
-            </li>
-        @else
-            <li class="page-item disabled" aria-disabled="true" aria-label="@lang('pagination.next')">
-                <span class="page-link" aria-hidden="true">&rsaquo;</span>
-            </li>
-        @endif
-    </ul>
+            @if ($paginator->hasMorePages())
+                <li class="pagination_item">
+                    <a class="" href="{{ $paginator->nextPageUrl() }}" rel="next">
+                        <i class="ti-arrow-right"></i>
+                    </a>
+                </li>
+            @else
+                <li class="pagination_item disabled" aria-disabled="true">
+                    <a class="" aria-hidden="true">
+                        <i class="ti-arrow-right"></i>
+                    </a>
+                </li>
+            @endif
+        </ul>
+    </div>
 @endif

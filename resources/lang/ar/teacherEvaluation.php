@@ -51,10 +51,13 @@ return[
     'evaluation_settings'=> 'Evaluation Settings',
     'submission_settings'=> 'Submission Settings',
     'pending_evaluation_report'=> 'Pending Evaluation Report',
+    'pending_report'=> 'Pending Report',
     'teacher_pending_evaluation_report'=> 'Teacher Pending Evaluation Report',
     'approved_evaluation_report'=> 'Approved Evaluation Report',
+    'approved_report'=> 'Approved Report',
     'teacher_approved_evaluation_report'=> 'Teacher Approved Evaluation Report',
     'wise_evaluation_report'=> 'Wise Evaluation Report',
     'teacher_wise_evaluation_report'=> 'Teacher Wise Evaluation Report',
+    'teacher_wise_report'=> 'Teacher Wise Report',
     'student_parent_evaluation_approval'=> 'Student-Parent Evaluation Approval',
 ];

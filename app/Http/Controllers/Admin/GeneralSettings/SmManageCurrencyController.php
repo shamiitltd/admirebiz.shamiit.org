@@ -83,41 +83,52 @@ class SmManageCurrencyController extends Controller
   
       public function manageCurrencyEdit($id)
       {
-  
-          try {
-              $currencies = SmCurrency::whereOr(['school_id', Auth::user()->school_id], ['school_id', 1])->get();
-              $editData = SmCurrency::where('id', $id)->first();
-  
-              return view('backEnd.systemSettings.create_update_currency', compact('editData', 'currencies'));
-          } catch (\Exception $e) {
-              Toastr::error('Operation Failed', 'Failed');
-              return redirect('manage-currency');
-          }
+        // if (config('app.app_sync') == true) {
+        //     Toastr::error('Disabled for demo mode', 'Failed');
+        //     return redirect()->route('manage-currency');
+        // }
+        try {
+            $currencies = SmCurrency::whereOr(['school_id', Auth::user()->school_id], ['school_id', 1])->get();
+            $editData = SmCurrency::where('id', $id)->first();
+
+            return view('backEnd.systemSettings.create_update_currency', compact('editData', 'currencies'));
+        } catch (\Exception $e) {
+            Toastr::error('Operation Failed', 'Failed');
+            return redirect('manage-currency');
+        }
       }
   
       public function manageCurrencyDelete($id)
       {
-          try {
-              $current_currency = SmGeneralSettings::where('school_id', Auth::user()->school_id)->where('currency', @schoolConfig()->currency)->where('currency_symbol', @schoolConfig()->currency_symbol)->first();
-              $del_currency = SmCurrency::findOrfail($id);
-  
-              if (!empty($current_currency) && $current_currency->currency == $del_currency->code && $current_currency->currency_symbol == $del_currency->symbol) {
-                  Toastr::warning('You cannot delete current currency', 'Warning');
-                  return redirect()->back();
-              } else {
-                  $currency = SmCurrency::findOrfail($id);
-                  $currency->delete();
-                  Toastr::success('Operation successful', 'Success');
-                  return redirect()->back();
-              }
-          } catch (\Exception $e) {
-  
-              Toastr::error('Operation Failed', 'Failed');
-              return redirect()->back();
-          }
+        // if (config('app.app_sync') == true) {
+        //     Toastr::error('Disabled for demo mode', 'Failed');
+        //     return redirect()->route('manage-currency');
+        // }
+        try {
+            $current_currency = SmGeneralSettings::where('school_id', Auth::user()->school_id)->where('currency', @schoolConfig()->currency)->where('currency_symbol', @schoolConfig()->currency_symbol)->first();
+            $del_currency = SmCurrency::findOrfail($id);
+
+            if (!empty($current_currency) && $current_currency->currency == $del_currency->code && $current_currency->currency_symbol == $del_currency->symbol) {
+                Toastr::warning('You cannot delete current currency', 'Warning');
+                return redirect()->back();
+            } else {
+                $currency = SmCurrency::findOrfail($id);
+                $currency->delete();
+                Toastr::success('Operation successful', 'Success');
+                return redirect()->back();
+            }
+        } catch (\Exception $e) {
+
+            Toastr::error('Operation Failed', 'Failed');
+            return redirect()->back();
+        }
       }
       public function manageCurrencyActive(int $id)
       {
+        if (config('app.app_sync') == true) {
+            Toastr::error('Disabled for demo mode', 'Failed');
+            return redirect()->route('manage-currency');
+        }
         try {
             $currency = SmCurrency::findOrFail($id);
 

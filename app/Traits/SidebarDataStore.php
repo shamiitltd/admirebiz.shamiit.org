@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use App\GlobalVariable;
 use App\InfixModuleManager;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
@@ -89,8 +90,9 @@ trait SidebarDataStore
         $user = auth()->user(); 
 
         $dashboardSections = ["dashboard", "menumanage.index"];
-        $administration_sections = ["admin_section", "academics", "study_material", "lesson-plan", "bulk_print"];
-        $student_sections = ["student_info", "fees", "fees_collection", "transport", "dormitory", "library", "homework", "behaviour_records"];
+        $administration_sections = ["admin_section", "academics", "study_material", 'download-center', "lesson-plan", "bulk_print","certificate","university","lms"];
+        $student_sections = ["student_info", "fees", "fees_collection", "transport", "dormitory", "library", "homework", "behaviour_records","alumni_records"];
+        $alumni_sections = ["student_info", "fees", "fees_collection", "transport", "dormitory", "library", "homework", "behaviour_records","alumni_records"];
         $exam_sections = ["examination", "online_exam", "examplan"];
         $hr_sections = ["role_permission", "human_resource", "teacher-evaluation", "leave"];
         $account_sections = ["accounts", "inventory", "wallet"];
@@ -113,7 +115,7 @@ trait SidebarDataStore
         foreach ($userPermissionSections as $key => $userSection) {
             $parent = $userSection->parent_route != null
             ? Permission::where('route', $userSection->parent_route)
-                ->when(auth()->user()->role_id == 2, function ($q) {
+                ->when(auth()->user()->role_id == 2 || auth()->user()->role_id == GlobalVariable::isAlumni(), function ($q) {
                     $q->where('is_student', 1);
                 })->when(auth()->user()->role_id == 3, function ($q) {
                 $q->where('is_parent', 1);
@@ -137,6 +139,10 @@ trait SidebarDataStore
                 $parent_id = Permission::where('route', 'student_section')
                 ->where('user_id', $user->id)->value('id');
             }
+            // if (in_array($sidebar->route, $alumni_sections)) {
+            //     $parent_id = Permission::where('route', 'alumni_sections')
+            //     ->where('user_id', $user->id)->value('id');
+            // }
             if (in_array($sidebar->route, $exam_sections)) {
                 $parent_id = Permission::where('route', 'exam_section')->where('user_id', $user->id)->value('id');
             }
@@ -181,8 +187,9 @@ trait SidebarDataStore
                 ->get(['id', 'name', 'type', 'route', 'parent_route', 'permission_section']);
         } else {
             $permissionInfos = Permission::where('is_menu', 1)
+                
                 ->orderBy('position', 'ASC')
-                ->when(!in_array($user->role_id, [2,3]) , function($q){
+                ->when(!in_array($user->role_id, [2,3, GlobalVariable::isAlumni()]) , function($q){
                     $q->where('is_admin', 1);
                 })->when($user->role_id == 4 , function($q){
                     $q->orWhere('is_teacher', 1);
@@ -192,8 +199,9 @@ trait SidebarDataStore
                     $q->where('is_parent', 1);
                 })->where(function($q) {
                    $q->where('user_id', auth()->user()->id)->orWhereNull('user_id');
+                })->when($user->role_id == GlobalVariable::isAlumni(), function($q){
+                    $q->where('is_alumni', 1);
                 })
-                
                 ->get(['id', 'name', 'type', 'route', 'parent_route', 'position', 'permission_section']);
         }
         return $permissionInfos;
@@ -236,7 +244,7 @@ trait SidebarDataStore
     }
     function parentId($sidebar)
     {
-        Log::info('sidebar='.$sidebar->id);
+        
         $parent = $sidebar->parent_route != null
         ? Permission::where('route', $sidebar->parent_route)
             ->when(auth()->user()->role_id == 2, function ($q) {

@@ -3,7 +3,7 @@
 @lang('system_settings.general_settings')
 @endsection
 @section('mainContent')
-<section class="sms-breadcrumb mb-40 white-box">
+<section class="sms-breadcrumb mb-20">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('system_settings.general_settings')</h1>
@@ -18,31 +18,31 @@
 <section class="student-details">
     <div class="container-fluid p-0">
         @include('backEnd.partials.alertMessage')
-        <div class="row">
-            <div class="col-lg-4 col-md-6 col-xl-4">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="main-title">
-                            <h3 class="mb-30">@lang('system_settings.change_logo')</h3>
-                        </div>
+        <div class="row row-gap-24">
+            <div class="col-lg-4 col-md-12 col-xl-4">
+                <div class="row row-gap-24">
+                    <div class="col-sm-6 col-lg-12">
                         @if(Illuminate\Support\Facades\Config::get('app.app_sync'))
                         {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'admin-dashboard', 'method' => 'GET', 'enctype' => 'multipart/form-data']) }}
-                    @else
-                        @if(userPermission('update-school-logo'))
-                            {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'update-school-logo', 'method' => 'POST', 'enctype' => 'multipart/form-data']) }}
+                        @else
+                            @if(userPermission('update-school-logo'))
+                                {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'update-school-logo', 'method' => 'POST', 'enctype' => 'multipart/form-data']) }}
+                            @endif
                         @endif
-                    @endif
                       
 
                         <div class="white-box">
+                            <div class="main-title">
+                                <h3 class="mb-15">@lang('system_settings.change_logo')</h3>
+                            </div>
                             <input type="hidden" name="url" id="url" value="{{URL::to('/')}}">
                             <div class="text-center">
                                 
                             @if(isset($editData->logo))
                                                       
-                                <img class="img-fluid Img-100" src="{{asset($editData->logo)}}" alt="" >
+                                <img id="upload_logo_preview" class="img-fluid Img-100" src="{{asset($editData->logo)}}" alt="" >
                             @else
-                                <img class="img-fluid" src="{{asset('public/uploads/settings/logo.png')}}" alt="">
+                                <img id="upload_logo_preview" class="img-fluid" src="{{asset('public/uploads/settings/logo.png')}}" alt="">
                             @endif
                             </div>
 
@@ -74,32 +74,27 @@
                         </div>
                         {{ Form::close() }}
                     </div>
-                </div>
-
-
-                <div class="row mt-40">
-                    <div class="col-lg-12">
-                        <div class="main-title">
-
-                            <h3 class="mb-30">@lang('system_settings.change_fav') </h3>
-                        </div>
+                    <div class="col-sm-6 col-lg-12">
 
                         @if(Illuminate\Support\Facades\Config::get('app.app_sync'))
                         {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'admin-dashboard', 'method' => 'GET', 'enctype' => 'multipart/form-data']) }}
-                    @else
-                    @if(userPermission('update-school-logo'))
-                        {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'update-school-logo', 'method' => 'POST', 'enctype' => 'multipart/form-data']) }}
+                        @else
+                        @if(userPermission('update-school-logo'))
+                            {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'update-school-logo', 'method' => 'POST', 'enctype' => 'multipart/form-data']) }}
 
+                            @endif
                         @endif
-                    @endif
                        
                         <div class="white-box">
+                            <div class="main-title">
+                                <h3 class="mb-15">@lang('system_settings.change_fav') </h3>
+                            </div>
                             <input type="hidden" name="url" id="url" value="{{URL::to('/')}}">
                             <div class="text-center">
                             @if(isset($editData->favicon) && !empty(@$editData->favicon))                            
-                                <img class="img-fluid Img-50" src="{{@$editData->favicon}}" alt="" >
+                                <img  id="upload_favicon_preview" class="img-fluid Img-50" src="{{@$editData->favicon}}" alt="" >
                             @else
-                                <img class="img-fluid" src="{{asset('public/uploads/settings/favicon.png')}}" alt="">
+                                <img  id="upload_favicon_preview" class="img-fluid" src="{{asset('public/uploads/settings/favicon.png')}}" alt="">
                             @endif
                             </div>
 
@@ -131,27 +126,32 @@
                     </div>
                 </div>
 
+
+                <!-- <div class="row mt-40">
+                    
+                </div> -->
+
                 
             </div>
 
             <div class="col-lg-8 col-xl-8">
-                <div class="row xm_3">
-                    <div class="col-lg-7 col-xl-7 no-apadmin col-sm-6">
-                        <div class="main-title">
-                            <h3 class="mb-30">@lang('system_settings.general_settings_view')</h3>
-                        </div>
-                    </div>
-                    <div class=" col-lg-5 col-xl-5 text-right col-md-6 col-sm-6 sm2_10">
-                        @if(userPermission('update-general-settings'))
-                            <a href="{{route('update-general-settings')}}" class="primary-btn small fix-gr-bg "> <span class="ti-pencil-alt"></span> @lang('common.edit')
-                        </a>
-                        @endif
-                    </div>
-                </div>
 
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="white-box">
+                            <div class="row xm_3">
+                                <div class="col-lg-7 col-xl-7 no-apadmin col-sm-6">
+                                    <div class="main-title">
+                                        <h3 class="mb-15">@lang('system_settings.general_settings_view')</h3>
+                                    </div>
+                                </div>
+                                <div class=" col-lg-5 col-xl-5 text-right col-md-6 col-sm-6 sm2_10">
+                                    @if(userPermission('update-general-settings'))
+                                        <a href="{{route('update-general-settings')}}" class="primary-btn small fix-gr-bg "> <span class="ti-pencil-alt"></span> @lang('common.edit')
+                                    </a>
+                                    @endif
+                                </div>
+                            </div>
                             <div class="student-meta-box">
                                 
                                 <div class="single-meta">
@@ -475,26 +475,25 @@
                                         </div>
                                     </div>
                                 </div>
-                                @if(moduleStatusCheck('Fees'))
-
-                                <div class="single-meta">
-                                    <div class="row">
-                                        <div class="col-lg-6 col-md-6">
-                                            <div class="name">
-                                                @lang('fees::feesModule.new_fees_module')
+                                @if(moduleStatusCheck('Fees') && !moduleStatusCheck('University'))
+                                    <div class="single-meta">
+                                        <div class="row">
+                                            <div class="col-lg-6 col-md-6">
+                                                <div class="name">
+                                                    @lang('fees::feesModule.new_fees_module')
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="col-lg-6 col-md-6">
-                                            <div class="value text-left">
-                                                @if (@$editData->fees_status == 1)
-                                                    @lang('fees::feesModule.enable')
-                                                @else
-                                                    @lang('fees::feesModule.disable')
-                                                @endif
+                                            <div class="col-lg-6 col-md-6">
+                                                <div class="value text-left">
+                                                    @if (@$editData->fees_status == 1)
+                                                        @lang('fees::feesModule.enable')
+                                                    @else
+                                                        @lang('fees::feesModule.disable')
+                                                    @endif
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
                                 @endif
 
                                 <div class="single-meta">
@@ -652,6 +651,25 @@
                                     </div>
                                 </div>
 
+                                <div class="single-meta">
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-6">
+                                            <div class="name">
+                                                @lang('common.Queue Connection')
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6">
+                                            <div class="value text-left">
+                                                @if (env('QUEUE_CONNECTION') == 'database')
+                                                    @lang('common.Database')
+                                                @else
+                                                    @lang('common.SYNC')
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
 
                                 <div class="single-meta">
                                     <div class="row">
@@ -667,7 +685,7 @@
 
                                                 @else
 
-                                                Copyright 2019 All rights reserved by Codethemes
+                                                Copyright 2019 All rights reserved by SHAMIIT
                                                 @endif
                                             </div>
                                         </div>
@@ -699,11 +717,14 @@
 <script>
     
     $(document).on('click', '.layout_image', function(){
-
-         console.log(this.src);
-            // $('.question_image_url').src(this.src);
-            $('.question_image_url').attr('src',this.src);   
-            $('.question_image_preview').modal('show');
-        })
+        $('.question_image_url').attr('src',this.src);   
+        $('.question_image_preview').modal('show');
+    })
+    $(document).on('change', '#upload_logo', function(event) {
+        imageChangeWithFile($(this)[0], '#upload_logo_preview');
+    });
+    $(document).on('change', '#upload_favicon', function(event) {
+        imageChangeWithFile($(this)[0], '#upload_favicon_preview');
+    });
 </script>
 @endsection

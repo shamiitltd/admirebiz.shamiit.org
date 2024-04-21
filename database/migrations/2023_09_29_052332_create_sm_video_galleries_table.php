@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->text('video_link')->nullable();
             $table->boolean('is_publish')->default(true);
+            $table->integer('position')->default(0);
             $table->integer('school_id')->nullable()->default(1)->unsigned();
             $table->foreign('school_id')->references('id')->on('sm_schools')->onDelete('cascade');
             $table->timestamps();
@@ -25,19 +26,22 @@ return new class extends Migration
 
         DB::table('sm_video_galleries')->insert([
             [
-                'name' => "One Click Update Infix Application",
-                'description' => "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.",
+                'name' => "Science Fair",
+                'description' => "A showcase of student experiments and scientific discoveries",
                 'video_link' => "https://www.youtube.com/watch?v=4zR-uaZjZ2U",
+                'position' => 1,
             ],
             [
-                'name' => "WhatsApp Chat Laravel Application",
-                'description' => "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.",
+                'name' => "Cultural Carnival",
+                'description' => "A lively celebration of diverse traditions, arts, and festivities.",
                 'video_link' => "https://www.youtube.com/watch?v=k61cLi1_Zd0&ab_channel=Infixdev",
+                'position' => 2,
             ],
             [
-                'name' => "Infix Module Installation",
-                'description' => "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.",
+                'name' => "Student Leadership Summit",
+                'description' => "Empowering future leaders through collaboration and inspiration.",
                 'video_link' => "https://www.youtube.com/watch?v=4zR-uaZjZ2U&ab_channel=Infixdev",
+                'position' => 3,
             ],
         ]);
     }

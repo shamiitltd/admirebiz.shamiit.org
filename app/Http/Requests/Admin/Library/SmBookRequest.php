@@ -19,7 +19,7 @@ class SmBookRequest extends FormRequest
             'subject' => "required",
             'quantity' => "sometimes|nullable|integer|min:0",            
             'book_number' => "sometimes|nullable",
-            'isbn_no' => "sometimes|nullable|different:book_number",
+            'isbn_no' => "sometimes|nullable|unique:sm_books,isbn_no|different:book_number",
             'publisher_name' => "sometimes|nullable",
             'author_name' => "sometimes|nullable",
             'details' => "sometimes|nullable",

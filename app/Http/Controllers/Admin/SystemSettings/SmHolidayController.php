@@ -34,7 +34,6 @@ class SmHolidayController extends Controller
     }
     public function store(SmHolidayRequest $request)
     {
-
         try{
             $destination =  'public/uploads/holidays/';
 

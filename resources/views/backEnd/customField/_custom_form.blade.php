@@ -126,7 +126,7 @@
                     <div class="row mt-30 static d-none">
                         <div class="col-lg-6">
                             <div class="primary_input">
-                                <label>{{isset($v_custom_field) ? $v_name_value : trans('student.value')}}</label>
+                                <label>{{isset($v_custom_field) ? trans('student.value').' '.$v_name_value : trans('student.value')}}<span class="text-danger"> *</span></label>
                                 <input class="primary_input_field form-control{{ $errors->has('value') ? ' is-invalid' : '' }}" type="text" name="name_value[]" autocomplete="off"
                                 value='{{isset($v_custom_field)? $v_name_value:''}}'>
                             
@@ -139,7 +139,7 @@
                             @endif
                         </div>
                         <div class="col-lg-4">
-                            <button class="primary-btn icon-only fix-gr-bg" type="button" id="deleteCustRow" {{isset($v_custom_field)? '':'disabled'}} >
+                            <button class="primary-btn icon-only fix-gr-bg mt-35" type="button" id="deleteCustRow" {{isset($v_custom_field)? '':'disabled'}} >
                                 <span class="ti-trash"></span>
                             </button>
                         </div>

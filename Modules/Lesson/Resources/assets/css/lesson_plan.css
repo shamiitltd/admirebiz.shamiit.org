@@ -60,7 +60,7 @@
 }
 
 input:checked+.slider {
-    background: linear-gradient(90deg, var(--gradient_1) 0%, #c738d8 51%, var(--gradient_1) 100%);
+    background: var(--primary-color);
 }
 
 input:focus+.slider {

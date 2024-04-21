@@ -1,6 +1,6 @@
 @php
 $div = isset($div) ? $div : 'col-lg-4';
-$mt = isset($mt) ? $mt : 'mt-30-md';
+$mt = isset($mt) ? $mt : 'mb-15';
 $subject = isset($subject) ? true : false;
 $required = $required ?? [];
 $selected = isset($selected) ? $selected : null;

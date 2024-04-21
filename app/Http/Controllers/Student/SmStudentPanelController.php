@@ -314,6 +314,7 @@ class SmStudentPanelController extends Controller
                 $labelIds = StudentRecord::where('student_id', $student_detail->id)
                     ->where('school_id', auth()->user()->school_id)
                     ->pluck('un_semester_label_id')->toArray();
+                    $lastRecordCreatedDate= date('Y-m-d');
                 if ($lastRecord) {
                     $next_semester_label = UnSemesterLabel::whereNotIn('id', $labelIds)
                         ->where('id', '!=', $lastRecord->un_semester_label_id)
@@ -323,6 +324,7 @@ class SmStudentPanelController extends Controller
                         ->where('un_semester_label_id', $lastRecord->un_semester_label_id)
                         ->get();
                     $departmentSubjects = $lastRecord->withOutPreSubject;
+                   
                     $lastRecordCreatedDate = $student_detail->lastRecord->value('created_at')->format('Y-m-d');
                 }
 
@@ -384,6 +386,7 @@ class SmStudentPanelController extends Controller
             }
         } catch (\Exception $e) {
             DB::rollback();
+            dd($e);
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();
         }
@@ -412,16 +415,14 @@ class SmStudentPanelController extends Controller
             DB::beginTransaction();
 
             if ($student) {
-                $full_name = $request->first_name . ' ' . $request->last_name;
-                $guardians_name = $request->guardians_name;
                 $username = $request->phone_number ? $request->phone_number : $request->admission_number;
                 $phone_number = $request->phone_number ? $request->phone_number : null;
-                $user_stu = $this->addUser($full_name, $student_detail->user_id, 2, $username, $request->email_address, $phone_number);
+                $user_stu = $this->addUser($student_detail->user_id, 2, $username, $request->email_address, $phone_number);
                 //sibling || parent info user update
                 if (($request->sibling_id == 0 || $request->sibling_id == 1) && $request->parent_id == "") {
                     $username = $request->guardians_phone ? $request->guardians_phone : $request->guardians_email;
                     $phone_number = $request->guardians_phone;
-                    $user_parent =  $this->addUser($guardians_name, $student_detail->parents->user_id, 3, $username, $request->guardians_email, $phone_number);
+                    $user_parent =  $this->addUser($student_detail->parents->user_id, 3, $username, $request->guardians_email, $phone_number);
 
                     $user_parent->toArray();
                 } elseif ($request->sibling_id == 0 && $request->parent_id != "") {
@@ -431,7 +432,7 @@ class SmStudentPanelController extends Controller
 
                     $username = $request->guardians_phone ? $request->guardians_phone : $request->guardians_email;
                     $phone_number = $request->guardians_phone;
-                    $user_parent = $this->addUser($guardians_name, null, 3, $username, $request->guardians_email, $phone_number);
+                    $user_parent = $this->addUser(null, 3, $username, $request->guardians_email, $phone_number);
                     $user_parent->toArray();
                 }
                 // end
@@ -713,15 +714,12 @@ class SmStudentPanelController extends Controller
             return redirect()->back();
         }
     }
-    private function addUser($full_name, $user_id, $role_id, $username, $email, $phone_number)
+    private function addUser($user_id, $role_id, $username, $email, $phone_number)
     {
         try {
 
             $user = $user_id == null ? new User() : User::find($user_id);
             $user->role_id = $role_id;
-            if ($full_name != null) {
-                $user->full_name = $full_name;
-            }
             if ($username != null) {
                 $user->username = $username;
             }
@@ -780,7 +778,6 @@ class SmStudentPanelController extends Controller
     }
     public function studentDashboard(Request $request, $id = null)
     {
-
         try {
             $user = auth()->user();
             if ($user) {
@@ -898,9 +895,15 @@ class SmStudentPanelController extends Controller
                 ->where('academic_id', getAcademicId())
                 ->where('school_id', $user->school_id)
                 ->where(function ($q) {
-                    $q->where('for_whom', 'All')->orWhere('for_whom', 'Student');
+                    $q->where('for_whom', 'All')
+                        ->orWhere('for_whom', 'Student')
+                        ->orWhereNull('for_whom');
                 })
+                #->whereJsonContains('role_ids', "2")
                 ->get();
+            
+            
+            #dd($events);
 
             $student_detail = SmStudent::where('user_id', $user->id)->first();
             $sm_weekends = SmWeekend::orderBy('order', 'ASC')
@@ -916,7 +919,7 @@ class SmStudentPanelController extends Controller
                     ->where('academic_id', getAcademicId())->get();
             }
             $routineDashboard = true;
-
+            
             $student_details = Auth::user()->student->load('studentRecords', 'attendances');
             $student_records = $student_details->studentRecords;
 
@@ -934,17 +937,17 @@ class SmStudentPanelController extends Controller
                 ->whereIn('school_id', $student_records->pluck('school_id'))
                 ->get();
             $complaints = SmComplaint::with('complaintType', 'complaintSource')->get();
-
+           
             $data['settings'] = SmCalendarSetting::get();
             $data['roles'] = InfixRole::where(function ($q) {
                 $q->where('school_id', auth()->user()->school_id)->orWhere('type', 'System');
             })
                 ->whereNotIn('id', [1, 2])
                 ->get();
+                
             $academicCalendar = new SmAcademicCalendarController();
-            $data['events'] = $academicCalendar->calenderData();
-
-            return view('backEnd.studentPanel.studentProfile', compact('totalSubjects', 'totalNotices', 'online_exams', 'teachers', 'issueBooks', 'homeworkLists', 'attendances', 'driver', 'student_detail', 'fees_assigneds', 'fees_discounts', 'exams', 'documents', 'timelines', 'siblings', 'grades', 'events', 'holidays', 'sm_weekends', 'records', 'student_records', 'routineDashboard', 'my_leaves', 'attendance', 'year', 'month', 'days', 'subjectAttendance', 'complaints'), $data);
+            $events = $academicCalendar->calenderData();
+            return view('backEnd.studentPanel.studentProfile', compact('events','totalSubjects', 'totalNotices', 'online_exams', 'teachers', 'issueBooks', 'homeworkLists', 'attendances', 'driver', 'student_detail', 'fees_assigneds', 'fees_discounts', 'exams', 'documents', 'timelines', 'siblings', 'grades', 'events', 'holidays', 'sm_weekends', 'records', 'student_records', 'routineDashboard', 'my_leaves', 'attendance', 'year', 'month', 'days', 'subjectAttendance', 'complaints'), $data);
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();
@@ -1538,6 +1541,8 @@ class SmStudentPanelController extends Controller
     public function studentTransport()
     {
         try {
+            $studentBehaviourRecords = (moduleStatusCheck('BehaviourRecords')) ? AssignIncident::where('student_id', auth()->user()->student->id)->with('incident', 'user', 'academicYear')->get() : null;
+            $behaviourRecordSetting = BehaviourRecordSetting::where('id', 1)->first();
             $user = Auth::user();
             $student_detail = SmStudent::where('user_id', $user->id)->first();
 
@@ -1549,7 +1554,7 @@ class SmStudentPanelController extends Controller
                 ->where('sm_assign_vehicles.school_id', Auth::user()->school_id)
                 ->get();
 
-            return view('backEnd.studentPanel.student_transport', compact('routes', 'student_detail'));
+            return view('backEnd.studentPanel.student_transport', compact('routes', 'student_detail', 'studentBehaviourRecords', 'behaviourRecordSetting'));
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();
@@ -1617,7 +1622,7 @@ class SmStudentPanelController extends Controller
             $issueBooks = SmBookIssue::where('member_id', $library_member->student_staff_id)
                 ->leftjoin('sm_books', 'sm_books.id', 'sm_book_issues.book_id')
                 ->leftjoin('library_subjects', 'library_subjects.id', 'sm_books.book_subject_id')
-                ->where('sm_book_issues.issue_status', 'I')
+                // ->where('sm_book_issues.issue_status', 'I')
                 ->where('sm_book_issues.school_id', Auth::user()->school_id)
                 ->get();
 

@@ -3,7 +3,7 @@
     @lang('homework.evaluation_report')
 @endsection
 @section('mainContent')
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('homework.evaluation_report')</h1>
@@ -18,15 +18,15 @@
     <section class="admin-visitor-area up_admin_visitor">
         <div class="container-fluid p-0">
             <div class="row">
-                <div class="col-lg-4 col-md-6">
-                    <div class="main-title">
-                        <h3 class="mb-30">@lang('common.select_criteria') </h3>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
                 <div class="col-lg-12">
                     <div class="white-box">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-6">
+                                <div class="main-title">
+                                    <h3 class="mb-15">@lang('common.select_criteria') </h3>
+                                </div>
+                            </div>
+                        </div>
                         {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'search-evaluation', 'method' => 'POST', 'enctype' => 'multipart/form-data']) }}
                         <input type="hidden" name="url" id="url" value="{{ URL::to('/') }}">
                         @if (moduleStatusCheck('University'))
@@ -145,107 +145,109 @@
         @if (@$homeworkLists)
             <div class="row mt-40">
                 <div class="col-lg-12">
-                    <div class="row">
-                        <div class="col-lg-4 no-gutters">
-                            <div class="main-title">
-                                <h3 class="mb-0">@lang('homework.evaluation_report')</h3>
+                    <div class="white-box">
+                        <div class="row">
+                            <div class="col-lg-4 no-gutters">
+                                <div class="main-title">
+                                    <h3 class="mb-15">@lang('homework.evaluation_report')</h3>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <x-table>
-                                <table id="table_id" class="table" cellspacing="0" width="100%">
-                                    <thead>
-                                        <tr>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <x-table>
+                                    <table id="table_id" class="table" cellspacing="0" width="100%">
+                                        <thead>
+                                            <tr>
+                                                @if (moduleStatusCheck('University'))
+                                                    <th>@lang('homework.home_work_date')</th>
+                                                    <th>@lang('homework.submission_date')</th>
+                                                    <th>@lang('common.action')</th>
+                                                @else
+                                                    <th>@lang('common.subject')</th>
+                                                    <th>@lang('homework.home_work_date')</th>
+                                                    <th>@lang('homework.submission_date')</th>
+                                                    <th>@lang('homework.complete/pending')</th>
+                                                    <th>@lang('homework.complete')(%)</th>
+                                                    <th>@lang('common.action')</th>
+                                                @endif
+                                            </tr>
+                                        </thead>
+                                        <tbody>
                                             @if (moduleStatusCheck('University'))
-                                                <th>@lang('homework.home_work_date')</th>
-                                                <th>@lang('homework.submission_date')</th>
-                                                <th>@lang('common.action')</th>
+                                                @foreach ($homeworkLists as $value)
+                                                    <tr>
+                                                        {{-- <td></td> --}}
+                                                        <td>{{ $value->homework_date != '' ? dateConvert($value->homework_date) : '' }}
+                                                        </td>
+                                                        <td>{{ $value->submission_date != '' ? dateConvert($value->submission_date) : '' }}
+                                                        </td>
+                                                        <td>
+                                                            <x-drop-down>
+                                                                @if (userPermission('view-evaluation-report'))
+                                                                    <a class="dropdown-item modalLink"
+                                                                        title="View Evaluation Report"
+                                                                        data-modal-size="full-width-modal"
+                                                                        href="{{ route('view-evaluation-report', @$value->id) }}">
+                                                                        @lang('common.view')
+                                                                    </a>
+                                                                @endif
+                                                            </x-drop-down>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
                                             @else
-                                                <th>@lang('common.subject')</th>
-                                                <th>@lang('homework.home_work_date')</th>
-                                                <th>@lang('homework.submission_date')</th>
-                                                <th>@lang('homework.complete/pending')</th>
-                                                <th>@lang('homework.complete')(%)</th>
-                                                <th>@lang('common.action')</th>
-                                            @endif
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @if (moduleStatusCheck('University'))
-                                            @foreach ($homeworkLists as $value)
-                                                <tr>
-                                                    {{-- <td></td> --}}
-                                                    <td>{{ $value->homework_date != '' ? dateConvert($value->homework_date) : '' }}
-                                                    </td>
-                                                    <td>{{ $value->submission_date != '' ? dateConvert($value->submission_date) : '' }}
-                                                    </td>
-                                                    <td>
-                                                        <x-drop-down>
-                                                            @if (userPermission('view-evaluation-report'))
-                                                                <a class="dropdown-item modalLink"
-                                                                    title="View Evaluation Report"
-                                                                    data-modal-size="full-width-modal"
-                                                                    href="{{ route('view-evaluation-report', @$value->id) }}">
-                                                                    @lang('common.view')
-                                                                </a>
-                                                            @endif
-                                                        </x-drop-down>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        @else
-                                            @foreach ($homeworkLists as $value)
-                                                <tr>
-                                                    <td>{{ $value->subjects != '' ? $value->subjects->subject_name : '' }}
-                                                    </td>
-                                                    <td>{{ $value->homework_date != '' ? dateConvert($value->homework_date) : '' }}
-                                                    </td>
-                                                    <td>{{ $value->submission_date != '' ? dateConvert($value->submission_date) : '' }}
-                                                    </td>
-                                                    @php
-                                                        $homeworkPercentage = App\SmHomework::getHomeworkPercentage($value->class_id, $value->section_id, $value->id);
-                                                    @endphp
-                                                    <td>
-                                                        <?php
-                                                        if (isset($homeworkPercentage)) {
-                                                            $incomplete = $homeworkPercentage['totalStudents'] - $homeworkPercentage['totalHomeworkCompleted'];
-                                                            echo $homeworkPercentage['totalHomeworkCompleted'] . '/' . $incomplete;
-                                                        }
-                                                        ?>
-                                                    </td>
-                                                    <td>
-                                                        <?php
-                                                        if (isset($homeworkPercentage)) {
-                                                            $x = $homeworkPercentage['totalHomeworkCompleted'] * 100;
-                                                            if (empty($homeworkPercentage['totalStudents']) || $homeworkPercentage['totalStudents'] < 1) {
-                                                                $y = 0;
-                                                            } else {
-                                                                $y = $x / $homeworkPercentage['totalStudents'];
+                                                @foreach ($homeworkLists as $value)
+                                                    <tr>
+                                                        <td>{{ $value->subjects != '' ? $value->subjects->subject_name : '' }}
+                                                        </td>
+                                                        <td>{{ $value->homework_date != '' ? dateConvert($value->homework_date) : '' }}
+                                                        </td>
+                                                        <td>{{ $value->submission_date != '' ? dateConvert($value->submission_date) : '' }}
+                                                        </td>
+                                                        @php
+                                                            $homeworkPercentage = App\SmHomework::getHomeworkPercentage($value->class_id, $value->section_id, $value->id);
+                                                        @endphp
+                                                        <td>
+                                                            <?php
+                                                            if (isset($homeworkPercentage)) {
+                                                                $incomplete = $homeworkPercentage['totalStudents'] - $homeworkPercentage['totalHomeworkCompleted'];
+                                                                echo $homeworkPercentage['totalHomeworkCompleted'] . '/' . $incomplete;
                                                             }
-                                                            echo number_format($y, 2);
-                                                        }
-                                                        ?>
-                                                    </td>
-                                                    <td>
-                                                        <x-drop-down>
-                                                            @if (userPermission('view-evaluation-report'))
-                                                                <a class="dropdown-item modalLink"
-                                                                    title="View Evaluation Report"
-                                                                    data-modal-size="full-width-modal"
-                                                                    href="{{ route('view-evaluation-report', @$value->id) }}">
-                                                                    @lang('common.view')
-                                                                </a>
-                                                            @endif
-                                                        </x-drop-down>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        @endif
-                                    </tbody>
-                                </table>
-                            </x-table>
+                                                            ?>
+                                                        </td>
+                                                        <td>
+                                                            <?php
+                                                            if (isset($homeworkPercentage)) {
+                                                                $x = $homeworkPercentage['totalHomeworkCompleted'] * 100;
+                                                                if (empty($homeworkPercentage['totalStudents']) || $homeworkPercentage['totalStudents'] < 1) {
+                                                                    $y = 0;
+                                                                } else {
+                                                                    $y = $x / $homeworkPercentage['totalStudents'];
+                                                                }
+                                                                echo number_format($y, 2);
+                                                            }
+                                                            ?>
+                                                        </td>
+                                                        <td>
+                                                            <x-drop-down>
+                                                                @if (userPermission('view-evaluation-report'))
+                                                                    <a class="dropdown-item modalLink"
+                                                                        title="View Evaluation Report"
+                                                                        data-modal-size="full-width-modal"
+                                                                        href="{{ route('view-evaluation-report', @$value->id) }}">
+                                                                        @lang('common.view')
+                                                                    </a>
+                                                                @endif
+                                                            </x-drop-down>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            @endif
+                                        </tbody>
+                                    </table>
+                                </x-table>
+                            </div>
                         </div>
                     </div>
                 </div>

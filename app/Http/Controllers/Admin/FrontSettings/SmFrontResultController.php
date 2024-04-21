@@ -32,7 +32,7 @@ class SmFrontResultController extends Controller
             'title' => "required",
             'publish_date' => "required",
             'link' => $request->file == null ? "required" : "nullable",
-            'file' => $request->link == null ? "required" : "nullable" . "|mimes:jpg,png,jpeg,pdf|max:" . $maxFileSize,
+            'file' => $request->link == null ? "required|mimes:jpg,png,jpeg,pdf|max:" . $maxFileSize : "nullable",
         ]);
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
@@ -76,7 +76,7 @@ class SmFrontResultController extends Controller
             'title' => "required",
             'publish_date' => "required",
             'link' => $request->file == null ? "required" : "nullable",
-            'file' => $request->link == null ? "required" : "nullable" . "|mimes:jpg,png,jpeg,pdf|max:" . $maxFileSize,
+            'file' => $request->link == null ? "required|mimes:jpg,png,jpeg,pdf|max:" . $maxFileSize : "sometimes|nullable",
         ]);
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();

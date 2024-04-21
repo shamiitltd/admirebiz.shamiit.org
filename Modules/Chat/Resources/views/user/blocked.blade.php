@@ -6,14 +6,15 @@
     <section class="admin-visitor-area up_st_admin_visitor" id="admin-visitor-area">
         <div class="container-fluid p-0">
             <div class="row justify-content-center">
-                <div class="col-xl-12">
+                <div class="col-xl-12 white-box">
 
-                    <div class="box_header">
-                        <div class="main-title">
-                            <h3 class="m-0">@lang('chat::chat.blocked_user') </h3>
+                    <div class="chat_flow_list crm_full_height ">
+
+                        <div class="box_header">
+                            <div class="main-title">
+                                <h3 class="m-0">@lang('chat::chat.blocked_user') </h3>
+                            </div>
                         </div>
-                    </div>
-                    <div class="chat_flow_list crm_full_height">
 
                         <div class="main-title2 mt-0">
                             <h4 class="">@lang('chat::chat.people')</h4>

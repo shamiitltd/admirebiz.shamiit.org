@@ -220,7 +220,7 @@ div.dt-button-collection {
 	-ms-column-gap: 8px;
 	-o-column-gap: 8px;
 	column-gap: 8px;
-	box-shadow: 0px 10px 20px rgba(108, 39, 255, 0.3);
+	box-shadow: var(--box_shadow);
 }
 div.dt-button-collection button.dt-button,
 div.dt-button-collection div.dt-button,

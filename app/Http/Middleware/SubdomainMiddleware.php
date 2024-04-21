@@ -26,7 +26,7 @@ class SubdomainMiddleware
     {
 
         $school = SaasSchool();
-
+        // dd($school);
         Session::put('domain', $school->domain);
         app()->forgetInstance('school');
         app()->instance('school', $school);
@@ -45,7 +45,7 @@ class SubdomainMiddleware
             if(activeTheme() && activeTheme() == 'edulia'){
                 $menus = SmHeaderMenuManager::when(activeTheme(), function($q){ $q->where('theme', activeTheme());})->when(activeTheme() == NULL, function($q){ $q->where('theme', 'default');})->whereNull('parent_id')->where('school_id', app('school')->id)->orderBy('position')->get();
             }else{
-                $menus = SmHeaderMenuManager::whereNull('parent_id')->where('school_id', app('school')->id)->orderBy('position')->get();
+                $menus = SmHeaderMenuManager::where('theme', 'default')->whereNull('parent_id')->where('school_id', app('school')->id)->orderBy('position')->get();
             }
 
             $data = [
@@ -55,8 +55,6 @@ class SubdomainMiddleware
                 'social_icons' => SmSocialMediaIcon::where('school_id', app('school')->id)->where('status', 1)->get(),
                 'school' => $school,
             ];
-
-           
 
             $view->with($data);
 

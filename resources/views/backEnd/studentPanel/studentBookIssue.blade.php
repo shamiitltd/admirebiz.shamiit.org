@@ -4,7 +4,7 @@
 @endsection
 
 @section('mainContent')
-<section class="sms-breadcrumb mb-40 white-box">
+<section class="sms-breadcrumb mb-20">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('library.student_book_issue')</h1>
@@ -74,6 +74,8 @@
                                         @else
                                             <button class="primary-btn small bg-success text-white border-0">@lang('library.issued')</button>
                                         @endif
+                                    @elseif ($value->issue_status == 'R')
+                                        <button class="primary-btn small bg-success text-white border-0">@lang('library.returned')</button>
                                     @endif
                                 </td>
                             </tr>

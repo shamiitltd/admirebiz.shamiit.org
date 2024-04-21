@@ -2,14 +2,16 @@
     <style>
         iframe {
             width: 100% !important;
+            height: 100% !important;
+        }
+        .google_map{
+            height: 200px;
         }
     </style>
 @endpushonce
-<div class="col-lg-12">
-    <div class="contacts_info">
-        <p>{!! pagesetting('google_map_editor') !!}</p>
-        <div class="google_map">
-            {!! pagesetting('google_map_key') !!}
-        </div>
+<div class="contacts_info mt-5">
+    <p>{!! pagesetting('google_map_editor') !!}</p>
+    <div class="google_map w-100">
+        {!! pagesetting('google_map_key') !!}
     </div>
 </div>

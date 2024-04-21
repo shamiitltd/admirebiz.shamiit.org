@@ -39,25 +39,23 @@
                 <td>
                     <h3 style="font-size:20px !important; margin: 5px 0 0 0" class="text-white mb-0"> @lang('exam.exam_routine')
                     </h3>
-                    <span style="font-size:14px !important;"
-                        class="text-white">@lang('common.academic_year') : {{ @$academic_year->title }}
+                    <span style="font-size:14px !important;" class="text-white">@lang('common.academic_year') :
+                        {{ @$academic_year->title }}
                         ({{ @$academic_year->year }}) </span> </br>
                     <span style="font-size:14px !important;margin-right:10px;" align="left"
                         class="text-white">@lang('exam.exam'): {{ @$exam_type }} </span>
- 
+
                     <span style="font-size:14px !important;margin-right:10px;" align="left"
                         class="text-white">@lang('common.class'): {{ @$class_name }} </span>
                     <span style="font-size:14px !important;;margin-right:10px;" align="left"
                         class="text-white">@lang('common.section'): {{ @$section_name }} </span>
                 </td>
                 <td style="text-aligh:center">
-                    <h3 style="font-size:20px !important; margin: 5px 0 0 0"
-                        class="text-white">
-                        {{ isset(generalSetting()->school_name) ? generalSetting()->school_name : 'Infix School Management ERP' }}
+                    <h3 style="font-size:20px !important; margin: 5px 0 0 0" class="text-white">
+                        {{ isset(generalSetting()->school_name) ? generalSetting()->school_name : 'SHAMIIT School Management ERP' }}
                     </h3>
-                    <p style="font-size:16px !important;margin:0px"
-                        class="text-white mb-0">
-                        {{ isset(generalSetting()->address) ? generalSetting()->address : 'Infix School Address' }}
+                    <p style="font-size:16px !important;margin:0px" class="text-white mb-0">
+                        {{ isset(generalSetting()->address) ? generalSetting()->address : 'SHAMIIT School Address' }}
                     </p>
                 </td>
             </tr>
@@ -69,7 +67,12 @@
                     @lang('common.date_|_day')
                 </th>
                 <th style="padding: 2px; padding-left:8px;">@lang('common.subject')</th>
-                <th style="padding: 2px; padding-left:8px;">@lang('common.class_Sec')</th>
+                @if (moduleStatusCheck('University'))
+                    <th style="padding: 2px; padding-left:8px;"> @lang('university::un.semester_label') (@lang('common.section'))</th>
+                @else
+                    <th style="padding: 2px; padding-left:8px;">@lang('common.class_Sec')</th>
+                @endif
+
                 <th style="padding: 2px; padding-left:8px;">@lang('common.teacher')</th>
                 <th style="padding: 2px; padding-left:8px;">@lang('common.time')</th>
                 <th style="padding: 2px; padding-left:8px;">@lang('common.duration')</th>
@@ -84,8 +87,18 @@
                         <td>
                             <strong> {{ $item->subject ? $item->subject->subject_name : '' }} </strong>
                         </td>
-                        <td>{{ $item->class ? $item->class->class_name : '' }}
-                            {{ $item->section ? '(' . $item->section->section_name . ')' : '' }}</td>
+                        @if (moduleStatusCheck('University'))
+                            <td>
+                                {{ $class_name }} ({{$section_name}})
+                                
+                            </td>
+                        @else
+                            <td>
+                                {{ $item->class ? $item->class->class_name : '' }}
+                                {{ $item->section ? '(' . $item->section->section_name . ')' : '' }}
+                            </td>
+                        @endif
+
                         <td>{{ $item->teacher ? $item->teacher->full_name : '' }}</td>
 
                         <td> {{ date('h:i A', strtotime(@$item->start_time)) }} -

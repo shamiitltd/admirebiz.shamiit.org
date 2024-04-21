@@ -73,8 +73,6 @@ class SmAddOnsController extends Controller
 
     public function moduleAddOnsEnable($name)
     {
-
-
         if (config('app.app_sync')) {
             return response()->json(['error' => 'Restricted in demo mode']);
         }

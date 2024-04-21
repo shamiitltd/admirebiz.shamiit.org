@@ -4,7 +4,7 @@
 @endsection
 
 @section('mainContent')
-<section class="sms-breadcrumb mb-40 white-box">
+<section class="sms-breadcrumb mb-20">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('library.parent_book_issue')</h1>
@@ -69,11 +69,13 @@
                                     $end=new DateTime($value->due_date);
                                 @endphp
                                 @if($value->issue_status == 'I')
-                                @if($end<$now)
-                                    <button class="primary-btn small bg-danger text-white border-0">@lang('library.expired')</button>
+                                    @if($end<$now)
+                                        <button class="primary-btn small bg-danger text-white border-0">@lang('library.expired')</button>
+                                    @else
+                                        <button class="primary-btn small bg-success text-white border-0">@lang('library.issued')</button>
+                                    @endif
                                 @else
-                                    <button class="primary-btn small bg-success text-white border-0">@lang('library.issued')</button>
-                                @endif
+                                    <button class="primary-btn small bg-success text-white border-0">@lang('library.returned')</button>
                                 @endif
                               </td>
                           </tr>

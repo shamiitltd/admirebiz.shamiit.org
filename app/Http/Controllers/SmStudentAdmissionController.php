@@ -446,6 +446,7 @@ class SmStudentAdmissionController extends Controller
 
     public function studentStore(Request $request)
     {
+        #dd($request->all());
         // custom field validation start
         $validator = Validator::make($request->all(), $this->generateValidateRules("student_registration"));
         if ($validator->fails()) {
@@ -893,7 +894,6 @@ class SmStudentAdmissionController extends Controller
             if ($r->hasFile('logo_pic')) {
                 $file = $r->file('logo_pic');
                 $images = Image::make($file)->insert($file);
-                return response()->json(['success' => true, 'image_data' => $images]);
                 $pathImage = 'public/uploads/student/';
                 if (!file_exists($pathImage)) {
                     mkdir($pathImage, 0777, true);
@@ -1238,7 +1238,7 @@ class SmStudentAdmissionController extends Controller
             Toastr::error('Invalid Data', 'Failed');
             return redirect()->back()->with(['studentDocuments' => 'active']);
         }
-        try {
+        try { 
             if ($request->file('photo') != "" && $request->title != "") {
 
                 $document_photo = "";
@@ -1337,47 +1337,42 @@ class SmStudentAdmissionController extends Controller
     public function studentUploadDocument(Request $request)
     {
         try {
-            try {
-                $request->validate([
-                    'title' => 'required',
-                    'photo' => "required|mimes:pdf,doc,docx,jpg,jpeg,png,txt",
-                ]);
-                if ($request->file('photo') != "" && $request->title != "") {
-                    $document_photo = "";
-                    if ($request->file('photo') != "") {
-                        $maxFileSize = SmGeneralSettings::first('file_size')->file_size;
-                        $file = $request->file('photo');
-                        $fileSize =  filesize($file);
-                        $fileSizeKb = ($fileSize / 1000000);
-                        if ($fileSizeKb >= $maxFileSize) {
-                            Toastr::error('Max upload file size ' . $maxFileSize . ' Mb is set in system', 'Failed');
-                            return redirect()->back();
-                        }
-                        $file = $request->file('photo');
-                        $document_photo = 'stu-' . md5($file->getClientOriginalName() . time()) . "." . $file->getClientOriginalExtension();
-                        $file->move('public/uploads/student/document/', $document_photo);
-                        $document_photo =  'public/uploads/student/document/' . $document_photo;
+            $request->validate([
+                'title' => 'required',
+                'photo' => "required|mimes:pdf,doc,docx,jpg,jpeg,png,txt",
+            ]);
+            if ($request->file('photo') != "" && $request->title != "") {
+                $document_photo = "";
+                if ($request->file('photo') != "") {
+                    $maxFileSize = SmGeneralSettings::first('file_size')->file_size;
+                    $file = $request->file('photo');
+                    $fileSize =  filesize($file);
+                    $fileSizeKb = ($fileSize / 1000000);
+                    if ($fileSizeKb >= $maxFileSize) {
+                        Toastr::error('Max upload file size ' . $maxFileSize . ' Mb is set in system', 'Failed');
+                        return redirect()->back();
                     }
-
-                    $document = new SmStudentDocument();
-                    $document->title = $request->title;
-                    $document->student_staff_id = $request->student_id;
-                    $document->type = 'stu';
-                    $document->file = $document_photo;
-                    $document->school_id = Auth::user()->school_id;
-                    $document->academic_id = getAcademicId();
-                    $document->save();
+                    $file = $request->file('photo');
+                    $document_photo = 'stu-' . md5($file->getClientOriginalName() . time()) . "." . $file->getClientOriginalExtension();
+                    $file->move('public/uploads/student/document/', $document_photo);
+                    $document_photo =  'public/uploads/student/document/' . $document_photo;
                 }
-            } catch (\Exception $e) {
-                Toastr::error('Input Fields Were Empty', 'Failed');
-                return redirect()->back()->with(['studentDocuments' => 'active']);
+
+                $document = new SmStudentDocument();
+                $document->title = $request->title;
+                $document->student_staff_id = $request->student_id;
+                $document->type = 'stu';
+                $document->file = $document_photo;
+                $document->school_id = Auth::user()->school_id;
+                $document->academic_id = getAcademicId();
+                $document->save();
             }
-            Toastr::success('Operation successful', 'Success');
-            return redirect()->back()->with(['studentDocuments' => 'active']);
         } catch (\Exception $e) {
-            Toastr::error('Operation Failed', 'Failed');
+            Toastr::error('Input Fields Were Empty', 'Failed');
             return redirect()->back()->with(['studentDocuments' => 'active']);
         }
+        Toastr::success('Operation successful', 'Success');
+        return redirect()->back()->with(['studentDocuments' => 'active']);
     }
 
     // timeline

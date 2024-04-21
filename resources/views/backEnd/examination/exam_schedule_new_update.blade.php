@@ -42,7 +42,7 @@
     </style>
 @endpush
 @section('mainContent')
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('exam.exam_schedule_create') </h1>
@@ -58,15 +58,15 @@
     <section class="admin-visitor-area">
         <div class="container-fluid p-0">
             <div class="row">
-                <div class="col-lg-4 col-md-6">
-                    <div class="main-title">
-                        <h3 class="mb-30">@lang('common.select_criteria') </h3>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
                 <div class="col-lg-12">
                     <div class="white-box">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-6">
+                                <div class="main-title">
+                                    <h3 class="mb-15">@lang('common.select_criteria') </h3>
+                                </div>
+                            </div>
+                        </div>
                         {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'exam_schedule_create_store', 'method' => 'post', 'enctype' => 'multipart/form-data', 'id' => 'search_student']) }}
                         <div class="row">
                             <input type="hidden" name="url" id="url" value="{{ URL::to('/') }}">
@@ -143,282 +143,284 @@
     @if (isset($exam_schedule))
         <section class="mt-20">
             <div class="container-fluid p-0">
-                <div class="row mt-40">
-                    <div class="col-lg-9 col-md-9">
-                        <div class="main-title">
-                            <h3 class="mb-30">@lang('exam.exam_schedule') |
-                                <small>
-                                    @lang('exam.exam'): {{ @$examName != '' ? $examName : ' ' }},
-                                    @lang('common.class'):
-                                    {{ @$search_current_class != '' ? $search_current_class->class_name : ' ' }},
-                                    @lang('common.section'):
-                                    {{ @$search_current_section != '' ? $search_current_section->section_name : 'All Sections' }},
-
-                                </small>
-                            </h3>
+                <div class="white-box mt-40">
+                    <div class="row">
+                        <div class="col-lg-9 col-md-9">
+                            <div class="main-title">
+                                <h3 class="mb-15">@lang('exam.exam_schedule') |
+                                    <small>
+                                        @lang('exam.exam'): {{ @$examName != '' ? $examName : ' ' }},
+                                        @lang('common.class'):
+                                        {{ @$search_current_class != '' ? $search_current_class->class_name : ' ' }},
+                                        @lang('common.section'):
+                                        {{ @$search_current_section != '' ? $search_current_section->section_name : 'All Sections' }},
+    
+                                    </small>
+                                </h3>
+                            </div>
+                        </div>
+    
+                        <div class="col-lg-3  col-md-3 mb-4 mb-md-0">
+                            <a href="{{ route('exam-routine-print', [$class_id, $section_id, $exam_type_id]) }}"
+                                class="primary-btn small fix-gr-bg pull-left" target="_blank"><i class="ti-printer"> </i>
+                                @lang('common.print')</a>
+                            <button class="primary-btn small fix-gr-bg pull-right" onclick="addRowInExamRoutine();"
+                                id="addRowBtn"> <span class="ti-plus pr-2"></span> @lang('common.add')</button>
                         </div>
                     </div>
-
-                    <div class="col-lg-3  col-md-3 mb-4 mb-md-0">
-                        <a href="{{ route('exam-routine-print', [$class_id, $section_id, $exam_type_id]) }}"
-                            class="primary-btn small fix-gr-bg pull-left" target="_blank"><i class="ti-printer"> </i>
-                            @lang('common.print')</a>
-                        <button class="primary-btn small fix-gr-bg pull-right" onclick="addRowInExamRoutine();"
-                            id="addRowBtn"> <span class="ti-plus pr-2"></span> @lang('common.add')</button>
-                    </div>
-                </div>
-
-
-                {{ Form::open([
-                    'class' => 'form-horizontal',
-                    'files' => true,
-                    'route' => 'add-exam-routine-store',
-                    'method' => 'POST',
-                    'enctype' => 'multipart/form-data',
-                    'name' => 'myForm',
-                    'id' => 'validateAddNewExamRoutine',
-                ]) }}
-
-                <input type="hidden" name="class_id" id="class_id" value="{{ @$class_id }}">
-                <input type="hidden" name="section_id" id="section_id" value="{{ @$section_id }}">
-                <input type="hidden" name="exam_type_id" id="exam_type_id" value="{{ @$exam_type_id }}">
-
-
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="table-responsive school-table-style">
-                            <table class="table" cellspacing="0" width="100%" id="examRoutineTable">
-                                <thead>
-                                    <tr>
-                                        <th>@lang('academics.subject')</th>
-                                        <th>@lang('common.class') </th>
-                                        <th>@lang('common.section')</th>
-                                        <th>@lang('common.teacher')</th>
-                                        <th>@lang('common.date') </th>
-                                        <th>@lang('academics.start_time')</th>
-                                        <th>@lang('exam.end_time')</th>
-                                        <th>@lang('common.room')</th>
-                                        <th>@lang('common.action')</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <input type="hidden" id="row_count" value="{{ $exam_schedule->count() + 1 }}">
-                                    @foreach ($exam_schedule as $row => $routine)
-                                        <tr class="0" id="row_{{ $row }}">
-                                            <td class="border-top-0">
-                                                <div class="primary_input">
-                                                    <select class="primary_select"
-                                                        name="routine[{{ $row }}][subject]" id="subject"
-                                                        data-rule-required="true" required>
-                                                        <option data-display="@lang('common.select_subject') *">@lang('common.select_subject') *
-                                                        </option>
-
-                                                        @foreach ($subjects as $subject)
-                                                            <option value="{{ $subject->id }}"
-                                                                {{ $routine->subject_id == $subject->id ? 'selected' : '' }}>
-                                                                {{ @$subject->subject_name }}</option>
-                                                        @endforeach
-                                                    </select>
-
-                                                    <span class="text-danger subject_error"></span>
-                                                </div>
-                                            </td>
-
-                                            <td class="border-top-0">
-                                                <div class="row">
-                                                    <div class="col-lg-12">
-
-                                                        <select class="primary_select  promote_class" readonly disabled
-                                                            id="promote_class" name="routine[{{ $row }}][class]"
-                                                            required>
-                                                            <option data-display="@lang('common.select_class') *" value="">
-                                                                @lang('common.select_class') *</option>
-                                                            @foreach ($classes as $class)
-                                                                <option value="{{ @$class->id }}"
-                                                                    {{ $class_id == $class->id ? 'selected' : '' }}>
-                                                                    {{ $class->class_name }}</option>
-                                                            @endforeach
-                                                        </select>
-                                                        @if ($errors->has('class'))
-                                                            <span class="text-danger invalid-select" role="alert">
-                                                                {{ $errors->first('class') }}
-                                                            </span>
-                                                        @endif
-
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="border-top-0">
-
-                                                <div class="row">
-
-                                                    <div class="col-lg-12" id="promote_section_div">
-
+    
+    
+                    {{ Form::open([
+                        'class' => 'form-horizontal',
+                        'files' => true,
+                        'route' => 'add-exam-routine-store',
+                        'method' => 'POST',
+                        'enctype' => 'multipart/form-data',
+                        'name' => 'myForm',
+                        'id' => 'validateAddNewExamRoutine',
+                    ]) }}
+    
+                    <input type="hidden" name="class_id" id="class_id" value="{{ @$class_id }}">
+                    <input type="hidden" name="section_id" id="section_id" value="{{ @$section_id }}">
+                    <input type="hidden" name="exam_type_id" id="exam_type_id" value="{{ @$exam_type_id }}">
+    
+    
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="table-responsive school-table-style">
+                                <table class="table" cellspacing="0" width="100%" id="examRoutineTable">
+                                    <thead>
+                                        <tr>
+                                            <th>@lang('academics.subject')</th>
+                                            <th>@lang('common.class') </th>
+                                            <th>@lang('common.section')</th>
+                                            <th>@lang('common.teacher')</th>
+                                            <th>@lang('common.date') </th>
+                                            <th>@lang('academics.start_time')</th>
+                                            <th>@lang('exam.end_time')</th>
+                                            <th>@lang('common.room')</th>
+                                            <th>@lang('common.action')</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <input type="hidden" id="row_count" value="{{ $exam_schedule->count() + 1 }}">
+                                        @foreach ($exam_schedule as $row => $routine)
+                                            <tr class="0" id="row_{{ $row }}">
+                                                <td class="border-top-0">
+                                                    <div class="primary_input">
                                                         <select class="primary_select"
-                                                            name="routine[{{ $row }}][section]" required>
-
-                                                            <option data-display="@lang('common.select_section') *" value="">
-                                                                @lang('common.select_section') *
+                                                            name="routine[{{ $row }}][subject]" id="subject"
+                                                            data-rule-required="true" required>
+                                                            <option data-display="@lang('common.select_subject') *">@lang('common.select_subject') *
                                                             </option>
-
-                                                            @foreach ($search_current_class->classSection as $section)
-                                                                <option value="{{ $section->sectionName->id }}"
-                                                                    {{ $routine->section_id == $section->sectionName->id ? 'selected' : '' }}>
-                                                                    {{ $section->sectionName->section_name }}</option>
+    
+                                                            @foreach ($subjects as $subject)
+                                                                <option value="{{ $subject->id }}"
+                                                                    {{ $routine->subject_id == $subject->id ? 'selected' : '' }}>
+                                                                    {{ @$subject->subject_name }}</option>
                                                             @endforeach
-
-
                                                         </select>
-
-                                                        @if ($errors->has('section'))
-                                                            <span class="text-danger invalid-select" role="alert">
-                                                                {{ $errors->first('section') }}</span>
-                                                        @endif
-
+    
+                                                        <span class="text-danger subject_error"></span>
                                                     </div>
-                                                </div>
-                                            </td>
-                                            <td class="border-top-0">
-                                                <div class="row " id="teacher-div">
-                                                    <div class="col-lg-12">
-                                                        <select class="primary_select  form-control"
-                                                            name="routine[{{ $row }}][teacher_id]">
-                                                            <option data-display="@lang('common.select_teacher')" required
-                                                                value="">@lang('common.select_teacher')</option>
-                                                            @foreach ($teachers as $teacher)
-                                                                <option value="{{ @$teacher->id }}"
-                                                                    {{ $routine->teacher_id == $teacher->id ? 'selected' : '' }}>
-                                                                    {{ @$teacher->full_name }}</option>
-                                                            @endforeach
-                                                        </select>
-                                                        <div class="pull-right loader loader_style"
-                                                            id="select_teacher_loader">
-                                                            <img class="loader_img_style"
-                                                                src="{{ asset('public/backEnd/img/demo_wait.gif') }}"
-                                                                alt="loader">
+                                                </td>
+    
+                                                <td class="border-top-0">
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+    
+                                                            <select class="primary_select  promote_class" readonly disabled
+                                                                id="promote_class" name="routine[{{ $row }}][class]"
+                                                                required>
+                                                                <option data-display="@lang('common.select_class') *" value="">
+                                                                    @lang('common.select_class') *</option>
+                                                                @foreach ($classes as $class)
+                                                                    <option value="{{ @$class->id }}"
+                                                                        {{ $class_id == $class->id ? 'selected' : '' }}>
+                                                                        {{ $class->class_name }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                            @if ($errors->has('class'))
+                                                                <span class="text-danger invalid-select" role="alert">
+                                                                    {{ $errors->first('class') }}
+                                                                </span>
+                                                            @endif
+    
                                                         </div>
-                                                        <span class="text-danger" id="teacher_error"></span>
                                                     </div>
-                                                </div>
-                                            </td>
-                                            <td class="border-top-0">
-
-                                                <div class="col-lg-12">
-                                                    <div class="primary_input mb-15">
-
-                                                        <div class="primary_datepicker_input">
-                                                            <div class="no-gutters input-right-icon">
-                                                                <div class="col">
-                                                                    <div class="">
-                                                                        <input
-                                                                            class="primary_input_field primary_input_field date form-control"
-                                                                            id="startDate" type="text"
-                                                                            name="routine[{{ $row }}][date]"
-                                                                            value="{{ isset($routine) ? date('m/d/Y', strtotime(@$routine->date)) : date('m/d/Y') }}"
-                                                                            autocomplete="off" required>
+                                                </td>
+                                                <td class="border-top-0">
+    
+                                                    <div class="row">
+    
+                                                        <div class="col-lg-12" id="promote_section_div">
+    
+                                                            <select class="primary_select"
+                                                                name="routine[{{ $row }}][section]" required>
+    
+                                                                <option data-display="@lang('common.select_section') *" value="">
+                                                                    @lang('common.select_section') *
+                                                                </option>
+    
+                                                                @foreach ($search_current_class->classSection as $section)
+                                                                    <option value="{{ $section->sectionName->id }}"
+                                                                        {{ $routine->section_id == $section->sectionName->id ? 'selected' : '' }}>
+                                                                        {{ $section->sectionName->section_name }}</option>
+                                                                @endforeach
+    
+    
+                                                            </select>
+    
+                                                            @if ($errors->has('section'))
+                                                                <span class="text-danger invalid-select" role="alert">
+                                                                    {{ $errors->first('section') }}</span>
+                                                            @endif
+    
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="border-top-0">
+                                                    <div class="row " id="teacher-div">
+                                                        <div class="col-lg-12">
+                                                            <select class="primary_select  form-control"
+                                                                name="routine[{{ $row }}][teacher_id]">
+                                                                <option data-display="@lang('common.select_teacher')" required
+                                                                    value="">@lang('common.select_teacher')</option>
+                                                                @foreach ($teachers as $teacher)
+                                                                    <option value="{{ @$teacher->id }}"
+                                                                        {{ $routine->teacher_id == $teacher->id ? 'selected' : '' }}>
+                                                                        {{ @$teacher->full_name }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                            <div class="pull-right loader loader_style"
+                                                                id="select_teacher_loader">
+                                                                <img class="loader_img_style"
+                                                                    src="{{ asset('public/backEnd/img/demo_wait.gif') }}"
+                                                                    alt="loader">
+                                                            </div>
+                                                            <span class="text-danger" id="teacher_error"></span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="border-top-0">
+    
+                                                    <div class="col-lg-12">
+                                                        <div class="primary_input mb-15">
+    
+                                                            <div class="primary_datepicker_input">
+                                                                <div class="no-gutters input-right-icon">
+                                                                    <div class="col">
+                                                                        <div class="">
+                                                                            <input
+                                                                                class="primary_input_field primary_input_field date form-control"
+                                                                                id="startDate" type="text"
+                                                                                name="routine[{{ $row }}][date]"
+                                                                                value="{{ isset($routine) ? date('m/d/Y', strtotime(@$routine->date)) : date('m/d/Y') }}"
+                                                                                autocomplete="off" required>
+                                                                        </div>
                                                                     </div>
+                                                                    <button class="btn-date" data-id="#date_of_birth"
+                                                                        type="button">
+                                                                        <i class="ti-calendar" id="start-date-icon"></i>
+                                                                    </button>
                                                                 </div>
-                                                                <button class="btn-date" data-id="#date_of_birth"
-                                                                    type="button">
-                                                                    <i class="ti-calendar" id="start-date-icon"></i>
-                                                                </button>
+                                                            </div>
+    
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="border-top-0">
+                                                    <div class="row no-gutters input-right-icon">
+                                                        <div class="col">
+                                                            <div class="primary_input">
+                                                                <input
+                                                                    class="primary_input_field primary_input_field time start_time_required start_time  form-control{{ @$errors->has('start_time') ? ' is-invalid' : '' }}"
+                                                                    type="text" id="start_time_{{ $row }}"
+                                                                    name="routine[{{ $row }}][start_time]"
+                                                                    value="{{ isset($routine) ? $routine->start_time : '' }}"
+                                                                    required>
+    
+    
+                                                                <span class="text-danger start_time_error"></span>
                                                             </div>
                                                         </div>
-
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="border-top-0">
-                                                <div class="row no-gutters input-right-icon">
-                                                    <div class="col">
-                                                        <div class="primary_input">
-                                                            <input
-                                                                class="primary_input_field primary_input_field time start_time_required start_time  form-control{{ @$errors->has('start_time') ? ' is-invalid' : '' }}"
-                                                                type="text" id="start_time_{{ $row }}"
-                                                                name="routine[{{ $row }}][start_time]"
-                                                                value="{{ isset($routine) ? $routine->start_time : '' }}"
-                                                                required>
-
-
-                                                            <span class="text-danger start_time_error"></span>
+                                                        <div class="col-auto">
+                                                            <button class="" type="button">
+                                                                <i class="ti-timer"></i>
+                                                            </button>
                                                         </div>
                                                     </div>
-                                                    <div class="col-auto">
-                                                        <button class="" type="button">
-                                                            <i class="ti-timer"></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
-
-                                            </td>
-
-                                            <td class="border-top-0">
-                                                <div class="row no-gutters input-right-icon">
-                                                    <div class="col">
-                                                        <div class="primary_input">
-                                                            <input
-                                                                class="primary_input_field primary_input_field time end_time form-control{{ @$errors->has('end_time') ? ' is-invalid' : '' }}"
-                                                                id="end_time_{{ $row }}" type="text"
-                                                                name="routine[{{ $row }}][end_time]"
-                                                                data-row_id="{{ $row }}"
-                                                                value="{{ isset($routine) ? $routine->end_time : '' }}"
-                                                                required>
-
-
-                                                            <span class="text-danger end_time_error"></span>
+    
+                                                </td>
+    
+                                                <td class="border-top-0">
+                                                    <div class="row no-gutters input-right-icon">
+                                                        <div class="col">
+                                                            <div class="primary_input">
+                                                                <input
+                                                                    class="primary_input_field primary_input_field time end_time form-control{{ @$errors->has('end_time') ? ' is-invalid' : '' }}"
+                                                                    id="end_time_{{ $row }}" type="text"
+                                                                    name="routine[{{ $row }}][end_time]"
+                                                                    data-row_id="{{ $row }}"
+                                                                    value="{{ isset($routine) ? $routine->end_time : '' }}"
+                                                                    required>
+    
+    
+                                                                <span class="text-danger end_time_error"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-auto">
+                                                            <button class="" type="button">
+                                                                <i class="ti-timer"></i>
+                                                            </button>
                                                         </div>
                                                     </div>
-                                                    <div class="col-auto">
-                                                        <button class="" type="button">
-                                                            <i class="ti-timer"></i>
+                                                </td>
+    
+    
+                                                <td class="border-top-0">
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                            <select class="primary_select  form-control"
+                                                                name="routine[{{ $row }}][room]" id="room"
+                                                                required>
+                                                                <option data-display="@lang('common.select_room') *" value="">
+                                                                    @lang('common.select_room') *</option>
+                                                                @foreach ($rooms as $room)
+                                                                    <option value="{{ @$room->id }}"
+                                                                        {{ isset($routine) ? ($routine->room_id == $room->id ? 'selected' : '') : '' }}>
+                                                                        {{ @$room->room_no }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                            <span class="text-danger" id="room_error"></span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="border-top-0">
+    
+                                                    @if (userPermission('delete-class-routine'))
+                                                        <button class="primary-btn icon-only fix-gr-bg removeExamRoutineRowBtn"
+                                                            data-row_id="{{ $row }}"
+                                                            data-exam_routine_id="{{ $routine->id }}" type="button">
+                                                            <span class="ti-trash"></span>
                                                         </button>
-                                                    </div>
-                                                </div>
-                                            </td>
-
-
-                                            <td class="border-top-0">
-                                                <div class="row">
-                                                    <div class="col-lg-12">
-                                                        <select class="primary_select  form-control"
-                                                            name="routine[{{ $row }}][room]" id="room"
-                                                            required>
-                                                            <option data-display="@lang('common.select_room') *" value="">
-                                                                @lang('common.select_room') *</option>
-                                                            @foreach ($rooms as $room)
-                                                                <option value="{{ @$room->id }}"
-                                                                    {{ isset($routine) ? ($routine->room_id == $room->id ? 'selected' : '') : '' }}>
-                                                                    {{ @$room->room_no }}</option>
-                                                            @endforeach
-                                                        </select>
-                                                        <span class="text-danger" id="room_error"></span>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="border-top-0">
-
-                                                @if (userPermission('delete-class-routine'))
-                                                    <button class="primary-btn icon-only fix-gr-bg removeExamRoutineRowBtn"
-                                                        data-row_id="{{ $row }}"
-                                                        data-exam_routine_id="{{ $routine->id }}" type="button">
-                                                        <span class="ti-trash"></span>
-                                                    </button>
-                                                @endif
-
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                                    @endif
+    
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="col-lg-12 mt-20 text-center">
-                    <button class="primary-btn fix-gr-bg">
-                        <span class="ti-check"></span>
-                        @lang('common.save')
-                    </button>
+    
+                    <div class="col-lg-12 mt-20 text-center">
+                        <button class="primary-btn fix-gr-bg">
+                            <span class="ti-check"></span>
+                            @lang('common.save')
+                        </button>
+                    </div>
                 </div>
                 {{ Form::close() }}
             </div>

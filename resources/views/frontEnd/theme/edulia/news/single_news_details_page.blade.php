@@ -1,5 +1,6 @@
 @extends(config('pagebuilder.site_layout'),['edit' => false ])
 @section(config('pagebuilder.site_section'))
+{{headerContent()}}
 <style>
     .cmt_rp_fornt{
         padding: 10px 21px;
@@ -10,8 +11,6 @@
         gap: 10px;
     }
 </style>
-
-{{headerContent()}}
     <section class="bradcrumb_area" style="background-image:url('{{asset($news->image)}}')">
         <div class="container">
             <div class="row">
@@ -65,8 +64,6 @@
             </div>
         </div>
     </section>
-
-    {{footerContent()}}
 @endsection
 @pushonce(config('pagebuilder.site_script_var'))
 <script>

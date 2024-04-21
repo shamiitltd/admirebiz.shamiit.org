@@ -1,5 +1,6 @@
 <div class="container-fluid">
     <div class="col-lg-12 mb-20">
+        <div class="table-responsive">
         <table class="table" cellspacing="0"
             width="100%">
             <thead>
@@ -37,5 +38,6 @@
                 @endforeach
             </tbody>
         </table>
+        </div>
     </div>
 </div>

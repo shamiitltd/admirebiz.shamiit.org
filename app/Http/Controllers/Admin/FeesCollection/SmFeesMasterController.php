@@ -854,6 +854,11 @@ class SmFeesMasterController extends Controller
     public function feesUnassignAll(Request $request)
     {
         try{
+            $assigned_fees = SmFeesAssign::get();
+            if($assigned_fees->all() == null){
+                Toastr::error('No fees assigned yet', 'Failed');
+                return redirect()->route('fees_assign', $request->fees_group_id);
+            }
             $fees_masters = SmFeesMaster::where('fees_group_id', $request->fees_group_id)
                 ->where('school_id', Auth::user()->school_id)
                 ->get();

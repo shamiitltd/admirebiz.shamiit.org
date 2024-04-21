@@ -3,7 +3,7 @@
     @lang('examplan::exp.seat_plan_setting')
 @endsection
 @section('mainContent')
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('examplan::exp.seat_plan_setting')</h1>
@@ -23,12 +23,12 @@
                     <div class="">
                         <div class="row">
                             <div class="col-lg-12">
-                                <div class="white_box_30px mt-5">
+                                <div class="white_box_30px">
                                     <!-- SMTP form  -->
-                                    <div class="main-title mb-25">
+                                    <div class="main-title mb-15">
                                         <h3 class="mb-0">@lang('examplan::exp.seat_plan_setting')</h3>
                                     </div>
-                                    <form action="{{ route('examplan.seatplan.settingUpdate') }}" method="post" class="bg-white p-4 rounded">
+                                    <form action="{{ route('examplan.seatplan.settingUpdate') }}" method="post" class="bg-white rounded">
                                         @csrf
                                         <div class="row">
                                             <div class="col-lg-6 d-flex relation-button justify-content-between mb-3 justify-content-between">

@@ -36,7 +36,7 @@ return [
                     'id'            => 'icon_class',
                     'type'          => 'text',
                     'value'         => '',
-                    'class'         => 'icon_picker',
+                    'class'         => '',
                     'label_title'   => __('edulia.font_awsome_class'),
                     'placeholder'   => __('edulia.example'),
                     'field_desc'    => __('edulia.only_use_fontawsome_version_5'),

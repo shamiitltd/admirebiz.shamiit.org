@@ -48,7 +48,7 @@
     }
 
     input:checked + .slider {
-        background: linear-gradient(90deg, var(--gradient_1) 0%, #c738d8 51%, var(--gradient_1) 100%);
+        background: var(--primary-color);
     }
 
     input:focus + .slider {
@@ -95,7 +95,7 @@
     margin-bottom: 20px;
 }
 </style>
-<section class="sms-breadcrumb mb-40 white-box up_breadcrumb">
+<section class="sms-breadcrumb mb-20 up_breadcrumb">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('common.email_template')</h1>

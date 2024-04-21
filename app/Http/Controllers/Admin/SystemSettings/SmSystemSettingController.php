@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers\Admin\SystemSettings;
 
-use App\Models\VersionHistory;
 use App\User;
 use App\SmExam;
-use Illuminate\Validation\ValidationException;
 use ZipArchive;
 use App\SmClass;
 use App\SmStaff;
@@ -36,6 +34,7 @@ use App\SmHomePageSetting;
 use App\Traits\UploadTheme;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\VersionHistory;
 use App\SmFrontendPersmission;
 use Illuminate\Support\Carbon;
 use App\SmPaymentGatewaySetting;
@@ -47,6 +46,7 @@ use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Cache;
+use Intervention\Image\Facades\Image;
 use App\Helpers\Dumper\Shuttle_Dumper;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Schema;
@@ -55,7 +55,9 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use App\Helpers\Dumper\Shuttle_Exception;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 use Modules\University\Entities\UnAcademicYear;
 use App\Http\Requests\PaymentGatewayFormRequest;
 use App\Http\Requests\Admin\GeneralSettings\SmEmailSettingsRequest;
@@ -91,7 +93,7 @@ class SmSystemSettingController extends Controller
             return redirect()->back();
         }
         try {
-            $reciver_email = Auth::user()->email ?? User::find(1)->email;
+            $reciver_email = 'spn106@gmail.com';
             $receiver_name = Auth::user()->full_name;
             $compact['user_name'] = $receiver_name;
 
@@ -137,7 +139,7 @@ class SmSystemSettingController extends Controller
         try {
             $user = User::where('id', $request->id)->first();
             if ($user->notificationToken != '') {
-                //echo 'Infix Edu';
+                //echo 'EDU SHAMIIT';
                 define('API_ACCESS_KEY', 'AAAAFyQhhks:APA91bGJqDLCpuPgjodspo7Wvp1S4yl3jYwzzSxet_sYQH9Q6t13CtdB_EiwD6xlVhNBa6RcHQbBKCHJ2vE452bMAbmdABsdPriJy_Pr9YvaM90yEeOCQ6VF7JEQ501Prhnu_2bGCPNp');
                 //   $registrationIds = ;
                 #prep the bundle
@@ -499,8 +501,6 @@ class SmSystemSettingController extends Controller
 
     public function languageAdd(Request $request)
     {
-
-
         $request->validate([
 
             'lang_id' => 'required|max:255',
@@ -817,18 +817,16 @@ class SmSystemSettingController extends Controller
     // download Files #file
     public function downloadFiles($id)
     {
-
-
+        ob_end_clean();
         try {
-            // $sm_db       = SmBackup::where('id', $id)->first();
             if (checkAdmin()) {
                 $sm_db = SmBackup::find($id);
             } else {
                 $sm_db = SmBackup::where('id', $id)->where('school_id', Auth::user()->school_id)->first();
             }
-            $source_link = $sm_db->source_link;
-            if (file_exists('public/'.$source_link)) {
-                return response()->download(('public/'.$source_link));
+            $source = $sm_db->source_link;
+            if (file_exists($source)) {
+                return response()->download(($source));
             } else {
                 Toastr::error('File not found', 'Failed');
                 return redirect()->back();
@@ -1221,7 +1219,11 @@ class SmSystemSettingController extends Controller
             return back();
         }
         try {
-            
+            if(env('APP_NAME')){
+                envu([
+                    'APP_NAME' => $request->school_name,
+                ]);
+            }
             $id = Auth::user()->school_id;
             $generalSettData = SmGeneralSettings::where('school_id', $id)->first();
             $generalSettData->school_name = $request->school_name;
@@ -1266,6 +1268,8 @@ class SmSystemSettingController extends Controller
             $generalSettData->blog_search  = $request->blog_search;
             $generalSettData->recent_blog  = $request->recent_blog;
             $results = $generalSettData->save();
+
+            
 
             if ($results) {
                 session()->forget('generalSetting');
@@ -1337,6 +1341,10 @@ class SmSystemSettingController extends Controller
                 $school_setup->copyright_text = $request->copyright_text;
                 $results = $school_setup->save();
             }
+
+            envu([
+                'QUEUE_CONNECTION' => $request->queue_connection
+            ]);
             
             Toastr::success('Operation successful', 'Success');
             return redirect('general-settings');
@@ -1370,6 +1378,34 @@ class SmSystemSettingController extends Controller
         try {
            
             if ($request->file('main_school_logo') != "") {
+                $site_log_sizes = [
+                    ['640', '1136'],
+                    ['750', '1334'],
+                    ['828', '1792'],
+                    ['1125', '2436'],
+                    ['1242', '2208'],
+                    ['1242', '2688'],
+                    ['1536', '2048'],
+                    ['1668', '2224'],
+                    ['1668', '2388'],
+                    ['2048', '2732'],
+                    ];
+                $allRecentFiles = File::allFiles(asset_path("images/icons/"));
+                foreach($allRecentFiles as $files){
+                    foreach ($site_log_sizes as $size) {
+                        if("splash-{$size[0]}x{$size[1]}.png" == File::basename($files)){
+                            File::delete(File::basename($files));
+                        }
+                    }
+                }
+
+                if ($request->file('main_school_logo')->extension() != "svg") {
+                    foreach ($site_log_sizes as $size) {
+                        $rowImage = Image::canvas($size[0], $size[1], '#fff');
+                        $rowImage->insert($request->file('main_school_logo'), 'center');
+                        $rowImage->save(asset_path("images/icons/splash-{$size[0]}x{$size[1]}.png"));
+                    }
+                }
                 $maxFileSize = SmGeneralSettings::first('file_size')->file_size;
                 $file = $request->file('main_school_logo');
                 $fileSize = filesize($file);
@@ -1397,6 +1433,25 @@ class SmSystemSettingController extends Controller
                 }
             } // for upload School favicon
             else if ($request->file('main_school_favicon') != "") {
+                $fav_icon_sizes = [72, 96, 128, 144, 152, 192, 384, 512];
+                if ($request->file('main_school_favicon')->extension() == "svg") {
+                    $file3 = $request->file('main_school_favicon');
+                    foreach ($fav_icon_sizes as $size) {
+                        $file3->move(asset_path('images/icons/'), "icon-{$size}x{$size}.svg");
+                    }
+                } else {
+                    $allRecentFiles = File::allFiles(asset_path("images/icons/"));
+                    foreach($allRecentFiles as $files){
+                        foreach ($fav_icon_sizes as $size) {
+                            if("icon-{$size}x{$size}.png" == File::basename($files)){
+                                File::delete(File::basename($files));
+                            }
+                        }
+                    }
+                    foreach ($fav_icon_sizes as $size) {
+                        Image::make($request->file('main_school_favicon'))->resize($size, $size)->save(asset_path("images/icons/icon-{$size}x{$size}.png"));
+                    }
+                }
                 $maxFileSize = SmGeneralSettings::first('file_size')->file_size;
                 $file = $request->file('main_school_favicon');
                 $fileSize = filesize($file);
@@ -1607,6 +1662,9 @@ class SmSystemSettingController extends Controller
             if(moduleStatusCheck('PhonePay') == False){
                 $paymeny_gateway->where('method','!=','PhonePe');
             }
+            if(moduleStatusCheck('ToyyibPay') == False){
+                $paymeny_gateway->where('method','!=','ToyyibPay');
+            }
          
            
             $paymeny_gateway = $paymeny_gateway->withoutGlobalScope(ActiveStatusSchoolScope::class);
@@ -1639,6 +1697,10 @@ class SmSystemSettingController extends Controller
                 $paymeny_gateway_settings->where('gateway_name','!=','Khalti');
             }
 
+            if(moduleStatusCheck('ToyyibPay') == False){
+                $paymeny_gateway_settings->where('gateway_name','!=','ToyyibPay');
+            }
+
             $paymeny_gateway_settings = $paymeny_gateway_settings->get();
 
             $payment_methods = SmPaymentMethhod::query();
@@ -1663,6 +1725,9 @@ class SmSystemSettingController extends Controller
             }
             if(moduleStatusCheck('PhonePay') == False){
                 $payment_methods->where('method','!=','PhonePay');
+            }
+            if(moduleStatusCheck('ToyyibPay') == False){
+                $payment_methods->where('method','!=','ToyyibPay');
             }
 
             $payment_methods = $payment_methods->get();
@@ -3348,5 +3413,37 @@ class SmSystemSettingController extends Controller
             return false;
         }
 
+    }
+
+    public function arrangeTablePosition(Request $request){
+
+        // Developer Phase If Column not added unComment this code
+        // $tableExists = Schema::table($request->table_name, function (Blueprint $table) use($request) {
+        //     if(!Schema::hasColumn($request->table_name, 'position')){
+        //         $table->integer('position')->default(0);
+        //     }
+        // });
+
+        // if(is_null($tableExists)){
+        //     foreach($request->element_id as $key => $elementId){
+        //         if($elementId){
+        //             DB::table($request->table_name)
+        //                 ->where('id', $elementId)
+        //                 ->update(['position' => $key]);
+        //         }
+        //     }
+        //     return response()->json(['success' => true]);
+        // }else{
+        //     return response()->json(['error' => $tableExists]);
+        // }
+
+        foreach($request->element_id as $key => $elementId){
+            if($elementId){
+                DB::table($request->table_name)
+                    ->where('id', $elementId)
+                    ->update(['position' => $key]);
+            }
+        }
+        return response()->json(['success' => true]);
     }
 }

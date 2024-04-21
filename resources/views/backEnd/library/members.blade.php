@@ -10,9 +10,18 @@
             .forParentWrapper {
                 display: none;
             }
+
+            .child .dtr-data{
+                word-break: break-word;
+            }
+            a.primary-btn.fix-gr-bg {
+                line-height: 1.2;
+                padding: 8px;
+                font-size: 11px!important;
+            }
         </style>
     @endpush
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('library.add_member')</h1>
@@ -43,15 +52,6 @@
                 <div class="col-lg-3">
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="main-title">
-                                <h3 class="mb-15">
-                                    @if (isset($editData))
-                                        @lang('library.edit_member')
-                                    @else
-                                        @lang('library.add_member')
-                                    @endif
-                                </h3>
-                            </div>
                             @if (isset($editData))
                                 {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'url' => 'holiday/' . $editData->id, 'method' => 'PUT', 'enctype' => 'multipart/form-data']) }}
                             @else
@@ -66,6 +66,15 @@
                                 @endif
                             @endif
                             <div class="white-box">
+                                <div class="main-title">
+                                    <h3 class="mb-15">
+                                        @if (isset($editData))
+                                            @lang('library.edit_member')
+                                        @else
+                                            @lang('library.add_member')
+                                        @endif
+                                    </h3>
+                                </div>
                                 <div class="add-visitor">
                                     <div class="row">
 
@@ -148,6 +157,8 @@
                                                             {{ __('common.section') }}
                                                             <span class="text-danger"> *</span>
                                                         </label>
+                                                        <input type="hidden" id="member_type_hidden" name="member_type_hidden"  value="">
+                                                        <input type="hidden" id="is_alumni" value="{{ App\GlobalVariable::isAlumni() }}">
                                                         <select
                                                             class="primary_select form-control{{ $errors->has('section') ? ' is-invalid' : '' }}"
                                                             id="select_section_member" name="section">
@@ -320,108 +331,110 @@
                 </div>
 
                 <div class="col-lg-9">
-                    <div class="row">
-                        <div class="col-lg-4 no-gutters">
-                            <div class="main-title">
-                                <h3 class="mb-0">@lang('library.members')</h3>
+                    <div class="white-box">
+                        <div class="row">
+                            <div class="col-lg-4 no-gutters">
+                                <div class="main-title">
+                                    <h3 class="mb-15">@lang('library.members')</h3>
+                                </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="row">
-
-                        <div class="col-lg-12">
-                            <x-table>
-                                <table id="table_id" class="table" cellspacing="0" width="100%">
-
-                                    <thead>
-
-                                        <tr>
-                                            <th>@lang('common.sl')</th>
-                                            <th>@lang('common.name')</th>
-                                            <th>@lang('library.member_type')</th>
-                                            <th>@lang('library.member_id')</th>
-                                            <th>@lang('common.email')</th>
-                                            <th>@lang('common.mobile')</th>
-                                            <th>@lang('common.action')</th>
-                                        </tr>
-                                    </thead>
-
-                                    <tbody>
-                                        @if (isset($libraryMembers))
-                                            @foreach ($libraryMembers as $key => $value)
-                                                <tr>
-                                                    <td>{{ $key + 1 }}</td>
-                                                    <td>
-                                                        <?php
-                                                        if ($value->member_type == '2') {
-                                                            if (!empty($value->studentDetails) && !empty($value->studentDetails->full_name)) {
-                                                                echo $value->studentDetails->full_name;
+    
+                        <div class="row">
+    
+                            <div class="col-lg-12">
+                                <x-table>
+                                    <table id="table_id" class="table" cellspacing="0" width="100%">
+    
+                                        <thead>
+    
+                                            <tr>
+                                                <th>@lang('common.sl')</th>
+                                                <th>@lang('common.name')</th>
+                                                <th>@lang('library.member_type')</th>
+                                                <th>@lang('library.member_id')</th>
+                                                <th>@lang('common.email')</th>
+                                                <th>@lang('common.mobile')</th>
+                                                <th>@lang('common.action')</th>
+                                            </tr>
+                                        </thead>
+    
+                                        <tbody>
+                                            @if (isset($libraryMembers))
+                                                @foreach ($libraryMembers as $key => $value)
+                                                    <tr>
+                                                        <td>{{ $key + 1 }}</td>
+                                                        <td>
+                                                            <?php
+                                                            if ($value->member_type == '2' || $value->member_type == '10') {
+                                                                if (!empty($value->studentDetails) && !empty($value->studentDetails->full_name)) {
+                                                                    echo $value->studentDetails->full_name;
+                                                                }
+                                                            } elseif ($value->member_type == '3') {
+                                                                if (!empty($value->parentsDetails)) {
+                                                                    echo $value->parentsDetails->fathers_name ? $value->parentsDetails->fathers_name : $value->parentsDetails->guardians_name;
+                                                                }
+                                                            } else {
+                                                                if (!empty($value->staffDetails) && !empty($value->staffDetails->full_name)) {
+                                                                    echo $value->staffDetails->full_name;
+                                                                }
                                                             }
-                                                        } elseif ($value->member_type == '3') {
-                                                            if (!empty($value->parentsDetails)) {
-                                                                echo $value->parentsDetails->fathers_name ? $value->parentsDetails->fathers_name : $value->parentsDetails->guardians_name;
+                                                            
+                                                            ?>
+    
+                                                        </td>
+                                                        <td>{{ !empty($value->roles) ? $value->roles->name : '' }}</td>
+                                                        <td>{{ $value->member_ud_id }}</td>
+                                                        <td>
+                                                            <?php
+                                                            if ($value->member_type == '2' || $value->member_type == '10') {
+                                                                if (!empty($value->studentDetails) && !empty($value->studentDetails->email)) {
+                                                                    echo $value->studentDetails->email;
+                                                                }
+                                                            } elseif ($value->member_type == '3') {
+                                                                if (!empty($value->parentsDetails) && !empty($value->parentsDetails->guardians_email)) {
+                                                                    echo $value->parentsDetails->guardians_email;
+                                                                }
+                                                            } else {
+                                                                if (!empty($value->staffDetails) && !empty($value->staffDetails->email)) {
+                                                                    echo $value->staffDetails->email;
+                                                                }
                                                             }
-                                                        } else {
-                                                            if (!empty($value->staffDetails) && !empty($value->staffDetails->full_name)) {
-                                                                echo $value->staffDetails->full_name;
+                                                            
+                                                            ?>
+    
+                                                        </td>
+                                                        <td>
+                                                            <?php
+                                                            if ($value->member_type == '2' || $value->member_type == '10') {
+                                                                if (!empty($value->studentDetails) && !empty($value->studentDetails->mobile)) {
+                                                                    echo $value->studentDetails->mobile;
+                                                                }
+                                                            } elseif ($value->member_type == '3') {
+                                                                if (!empty($value->parentsDetails) && !empty($value->parentsDetails->fathers_mobile)) {
+                                                                    echo $value->parentsDetails->fathers_mobile;
+                                                                }
+                                                            } else {
+                                                                if (!empty($value->staffDetails) && !empty($value->staffDetails->mobile)) {
+                                                                    echo $value->staffDetails->mobile;
+                                                                }
                                                             }
-                                                        }
-                                                        
-                                                        ?>
-
-                                                    </td>
-                                                    <td>{{ !empty($value->roles) ? $value->roles->name : '' }}</td>
-                                                    <td>{{ $value->member_ud_id }}</td>
-                                                    <td>
-                                                        <?php
-                                                        if ($value->member_type == '2') {
-                                                            if (!empty($value->studentDetails) && !empty($value->studentDetails->email)) {
-                                                                echo $value->studentDetails->email;
-                                                            }
-                                                        } elseif ($value->member_type == '3') {
-                                                            if (!empty($value->parentsDetails) && !empty($value->parentsDetails->guardians_email)) {
-                                                                echo $value->parentsDetails->guardians_email;
-                                                            }
-                                                        } else {
-                                                            if (!empty($value->staffDetails) && !empty($value->staffDetails->email)) {
-                                                                echo $value->staffDetails->email;
-                                                            }
-                                                        }
-                                                        
-                                                        ?>
-
-                                                    </td>
-                                                    <td>
-                                                        <?php
-                                                        if ($value->member_type == '2') {
-                                                            if (!empty($value->studentDetails) && !empty($value->studentDetails->mobile)) {
-                                                                echo $value->studentDetails->mobile;
-                                                            }
-                                                        } elseif ($value->member_type == '3') {
-                                                            if (!empty($value->parentsDetails) && !empty($value->parentsDetails->fathers_mobile)) {
-                                                                echo $value->parentsDetails->fathers_mobile;
-                                                            }
-                                                        } else {
-                                                            if (!empty($value->staffDetails) && !empty($value->staffDetails->mobile)) {
-                                                                echo $value->staffDetails->mobile;
-                                                            }
-                                                        }
-                                                        
-                                                        ?>
-                                                    </td>
-                                                    <td>
-                                                        @if (userPermission('cancel-membership'))
-                                                            <a class="primary-btn fix-gr-bg nowrap"
-                                                                href="{{ route('cancel-membership', @$value->id) }}">@lang('library.cancel_membership')</a>
-                                                        @endif
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        @endif
-                                    </tbody>
-                                </table>
-                            </x-table>
+                                                            
+                                                            ?>
+                                                        </td>
+                                                        <td>
+                                                            @if (userPermission('cancel-membership'))
+                                                                <a class="primary-btn fix-gr-bg"
+                                                                    href="{{ route('cancel-membership', @$value->id) }}">@lang('library.cancel_membership')</a>
+                                                            @endif
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            @endif
+                                        </tbody>
+                                    </table>
+                                </x-table>
+                            </div>
                         </div>
                     </div>
                 </div>

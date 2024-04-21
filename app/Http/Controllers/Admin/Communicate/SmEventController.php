@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Communicate;
 
+use App\GlobalVariable;
 use App\SmEvent;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -61,6 +62,9 @@ class SmEventController extends Controller
                 if($role_id == 2){
                     $this->sent_notifications('Event', $userIds, $data, ['Student']);
                 }
+                if($role_id == GlobalVariable::isAlumni()){
+                    $this->sent_notifications('Event', $userIds, $data, ['Alumni']);
+                }
             }
             if($request->data_type == 'ajax'){
                 return response()->json($events);
@@ -102,6 +106,7 @@ class SmEventController extends Controller
             $events->event_location = $request->event_location;
             $events->from_date = date('Y-m-d', strtotime($request->from_date));
             $events->to_date = date('Y-m-d', strtotime($request->to_date));
+            $events->url = $request->url;
             $events->updated_by = auth()->user()->id;
             $events->uplad_image_file = fileUpdate($events->uplad_image_file,$request->upload_file_name,$destination);
             $events->update();
@@ -162,6 +167,10 @@ class SmEventController extends Controller
                     }
                 }
                 return $roleName;
+            })
+            ->filterColumn('name', function ($query, $keyword) {
+                $query->where('event_title', 'like', '%' . $keyword . '%')
+                      ->orWhere('event_location', 'like', '%' . $keyword . '%');
             })
             ->addColumn('date', function ($event) {
                 return dateConvert($event->from_date). '-' . dateConvert($event->to_date);

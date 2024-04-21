@@ -29,6 +29,12 @@ class CreateSmStudentCertificatesTable extends Migration
             $table->string('footer_right_text')->nullable();
             $table->tinyInteger('student_photo')->default(1)->comment('1 = yes 0 no');
             $table->string('file')->nullable();
+            $table->integer('layout')->nullable()->comment('1 = Portrait, 2 =  Landscape');
+            $table->string('body_font_family')->nullable()->default('Arial')->comment('body_font_family');
+            $table->string('body_font_size')->nullable()->default('2em')->comment('');
+            $table->string('height', 50)->nullable()->comment('Height in mm');
+            $table->string('width', 50)->nullable()->comment('width in mm');
+            $table->string('default_for', 50)->nullable()->comment('default_for course');
             $table->tinyInteger('active_status')->default(1);
             $table->timestamps();
 
@@ -53,6 +59,8 @@ class CreateSmStudentCertificatesTable extends Migration
         $s->footer_center_text  = 'Instructor Signature';
         $s->footer_right_text = 'Principale Signature';
         $s->student_photo       = 0;
+        $s->body_font_family       = 'Arial';
+        $s->body_font_size       = '2em';
         $s->file                = 'public/uploads/certificate/c.jpg';
         $s->save();
     }
@@ -65,5 +73,6 @@ class CreateSmStudentCertificatesTable extends Migration
     public function down()
     {
         Schema::dropIfExists('sm_student_certificates');
+
     }
 }

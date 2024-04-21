@@ -4,7 +4,7 @@
     .student-details .nav-tabs {
         margin-left: 10px;
     }
-    #studentOnlineExam table.dataTable thead .sorting:after,
+    /* #studentOnlineExam table.dataTable thead .sorting:after,
     #studentOnlineExam table.dataTable thead .sorting_asc:after,
     #leaves table.dataTable thead .sorting:after,
     #leaves table.dataTable thead .sorting_asc:after {
@@ -15,7 +15,7 @@
     #leaves table.dataTable thead .sorting_desc:after {
         top: 10px !important;
         left: 5px !important;
-    }
+    } */
     .input-right-icon button.primary-btn-small-input {
         top: 8px !important;
         right: 12px !important;

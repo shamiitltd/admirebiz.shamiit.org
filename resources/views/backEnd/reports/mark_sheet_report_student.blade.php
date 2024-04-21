@@ -92,9 +92,16 @@
             padding: 0px 40px !important;
             vertical-align: middle;
         }
+        @media (max-width: 576px){
+            .single-report-admit .report-admit-img{
+                position: initial;
+                margin: auto;
+                margin-top: 20px;
+            }
+        }
 
     </style>
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('reports.mark_sheet_report_student') </h1>
@@ -107,18 +114,16 @@
         </div>
     </section>
     <section class="admin-visitor-area">
-        <div class="container-fluid p-0">
-            <div class="row">
-                <div class="col-lg-8 col-md-6">
-                    <div class="main-title">
-                        <h3 class="mb-30">@lang('common.select_criteria')</h3>
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="row">
             <div class="col-lg-12">
                 <div class="white-box">
+                    <div class="row">
+                        <div class="col-lg-8 col-md-6">
+                            <div class="main-title">
+                                <h3 class="mb-15">@lang('common.select_criteria')</h3>
+                            </div>
+                        </div>
+                    </div>
                     {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'mark_sheet_report_students', 'method' => 'POST', 'enctype' => 'multipart/form-data', 'id' => 'search_student']) }}
                     <div class="row">
                         <input type="hidden" name="url" id="url" value="{{URL::to('/')}}">
@@ -130,7 +135,8 @@
                                         ['USN', 'UD', 'UA', 'US', 'USL'],'hide'=> ['USUB']
                                     ])
 
-                                    <div class="col-lg-3 mt-30" id="select_exam_typ_subject_div">
+                                    <div class="col-lg-3 mt-15" id="select_exam_typ_subject_div">
+                                        <label for="">@lang('exam.select_exam')</label>
                                         {{ Form::select('exam_type',[""=>__('exam.select_exam').'*'], null , ['class' => 'primary_select  form-control'. ($errors->has('exam_type') ? ' is-invalid' : ''), 'id'=>'select_exam_typ_subject']) }}
 
                                         <div class="pull-right loader loader_style" id="select_exam_type_loader">
@@ -143,7 +149,8 @@
                                         @endif
                                     </div>
 
-                                    <div class="col-lg-3 mt-30" id="select_un_student_div">
+                                    <div class="col-lg-3 mt-15" id="select_un_student_div">
+                                        <label for="">@lang('common.select_student')</label>
                                         {{ Form::select('student_id',[""=>__('common.select_student').'*'], null , ['class' => 'primary_select  form-control'. ($errors->has('student_id') ? ' is-invalid' : ''), 'id'=>'select_un_student']) }}
 
                                         <div class="pull-right loader loader_style" id="select_un_student_loader">
@@ -628,317 +635,223 @@
         @else
             <section class="student-details">
                 <div class="container-fluid p-0">
-                    <div class="row mt-40">
-                        <div class="col-lg-4 no-gutters">
-                            <div class="main-title">
-                                <h3 class="mb-30">@lang('reports.mark_sheet_report')</h3>
+                    <div class="white-box mt-40">
+                        <div class="row">
+                            <div class="col-sm-6 no-gutters">
+                                <div class="main-title">
+                                    <h3 class="mb-15">@lang('reports.mark_sheet_report')</h3>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 pull-sm-right text-sm-right mb-3 mb-sm-0">
+                                <a href="{{route('mark_sheet_report_print', [$input['exam_id'], $input['class_id'], $input['section_id'], $input['student_id']])}}"
+                                   class="primary-btn small fix-gr-bg pull-sm-right" target="_blank">
+                                    <i class="ti-printer"> </i>
+                                    @lang('reports.print')
+                                </a>
                             </div>
                         </div>
-                        <div class="col-lg-8 pull-right">
-                            <a href="{{route('mark_sheet_report_print', [$input['exam_id'], $input['class_id'], $input['section_id'], $input['student_id']])}}"
-                               class="primary-btn small fix-gr-bg pull-right" target="_blank">
-                                <i class="ti-printer"> </i>
-                                @lang('reports.print')
-                            </a>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="white-box">
-                                <div class="row justify-content-center">
-                                    <div class="col-lg-12">
-                                        <div class="single-report-admit">
-                                            <div class="card">
-                                                <div class="card-header">
-                                                    <div class="d-flex">
-                                                        <div class=" col-lg-2">
-                                                            <img class="logo-img" src="{{ generalSetting()->logo }}" alt="{{generalSetting()->school_name }}">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div>
+                                    <div class="row justify-content-center">
+                                        <div class="col-lg-12">
+                                            <div class="single-report-admit">
+                                                <div class="card">
+                                                    <div class="card-header">
+                                                        <div class="row">
+                                                            <div class="col-xl-2 col-sm-8 text-center text-xl-left mb-3 mb-xl-0">
+                                                                <img class="logo-img" src="{{ generalSetting()->logo }}" alt="{{generalSetting()->school_name }}">
+                                                            </div>
+                                                            <div class="col-xl-8  col-sm-8 text-center">
+                                                                <h3 class="text-white" style="font-size: 30px;margin-bottom: 0px;"> {{isset(generalSetting()->school_name)?generalSetting()->school_name:'SHAMIIT School Management ERP'}} </h3>
+                                                                <p class="text-white mb-0" style="font-size: 16px;">  {{isset(generalSetting()->address)?generalSetting()->address:'SHAMIIT School Address'}} </p>
+                                                                <p class="text-white mb-0" style="font-size: 16px;">
+                                                                    @lang('common.email'): <span class="text-lowercase">{{isset(generalSetting()->email)?generalSetting()->email:'admin@demo.com'}}</span>,
+                                                                    @lang('common.phone'): {{isset(generalSetting()->phone)?generalSetting()->phone:'+8801841412141'}} </p>
+                                                            </div>
+    
                                                         </div>
-                                                        <div class="col-lg-8 text-center">
-                                                            <h3 class="text-white" style="font-size: 30px;margin-bottom: 0px;"> {{isset(generalSetting()->school_name)?generalSetting()->school_name:'Infix School Management ERP'}} </h3>
-                                                            <p class="text-white mb-0" style="font-size: 16px;">  {{isset(generalSetting()->address)?generalSetting()->address:'Infix School Address'}} </p>
-                                                            <p class="text-white mb-0" style="font-size: 16px;">
-                                                                @lang('common.email'): <span class="text-lowercase">{{isset(generalSetting()->email)?generalSetting()->email:'admin@demo.com'}}</span>,
-                                                                @lang('common.phone'): {{isset(generalSetting()->phone)?generalSetting()->phone:'+8801841412141'}} </p>
-                                                        </div>
-
+                                                        <div class="report-admit-img profile_100" style="background-image: url({{ file_exists(@$studentDetails->studentDetail->student_photo) ? asset($studentDetails->studentDetail->student_photo) : asset('public/uploads/staff/demo/staff.jpg') }})"></div>
+    
                                                     </div>
-                                                    <div class="report-admit-img profile_100" style="background-image: url({{ file_exists(@$studentDetails->studentDetail->student_photo) ? asset($studentDetails->studentDetail->student_photo) : asset('public/uploads/staff/demo/staff.jpg') }})"></div>
-
-                                                </div>
-                                                {{--Start  Result Table --}}
-                                                <div class="student_marks_table">
-                                                    <table class="custom_table" >
-                                                        <thead>
-                                                        <tr>
-                                                            <th colspan="1" class="text_left" style="border: 0px !important;">
-                                                                <div class="main-title">
-                                                                    <h2 class="mb-20">
-                                                                        {{$student_detail->studentDetail->full_name}}
-                                                                    </h2>
-                                                                </div>
-                                                                <div class="marks_wrap_area d-block">
-                                                                    <div class="row">
-                                                                        <div class="col-lg-8">
-                                                                            <div class="d-flex flex-wrap" style="grid-gap: 30px;">
-                                                                                <ul class="student_info">
-                                                                                    <li>
-                                                                                        <p>
-                                                                                            @lang('common.academic_year')
-                                                                                        </p>
-                                                                                        <p>
-                                                                                            <strong>
-                                                                                                : {{ @$student_detail->academic->year }}
-                                                                                            </strong>
-                                                                                        </p>
-                                                                                    </li>
-                                                                                    <li>
-                                                                                        <p>
-                                                                                            @lang('common.class')
-                                                                                        </p>
-                                                                                        <p class="italic_text">
-                                                                                            <strong>
-                                                                                                : {{$student_detail->class->class_name}}
-                                                                                            </strong>
-                                                                                        </p>
-                                                                                    </li>
-                                                                                    <li>
-                                                                                        <p>
-                                                                                            @lang('common.section')
-                                                                                        </p>
-                                                                                        <p class="italic_text">
-                                                                                            <strong>
-                                                                                                : {{$student_detail->section->section_name}}
-                                                                                            </strong>
-                                                                                        </p>
-                                                                                    </li>
-                                                                                    <li>
-                                                                                        <p>
-                                                                                            @lang('student.admission_no')
-                                                                                        </p>
-                                                                                        <p class="italic_text">
-                                                                                            <strong>
-                                                                                                : {{@$student_detail->student->admission_no}}
-                                                                                            </strong>
-                                                                                        </p>
-                                                                                    </li>
-
-                                                                                    <li>
-                                                                                        <p>
-                                                                                            @lang('student.roll_no')
-                                                                                        </p>
-                                                                                        <p>
-                                                                                            <strong>
-                                                                                                : {{$student_detail->studentDetail->roll_no}}
-                                                                                            </strong>
-                                                                                        </p>
-                                                                                    </li>
-
-                                                                                    <li>
-                                                                                        <p>
-                                                                                            @lang('common.date_of_birth')
-                                                                                        </p>
-                                                                                        <p>
-                                                                                            <strong>
-                                                                                                : {{$student_detail->studentDetail->date_of_birth != ""? dateConvert($student_detail->studentDetail->date_of_birth):''}}
-                                                                                            </strong>
-                                                                                        </p>
-                                                                                    </li>
-                                                                                </ul>
+                                                    {{--Start  Result Table --}}
+                                                    <div class="student_marks_table">
+                                                        <table class="custom_table" >
+                                                            <thead>
+                                                            <tr>
+                                                                <th colspan="1" class="text_left" style="border: 0px !important;">
+                                                                    <div class="main-title">
+                                                                        <h2 class="mb-20">
+                                                                            {{$student_detail->studentDetail->full_name}}
+                                                                        </h2>
+                                                                    </div>
+                                                                    <div class="marks_wrap_area d-block">
+                                                                        <div class="row">
+                                                                            <div class="col-lg-8">
+                                                                                <div class="d-flex flex-wrap" style="grid-gap: 30px;">
+                                                                                    <ul class="student_info">
+                                                                                        <li>
+                                                                                            <p>
+                                                                                                @lang('common.academic_year')
+                                                                                            </p>
+                                                                                            <p>
+                                                                                                <strong>
+                                                                                                    : {{ @$student_detail->academic->year }}
+                                                                                                </strong>
+                                                                                            </p>
+                                                                                        </li>
+                                                                                        <li>
+                                                                                            <p>
+                                                                                                @lang('common.class')
+                                                                                            </p>
+                                                                                            <p class="italic_text">
+                                                                                                <strong>
+                                                                                                    : {{$student_detail->class->class_name}}
+                                                                                                </strong>
+                                                                                            </p>
+                                                                                        </li>
+                                                                                        <li>
+                                                                                            <p>
+                                                                                                @lang('common.section')
+                                                                                            </p>
+                                                                                            <p class="italic_text">
+                                                                                                <strong>
+                                                                                                    : {{$student_detail->section->section_name}}
+                                                                                                </strong>
+                                                                                            </p>
+                                                                                        </li>
+                                                                                        <li>
+                                                                                            <p>
+                                                                                                @lang('student.admission_no')
+                                                                                            </p>
+                                                                                            <p class="italic_text">
+                                                                                                <strong>
+                                                                                                    : {{@$student_detail->student->admission_no}}
+                                                                                                </strong>
+                                                                                            </p>
+                                                                                        </li>
+    
+                                                                                        <li>
+                                                                                            <p>
+                                                                                                @lang('student.roll_no')
+                                                                                            </p>
+                                                                                            <p>
+                                                                                                <strong>
+                                                                                                    : {{$student_detail->studentDetail->roll_no}}
+                                                                                                </strong>
+                                                                                            </p>
+                                                                                        </li>
+    
+                                                                                        <li>
+                                                                                            <p>
+                                                                                                @lang('common.date_of_birth')
+                                                                                            </p>
+                                                                                            <p>
+                                                                                                <strong>
+                                                                                                    : {{$student_detail->studentDetail->date_of_birth != ""? dateConvert($student_detail->studentDetail->date_of_birth):''}}
+                                                                                                </strong>
+                                                                                            </p>
+                                                                                        </li>
+                                                                                    </ul>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-lg-4 text-black">
+                                                                                @php
+                                                                                    $generalsettingsResultType = generalSetting()->result_type;
+                                                                                @endphp
+                                                                                @if(@$grades)
+                                                                                    <div class="table-responsive">
+                                                                                    <table class="table " id="grade_table">
+                                                                                        <thead>
+                                                                                        <tr>
+                                                                                            <th>@lang('reports.staring')</th>
+                                                                                            <th>@lang('reports.ending')</th>
+                                                                                            @if (@$generalsettingsResultType != 'mark')
+                                                                                                <th>@lang('exam.gpa')</th>
+                                                                                                <th>@lang('exam.grade')</th>
+                                                                                            @endif
+                                                                                            <th>@lang('homework.evalution')</th>
+                                                                                        </tr>
+                                                                                        </thead>
+                                                                                        <tbody>
+                                                                                        @foreach($grades as $grade_d)
+                                                                                            <tr>
+                                                                                                <td>{{$grade_d->percent_from}}</td>
+                                                                                                <td>{{$grade_d->percent_upto}}</td>
+                                                                                                @if (@$generalsettingsResultType != 'mark')
+                                                                                                    <td>{{$grade_d->gpa}}</td>
+                                                                                                    <td>{{$grade_d->grade_name}}</td>
+                                                                                                @endif
+                                                                                                <td class="text-left">{{$grade_d->description}}</td>
+                                                                                            </tr>
+                                                                                        @endforeach
+                                                                                        </tbody>
+                                                                                    </table>
+                                                                                    </div>
+                                                                                @endif
                                                                             </div>
                                                                         </div>
-                                                                        <div class="col-lg-4 text-black">
-                                                                            @php
-                                                                                $generalsettingsResultType = generalSetting()->result_type;
-                                                                            @endphp
-                                                                            @if(@$grades)
-                                                                                <table class="table " id="grade_table">
-                                                                                    <thead>
-                                                                                    <tr>
-                                                                                        <th>@lang('reports.staring')</th>
-                                                                                        <th>@lang('reports.ending')</th>
-                                                                                        @if (@$generalsettingsResultType != 'mark')
-                                                                                            <th>@lang('exam.gpa')</th>
-                                                                                            <th>@lang('exam.grade')</th>
-                                                                                        @endif
-                                                                                        <th>@lang('homework.evalution')</th>
-                                                                                    </tr>
-                                                                                    </thead>
-                                                                                    <tbody>
-                                                                                    @foreach($grades as $grade_d)
-                                                                                        <tr>
-                                                                                            <td>{{$grade_d->percent_from}}</td>
-                                                                                            <td>{{$grade_d->percent_upto}}</td>
-                                                                                            @if (@$generalsettingsResultType != 'mark')
-                                                                                                <td>{{$grade_d->gpa}}</td>
-                                                                                                <td>{{$grade_d->grade_name}}</td>
-                                                                                            @endif
-                                                                                            <td class="text-left">{{$grade_d->description}}</td>
-                                                                                        </tr>
-                                                                                    @endforeach
-                                                                                    </tbody>
-                                                                                </table>
-                                                                            @endif
-                                                                        </div>
+                                                                        {{--end sm_marks_grades --}}
                                                                     </div>
-                                                                    {{--end sm_marks_grades --}}
-                                                                </div>
-                                                            </th>
-                                                        </tr>
-                                                        </thead>
-                                                    </table>
-                                                    <div class="student_name_highlight" style="text-align: center; margin-bottom: 20px;">
-                                                        <h3>{{$exam_details->title}}</h3>
-                                                        <h4 style="text-align: center !important;"> <span style="border-bottom: 3px double;">@lang('reports.mark_sheet')</span></h4>
-                                                    </div>
-
-
-
-                                                    <table class="custom_table">
-                                                        <thead>
-                                                        <!--                                                            <tr>
-
-                                                                <th colspan="5">{{$exam_details->title}}</th>
-                                                            </tr>-->
-                                                        <tr>
-                                                            <th>@lang('reports.subject_name')</th>
-                                                            <th>@lang('exam.total_mark')</th>
-                                                            <th>@lang('reports.highest_marks')</th>
-                                                            <th>@lang('reports.obtained_marks')</th>
-                                                            @if (@$generalsettingsResultType != 'mark')
-                                                                <th>@lang('reports.letter_grade')</th>
-                                                            @endif
-                                                            <th>@lang('reports.remarks')</th>
-                                                            @if (@$generalsettingsResultType == 'mark')
-                                                                <th>@lang('homework.evaluation')</th>
-                                                                <th>@lang('exam.pass_fail')</th>
-                                                            @endif
-
-                                                        </tr>
-                                                        </thead>
-                                                        <tbody>
-
-                                                        @php
-                                                            $optional_countable_gpa = 0;
-                                                            $main_subject_total_gpa=0;
-                                                            $Optional_subject_count=0;
-                                                                if($optional_subject!=''){
-                                                                    $Optional_subject_count=$subjects->count()-1;
-                                                                }else{
-                                                                    $Optional_subject_count=$subjects->count();
-                                                                }
-                                                            $sum_gpa= 0;
-                                                            $resultCount=1;
-                                                            $subject_count=1;
-                                                            $tota_grade_point=0;
-                                                            $this_student_failed=0;
-                                                            $count=1;
-                                                            $total_mark=0;
-                                                            $temp_grade=[];
-                                                            $average_passing_mark = averagePassingMark($exam_type_id);
-                                                        @endphp
-                                                        @foreach($mark_sheet as $data)
-                                                            @php
-                                                                $temp_grade[]=$data->total_gpa_grade;
-                                                                if ($data->subject_id==$optional_subject) {
-                                                                    continue;
-                                                                }
-                                                            @endphp
-                                                            <tr>
-                                                                <th>
-                                                                    {{$data->subject->subject_name}}
                                                                 </th>
-                                                                <td>
-                                                                    <p>
-                                                                        @if (@$generalsettingsResultType == 'mark')
-                                                                            {{subject100PercentMark()}}
-                                                                        @else
-                                                                            {{@subjectFullMark($exam_details->id, $data->subject->id, $class_id, $section_id )}}
-                                                                        @endif
-                                                                    </p>
-                                                                </td>
-                                                                <td>
-                                                                    <p>
-                                                                        @if (@$generalsettingsResultType == 'mark')
-                                                                            {{subjectPercentageMark(@subjectHighestMark($exam_type_id, $data->subject->id, $class_id, $section_id), @subjectFullMark($exam_details->id, $data->subject->id, $class_id, $section_id))}}
-                                                                        @else
-                                                                            {{@subjectHighestMark($exam_type_id, $data->subject->id, $class_id, $section_id)}}
-                                                                        @endif
-                                                                    </p>
-                                                                </td>
-                                                                <td>
-
-                                                                    <p>
-                                                                        @if (@$generalsettingsResultType == 'mark')
-                                                                            {{@singleSubjectMark($data->student_record_id,$data->subject_id,$data->exam_type_id)[0]}}
-                                                                        @else
-                                                                            {{@$data->total_marks}}
-                                                                        @endif
-
-                                                                        @php
-                                                                            if(@$generalsettingsResultType == 'mark'){
-                                                                                $total_mark+=subjectPercentageMark(@$data->total_marks, @subjectFullMark($exam_details->id, $data->subject->id, $class_id, $section_id));
-                                                                            }else{
-                                                                                $total_mark+=@$data->total_marks;
-                                                                            }
-                                                                        @endphp
-                                                                    </p>
-                                                                </td>
-                                                                @if (@$generalsettingsResultType != 'mark')
-                                                                    <td>
-                                                                        <p>
-                                                                            @php
-                                                                                $result = markGpa(@subjectPercentageMark(@$data->total_marks , @subjectFullMark($exam_details->id, $data->subject->id, $class_id, $section_id)));
-                                                                                $main_subject_total_gpa += $result->gpa;
-                                                                            @endphp
-                                                                            {{@$data->total_gpa_grade}}
-                                                                        </p>
-                                                                    </td>
-                                                                @endif
-                                                                <td>
-                                                                    <p>
-                                                                        {{@$data->teacher_remarks}}
-                                                                    </p>
-                                                                </td>
-                                                                @if (@$generalsettingsResultType == 'mark')
-
-                                                                    <td>
-                                                                        <p>
-                                                                            @php
-                                                                                $evaluation= markGpa(subjectPercentageMark(@$data->total_marks, @subjectFullMark($exam_details->id, $data->subject->id, $class_id, $section_id)));
-                                                                            @endphp
-                                                                            {{@$evaluation->description}}
-                                                                        </p>
-                                                                    </td>
-                                                                    <td>
-                                                                        <p>
-                                                                            @php
-                                                                                $totalMark = subjectPercentageMark(@$data->total_marks, @subjectFullMark($exam_details->id, $data->subject->id, $class_id, $section_id));
-                                                                                $passMark = $data->subject->pass_mark;
-                                                                            @endphp
-                                                                            @if ($passMark <= $totalMark)
-                                                                                @lang('exam.pass')
-                                                                            @else
-                                                                                @lang('exam.fail')
-                                                                            @endif
-                                                                        </p>
-                                                                    </td>
-                                                                @endif
-
-                                                                @php
-                                                                    $count++
-                                                                @endphp
                                                             </tr>
-                                                        @endforeach
-                                                        @if(@$optional_subject_setup->gpa_above)
+                                                            </thead>
+                                                        </table>
+                                                        <div class="student_name_highlight" style="text-align: center; margin-bottom: 20px;">
+                                                            <h3>{{$exam_details->title}}</h3>
+                                                            <h4 style="text-align: center !important;"> <span style="border-bottom: 3px double;">@lang('reports.mark_sheet')</span></h4>
+                                                        </div>
+    
+    
+    
+                                                        <div class="table-responsive">
+                                                        <table class="custom_table">
+                                                            <thead>
+                                                            <!--                                                            <tr>
+    
+                                                                    <th colspan="5">{{$exam_details->title}}</th>
+                                                                </tr>-->
                                                             <tr>
-                                                                <td colspan="7" class="border-top text-center pl-3" style="text-align: center !important;">
-                                                                    <strong>@lang('reports.additional_subject')</strong>
-                                                                </td>
+                                                                <th>@lang('reports.subject_name')</th>
+                                                                <th>@lang('exam.total_mark')</th>
+                                                                <th>@lang('reports.highest_marks')</th>
+                                                                <th>@lang('reports.obtained_marks')</th>
+                                                                @if (@$generalsettingsResultType != 'mark')
+                                                                    <th>@lang('reports.letter_grade')</th>
+                                                                @endif
+                                                                <th>@lang('reports.remarks')</th>
+                                                                @if (@$generalsettingsResultType == 'mark')
+                                                                    <th>@lang('homework.evaluation')</th>
+                                                                    <th>@lang('exam.pass_fail')</th>
+                                                                @endif
+    
                                                             </tr>
+                                                            </thead>
+                                                            <tbody>
+    
+                                                            @php
+                                                                $optional_countable_gpa = 0;
+                                                                $main_subject_total_gpa=0;
+                                                                $Optional_subject_count=0;
+                                                                    if($optional_subject!=''){
+                                                                        $Optional_subject_count=$subjects->count()-1;
+                                                                    }else{
+                                                                        $Optional_subject_count=$subjects->count();
+                                                                    }
+                                                                $sum_gpa= 0;
+                                                                $resultCount=1;
+                                                                $subject_count=1;
+                                                                $tota_grade_point=0;
+                                                                $this_student_failed=0;
+                                                                $count=1;
+                                                                $total_mark=0;
+                                                                $temp_grade=[];
+                                                                $average_passing_mark = averagePassingMark($exam_type_id);
+                                                            @endphp
                                                             @foreach($mark_sheet as $data)
                                                                 @php
-                                                                    if ($data->subject_id!=$optional_subject) {
+                                                                    $temp_grade[]=$data->total_gpa_grade;
+                                                                    if ($data->subject_id==$optional_subject) {
                                                                         continue;
                                                                     }
                                                                 @endphp
@@ -948,15 +861,31 @@
                                                                     </th>
                                                                     <td>
                                                                         <p>
-                                                                            {{@subjectFullMark($exam_details->id, $data->subject->id, $class_id, $section_id )}}
+                                                                            @if (@$generalsettingsResultType == 'mark')
+                                                                                {{subject100PercentMark()}}
+                                                                            @else
+                                                                                {{@subjectFullMark($exam_details->id, $data->subject->id, $class_id, $section_id )}}
+                                                                            @endif
                                                                         </p>
                                                                     </td>
                                                                     <td>
-                                                                        <p>{{@subjectHighestMark($exam_type_id, $data->subject->id, $class_id, $section_id)}}</p>
+                                                                        <p>
+                                                                            @if (@$generalsettingsResultType == 'mark')
+                                                                                {{subjectPercentageMark(@subjectHighestMark($exam_type_id, $data->subject->id, $class_id, $section_id), @subjectFullMark($exam_details->id, $data->subject->id, $class_id, $section_id))}}
+                                                                            @else
+                                                                                {{@subjectHighestMark($exam_type_id, $data->subject->id, $class_id, $section_id)}}
+                                                                            @endif
+                                                                        </p>
                                                                     </td>
                                                                     <td>
+    
                                                                         <p>
-                                                                            {{@$data->total_marks}}
+                                                                            @if (@$generalsettingsResultType == 'mark')
+                                                                                {{@singleSubjectMark($data->student_record_id,$data->subject_id,$data->exam_type_id)[0]}}
+                                                                            @else
+                                                                                {{@$data->total_marks}}
+                                                                            @endif
+    
                                                                             @php
                                                                                 if(@$generalsettingsResultType == 'mark'){
                                                                                     $total_mark+=subjectPercentageMark(@$data->total_marks, @subjectFullMark($exam_details->id, $data->subject->id, $class_id, $section_id));
@@ -969,25 +898,21 @@
                                                                     @if (@$generalsettingsResultType != 'mark')
                                                                         <td>
                                                                             <p>
+                                                                                @php
+                                                                                    $result = markGpa(@subjectPercentageMark(@$data->total_marks , @subjectFullMark($exam_details->id, $data->subject->id, $class_id, $section_id)));
+                                                                                    $main_subject_total_gpa += $result->gpa;
+                                                                                @endphp
                                                                                 {{@$data->total_gpa_grade}}
                                                                             </p>
                                                                         </td>
                                                                     @endif
                                                                     <td>
-                                                                        <span>
-                                                                            @php
-                                                                                if($data->total_gpa_point > @$optional_subject_setup->gpa_above){
-                                                                                    $optional_countable_gpa= $data->total_gpa_point - @$optional_subject_setup->gpa_above;
-                                                                                }else{
-                                                                                    $optional_countable_gpa=0;
-                                                                                }
-                                                                            @endphp
-                                                                        </span>
                                                                         <p>
                                                                             {{@$data->teacher_remarks}}
                                                                         </p>
                                                                     </td>
                                                                     @if (@$generalsettingsResultType == 'mark')
+    
                                                                         <td>
                                                                             <p>
                                                                                 @php
@@ -1010,194 +935,285 @@
                                                                             </p>
                                                                         </td>
                                                                     @endif
+    
+                                                                    @php
+                                                                        $count++
+                                                                    @endphp
                                                                 </tr>
                                                             @endforeach
-                                                        @endif
-                                                        </tbody>
-                                                    </table>
-                                                    <div class="col-md-4 offset-md-4">
-                                                        <table class="table @if(resultPrintStatus('vertical_boarder')) mt-5 @endif">
-                                                            <tbody class="spacing">
-                                                            <tr>
-                                                                <td>@lang('reports.attendance')</td>
-                                                                @if(isset($exam_content))
-                                                                    <td class="nowrap">
-                                                                        <p>{{@$student_attendance}} @lang('reports.of') {{@$total_class_days}}</p>
-                                                                    </td>
-                                                                @else
-                                                                    <td class="nowrap">
-                                                                        <p>@lang('reports.no_data_found')</p>
-                                                                    </td>
-                                                                @endif
-                                                                <td>@lang('exam.total_mark')</td>
-                                                                <td>{{@$total_mark}}</td>
-                                                            </tr>
-                                                            @if ($average_passing_mark)
+                                                            @if(@$optional_subject_setup->gpa_above)
                                                                 <tr>
-                                                                    <td class="nowrap">@lang('reports.average_passing_mark')</td>
+                                                                    <td class="nowrap">@lang('reports.average_mark')</td>
                                                                     <td class="nowrap">
                                                                         <p>{{number_format($average_passing_mark, 2, '.', '')}}</p>
                                                                     </td>
-                                                                    <td>@lang('common.status')</td>
-                                                                    <td class="nowrap">
+                                                                </tr>
+                                                                @foreach($mark_sheet as $data)
+                                                                    @php
+                                                                        if ($data->subject_id!=$optional_subject) {
+                                                                            continue;
+                                                                        }
+                                                                    @endphp
+                                                                    <tr>
+                                                                        <th>
+                                                                            {{$data->subject->subject_name}}
+                                                                        </th>
+                                                                        <td>
+                                                                            <p>
+                                                                                {{@subjectFullMark($exam_details->id, $data->subject->id, $class_id, $section_id )}}
+                                                                            </p>
+                                                                        </td>
+                                                                        <td>
+                                                                            <p>{{@subjectHighestMark($exam_type_id, $data->subject->id, $class_id, $section_id)}}</p>
+                                                                        </td>
+                                                                        <td>
+                                                                            <p>
+                                                                                {{@$data->total_marks}}
+                                                                                @php
+                                                                                    if(@$generalsettingsResultType == 'mark'){
+                                                                                        $total_mark+=subjectPercentageMark(@$data->total_marks, @subjectFullMark($exam_details->id, $data->subject->id, $class_id, $section_id));
+                                                                                    }else{
+                                                                                        $total_mark+=@$data->total_marks;
+                                                                                    }
+                                                                                @endphp
+                                                                            </p>
+                                                                        </td>
+                                                                        @if (@$generalsettingsResultType != 'mark')
+                                                                            <td>
+                                                                                <p>
+                                                                                    {{@$data->total_gpa_grade}}
+                                                                                </p>
+                                                                            </td>
+                                                                        @endif
+                                                                        <td>
+                                                                            <span>
+                                                                                @php
+                                                                                    if($data->total_gpa_point > @$optional_subject_setup->gpa_above){
+                                                                                        $optional_countable_gpa= $data->total_gpa_point - @$optional_subject_setup->gpa_above;
+                                                                                    }else{
+                                                                                        $optional_countable_gpa=0;
+                                                                                    }
+                                                                                @endphp
+                                                                            </span>
+                                                                            <p>
+                                                                                {{@$data->teacher_remarks}}
+                                                                            </p>
+                                                                        </td>
+                                                                        @if (@$generalsettingsResultType == 'mark')
+                                                                            <td>
+                                                                                <p>
+                                                                                    @php
+                                                                                        $evaluation= markGpa(subjectPercentageMark(@$data->total_marks, @subjectFullMark($exam_details->id, $data->subject->id, $class_id, $section_id)));
+                                                                                    @endphp
+                                                                                    {{@$evaluation->description}}
+                                                                                </p>
+                                                                            </td>
+                                                                            <td>
+                                                                                <p>
+                                                                                    @php
+                                                                                        $totalMark = subjectPercentageMark(@$data->total_marks, @subjectFullMark($exam_details->id, $data->subject->id, $class_id, $section_id));
+                                                                                        $passMark = $data->subject->pass_mark;
+                                                                                    @endphp
+                                                                                    @if ($passMark <= $totalMark)
+                                                                                        @lang('exam.pass')
+                                                                                    @else
+                                                                                        @lang('exam.fail')
+                                                                                    @endif
+                                                                                </p>
+                                                                            </td>
+                                                                        @endif
+                                                                    </tr>
+                                                                @endforeach
+                                                            @endif
+                                                            </tbody>
+                                                        </table>
+                                                        </div>
+                                                        <div class="col-md-6 offset-md-3">
+                                                            <div class="table-responsive">
+                                                            <table class="table @if(resultPrintStatus('vertical_boarder')) mt-5 @endif">
+                                                                <tbody class="spacing">
+                                                                <tr>
+                                                                    <td>@lang('reports.attendance')</td>
+                                                                    @if(isset($exam_content))
+                                                                        <td class="nowrap">
+                                                                            <p>{{@$student_attendance}} @lang('reports.of') {{@$total_class_days}}</p>
+                                                                        </td>
+                                                                    @else
+                                                                        <td class="nowrap">
+                                                                            <p>@lang('reports.no_data_found')</p>
+                                                                        </td>
+                                                                    @endif
+                                                                    <td>@lang('exam.total_mark')</td>
+                                                                    <td>{{@$total_mark}}</td>
+                                                                </tr>
+                                                                @if ($average_passing_mark)
+                                                                    <tr>
+                                                                        <td class="nowrap">@lang('reports.average_passing_mark')</td>
+                                                                        <td class="nowrap">
+                                                                            <p>{{number_format($average_passing_mark, 2, '.', '')}}</p>
+                                                                        </td>
+                                                                        <td>@lang('common.status')</td>
+                                                                        <td class="nowrap">
+                                                                            @php
+                                                                                $average_mark = 0;
+                                                                                if($Optional_subject_count){
+                                                                                $average_mark = $total_mark/($Optional_subject_count);
+                                                                                }
+    
+                                                                            @endphp
+                                                                            <p><strong>{{$average_passing_mark <= $average_mark ? __('exam.pass') : __('exam.fail')}}</strong></p>
+                                                                        </td>
+                                                                    </tr>
+                                                                @endif
+                                                                <tr>
+                                                                    <td class="nowrap {{$generalsettingsResultType == 'mark' ? 'text-center' : ''}}" colspan="{{$generalsettingsResultType == 'mark' ? '2' : ''}}">@lang('reports.average_mark')</td>
+                                                                    <td colspan="{{$generalsettingsResultType == 'mark' ? '2' : ''}}">
                                                                         @php
                                                                             $average_mark = 0;
                                                                             if($Optional_subject_count){
                                                                             $average_mark = $total_mark/($Optional_subject_count);
                                                                             }
-
                                                                         @endphp
-                                                                        <p><strong>{{$average_passing_mark <= $average_mark ? __('exam.pass') : __('exam.fail')}}</strong></p>
+                                                                        {{number_format(@$average_mark, 2, '.', '')}}
                                                                     </td>
+    
+                                                                    @if (@$generalsettingsResultType != 'mark')
+                                                                        <td class="nowrap">@lang('reports.gpa_above') ( {{@$optional_subject_setup->gpa_above}} )</td>
+                                                                        <td>
+                                                                            <p>
+                                                                                {{$optional_countable_gpa}}
+                                                                            </p>
+                                                                        </td>
+                                                                    @endif
                                                                 </tr>
-                                                            @endif
-                                                            <tr>
-                                                                <td class="nowrap {{$generalsettingsResultType == 'mark' ? 'text-center' : ''}}" colspan="{{$generalsettingsResultType == 'mark' ? '2' : ''}}">@lang('reports.average_mark')</td>
-                                                                <td colspan="{{$generalsettingsResultType == 'mark' ? '2' : ''}}">
-                                                                    @php
-                                                                        $average_mark = 0;
-                                                                        if($Optional_subject_count){
-                                                                        $average_mark = $total_mark/($Optional_subject_count);
-                                                                        }
-                                                                    @endphp
-                                                                    {{number_format(@$average_mark, 2, '.', '')}}
-                                                                </td>
-
-                                                                @if (@$generalsettingsResultType != 'mark')
-                                                                    <td class="nowrap">@lang('reports.gpa_above') ( {{@$optional_subject_setup->gpa_above}} )</td>
-                                                                    <td>
-                                                                        <p>
-                                                                            {{$optional_countable_gpa}}
-                                                                        </p>
-                                                                    </td>
+                                                                @if(@$generalsettingsResultType != 'mark')
+                                                                    <tr>
+                                                                        <td class="nowrap">@lang('reports.without_optional')</td>
+                                                                        <td>
+                                                                            @php
+                                                                                $without_optional = 0;
+                                                                                if($Optional_subject_count){
+                                                                                $without_optional=$main_subject_total_gpa/$Optional_subject_count;
+                                                                                }
+    
+                                                                            @endphp
+                                                                            {{number_format($without_optional, 2,'.','')}}
+                                                                        </td>
+                                                                        <td>@lang('exam.gpa')</td>
+                                                                        <td>
+                                                                            @php
+                                                                                $final_result= 0;
+                                                                                if($Optional_subject_count){
+                                                                                 $final_result = ($main_subject_total_gpa + $optional_countable_gpa) /$Optional_subject_count;
+                                                                                }
+    
+                                                                                    if($final_result >= $maxGrade){
+                                                                                        echo number_format($maxGrade, 2,'.','');
+                                                                                    } else {
+                                                                                        echo number_format($final_result, 2,'.','');
+                                                                                    }
+                                                                            @endphp
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>@lang('exam.grade')</td>
+                                                                        <td>
+                                                                            @php
+                                                                                if(in_array($failgpaname->grade_name,$temp_grade)){
+                                                                                    echo $failgpaname->grade_name;
+                                                                                }else{
+                                                                                    if($final_result >= $maxGrade){
+                                                                                        $grade_details= App\SmResultStore::remarks($maxGrade);
+                                                                                    } else {
+                                                                                        $grade_details= App\SmResultStore::remarks($final_result);
+                                                                                    }
+                                                                                }
+                                                                            @endphp
+                                                                            {{@$grade_details->grade_name}}
+                                                                        </td>
+                                                                        <td>@lang('homework.evaluation')</td>
+                                                                        <td class="nowrap">
+                                                                            @php
+                                                                                if(in_array($failgpaname->grade_name,$temp_grade)){
+                                                                                    echo $failgpaname->description;
+                                                                                }else{
+                                                                                    if($final_result >= $maxGrade){
+                                                                                        $grade_details= App\SmResultStore::remarks($maxGrade);
+                                                                                    } else {
+                                                                                        $grade_details= App\SmResultStore::remarks($final_result);
+                                                                                    }
+                                                                                }
+                                                                            @endphp
+                                                                            <p>{{@$grade_details->description}}</p>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td colspan="2" style="text-align: center !important;">
+                                                                            @lang('exam.position')
+                                                                        </td>
+                                                                        <td colspan="2" style="text-align: center !important;">{{getStudentMeritPosition($class_id, $section_id, $exam_type_id, $student_detail->id)}}</td>
+    
+                                                                    </tr>
                                                                 @endif
-                                                            </tr>
-                                                            @if(@$generalsettingsResultType != 'mark')
-                                                                <tr>
-                                                                    <td class="nowrap">@lang('reports.without_optional')</td>
-                                                                    <td>
-                                                                        @php
-                                                                            $without_optional = 0;
-                                                                            if($Optional_subject_count){
-                                                                            $without_optional=$main_subject_total_gpa/$Optional_subject_count;
-                                                                            }
-
-                                                                        @endphp
-                                                                        {{number_format($without_optional, 2,'.','')}}
-                                                                    </td>
-                                                                    <td>@lang('exam.gpa')</td>
-                                                                    <td>
-                                                                        @php
-                                                                            $final_result= 0;
-                                                                            if($Optional_subject_count){
-                                                                             $final_result = ($main_subject_total_gpa + $optional_countable_gpa) /$Optional_subject_count;
-                                                                            }
-
-                                                                                if($final_result >= $maxGrade){
-                                                                                    echo number_format($maxGrade, 2,'.','');
-                                                                                } else {
-                                                                                    echo number_format($final_result, 2,'.','');
-                                                                                }
-                                                                        @endphp
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>@lang('exam.grade')</td>
-                                                                    <td>
-                                                                        @php
-                                                                            if(in_array($failgpaname->grade_name,$temp_grade)){
-                                                                                echo $failgpaname->grade_name;
-                                                                            }else{
-                                                                                if($final_result >= $maxGrade){
-                                                                                    $grade_details= App\SmResultStore::remarks($maxGrade);
-                                                                                } else {
-                                                                                    $grade_details= App\SmResultStore::remarks($final_result);
-                                                                                }
-                                                                            }
-                                                                        @endphp
-                                                                        {{@$grade_details->grade_name}}
-                                                                    </td>
-                                                                    <td>@lang('homework.evaluation')</td>
-                                                                    <td class="nowrap">
-                                                                        @php
-                                                                            if(in_array($failgpaname->grade_name,$temp_grade)){
-                                                                                echo $failgpaname->description;
-                                                                            }else{
-                                                                                if($final_result >= $maxGrade){
-                                                                                    $grade_details= App\SmResultStore::remarks($maxGrade);
-                                                                                } else {
-                                                                                    $grade_details= App\SmResultStore::remarks($final_result);
-                                                                                }
-                                                                            }
-                                                                        @endphp
-                                                                        <p>{{@$grade_details->description}}</p>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td colspan="2" style="text-align: center !important;">
-                                                                        @lang('exam.position')
-                                                                    </td>
-                                                                    <td colspan="2" style="text-align: center !important;">{{getStudentMeritPosition($class_id, $section_id, $exam_type_id, $student_detail->id)}}</td>
-
-                                                                </tr>
-                                                            @endif
-
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-
-                                                    <script>
-                                                        function myFunction(value, subject) {
-                                                            if (value != "") {
-                                                                var res = Number(value / subject).toFixed(2);
-                                                            } else {
-                                                                var res = 0;
-                                                            }
-                                                            // document.getElementById("main_subject_total_gpa").innerHTML = res;
-                                                        }
-                                                        function myFunction2(value, subject , maxGrade) {
-                                                            if (value != "") {
-                                                                var totalGrade = Number(value / subject).toFixed(2);
-                                                                if(totalGrade >= maxGrade){
-                                                                    var res = Number(maxGrade).toFixed(2);
+    
+                                                                </tbody>
+                                                            </table>
+                                                            </div>
+                                                        </div>
+    
+                                                        <script>
+                                                            function myFunction(value, subject) {
+                                                                if (value != "") {
+                                                                    var res = Number(value / subject).toFixed(2);
                                                                 } else {
-                                                                    var res = totalGrade;
+                                                                    var res = 0;
                                                                 }
-                                                            } else {
-                                                                var res = 0;
+                                                                // document.getElementById("main_subject_total_gpa").innerHTML = res;
                                                             }
-                                                            // document.getElementById("final_result").innerHTML = res;
-                                                        }
-                                                        myFunction({{ $main_subject_total_gpa }}, {{ $Optional_subject_count }});
-                                                        myFunction2( {{ $main_subject_total_gpa +$optional_countable_gpa  }}, {{ $Optional_subject_count }}, {{$maxGrade}});
-                                                    </script>
-
-                                                    @if(isset($exam_content))
-                                                        <table style="width:100%" class="border-0">
-                                                            <tbody>
-                                                            <tr>
-                                                                <td class="border-0" style="border: 0 !important;">
-                                                                    <p class="result-date" style="text-align:left; float:left; display:inline-block; margin-top:50px; padding-left: 0;">
-                                                                        @lang('reports.date_of_publication_of_result') :
-                                                                        <strong>
-                                                                            {{dateConvert(@$exam_content->publish_date)}}
-                                                                        </strong>
-                                                                    </p>
-                                                                </td>
-                                                                <td class="border-0" style="border: 0 !important;">
-                                                                    <div class="text-right d-flex flex-column justify-content-end">
-                                                                        <div class="thumb text-right">
-                                                                            <img src="{{@$exam_content->file}}" width="100px">
-                                                                        </div>
-                                                                        <p style="text-align:right; float:right; display:inline-block; margin-top:5px;">
-                                                                            ({{@$exam_content->title}})
+                                                            function myFunction2(value, subject , maxGrade) {
+                                                                if (value != "") {
+                                                                    var totalGrade = Number(value / subject).toFixed(2);
+                                                                    if(totalGrade >= maxGrade){
+                                                                        var res = Number(maxGrade).toFixed(2);
+                                                                    } else {
+                                                                        var res = totalGrade;
+                                                                    }
+                                                                } else {
+                                                                    var res = 0;
+                                                                }
+                                                                // document.getElementById("final_result").innerHTML = res;
+                                                            }
+                                                            myFunction({{ $main_subject_total_gpa }}, {{ $Optional_subject_count }});
+                                                            myFunction2( {{ $main_subject_total_gpa +$optional_countable_gpa  }}, {{ $Optional_subject_count }}, {{$maxGrade}});
+                                                        </script>
+    
+                                                        @if(isset($exam_content))
+                                                            <table style="width:100%" class="border-0">
+                                                                <tbody>
+                                                                <tr>
+                                                                    <td class="border-0" style="border: 0 !important;">
+                                                                        <p class="result-date" style="text-align:left; float:left; display:inline-block; margin-top:50px; padding-left: 0;">
+                                                                            @lang('reports.date_of_publication_of_result') :
+                                                                            <strong>
+                                                                                {{dateConvert(@$exam_content->publish_date)}}
+                                                                            </strong>
                                                                         </p>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    @endif
+                                                                    </td>
+                                                                    <td class="border-0" style="border: 0 !important;">
+                                                                        <div class="text-right d-flex flex-column justify-content-end">
+                                                                            <div class="thumb text-right">
+                                                                                <img src="{{@$exam_content->file}}" width="100px">
+                                                                            </div>
+                                                                            <p style="text-align:right; float:right; display:inline-block; margin-top:5px;">
+                                                                                ({{@$exam_content->title}})
+                                                                            </p>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        @endif
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

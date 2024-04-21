@@ -26,6 +26,15 @@
             right: 12px !important;
         }
 
+        .table thead th,
+        .table tbody td {
+            font-size: 12px !important;
+        }
+        table#table_id thead tr th {
+            font-size: 12px!important;
+        }
+        table.dataTable thead .sorting_asc::after,
+        table.dataTable thead .sorting::after,
         table.dataTable thead .sorting_asc::after, table.dataTable thead .sorting:after {
             top: 8px;
             left: 10px;
@@ -34,10 +43,6 @@
         table.dataTable thead .sorting_desc::after {
             top: 8px;
             left: 10px;
-        }
-
-        .dataTables_filter label {
-            top: -30px !important;
         }
 
         @media (max-width: 1580px) {
@@ -82,6 +87,17 @@
         .table.dataTable tr td {
             min-width: 150px;
         }
+        .behaviourBottomPadding{
+            margin-bottom: 10px !important;
+        }
+        .badge {
+            background: var(--primary-color);
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 30px;
+            display: inline-block;
+            font-size: 8px;
+        }
     </style>
     @if (moduleStatusCheck('University'))
         <style>
@@ -125,7 +141,7 @@
                                  alt="">
                         @endif
                         <div class="white-box radius-t-y-0">
-                            <div class="single-meta mt-10">
+                            <div class="single-meta mt-50">
                                 <div class="d-flex justify-content-between">
                                     <div class="name">
                                         @lang('student.student_name')
@@ -278,21 +294,21 @@
                                href="#subjectAttendance" role="tab"
                                data-toggle="tab">@lang('student.subject_attendance')</a>
                         </li>
-                        @if (moduleStatusCheck('BehaviourRecords'))
-                            @if ($behaviourRecordSetting->parent_view == 1)
-                                <li class="nav-item mt-10">
-                                    <a class="nav-link {{ Session::get('studentBehaviourRecord') == 'active' ? 'active' : '' }} "
-                                       href="#studentBehaviourRecord" role="tab"
-                                       data-toggle="tab">@lang('student.behaviour_record')</a>
-                                </li>
-                            @endif
-                        @endif
                         @if (moduleStatusCheck('Wallet'))
                             @if (userPermission('wallet.my-wallet'))
                                 <li class="nav-item">
                                     <a class="nav-link {{ Session::get('parentWallet') == 'active' ? 'active' : '' }} "
                                        href="#parentWallet" role="tab"
                                        data-toggle="tab">@lang('wallet::wallet.wallet')</a>
+                                </li>
+                            @endif
+                        @endif
+                        @if (moduleStatusCheck('BehaviourRecords'))
+                            @if ($behaviourRecordSetting->parent_view == 1)
+                                <li class="nav-item behaviourBottomPadding">
+                                    <a class="nav-link {{ Session::get('studentBehaviourRecord') == 'active' ? 'active' : '' }} "
+                                       href="#studentBehaviourRecord" role="tab"
+                                       data-toggle="tab">@lang('student.behaviour_record')</a>
                                 </li>
                             @endif
                         @endif
@@ -1782,7 +1798,13 @@
                                     <tbody class="d-block">
                                     @foreach ($student_detail->studentRecords as $record)
                                         <tr class="d-flex">
-                                            <td class="col-4">{{ $record->class->class_name }}</td>
+                                            <td class="col-4">{{ $record->class->class_name }}
+                                                @if ($record->is_default)
+                                                    <span class="badge fix-gr-bg">
+                                                        {{ __('common.default') }}
+                                                    </span>
+                                                @endif
+                                            </td>
                                             <td class="col-4">{{ $record->section->section_name }}</td>
                                             <td class="col-4">{{ $record->roll_no }}</td>
                                         </tr>

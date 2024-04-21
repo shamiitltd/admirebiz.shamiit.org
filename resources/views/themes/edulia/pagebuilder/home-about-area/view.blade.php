@@ -42,7 +42,9 @@
                                 </g>
                             </svg>{{ pagesetting('home_about_area_phone') }}</a>
                     </div>
-                    <a href="{{ pagesetting('home_about_area_button_link') }}" class="site_btn">{{ pagesetting('home_about_area_button') }}</a>
+                    @if(!empty(pagesetting('home_about_area_button')))
+                        <a href="{{ pagesetting('home_about_area_button_link') }}" class="site_btn">{{ pagesetting('home_about_area_button') }}</a>
+                    @endif
                 </div>
             </div>
         </div>

@@ -6,7 +6,7 @@
         <li>
             <div class="noticeboard_inner_item">
                 <p><span>{{ __('edulia.published') }}:</span> {{ dateConvert($notice->notice_date) }}</p>
-                <a href="{{ route('frontend.notice-details', $notice->id) }}" class='noticeboard_inner_item_title'>
+                <a href="{{route('frontend.notice-details',$notice->id )}}" class='noticeboard_inner_item_title'>
                     {{ $notice->notice_title }}
                 </a>
             </div>

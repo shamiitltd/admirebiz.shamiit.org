@@ -19,7 +19,7 @@
 
             
 // class InfixApi {
-static String root = 'http://infixedu.com/android/';
+static String root = 'https://edu.shamiit.com/android/';
 static String baseApi = root + 'api/';
 
 static String uploadHomework = baseApi+"add-homework";

@@ -3,7 +3,7 @@
 @lang('examplan::exp.admit_card')
 @endsection
 @section('mainContent')
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1> @lang('examplan::exp.admit_card') </h1>
@@ -107,7 +107,7 @@
                                 <tbody>
                                     @foreach($exam_routines as $date => $exam_routine)
                                     <tr>
-                                        <td >{{ dateConvert($exam_routine->date) }} <br>{{ Carbon::createFromFormat('Y-m-d', $exam_routine->date)->format('l'); }}</td>
+                                        <td >{{ dateConvert($exam_routine->date) }} <br>{{ Carbon::createFromFormat('Y-m-d', $exam_routine->date)->format('l') }}</td>
                                         <td>
                                         <strong> {{ $exam_routine->subject ? $exam_routine->subject->subject_name :'' }} </strong>  {{ $exam_routine->subject ? '('.$exam_routine->subject->subject_code .')':'' }}
                                         </td>

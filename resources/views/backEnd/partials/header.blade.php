@@ -1,10 +1,10 @@
-
 <!DOCTYPE html>
 @php
     $generalSetting = generalSetting();
 @endphp
 <html lang="{{ app()->getLocale() }}" @if(userRtlLtl()==1) dir="rtl" class="rtl" @endif>
 <head>
+    @laravelPWA
     <!-- Required meta tags -->
     <meta charset="utf-8"/>
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -14,7 +14,7 @@
     @else
         <link rel="icon" href="{{asset('public/uploads/settings/favicon.png')}}" type="image/png"/>
     @endif
-    <title>{{@schoolConfig()->school_name ? @schoolConfig()->school_name : 'Infix Edu ERP'}} |
+    <title>{{@schoolConfig()->school_name ? @schoolConfig()->school_name : 'EDU SHAMIIT ERP'}} |
         @yield('title')
     </title>
 
@@ -33,8 +33,9 @@
 <link rel="stylesheet" href="{{ asset('public/backEnd/vendors/css/nice-select.css') }}" />
 <link rel="stylesheet" href="{{ asset('public/backEnd/vendors/css/toastr.min.css') }}" />
 <link rel="stylesheet" href="{{ asset('public/backEnd/assets/css/style.css')}}" />
-<link rel="stylesheet" href="{{ asset('public/backEnd/vendors/editor/summernote-bs4.css') }}">
+@if(moduleStatusCheck('WhatsappSupport'))
 <link rel="stylesheet" href="{{ asset('public/whatsapp-support/style.css') }}">
+@endif 
 @if(\Request::route()->getName() == "fees.fees-invoice-settings")
 <link rel="stylesheet" href="{{ asset('public/backEnd/vendors/select2/css/select2.min.css')}}" />
 @endif 
@@ -44,7 +45,7 @@
         .demo_addons{
             float: left!important;
             margin-left: 30px!important;
-        }    
+        } 
     </style>
 @endif
     <x-root-css/>
@@ -63,7 +64,8 @@
 </head>
 @php
 if (empty(color_theme())) {
- $css = "background: url('".asset('/public/backEnd/img/body-bg.jpg')."')  no-repeat center; background-size: cover ; ";
+//  $css = "background: url('".asset('/public/backEnd/img/body-bg.jpg')."')  no-repeat center; background-size: cover ; ";
+    $css = "background: var(--background)";
 } else {
  if (!empty(color_theme()->background_type == 'image')) {
      $css = "background: url('" . asset(color_theme()->background_image) . "')  no-repeat center; background-size: cover; background-attachment: fixed; background-position: top; ";
@@ -82,10 +84,10 @@ if (empty(color_theme())) {
     }
 @endphp
 
-<body class="admin"  style="{!! $css !!} ">
-        @include('backEnd.preloader')
-        @php
-            $chat_method = $generalSetting->chatting_method;
+<body class="admin"  style="{!! $css !!}">
+          @include('backEnd.preloader')
+          @php
+            $chat_method = app('general_settings')->get('chatting_method');
         @endphp
         <input type="hidden" id="chat_settings" value="{{ $chat_method }}">
         @if($chat_method == 'pusher')
@@ -119,3 +121,14 @@ if (empty(color_theme())) {
     <div id="main-content">
         <input type="hidden" name="url" id="url" value="{{url('/')}}">
 @include('backEnd.partials.menu')
+
+<script>
+    $(window).on('resize', function(){
+        var win = $(this);
+        if (win.width() <= 991){
+            $('#sidebar.sidebar').removeClass('mini_sidebar');
+            $('#main-content').removeClass('mini_main_content');
+            $('.footer-area').removeClass('mini_main_content');
+        }
+    });
+</script>

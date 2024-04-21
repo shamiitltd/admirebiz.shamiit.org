@@ -14,7 +14,7 @@
     </style>
 @endpush
 @section('mainContent')
-<section class="sms-breadcrumb mb-40 white-box">
+<section class="sms-breadcrumb mb-20">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('homework.evaluation')</h1>
@@ -423,7 +423,7 @@
                     </div>
                 </div>
             </div>
-
+            {{-- @dd($homeworkDetails) --}}
             <div class="single-meta">
                 <div class="row">
                     <div class="col-lg-7">
@@ -434,7 +434,7 @@
                     <div class="col-lg-5">
                         <div class="name">
                             @if(isset($homeworkDetails))
-                            {{$homeworkDetails->subjects->subject_name}}
+                            {{@$homeworkDetails->subjects->subject_name}}
                             @endif
                         </div>
                     </div>

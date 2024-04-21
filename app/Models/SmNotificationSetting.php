@@ -13,7 +13,7 @@ class SmNotificationSetting extends Model
     use HasFactory;
 
     protected $casts = ['destination' => 'array', 'template' => 'array', 'subject' => 'array', 'recipient' => 'array', 'shortcode' => 'array'];
-    
+
     public static function templeteData($body, $data)
     {
         $body = str_replace('[student_name]', @$data['student_name'], $body);
@@ -44,27 +44,40 @@ class SmNotificationSetting extends Model
         $body = str_replace('[item]', @$data['item'], $body);
         $body = str_replace('[quantity]', @$data['quantity'], $body);
         $body = str_replace('[amount]', @$data['amount'], $body);
-        $body = str_replace('[class]', @$data['class'], $body);
-        $body = str_replace('[section]', @$data['section'], $body);
+        if (@$data['attendance_type'] == "P") {
+            $body = str_replace('[attendance_type]', "Present", $body);
+        } elseif (@$data['attendance_type'] == "L") {
+            $body = str_replace('[attendance_type]', "Late", $body);
+        } elseif (@$data['attendance_type'] == "A") {
+            $body = str_replace('[attendance_type]', "Absent", $body);
+        } elseif (@$data['attendance_type'] == "F") {
+            $body = str_replace('[attendance_type]', "Half Day", $body);
+        }
 
-            if (@$data['section']) {
-                $body = str_replace('[section]', @$data['section'], $body);
-            }
+        if (@$data['class']) {
+            $class = SmClass::find($data['class']);
+            $body = str_replace('[class]', @$class->class_name, $body);
+        }
 
-            if (@$data['class_id']) {
-                $class = SmClass::find($data['class_id'], ['class_name']);
-                $body = str_replace('[class]', @$class->class_name, $body);
-            }
+        if (@$data['section']) {
+            $section = SmSection::find($data['section']);
+            $body = str_replace('[section]', @$section->section_name, $body);
+        }
 
-            if (@$data['section_id']) {
-                $class = SmSection::find($data['section_id'], ['section_name']);
-                $body = str_replace('[section]', @$class->section_name, $body);
-            }
+        if (@$data['class_id']) {
+            $class = SmClass::find($data['class_id'], ['class_name']);
+            $body = str_replace('[class]', @$class->class_name, $body);
+        }
 
-            if (@$data['subject_id']) {
-                $class = SmSubject::find($data['subject_id'], ['subject_name']);
-                $body = str_replace('[subject]', @$class->subject_name, $body);
-            }
-            return $body;
+        if (@$data['section_id']) {
+            $section = SmSection::find($data['section_id'], ['section_name']);
+            $body = str_replace('[section]', @$section->section_name, $body);
+        }
+
+        if (@$data['subject_id']) {
+            $subject = SmSubject::find($data['subject_id'], ['subject_name']);
+            $body = str_replace('[subject]', @$subject->subject_name, $body);
+        }
+        return $body;
     }
 }

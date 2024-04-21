@@ -4,7 +4,7 @@
 @lang('exam.marks_register')
 @endsection
 @section('mainContent')
-<section class="sms-breadcrumb mb-40 white-box">
+<section class="sms-breadcrumb mb-20">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('exam.marks_register') </h1>
@@ -17,26 +17,24 @@
     </div>
 </section>
 <section class="admin-visitor-area">
-    <div class="container-fluid p-0">
-            <div class="row">
-                <div class="col-lg-8 col-md-6 col-sm-6">
-                    <div class="main-title">
-                        <h3 class="mb-30">@lang('common.select_criteria') </h3>
-                    </div>
-                </div>
-            @if(userPermission('marks_register_create'))
-                <div class="col-lg-4 text-md-right text-left col-md-6 mb-30-lg col-sm-6 text_sm_right">
-                    <a href="{{route('marks_register_create')}}" class="primary-btn small fix-gr-bg">
-                        <span class="ti-plus pr-2"></span>
-                        @lang('exam.add_marks')
-                    </a>
-                </div>
-            @endif
-            </div>
-        </div>
         <div class="row">
             <div class="col-lg-12">              
                 <div class="white-box">
+                    <div class="row">
+                        <div class="col-lg-8 col-md-6 col-sm-6">
+                            <div class="main-title">
+                                <h3 class="mb-15">@lang('common.select_criteria') </h3>
+                            </div>
+                        </div>
+                    @if(userPermission('marks_register_create'))
+                        <div class="col-lg-4 text-md-right text-left col-md-6 mb-30-lg col-sm-6 text_sm_right">
+                            <a href="{{route('marks_register_create')}}" class="primary-btn small fix-gr-bg">
+                                <span class="ti-plus pr-2"></span>
+                                @lang('exam.add_marks')
+                            </a>
+                        </div>
+                    @endif
+                    </div>
                     {{ Form::open(['class' => 'form-horizontal', 'route' => 'marks_register_search', 'method' => 'POST', 'id' => 'search_student']) }}
                         <div class="row">
                             <input type="hidden" name="url" id="url" value="{{URL::to('/')}}">
@@ -79,8 +77,11 @@
                                 <div class="col-lg-3 mt-30-md">
                                     <select class="primary_select form-control{{ $errors->has('exam') ? ' is-invalid' : '' }}" name="exam">
                                         <option data-display="@lang('exam.select_exam') *" value="">@lang('exam.select_exam') *</option>
-                                        @foreach($exam_types as $exam_type)
-                                            <option value="{{$exam_type->id}}" {{isset($exam_id)? ($exam_id == $exam_type->id? 'selected':''):''}}>{{$exam_type->title}}</option>
+                                        @foreach ($exams as $exam)
+                                            <option value="{{ $exam->id }}"
+                                                {{ isset($exam_id) ? ($exam_id == $exam->id ? 'selected' : '') : '' }}>
+                                                {{ $exam->examType->title }}/{{ $exam->class->class_name }}({{ $exam->section->section_name }})
+                                            </option>
                                         @endforeach
                                     </select>
                                     @if ($errors->has('exam'))

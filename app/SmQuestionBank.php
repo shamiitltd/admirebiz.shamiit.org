@@ -9,12 +9,13 @@ use App\Scopes\StatusAcademicSchoolScope;
 class SmQuestionBank extends Model
 {
     use HasFactory;
-	protected static function boot(){
+    protected static function boot()
+    {
         parent::boot();
         static::addGlobalScope(new StatusAcademicSchoolScope);
     }
-    
-    
+
+
     public function questionGroup()
     {
         return $this->belongsTo('App\SmQuestionGroup', 'q_group_id')->withOutGlobalScope(StatusAcademicSchoolScope::class);
@@ -29,8 +30,17 @@ class SmQuestionBank extends Model
     }
     public function section()
     {
-        return $this->belongsTo('App\SmSection', 'section_id', 'id')->withOutGlobalScope(StatusAcademicSchoolScope::class);
+        if (moduleStatusCheck('University')) {
+            return $this->belongsTo('App\SmSection', 'un_section_id', 'id')->withOutGlobalScope(StatusAcademicSchoolScope::class);
+        } else {
+            return $this->belongsTo('App\SmSection', 'section_id', 'id')->withOutGlobalScope(StatusAcademicSchoolScope::class);
+        }
     }
+    public function unSemesterLabel()
+    {
+        return $this->belongsTo('Modules\University\Entities\UnSemesterLabel', 'un_semester_label_id', 'id')->withDefault();
+    }
+
     public function questionMu()
     {
         return $this->hasMany('App\SmQuestionBankMuOption', 'question_bank_id', 'id');

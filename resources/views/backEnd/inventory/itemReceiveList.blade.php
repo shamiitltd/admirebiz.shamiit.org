@@ -19,7 +19,7 @@
             $currency = '$';
         }
     @endphp
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('inventory.item_receive_list')</h1>
@@ -45,37 +45,39 @@
                     </div>
                 @endif
             </div>
-            <div class="row mt-40">
+            <div class="row mt-20">
                 <div class="col-lg-12">
-                    <div class="row">
-                        <div class="col-lg-4 no-gutters">
-                            <div class="main-title">
-                                <h3 class="mb-0">@lang('inventory.item_receive_list')</h3>
+                    <div class="white-box">
+                        <div class="row">
+                            <div class="col-lg-4 no-gutters">
+                                <div class="main-title">
+                                    <h3 class="mb-15">@lang('inventory.item_receive_list')</h3>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <x-table>
-                                <table id="table_id" class="table data-table" cellspacing="0" width="100%">
-                                    <thead>
-                                        <tr>
-                                            <th>@lang('common.sl')</th>
-                                            <th>@lang('inventory.reference_no')</th>
-                                            <th>@lang('inventory.supplier_company_name')</th>
-                                            <th>@lang('common.date')</th>
-                                            <th>@lang('inventory.grand_total')</th>
-                                            <th>@lang('inventory.total_quantity')</th>
-                                            <th>@lang('inventory.paid')</th>
-                                            <th>@lang('inventory.balance') ({{ $currency }})</th>
-                                            <th>@lang('common.status')</th>
-                                            <th>@lang('common.action')</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
-                            </x-table>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <x-table>
+                                    <table id="table_id" class="table data-table" cellspacing="0" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th>@lang('common.sl')</th>
+                                                <th>@lang('inventory.reference_no')</th>
+                                                <th>@lang('inventory.supplier_company_name')</th>
+                                                <th>@lang('common.date')</th>
+                                                <th>@lang('inventory.grand_total')</th>
+                                                <th>@lang('inventory.total_quantity')</th>
+                                                <th>@lang('inventory.paid')</th>
+                                                <th>@lang('inventory.balance') ({{ $currency }})</th>
+                                                <th>@lang('common.status')</th>
+                                                <th>@lang('common.action')</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </x-table>
+                            </div>
                         </div>
                     </div>
                 </div>

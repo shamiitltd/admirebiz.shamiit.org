@@ -8,8 +8,8 @@
     @endif
 @endsection
 @section('mainContent')
-    <section class="sms-breadcrumb mb-40 white-box">
-        <div class="container-fluid p-0">
+    <section class="sms-breadcrumb mb-20">
+        <div class="container-fluid">
             <div class="row justify-content-between">
 
                 <h1>
@@ -35,45 +35,47 @@
     </section>
     <section class="admin-visitor-area up_admin_visitor">
         <div class="container-fluid p-0">
-            <div class="row">
-                <div class="col-lg-4 no-gutters">
-                    <div class="main-title">
-                        @php $pending = Illuminate\Support\Str::contains(Request::path(), 'pending');  @endphp
-
-                        @if ($pending)
-                            <h3>@lang('leave.pending_leave_request')
-                                <h3>
-                                @else
-                                    <h3>@lang('leave.approve_leave_request')<h3>
-                        @endif
+            <div class="white-box">
+                <div class="row">
+                    <div class="col-lg-4 no-gutters">
+                        <div class="main-title">
+                            @php $pending = Illuminate\Support\Str::contains(Request::path(), 'pending');  @endphp
+    
+                            @if ($pending)
+                                <h3 class="mb-15">@lang('leave.pending_leave_request')
+                                    <h3>
+                                    @else
+                                        <h3 class="mb-15">@lang('leave.approve_leave_request')<h3>
+                            @endif
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="row">
-                <div class="col-lg-12">
-                    <x-table>
-                        <table id="table_id" class="table data-table" cellspacing="0" width="100%">
-
-                            <thead>
-
-                                <tr>
-                                    <th>Si</th>
-                                    <th>@lang('common.name')</th>
-                                    <th>@lang('common.type')</th>
-                                    <th>@lang('common.from')</th>
-                                    <th>@lang('common.to')</th>
-                                    <th>@lang('leave.apply_date')</th>
-                                    <th>@lang('common.status')</th>
-                                    <th>@lang('common.action')</th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-
-                            </tbody>
-                        </table>
-                    </x-table>
+    
+                <div class="row">
+                    <div class="col-lg-12">
+                        <x-table>
+                            <table id="table_id" class="table data-table" cellspacing="0" width="100%">
+    
+                                <thead>
+    
+                                    <tr>
+                                        <th>Si</th>
+                                        <th>@lang('common.name')</th>
+                                        <th>@lang('common.type')</th>
+                                        <th>@lang('common.from')</th>
+                                        <th>@lang('common.to')</th>
+                                        <th>@lang('leave.apply_date')</th>
+                                        <th>@lang('common.status')</th>
+                                        <th>@lang('common.action')</th>
+                                    </tr>
+                                </thead>
+    
+                                <tbody>
+    
+                                </tbody>
+                            </table>
+                        </x-table>
+                    </div>
                 </div>
             </div>
         </div>

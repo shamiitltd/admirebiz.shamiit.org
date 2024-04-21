@@ -52,7 +52,7 @@
             @$currency = '$';
         }
     @endphp
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('accounts.fund_transfer')</h1>
@@ -67,21 +67,21 @@
     <section class="admin-visitor-area up_admin_visitor">
         <div class="container-fluid p-0">
             <div class="row">
-                <div class="col-lg-4 col-md-6">
-                    <div class="main-title">
-                        <h3 class="mb-30">@lang('common.select_criteria')</h3>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
                 <div class="col-lg-12">
                     <div class="white-box">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-6">
+                                <div class="main-title">
+                                    <h3 class="mb-15">@lang('common.select_criteria')</h3>
+                                </div>
+                            </div>
+                        </div>
                         {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'fund-transfer-store', 'method' => 'POST', 'enctype' => 'multipart/form-data']) }}
                         <div class="row">
                             <div class="col-lg-4">
                                 <div class="row">
                                     <div class="col-lg-12">
-                                        <h3 class="mb-10">@lang('common.add_information')</h3>
+                                        <h3 class="mb-10 section_sub_title">@lang('common.add_information')</h3>
                                         <input type="hidden" name="url" id="url" value="{{ URL::to('/') }}">
                                         <div class="primary_input">
                                             <label class="primary_input_label" for="">@lang('accounts.amount') <span
@@ -138,7 +138,7 @@
                                 </div>
                             </div>
                             <div class="col-lg-4">
-                                <h3>@lang('accounts.from')</h3>
+                                <h3 class="section_sub_title">@lang('accounts.from')</h3>
                                 @foreach ($payment_methods as $payment_method)
                                     <div class=" radio-btn-flex ml-20">
                                         <div class="CustomPaymentMethod d-flex mb-2">
@@ -184,7 +184,7 @@
                                 @endif
                             </div>
                             <div class="col-lg-4">
-                                <h3>@lang('accounts.to')</h3>
+                                <h3 class="section_sub_title">@lang('accounts.to')</h3>
                                 @foreach ($payment_methods as $payment_method)
                                     <div class=" radio-btn-flex ml-20">
                                         <div class="CustomPaymentMethod d-flex mb-2">
@@ -240,54 +240,56 @@
             </div>
             <div class="row mt-40">
                 <div class="col-lg-12">
-                    <div class="row">
-                        <div class="col-lg-6 no-gutters">
-                            <div class="main-title">
-                                <h3 class="mb-0">@lang('accounts.amount_transfer_list')</h3>
+                    <div class="white-box">
+                        <div class="row">
+                            <div class="col-lg-6 no-gutters">
+                                <div class="main-title">
+                                    <h3 class="mb-15">@lang('accounts.amount_transfer_list')</h3>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <!-- </div> -->
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <x-table>
-                                <div class="table-responsive">
-                                    <table id="tableWithoutSort" class="table" cellspacing="0" width="100%">
-                                        <thead>
-                                            <tr>
-                                                <th>@lang('accounts.purpose')</th>
-                                                <th>@lang('accounts.amount')</th>
-                                                <th>@lang('accounts.from')</th>
-                                                <th>@lang('accounts.to')</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @php
-                                                $total = 0;
-                                            @endphp
-                                            @foreach ($transfers as $transfer)
-                                                @php
-                                                    $total = $total + $transfer->amount;
-                                                @endphp
+                        <!-- </div> -->
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <x-table>
+                                    <div class="table-responsive">
+                                        <table id="tableWithoutSort" class="table" cellspacing="0" width="100%">
+                                            <thead>
                                                 <tr>
-                                                    <td>{{ $transfer->purpose }}</td>
-                                                    <td>{{ $transfer->amount }}</td>
-                                                    <td>{{ $transfer->fromPaymentMethodName->method }}</td>
-                                                    <td>{{ $transfer->toPaymentMethodName->method }}</td>
+                                                    <th>@lang('accounts.purpose')</th>
+                                                    <th>@lang('accounts.amount')</th>
+                                                    <th>@lang('accounts.from')</th>
+                                                    <th>@lang('accounts.to')</th>
                                                 </tr>
-                                            @endforeach
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <td>@lang('accounts.total')</td>
-                                                <td>{{ currency_format($total) }}</td>
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
-                            </x-table>
+                                            </thead>
+                                            <tbody>
+                                                @php
+                                                    $total = 0;
+                                                @endphp
+                                                @foreach ($transfers as $transfer)
+                                                    @php
+                                                        $total = $total + $transfer->amount;
+                                                    @endphp
+                                                    <tr>
+                                                        <td>{{ $transfer->purpose }}</td>
+                                                        <td>{{ $transfer->amount }}</td>
+                                                        <td>{{ $transfer->fromPaymentMethodName->method }}</td>
+                                                        <td>{{ $transfer->toPaymentMethodName->method }}</td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td>@lang('accounts.total')</td>
+                                                    <td>{{ currency_format($total) }}</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </x-table>
+                            </div>
                         </div>
                     </div>
                 </div>

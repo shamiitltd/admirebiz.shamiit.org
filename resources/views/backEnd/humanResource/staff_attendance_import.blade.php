@@ -11,7 +11,7 @@
 @lang('hr.staff_attendance_import')
 @endsection 
 @section('mainContent')
-<section class="sms-breadcrumb mb-40 up_breadcrumb white-box">
+<section class="sms-breadcrumb mb-20 up_breadcrumb">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('hr.staff_attendance')</h1>

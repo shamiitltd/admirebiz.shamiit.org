@@ -9,13 +9,13 @@
                             if ($item['icon_size'] == 5) {
                                 $size = '25px';
                             } elseif ($item['icon_size'] == 15) {
-                                $size = '50px';
+                                $size = '77px';
                             } elseif ($item['icon_size'] == 30) {
-                                $size = '75px';
+                                $size = '154px';
                             } elseif ($item['icon_size'] == 45) {
-                                $size = '100px';
+                                $size = '230px';
                             } else {
-                                $size = '125px';
+                                $size = '307px';
                             }
                         @endphp
                         @if (!empty($item['icon_class']))

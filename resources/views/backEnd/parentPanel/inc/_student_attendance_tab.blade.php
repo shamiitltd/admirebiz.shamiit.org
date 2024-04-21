@@ -58,21 +58,12 @@
             box-shadow: inset 0 0 5px grey
         }
 
-        th {
-            padding: .5rem !important;
-            font-size: 10px !important;
-        }
-
         td {
             padding: .3rem !important;
             font-size: 12px !important;
         }
 
         .dataTables_filter {
-            margin-top: 30px;
-        }
-
-        .dt-buttons {
             margin-top: 30px;
         }
     </style>

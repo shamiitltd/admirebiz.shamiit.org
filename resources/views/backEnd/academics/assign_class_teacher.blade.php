@@ -2,8 +2,17 @@
 @section('title') 
 @lang('academics.assign_class_teacher')
 @endsection
+
+@push('css')
+<style>
+    .primary-btn.fix-gr-bg.submit{
+        font-size: 11px;
+        padding: 0 16px;
+    }
+</style>
+@endpush
 @section('mainContent')
-<section class="sms-breadcrumb mb-40 white-box">
+<section class="sms-breadcrumb mb-20">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('academics.assign_class_teacher') </h1>
@@ -30,18 +39,9 @@
         @endif
         @endif
         <div class="row">
-             <div class="col-lg-3">
+             <div class="col-lg-4 col-xl-3">
                 <div class="row">
                     <div class="col-lg-12">
-                        <div class="main-title">
-                            <h3 class="mb-30">
-                                @if(isset($assign_class_teacher))
-                                    @lang('academics.edit_assign_class_teacher')
-                                @else
-                                    @lang('academics.assign_class_teacher')
-                                @endif
-                            </h3>
-                        </div>
                         @if(isset($assign_class_teacher))
                         {{ Form::open(['class' => 'form-horizontal', 'route' => array('assign-class-teacher-update',@$assign_class_teacher->id), 'method' => 'PUT']) }}
                         @else
@@ -50,6 +50,15 @@
                         @endif
                         @endif
                         <div class="white-box">
+                            <div class="main-title">
+                                <h3 class="mb-15">
+                                    @if(isset($assign_class_teacher))
+                                        @lang('academics.edit_assign_class_teacher')
+                                    @else
+                                        @lang('academics.assign_class_teacher')
+                                    @endif
+                                </h3>
+                            </div>
                             <div class="add-visitor">
                                 <div class="row">
                                     <div class="col-lg-12">
@@ -156,90 +165,92 @@
                 </div>
             </div>
 
-            <div class="col-lg-9">
-                <div class="row">
-                    <div class="col-lg-4 no-gutters">
-                        <div class="main-title">
-                            <h3 class="mb-0">@lang('academics.class_teacher_list')</h3>
+            <div class="col-lg-8 col-xl-9">
+                <div class="white-box">
+                    <div class="row">
+                        <div class="col-lg-4 no-gutters">
+                            <div class="main-title">
+                                <h3 class="mb-15">@lang('academics.class_teacher_list')</h3>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-lg-12">
-                        <x-table>
-                            <table id="table_id" class="table Crm_table_active3" cellspacing="0" width="100%">
-
-                                <thead>
-                                  
-                                    <tr>
-                                        <th>@lang('common.class')</th>
-                                        <th>@lang('common.section')</th>
-                                        <th>@lang('common.teacher')</th>
-                                        <th>@lang('common.action')</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($assign_class_teachers as $assign_class_teacher)
-                                    <tr>
-                                        <td valign="top">{{@$assign_class_teacher->class !=""? @$assign_class_teacher->class->class_name:""}}</td>
-                                        <td valign="top">{{@$assign_class_teacher->section != ""? @$assign_class_teacher->section->section_name:""}}</td>
-                                        <td valign="top">
+    
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <x-table>
+                                <table id="table_id" class="table Crm_table_active3" cellspacing="0" width="100%">
+    
+                                    <thead>
+                                      
+                                        <tr>
+                                            <th>@lang('common.class')</th>
+                                            <th>@lang('common.section')</th>
+                                            <th>@lang('common.teacher')</th>
+                                            <th>@lang('common.action')</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($assign_class_teachers as $assign_class_teacher)
+                                        <tr>
+                                            <td valign="top">{{@$assign_class_teacher->class !=""? @$assign_class_teacher->class->class_name:""}}</td>
+                                            <td valign="top">{{@$assign_class_teacher->section != ""? @$assign_class_teacher->section->section_name:""}}</td>
+                                            <td valign="top">
+                                                
+                                                    @php
+                                                      @$classTeachers = @$assign_class_teacher->classTeachers;
+                                                    @endphp
+                                                    @if($classTeachers !="")
+                                                            @foreach($classTeachers as $classTeacher)
+                                                                @php 
+                                                                    @$teacher = @$classTeacher->teacher;
+                                                                @endphp
+                                                                    {{ @$teacher->full_name }}
+                                                             @endforeach
+                                                    @endif
+                                            </td>
                                             
+                                            <td valign="top">
+                                                
                                                 @php
-                                                  @$classTeachers = @$assign_class_teacher->classTeachers;
-                                                @endphp
-                                                @if($classTeachers !="")
-                                                        @foreach($classTeachers as $classTeacher)
-                                                            @php 
-                                                                @$teacher = @$classTeacher->teacher;
-                                                            @endphp
-                                                                {{ @$teacher->full_name }}
-                                                         @endforeach
-                                                @endif
-                                        </td>
-                                        
-                                        <td valign="top">
-                                            
-                                            @php
-                                            $routeList = [
-                                                userPermission('assign-class-teacher-edit') ?
-                                                '<a class="dropdown-item" href="'.route('assign-class-teacher-edit', [$assign_class_teacher->id]).'">'.__('common.edit').'</a>':null,
-                                                userPermission('assign-class-teacher-delete') ?
-                                                '<a class="dropdown-item" data-toggle="modal" data-target="#deleteClassModal'.$assign_class_teacher->id.'"  href="#">'.__('common.delete').'</a>' : null,
-                                            ]
-                                        @endphp
-                                         <x-drop-down-action-component :routeList="$routeList" />
-                                        </td>
-                                    </tr>
-                                    <div class="modal fade admin-query" id="deleteClassModal{{@$assign_class_teacher->id}}" >
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h4 class="modal-title">@lang('academics.delete_assign_teacher')</h4>
-                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                </div>
-    
-                                                <div class="modal-body">
-                                                    <div class="text-center">
-                                                        <h4>@lang('common.are_you_sure_to_delete')</h4>
+                                                $routeList = [
+                                                    userPermission('assign-class-teacher-edit') ?
+                                                    '<a class="dropdown-item" href="'.route('assign-class-teacher-edit', [$assign_class_teacher->id]).'">'.__('common.edit').'</a>':null,
+                                                    userPermission('assign-class-teacher-delete') ?
+                                                    '<a class="dropdown-item" data-toggle="modal" data-target="#deleteClassModal'.$assign_class_teacher->id.'"  href="#">'.__('common.delete').'</a>' : null,
+                                                ]
+                                            @endphp
+                                             <x-drop-down-action-component :routeList="$routeList" />
+                                            </td>
+                                        </tr>
+                                        <div class="modal fade admin-query" id="deleteClassModal{{@$assign_class_teacher->id}}" >
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">@lang('academics.delete_assign_teacher')</h4>
+                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
                                                     </div>
-    
-                                                    <div class="mt-40 d-flex justify-content-between">
-                                                        <button type="button" class="primary-btn tr-bg" data-dismiss="modal">@lang('common.cancel')</button>
-                                                        {{ Form::open(['route' => array('assign-class-teacher-delete',@$assign_class_teacher->id), 'method' => 'DELETE', 'enctype' => 'multipart/form-data']) }}
-                                                        <button class="primary-btn fix-gr-bg" type="submit">@lang('common.delete')</button>
-                                                         {{ Form::close() }}
+        
+                                                    <div class="modal-body">
+                                                        <div class="text-center">
+                                                            <h4>@lang('common.are_you_sure_to_delete')</h4>
+                                                        </div>
+        
+                                                        <div class="mt-40 d-flex justify-content-between">
+                                                            <button type="button" class="primary-btn tr-bg" data-dismiss="modal">@lang('common.cancel')</button>
+                                                            {{ Form::open(['route' => array('assign-class-teacher-delete',@$assign_class_teacher->id), 'method' => 'DELETE', 'enctype' => 'multipart/form-data']) }}
+                                                            <button class="primary-btn fix-gr-bg" type="submit">@lang('common.delete')</button>
+                                                             {{ Form::close() }}
+                                                        </div>
                                                     </div>
+        
                                                 </div>
-    
                                             </div>
                                         </div>
-                                    </div>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </x-table>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </x-table>
+                        </div>
                     </div>
                 </div>
             </div>

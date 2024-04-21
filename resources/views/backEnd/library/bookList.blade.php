@@ -17,37 +17,39 @@
 </section>
 <section class="admin-visitor-area up_admin_visitor">
     <div class="container-fluid p-0">
-    <div class="row mt-50">
-        <div class="col-lg-12">
-           <div class="row">
-               <div class="col-lg-12">
-                <x-table>
-                    <table id="table_id" class="table data-table" cellspacing="0" width="100%">
-                        <thead> 
-                           
-                            <tr>
-                                <th>@lang('common.sl')</th>
-                                <th>@lang('library.book_title')</th>
-                                <th>@lang('library.book_no')</th>
-                                <th>@lang('library.isbn_no')</th>
-                                <th>@lang('student.category')</th>
-                                <th>@lang('library.publisher_name')</th>
-                                <th>@lang('library.author_name')</th>
-                                <th>@lang('library.quantity')</th>
-                                <th>@lang('library.price')</th>
-                                <th>@lang('common.action')</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            
-                       </tbody>
-                   </table>
-                </x-table>
+    <div class="white-box">
+        <div class="row mt-50">
+            <div class="col-lg-12">
+               <div class="row">
+                   <div class="col-lg-12">
+                    <x-table>
+                        <table id="table_id" class="table data-table" cellspacing="0" width="100%">
+                            <thead> 
+                               
+                                <tr>
+                                    <th>@lang('common.sl')</th>
+                                    <th>@lang('library.book_title')</th>
+                                    <th>@lang('library.book_no')</th>
+                                    <th>@lang('library.isbn_no')</th>
+                                    <th>@lang('student.category')</th>
+                                    <th>@lang('library.publisher_name')</th>
+                                    <th>@lang('library.author_name')</th>
+                                    <th>@lang('library.quantity')</th>
+                                    <th>@lang('library.price')</th>
+                                    <th>@lang('common.action')</th>
+                                </tr>
+                            </thead>
+    
+                            <tbody>
+                                
+                           </tbody>
+                       </table>
+                    </x-table>
+                   </div>
                </div>
            </div>
        </div>
-   </div>
+    </div>
 </div>
 </section>
 @endsection

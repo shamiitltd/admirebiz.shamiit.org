@@ -11,95 +11,93 @@
         $is_registration_permission = $reg_setting ? $reg_setting->registration_permission == 1 : false;
     }
 @endphp
-<header class="heading" style="position: {{isset($position) ? $position : ''}}">
-    @if(pagesetting('header_top_menu') == 1)
-        <div class="heading_sub">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-5">
-                        <nav class="heading_sub_left">
-                            <ul>
-                                @if (!empty(pagesetting('header-left-menus')))
-                                    @foreach(pagesetting('header-left-menus') as $rightMenu)
-                                        <li>
-                                            <a href="{{ gv($rightMenu, 'header-left-menu-icon-url') }}">
-                                                <i class="{{gv($rightMenu, 'header-left-menu-icon-class')}}"></i>
-                                                {{ gv($rightMenu, 'header-left-menu-label') }}
-                                            </a>
-                                        </li>
-                                    @endforeach
-                                @endif
-                            </ul>
-                        </nav>
-                    </div>
-                    <div class="col-md-7 text-end">
-                        <nav class="heading_sub_right">
-                            <ul class='social-links'>
-                                @if (!empty(pagesetting('header-right-menus')))
-                                    @foreach (pagesetting('header-right-menus') as $icon)
-                                        <li class='social-links-list'>
-                                            <a href="{{ gv($icon, 'header-right-icon-url') }}" target='_blank' class='social-links-list-link'>
-                                                <i class="{{ gv($icon, 'header-right-icon-class') }}"></i>
-                                                {{ gv($icon, 'header-right-menu-label') }}
-                                            </a>
-                                        </li>
-                                    @endforeach
-                                @endif
-                            </ul>
-
-                            <ul>
-                                <li>
-                                    @if (!auth()->check())
-                                        <a href="{{url('/login')}}">
-                                            <i class="far fa-user"></i>
-                                            {{ __('edulia.login')}}
-                                        </a>
-                                    @else
-                                        <a href="{{url('/admin-dashboard')}}">
-                                            <i class="far fa-user"></i>
-                                            {{ __('edulia.dashboard')}}
-                                        </a>
-                                    @endif
-                                </li>
-                                @if (moduleStatusCheck('ParentRegistration') && $is_registration_permission && $is_registration_permission == 1)
+<header class="heading">
+    <div class="heading_sub">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-5">
+                    <nav class="heading_sub_left">
+                        <ul>
+                            @if (!empty(pagesetting('header-left-menus')))
+                                @foreach(pagesetting('header-left-menus') as $rightMenu)
                                     <li>
-                                        <a href="{{ route('parentregistration/registration', $reg_setting->url) }}">
-                                            <i class="far">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="16.5"
-                                                    viewBox="0 0 15 16.5">
-                                                    <g id="archive-book" transform="translate(-2.25 -1.25)">
-                                                        <path id="Path_1912" data-name="Path 1912"
-                                                            d="M16.5,5.75v7.5c0,2.25-1.125,3.75-3.75,3.75h-6C4.125,17,3,15.5,3,13.25V5.75C3,3.5,4.125,2,6.75,2h6C15.375,2,16.5,3.5,16.5,5.75Z"
-                                                            transform="translate(0)" fill="none" stroke="#fff"
-                                                            stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-miterlimit="10" stroke-width="1.5" />
-                                                        <path id="Path_1913" data-name="Path 1913"
-                                                            d="M13.758,2V7.9a.377.377,0,0,1-.631.278L11.385,6.575a.372.372,0,0,0-.511,0L9.131,8.182A.377.377,0,0,1,8.5,7.9V2Z"
-                                                            transform="translate(-1.379)" fill="none" stroke="#fff"
-                                                            stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-miterlimit="10" stroke-width="1.5" />
-                                                        <path id="Path_1914" data-name="Path 1914" d="M13.25,14h3.192"
-                                                            transform="translate(-2.566 -3)" fill="none" stroke="#fff"
-                                                            stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-miterlimit="10" stroke-width="1.5" />
-                                                        <path id="Path_1915" data-name="Path 1915" d="M9,18h6.385"
-                                                            transform="translate(-1.506 -4.005)" fill="none" stroke="#fff"
-                                                            stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-miterlimit="10" stroke-width="1.5" />
-                                                    </g>
-                                                </svg>
-                                            </i>
-                                            {{ __('edulia.student_registration')}}
+                                        <a href="{{ gv($rightMenu, 'header-left-menu-icon-url') }}">
+                                            <i class="{{gv($rightMenu, 'header-left-menu-icon-class')}}"></i>
+                                            {{ gv($rightMenu, 'header-left-menu-label') }}
                                         </a>
                                     </li>
+                                @endforeach
+                            @endif
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col-md-7 text-end">
+                    <nav class="heading_sub_right">
+                        <ul class='social-links'>
+                            @if (!empty(pagesetting('header-right-menus')))
+                                @foreach (pagesetting('header-right-menus') as $icon)
+                                    <li class='social-links-list'>
+                                        <a href="{{ gv($icon, 'header-right-icon-url') }}" target='_blank' class='social-links-list-link'>
+                                            <i class="{{ gv($icon, 'header-right-icon-class') }}"></i>
+                                            {{ gv($icon, 'header-right-menu-label') }}
+                                        </a>
+                                    </li>
+                                @endforeach
+                            @endif
+                        </ul>
+
+                        <ul>
+                            <li>
+                                @if (!auth()->check())
+                                    <a href="{{url('/login')}}">
+                                        <i class="far fa-user"></i>
+                                        {{ __('edulia.login')}}
+                                    </a>
+                                @else
+                                    <a href="{{url('/admin-dashboard')}}">
+                                        <i class="far fa-user"></i>
+                                        {{ __('edulia.dashboard')}}
+                                    </a>
                                 @endif
-                            </ul>
-                        </nav>
-                    </div>
+                            </li>
+                            @if (moduleStatusCheck('ParentRegistration') && $is_registration_permission && $is_registration_permission == 1)
+                                <li>
+                                    <a href="{{ route('parentregistration/registration', $reg_setting->url) }}">
+                                        <i class="far">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="16.5"
+                                                viewBox="0 0 15 16.5">
+                                                <g id="archive-book" transform="translate(-2.25 -1.25)">
+                                                    <path id="Path_1912" data-name="Path 1912"
+                                                        d="M16.5,5.75v7.5c0,2.25-1.125,3.75-3.75,3.75h-6C4.125,17,3,15.5,3,13.25V5.75C3,3.5,4.125,2,6.75,2h6C15.375,2,16.5,3.5,16.5,5.75Z"
+                                                        transform="translate(0)" fill="none" stroke="#fff"
+                                                        stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-miterlimit="10" stroke-width="1.5" />
+                                                    <path id="Path_1913" data-name="Path 1913"
+                                                        d="M13.758,2V7.9a.377.377,0,0,1-.631.278L11.385,6.575a.372.372,0,0,0-.511,0L9.131,8.182A.377.377,0,0,1,8.5,7.9V2Z"
+                                                        transform="translate(-1.379)" fill="none" stroke="#fff"
+                                                        stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-miterlimit="10" stroke-width="1.5" />
+                                                    <path id="Path_1914" data-name="Path 1914" d="M13.25,14h3.192"
+                                                        transform="translate(-2.566 -3)" fill="none" stroke="#fff"
+                                                        stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-miterlimit="10" stroke-width="1.5" />
+                                                    <path id="Path_1915" data-name="Path 1915" d="M9,18h6.385"
+                                                        transform="translate(-1.506 -4.005)" fill="none" stroke="#fff"
+                                                        stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-miterlimit="10" stroke-width="1.5" />
+                                                </g>
+                                            </svg>
+                                        </i>
+                                        {{ __('edulia.student_registration')}}
+                                    </a>
+                                </li>
+                            @endif
+                        </ul>
+                    </nav>
                 </div>
             </div>
         </div>
-    @endif
+    </div>
     
     <div class="heading_mobile">
         <div>
@@ -110,20 +108,11 @@
                 <img src="{{pagesetting('header_menu_image') ? pagesetting('header_menu_image')[0]['thumbnail'] : defaultLogo($generalSetting->logo) }}" alt="">
             </a>
         </div>
-        <div class='text-end'>
-            @if (!empty(pagesetting('header_menu_search')) && pagesetting('header_menu_search') == 1)
-                <div class='heading_mobile_inner'>
-                    <ul>
-                        <li><a href="#" data-mobile-search='true'><i class="far fa-search"></i></a></li>
-                    </ul>
-                </div>
-            @endif
-        </div>
         <form action="#" class='heading_main_search m_s'>
             <div class="input-control">
                 <label for="search" class="input-control-icon"><i class="far fa-search"></i></label>
                 <input type="search" name='search' id='search' class="input-control-input"
-                    placeholder='{{__('common.search')}}' required>
+                    placeholder='Search for course, skills and Videos' required>
             </div>
         </form>
     </div>
@@ -136,7 +125,7 @@
                         <img src="{{pagesetting('header_menu_image') ? pagesetting('header_menu_image')[0]['thumbnail'] : defaultLogo($generalSetting->logo) }}" alt="">
                     </a>
                 </div>
-                <div class="col-md-{{ pagesetting('header_menu_search') == 1 ? 7 : 10}}">
+                <div class="col-md-7">
                     <x-header-content-menu></x-header-content-menu>
                 </div>
                 @if (!empty(pagesetting('header_menu_search')) && pagesetting('header_menu_search') == 1)

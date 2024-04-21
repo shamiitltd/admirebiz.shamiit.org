@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Admin\FrontSettings;
 
+use App\SmStaff;
 use Illuminate\Http\Request;
 use App\Models\SmExpertTeacher;
 use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
-use Illuminate\Support\Facades\Validator;
+use Modules\RolePermission\Entities\InfixRole;
 
 class SmExpertTeacherController extends Controller
 {
@@ -17,8 +18,14 @@ class SmExpertTeacherController extends Controller
     public function index()
     {
         try {
-            $expertTeachers = SmExpertTeacher::where('school_id', app('school')->id)->get();
-            return view('backEnd.frontSettings.expert_teacher.expert_teacher', compact('expertTeachers'));
+            $expertTeachers = SmExpertTeacher::where('school_id', auth()->user()->school_id)->orderBy('position', 'asc')->with('staff.designations')->get();
+            $roles = InfixRole::where('active_status', '=', '1')
+                ->whereNotIn('id', [1, 2, 3, 10])
+                ->where(function ($q) {
+                    $q->where('school_id', auth()->user()->school_id)->orWhere('type', 'System');
+                })->get();
+                // dd($expertTeachers);
+            return view('backEnd.frontSettings.expert_teacher.expert_teacher', compact('expertTeachers', 'roles'));
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();
@@ -26,73 +33,27 @@ class SmExpertTeacherController extends Controller
     }
     public function store(Request $request)
     {
-        $maxFileSize = generalSetting()->file_size * 1024;
-        $input = $request->all();
-        $validator = Validator::make($input, [
-            'name' => "required",
-            'designation' => "required",
-            'image' => "required|mimes:jpg,jpeg,png|max:" . $maxFileSize,
-        ]);
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
         try {
-            $destination =  'public/uploads/expert_teacher/';
-            $image = fileUpload($request->image, $destination);
-            $expertTeacher = new SmExpertTeacher();
-            $expertTeacher->name = $request->name;
-            $expertTeacher->designation = $request->designation;
-            $expertTeacher->image = $image;
-            $expertTeacher->school_id = app('school')->id;
-            $result = $expertTeacher->save();
+            $staffExists = SmExpertTeacher::where('staff_id', $request->staff)->first();
+            if ($staffExists == null) {
+                $expertTeacher = new SmExpertTeacher();
+                $expertTeacher->staff_id = $request->staff;
+                $expertTeacher->created_by = auth()->user()->id;
+                $expertTeacher->school_id = auth()->user()->school_id;
+                $expertTeacher->save();
 
-            Toastr::success('Operation successful', 'Success');
-            return redirect()->route('expert-teacher');
-        } catch (\Exception $e) {
-            Toastr::error('Operation Failed', 'Failed');
-            return redirect()->back();
-        }
-    }
-    public function edit($id)
-    {
-        try {
-            $expertTeachers = SmExpertTeacher::where('school_id', app('school')->id)->get();
-            $add_expert_teacher = SmExpertTeacher::find($id);
-            return view('backEnd.frontSettings.expert_teacher.expert_teacher', compact('add_expert_teacher', 'expertTeachers'));
-        } catch (\Exception $e) {
-            Toastr::error('Operation Failed', 'Failed');
-            return redirect()->back();
-        }
-    }
-    public function update(Request $request)
-    {
-        $maxFileSize = generalSetting()->file_size * 1024;
-        $input = $request->all();
-        if ($input['id']) {
-            $validator = Validator::make($input, [
-                'image' => "sometimes|nullable|mimes:jpg,jpeg,png|max:" . $maxFileSize,
-            ]);
-        } else {
-            $validator = Validator::make($input, [
-                'name' => "required",
-                'designation' => "required",
-                'image' => "required|mimes:jpg,jpeg,png|max:" . $maxFileSize,
-            ]);
-        }
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
-        try {
-            $destination =  'public/uploads/expert_teacher/';
-            $expertTeacher = SmExpertTeacher::find($request->id);
-            $expertTeacher->name = $request->name;
-            $expertTeacher->designation = $request->designation;
-            $expertTeacher->image = fileUpdate($expertTeacher->image, $request->image, $destination);
-            $expertTeacher->school_id = app('school')->id;
-            $result = $expertTeacher->save();
+                $staff = SmStaff::find($request->staff);
+                if ($staff != null) {
+                    $staff->show_public = 1;
+                    $staff->update();
+                }
 
-            Toastr::success('Operation successful', 'Success');
-            return redirect()->route('expert-teacher');
+                Toastr::success('Operation successful', 'Success');
+                return redirect()->route('expert-teacher');
+            } else {
+                Toastr::error('Already Set As Expert Staff', 'Failed');
+                return redirect()->route('expert-teacher');
+            }
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();
@@ -112,6 +73,13 @@ class SmExpertTeacherController extends Controller
     {
         try {
             $expertTeacher = SmExpertTeacher::where('id', $id)->first();
+
+            $staff = SmStaff::find($expertTeacher->staff_id);
+            if ($staff != null) {
+                $staff->show_public = 0;
+                $staff->update();
+            }
+
             $expertTeacher->delete();
             Toastr::success('Deleted successfully', 'Success');
             return redirect()->back();

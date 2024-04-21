@@ -3,7 +3,7 @@
 @lang('bulkprint::bulk.payroll_bulk_print')
 @endsection
 @section('mainContent')
-<section class="sms-breadcrumb mb-40 white-box">
+<section class="sms-breadcrumb mb-20">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1> @lang('bulkprint::bulk.payroll_bulk_print')</h1>
@@ -19,15 +19,15 @@
     <div class="container-fluid p-0">
         @if(userPermission(173))
         <div class="row">
-            <div class="col-lg-4 col-md-6">
-                <div class="main-title">
-                    <h3 class="mb-30">@lang('common.select_criteria')</h3>
-                </div>
-            </div>
-        </div>
-        <div class="row">
            <div class="col-lg-12">         
             <div class="white-box">
+                <div class="row">
+                    <div class="col-lg-4 col-md-6">
+                        <div class="main-title">
+                            <h3 class="mb-15">@lang('common.select_criteria')</h3>
+                        </div>
+                    </div>
+                </div>
                 {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'payroll-bulk-print-seacrh', 'method' => 'POST', 'enctype' => 'multipart/form-data']) }}
                 <div class="row">
                     <div class="col-lg-4 mb-3 mb-lg-0">
@@ -99,82 +99,84 @@
 @if(isset($staffs))
 <div class="row mt-40">
     <div class="col-lg-12">
-        <div class="row">
-            <div class="col-lg-4 no-gutters">
-                <div class="main-title">
-                    <h3 class="mb-0">@lang('hr.staff_list')</h3>
+        <div class="white-box">
+            <div class="row">
+                <div class="col-lg-4 no-gutters">
+                    <div class="main-title">
+                        <h3 class="mb-15">@lang('hr.staff_list')</h3>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-12">
-                <table id="table_id" class="table" cellspacing="0" width="100%">
-                    <thead>
-                        <tr>
-                            <th>@lang('hr.staff_no')</th>
-                            <th>@lang('common.name')</th>
-                            <th>@lang('common.role')</th>
-                            <th>@lang('hr.department')</th>
-                            <th>@lang('common.description')</th>
-                            <th>@lang('common.mobile')</th>
-                            <th>@lang('common.status')</th>
-                            <th>@lang('common.action')</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                      @foreach($staffs as $value)
-                      <tr>
-                        <td>{{$value->staff_no}}</td>
-                        <td>{{$value->first_name}}&nbsp;{{$value->last_name}}</td>
-                        <td>{{$value->roles !=""?$value->roles->name:""}}</td>
-                        <td>{{$value->departments !=""?$value->departments->name:""}}</td>
-                        <td>{{$value->designations !=""?$value->designations->title:""}}</td>
-                        <td>{{$value->mobile}}</td>
-                        <td>
-                            @php
-                                $getPayrollDetails = App\SmHrPayrollGenerate::getPayrollDetails($value->id, $payroll_month, $payroll_year);
-                            @endphp
-                            @if(!empty($getPayrollDetails))
-                                @if($getPayrollDetails->payroll_status == 'G')
-                                    <button class="primary-btn small bg-warning text-white border-0"> @lang('hr.generated')</button>
-                                @endif
-                                @if($getPayrollDetails->payroll_status == 'P')
-                                    <button class="primary-btn small bg-success text-white border-0"> @lang('hr.paid') </button>
-                                @endif
-                            @else
-                                <button class="primary-btn small bg-danger text-white border-0 nowrap">@lang('hr.not_generated')</button>
-                            @endif
-                        </td>
-                        <td>
-                            <div class="dropdown">
-                                <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
-                                    @lang('common.select')
-                                </button>
-                                <div class="dropdown-menu dropdown-menu-right">
+            <div class="row">
+                <div class="col-lg-12">
+                    <table id="table_id" class="table" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>@lang('hr.staff_no')</th>
+                                <th>@lang('common.name')</th>
+                                <th>@lang('common.role')</th>
+                                <th>@lang('hr.department')</th>
+                                <th>@lang('common.description')</th>
+                                <th>@lang('common.mobile')</th>
+                                <th>@lang('common.status')</th>
+                                <th>@lang('common.action')</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                          @foreach($staffs as $value)
+                          <tr>
+                            <td>{{$value->staff_no}}</td>
+                            <td>{{$value->first_name}}&nbsp;{{$value->last_name}}</td>
+                            <td>{{$value->roles !=""?$value->roles->name:""}}</td>
+                            <td>{{$value->departments !=""?$value->departments->name:""}}</td>
+                            <td>{{$value->designations !=""?$value->designations->title:""}}</td>
+                            <td>{{$value->mobile}}</td>
+                            <td>
+                                @php
+                                    $getPayrollDetails = App\SmHrPayrollGenerate::getPayrollDetails($value->id, $payroll_month, $payroll_year);
+                                @endphp
                                 @if(!empty($getPayrollDetails))
                                     @if($getPayrollDetails->payroll_status == 'G')
-                                        @if(userPermission(176))
-                                            <a class="dropdown-item modalLink" data-modal-size="modal-lg" title="@lang('hr.proceed_to_pay')" href="{{route('pay-payroll',[$getPayrollDetails->id,$value->role_id])}}">@lang('hr.proceed_to_pay')</a>
-                                        @endif
-                                            <a class="dropdown-item" href="{{route('print-payslip', $getPayrollDetails->id)}}">@lang('common.print')</a>
+                                        <button class="primary-btn small bg-warning text-white border-0"> @lang('hr.generated')</button>
                                     @endif
                                     @if($getPayrollDetails->payroll_status == 'P')
-                                        @if(userPermission(177))
-                                            <a class="dropdown-item modalLink" data-modal-size="modal-lg" title="@lang('hr.view_payslip')" href="{{route('view-payslip', $getPayrollDetails->id)}}">@lang('hr.view_payslip')</a>
-                                        @endif
+                                        <button class="primary-btn small bg-success text-white border-0"> @lang('hr.paid') </button>
                                     @endif
                                 @else
-                                    @if(userPermission(174))
-                                        <a class="dropdown-item" href="{{route('generate-Payroll',[@$value->id,@$payroll_month,@$payroll_year])}}">@lang('hr.generate_payroll')</a>
-                                    @endif
+                                    <button class="primary-btn small bg-danger text-white border-0 nowrap">@lang('hr.not_generated')</button>
                                 @endif
+                            </td>
+                            <td>
+                                <div class="dropdown">
+                                    <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
+                                        @lang('common.select')
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                    @if(!empty($getPayrollDetails))
+                                        @if($getPayrollDetails->payroll_status == 'G')
+                                            @if(userPermission(176))
+                                                <a class="dropdown-item modalLink" data-modal-size="modal-lg" title="@lang('hr.proceed_to_pay')" href="{{route('pay-payroll',[$getPayrollDetails->id,$value->role_id])}}">@lang('hr.proceed_to_pay')</a>
+                                            @endif
+                                                <a class="dropdown-item" href="{{route('print-payslip', $getPayrollDetails->id)}}">@lang('common.print')</a>
+                                        @endif
+                                        @if($getPayrollDetails->payroll_status == 'P')
+                                            @if(userPermission(177))
+                                                <a class="dropdown-item modalLink" data-modal-size="modal-lg" title="@lang('hr.view_payslip')" href="{{route('view-payslip', $getPayrollDetails->id)}}">@lang('hr.view_payslip')</a>
+                                            @endif
+                                        @endif
+                                    @else
+                                        @if(userPermission(174))
+                                            <a class="dropdown-item" href="{{route('generate-Payroll',[@$value->id,@$payroll_month,@$payroll_year])}}">@lang('hr.generate_payroll')</a>
+                                        @endif
+                                    @endif
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>

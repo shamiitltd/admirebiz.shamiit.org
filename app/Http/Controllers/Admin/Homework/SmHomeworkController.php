@@ -335,7 +335,8 @@ class SmHomeworkController extends Controller
     public function unEvaluationHomework($sem_label_id, $homework_id)
     {
         try {
-            $homeworkDetails = SmHomework::find($homework_id);
+            $homeworkDetails = SmHomework::with('subjects')->find($homework_id);
+
             $student_records = StudentRecord::where('un_semester_label_id', $sem_label_id)->distinct('student_id')->get('student_id');
             $student_ids = [];
             foreach ($student_records as $record) {
@@ -451,6 +452,9 @@ class SmHomeworkController extends Controller
         $request->validate([
             'class_id' => 'required',
             'subject_id' => 'required'
+        ],[
+            'class_id' => 'The class field is required.',
+            'subject_id' => 'The subject field is required.'
         ]);
         try {
             if (moduleStatusCheck('University')) {
@@ -762,17 +766,28 @@ class SmHomeworkController extends Controller
             return redirect()->back();
         }
     }
-    public function homeworkReportSearch(Request $request)
-    {
+    function universityHomeworkSearch($request){
         $input = $request->all();
         $validator = Validator::make($input, [
-            'class_id' => "required",
-            'subject_id' => "required",
-            'section_id' => "required",
+            'un_session_id' => "required",
+            // 'un_faculty_id' => "required",
+            // 'un_department_id' => "required",
+            // 'un_academic_id' => "required",
+            // 'un_semester_id' => "required",
+            // 'un_semester_lable_id' => "required",
+            // 'un_section_id'=> "required",
+            // 'un_subject_id'=> "required",
+
         ], [
-            'class_id' => "The Class field is required",
-            'subject_id' => "The Subject field is required",
-            'section_id' => "The Section field is required",
+            'un_session_id' => "The Session field is required",
+            'un_faculty_id' => "The Faculty field is required",
+            'un_department_id' => "The Department field is required",
+            'un_academic_id' => "The Academic field is required",
+            'un_semester_id' => "The Semester field is required",
+            'un_semester_lable_id' => "The Semester Lable field is required",
+            'un_section_id'=> "The Section field is required",
+            'un_subject_id'=> "The Subject field is required",
+        
         ]);
         if ($validator->fails()) {
             return redirect()->route('homework-report')
@@ -780,41 +795,51 @@ class SmHomeworkController extends Controller
                 ->withInput();
         }
 
+
+        // return $input;
         try {
-            if (teacherAccess()) {
-                $teacher_info = SmStaff::where('user_id', Auth::user()->id)->first();
-                $classes = $teacher_info->classes;
-            } else {
-                $classes = SmClass::get();
-            }
 
-            $homeworks = SmHomework::where('class_id', $request->class_id)
-                ->when($request->subject_id, function ($query) use ($request) {
-                    $query->where('subject_id', $request->subject_id);
+            $homeworks = SmHomework::when($request->un_session_id, function ($query) use ($request) {
+                    $query->where('un_session_id', $request->un_session_id);
                 })
-                ->when($request->section_id, function ($query) use ($request) {
-                    $query->where('section_id', $request->section_id);
+                ->when($request->un_faculty_id, function ($query) use ($request) {
+                    $query->where('un_faculty_id', $request->un_faculty_id);
+                })
+                ->when($request->un_department_id, function ($query) use ($request) {
+                    $query->where('un_department_id', $request->un_department_id);
+                })
+                ->when($request->un_academic_id, function ($query) use ($request) {
+                    $query->where('un_academic_id', $request->un_academic_id);
+                })
+                ->when($request->un_semester_id, function ($query) use ($request) {
+                    $query->where('un_semester_id', $request->un_semester_id);
+                })
+                ->when($request->un_semester_lable_id, function ($query) use ($request) {
+                    $query->where('un_semester_lable_id', $request->un_semester_lable_id);
+                })
+                ->when($request->un_section_id, function ($query) use ($request) {
+                    $query->where('un_section_id', $request->un_section_id);
+                })
+                ->when($request->un_subject_id, function ($query) use ($request) {
+                    $query->where('un_subject_id', $request->un_subject_id);
+                })
+                ->when($request->date, function ($query) use ($request) {
+                    $query->where('homework_date', date('Y-m-d', strtotime($request->date)));
                 });
-            $homeworks = $homeworks->with('class.records.studentDetail', 'section', 'subjects', 'evaluatedBy')
-                ->whereHas('class.records', function ($q) use ($request) {
-                    $q->where('section_id', $request->section_id);
-                })->get();
-
-            $data = collect();
+            $homeworks = $homeworks->with('class.students.studentDetail', 'unSection.section', 'subjects', 'evaluatedBy')->get();
             foreach ($homeworks as $hw) {
                 $hw_evaluations = $hw->evaluations;
                 $hw_contents = $hw->contents;
-
-                foreach ($hw->class->records as $record) {
+                foreach ($hw->class->students as $record) {
                     $evaluation = $hw->evaluations->where('student_id', $record->student_id)->first();
                     $submission = $hw_contents->where('student_id', $record->student_id)->first();
                     $data[] = [
                         'student' => $record->studentDetail ? $record->studentDetail->full_name : '',
                         'student_id' => $record->studentDetail ? $record->studentDetail->id : '',
-                        'class' => $hw->class ?  $hw->class->class_name : '',
+                        'class' => $hw->class ?  $hw->class->name : '',
                         'class_id' => $hw->class ?  $hw->class->id : '',
-                        'section' =>  $hw->section ?  $hw->section->section_name : '',
-                        'section_id' =>  $hw->section ?  $hw->section->id : '',
+                        'section' =>  $hw->unSection ?  $hw->unSection->section->section_name : '',
+                        'section_id' =>  $hw->unSection ?  $hw->unSection->section->id : '',
                         'subject' => $hw->subjects ?  $hw->subjects->subject_name : '',
                         'total_marks' =>  $hw->marks,
                         'homework_id' =>  $hw->id,
@@ -827,13 +852,90 @@ class SmHomeworkController extends Controller
                     ];
                 }
             }
-
-            return view('backEnd.homework.homework_report', compact('classes', 'data'));
+            return view('backEnd.homework.homework_report', compact('data'));
         } catch (\Exception $e) {
         
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();
         }
+    }
+    public function homeworkReportSearch(Request $request)
+    {
+        if(moduleStatusCheck('University')){
+            return $this->universityHomeworkSearch($request);
+        }else{
+            $input = $request->all();
+            $validator = Validator::make($input, [
+                'class_id' => "required",
+                'subject_id' => "required",
+                'section_id' => "required",
+            ], [
+                'class_id' => "The Class field is required",
+                'subject_id' => "The Subject field is required",
+                'section_id' => "The Section field is required",
+            ]);
+            if ($validator->fails()) {
+                return redirect()->route('homework-report')
+                    ->withErrors($validator)
+                    ->withInput();
+            }
+    
+            try {
+                if (teacherAccess()) {
+                    $teacher_info = SmStaff::where('user_id', Auth::user()->id)->first();
+                    $classes = $teacher_info->classes;
+                } else {
+                    $classes = SmClass::get();
+                }
+    
+                $homeworks = SmHomework::where('class_id', $request->class_id)
+                    ->when($request->subject_id, function ($query) use ($request) {
+                        $query->where('subject_id', $request->subject_id);
+                    })
+                    ->when($request->section_id, function ($query) use ($request) {
+                        $query->where('section_id', $request->section_id);
+                    });
+                $homeworks = $homeworks->with('class.records.studentDetail', 'section', 'subjects', 'evaluatedBy')
+                    ->whereHas('class.records', function ($q) use ($request) {
+                        $q->where('section_id', $request->section_id);
+                    })->get();
+    
+                $data = collect();
+                foreach ($homeworks as $hw) {
+                    $hw_evaluations = $hw->evaluations;
+                    $hw_contents = $hw->contents;
+    
+                    foreach ($hw->class->records as $record) {
+                        $evaluation = $hw->evaluations->where('student_id', $record->student_id)->first();
+                        $submission = $hw_contents->where('student_id', $record->student_id)->first();
+                        $data[] = [
+                            'student' => $record->studentDetail ? $record->studentDetail->full_name : '',
+                            'student_id' => $record->studentDetail ? $record->studentDetail->id : '',
+                            'class' => $hw->class ?  $hw->class->class_name : '',
+                            'class_id' => $hw->class ?  $hw->class->id : '',
+                            'section' =>  $hw->section ?  $hw->section->section_name : '',
+                            'section_id' =>  $hw->section ?  $hw->section->id : '',
+                            'subject' => $hw->subjects ?  $hw->subjects->subject_name : '',
+                            'total_marks' =>  $hw->marks,
+                            'homework_id' =>  $hw->id,
+                            'obtain_marks' =>  $evaluation ?   @$evaluation->marks   :  '',
+                            'submission_date' => $submission ?  dateConvert($submission->created_at) : '',
+                            'evaluation_date' => $evaluation  ?  dateConvert($evaluation->created_at) : '',
+                            'evaluated_by' => $hw->evaluatedBy ?  $hw->evaluatedBy->full_name : '',
+                            'status' => $evaluation ? ($evaluation->complete_status == 'C' ? 'Completed' : 'Not Complete') : '',
+                            'comment' => $evaluation ?  $evaluation->teacher_comments : '',
+                        ];
+                    }
+                }
+    
+                return view('backEnd.homework.homework_report', compact('classes', 'data'));
+            } catch (\Exception $e) {
+                dd($e);
+                Toastr::error('Operation Failed', 'Failed');
+                return redirect()->back();
+            }
+        }
+      
     }
 
     public function homeworkReportView($student_id, $class_id, $section_id, $homework_id)

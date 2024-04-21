@@ -269,11 +269,11 @@ if (!function_exists('getColumnInfo')) {
                 break;
 
             case '6x2':
-                return ['col-6', 'col-6'];
+                return ['col-md-6', 'col-md-6'];
                 break;
 
             case '6x3x3':
-                return ['col-6', 'col-3', 'col-3'];
+                return ['col-md-6 col-12', 'col-md-3 col-6', 'col-md-3 col-6'];
                 break;
 
             case '9x3':

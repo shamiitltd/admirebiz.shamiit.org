@@ -37,8 +37,7 @@ class SmStudentCertificateController extends Controller
     }
     public function store(SmStudentCertificateRequest $request)
     {
-        try {
-
+        #try {
             $destination = 'public/uploads/certificate/';
             $fileName = fileUpload($request->file,$destination);
             $certificate = new SmStudentCertificate();
@@ -51,6 +50,11 @@ class SmStudentCertificateController extends Controller
             $certificate->footer_right_text = $request->footer_right_text;
             $certificate->student_photo = $request->student_photo;
             $certificate->file = $fileName;
+            $certificate->body_font_family = $request->body_font_family;
+            $certificate->layout = $request->layout;
+            $certificate->body_font_size = $request->body_font_size;
+            $certificate->height = $request->height;
+            $certificate->width = $request->width;
             $certificate->school_id = Auth::user()->school_id;
             $certificate->academic_id = getAcademicId();
 
@@ -59,10 +63,10 @@ class SmStudentCertificateController extends Controller
             Toastr::success('Operation successful', 'Success');
             return redirect()->back();
 
-        } catch (\Exception $e) {
-            Toastr::error('Operation Failed', 'Failed');
-            return redirect()->back();
-        }
+        // } catch (\Exception $e) {
+        //     Toastr::error('Operation Failed', 'Failed');
+        //     return redirect()->back();
+        // }
     }
 
     public function edit($id)
@@ -103,6 +107,11 @@ class SmStudentCertificateController extends Controller
             $certificate->footer_right_text = $request->footer_right_text;
             $certificate->student_photo = $request->student_photo;
             $certificate->certificate_no = $request->certificate_no;
+            $certificate->body_font_family = $request->body_font_family;
+            $certificate->layout = $request->layout;
+            $certificate->body_font_size = $request->body_font_size;
+            $certificate->height = $request->height;
+            $certificate->width = $request->width;
             $certificate->file = fileUpdate($certificate->file,$request->file,$destination);
             //   uest->all());
             $result = $certificate->save();
@@ -151,6 +160,41 @@ class SmStudentCertificateController extends Controller
             $classes = SmClass::where('active_status', 1)->where('academic_id', getAcademicId())->where('school_id',Auth::user()->school_id)->get();
             $certificates = SmStudentCertificate::where('school_id',auth()->user()->school_id)->get();
             return view('backEnd.admin.generate_certificate', compact('classes', 'certificates'));
+        } catch (\Exception $e) {
+            Toastr::error('Operation Failed', 'Failed');
+            return redirect()->back();
+        }
+    }
+    
+    public function setDefault($certificate_id,$default_for){
+        try {
+            $certificate = SmStudentCertificate::find($certificate_id);
+            $certificate->default_for = $default_for;
+            $result = $certificate->save();
+            if($result){
+                Toastr::success('Certificate Set As Default for '.$default_for, 'Success');
+                return redirect()->back();
+            }else{
+                Toastr::error('Operation Failed', 'Failed');
+                return redirect()->back();
+            }
+        } catch (\Exception $e) {
+            Toastr::error('Operation Failed', 'Failed');
+            return redirect()->back();
+        }
+    }
+    public function resetDefault($certificate_id){
+        try {
+            $certificate = SmStudentCertificate::find($certificate_id);
+            $certificate->default_for = null;
+            $result = $certificate->save();
+            if($result){
+                Toastr::success('Certificate Reset For Default', 'Success');
+                return redirect()->back();
+            }else{
+                Toastr::error('Operation Failed', 'Failed');
+                return redirect()->back();
+            }
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();
@@ -206,12 +250,11 @@ class SmStudentCertificateController extends Controller
 
     public function generateCertificateGenerate($s_id, $c_id)
     {
-
         try {
             $s_ids = explode('-', $s_id);
             $students = [];
             foreach ($s_ids as $sId) {
-                $students[] = StudentRecord::find($sId);
+                $students[] = StudentRecord::with('student')->find($sId);
             }
 
             $certificate = SmStudentCertificate::find($c_id);

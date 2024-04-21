@@ -438,7 +438,7 @@ input:checked+.slider:before {
     border-radius: 0px 0px 10px 10px;
     margin-top: 1px;
     z-index: 9999 !important;
-    box-shadow: 0px 10px 20px rgba(108, 39, 255, 0.3);
+    box-shadow: var(--box_shadow);
 }
 
 .select2-dropdown.select2-dropdown--below {

@@ -24,6 +24,7 @@ class SettingsController extends Controller
                 'chat_teacher_staff_can_make_group' => $request->teacher_staff_can_make_group,
                 'chat_staff_or_teacher_can_ban_student' => $request->staff_or_teacher_can_ban_student,
                 'chat_teacher_can_pin_top_message' => $request->teacher_can_pin_top_message,
+                'student_can_add_member'    => $request->student_can_add_member,
             ]);
             Toastr::success('Settings successfully updated!');
             return redirect()->back();

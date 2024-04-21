@@ -317,6 +317,10 @@ class SmFeesDiscountController extends Controller
 
     public function feesDiscountAssignStore(Request $request)
     {
+        if(!$request->checkAll){
+            Toastr::error('Please Select Student', 'Failed');
+            return redirect()->route('fees_discount_assign', $request->fees_discount_id);
+        }
         $datas= collect($request->data);
         try{
             $discount_id=intval($request->fees_discount_id);

@@ -79,14 +79,14 @@
 @endpush
 
 @section('mainContent')
-    <section class="sms-breadcrumb mb-40 white-box up_breadcrumb">
+    <section class="sms-breadcrumb mb-20 up_breadcrumb">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('front_settings.Theme Manager')</h1>
                 <div class="bc-pages">
                     <a href="{{ route('dashboard') }}">@lang('common.dashboard')</a>
                     <a href="#">@lang('common.frontend_cms')</a>
-                    <a href="#">@lang('front_settings.Theme Manager') {{activeTheme()}}</a>
+                    <a href="#">@lang('front_settings.Theme Manager') - {{activeTheme()}}</a>
                 </div>
             </div>
         </div>
@@ -106,7 +106,7 @@
                                 <div class="card-footer d-flex">
                                     <div class="d-flex flex-grow-1 align-items-center gap-10">
                                         <div class="flex-grow-1">
-                                            <h4 class="theme_name">@if(activeTheme() == 'edulia')Active: @endif Edulia</h4>
+                                            <h4 class="theme_name">@if(activeTheme() == 'edulia')Active: @endif SHAMIIT</h4>
                                         </div>
                                         @if(activeTheme() != 'edulia')
                                             <div class="text-center active_btn">

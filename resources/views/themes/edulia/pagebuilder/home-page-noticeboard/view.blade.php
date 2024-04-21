@@ -9,7 +9,7 @@
                   </div>
                   <div class="notification-container">
                     <ul>
-                    <x-home-page-noticeboard
+                      <x-home-page-noticeboard
                         :sorting="pagesetting('notice_gallery_sorting')" 
                         :count="pagesetting('notice_gallery_count')"
                       ></x-home-page-noticeboard>
@@ -22,37 +22,45 @@
 </section>
 @pushonce(config('pagebuilder.site_script_var'))
     <script>
+            // notification area
+
+            var isAnimating = false;
+
         $(function() {
-        let tickerLength = $('.notification-container ul li').length;
-        let tickerHeight = $('.notification-container ul li').outerHeight();
-        $('.notification-container ul li:last-child').prependTo('.notification-container ul');
-        $('.notification-container ul').css('marginTop', -tickerHeight);
-        
-        var timer;
-        function moveTop() {
-          $('.notification-container ul').animate({
-            top: -tickerHeight - 10
-          }, 600, function() {
-            $('.notification-container ul li:first-child').appendTo('.notification-container ul');
-            $('.notification-container ul').css('top', '');
-          });
-        }
-        
-        // Check if the mouse is hovered over the notification container
-        var isHovered = false;
-        $('.notification-container').hover(function() {
-          isHovered = true;
-        }, function() {
-          isHovered = false;
+            let tickerLength = $('.notification-container ul li').length;
+            let tickerHeight = $('.notification-container ul li').outerHeight();
+            $('.notification-container ul li:last-child').prependTo('.notification-container ul');
+            $('.notification-container ul').css('marginTop', -tickerHeight);
+            
+            var timer;
+            function moveTop() {
+                if (!isAnimating) {
+                    isAnimating = true;
+                    $('.notification-container ul').animate({
+                      top: -tickerHeight - 10
+                    }, 600, function() {
+                      isAnimating = false;
+                      $('.notification-container ul li:first-child').appendTo('.notification-container ul');
+                      $('.notification-container ul').css('top', '');
+                    });
+                }
+            }
+            
+            // Check if the mouse is hovered over the notification container
+            var isHovered = false;
+            $('.notification-container').hover(function() {
+              isHovered = true;
+            }, function() {
+              isHovered = false;
+            });
+            
+            // Pause the animation when the mouse is hovered over the notification container
+            timer = setInterval(moveTop, 3000);
+            $('.notification-container').on('mouseenter', function() {
+              clearInterval(timer);
+            }).on('mouseleave', function() {
+              timer = setInterval(moveTop, 3000);
+            });
         });
-        
-        // Pause the animation when the mouse is hovered over the notification container
-        timer = setInterval(moveTop, 3000);
-        $('.notification-container').on('mouseenter', function() {
-          clearInterval(timer);
-        }).on('mouseleave', function() {
-          timer = setInterval(moveTop, 3000);
-        });
-    });
     </script>
 @endpushonce

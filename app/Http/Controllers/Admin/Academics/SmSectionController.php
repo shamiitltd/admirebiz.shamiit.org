@@ -16,40 +16,40 @@ use Modules\University\Entities\UnAcademicYear;
 class SmSectionController extends Controller
 {
     public function __construct()
-	{
+    {
         $this->middleware('PM');
         // User::checkAuth();
-	}
+    }
 
     public function index(Request $request)
     {
         try {
             $sections = SmSection::query();
-            if(moduleStatusCheck('University')){
-            $data = $sections->where('un_academic_id',getAcademicId());
-            }else{
-                $data = $sections->where('academic_id',getAcademicId());
+            if (moduleStatusCheck('University')) {
+                $data = $sections->where('un_academic_id', getAcademicId());
+            } else {
+                $data = $sections->where('academic_id', getAcademicId());
             }
-            $sections = $data->where('school_id',auth()->user()->school_id)->get();
+            $sections = $data->where('school_id', auth()->user()->school_id)->get();
 
             $unAcademics = null;
             if (moduleStatusCheck('University')) {
                 $unAcademics = UnAcademicYear::where('school_id', auth()->user()->school_id)->get()
-                ->pluck('name', 'id')
-                ->prepend(__('university::un.select_academic'), ' *')
-                ->toArray();
+                    ->pluck('name', 'id')
+                    ->prepend(__('university::un.select_academic'), ' *')
+                    ->toArray();
             }
             return view('backEnd.academics.section', compact('sections', 'unAcademics'));
         } catch (\Exception $e) {
-          
+
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();
         }
     }
     public function store(SectionRequest $request)
-    { 
-        $academic_year=academicYears();
-        if ($academic_year==null) {
+    {
+        $academic_year = academicYears();
+        if ($academic_year == null) {
             Toastr::warning('Create academic year first', 'Warning');
             return redirect()->back();
         }
@@ -58,7 +58,7 @@ class SmSectionController extends Controller
             $section->section_name = $request->name;
             $section->created_at = YearCheck::getYear() . '-' . date('m-d h:i:s');
             $section->school_id = Auth::user()->school_id;
-            $section->created_at=auth()->user()->id;
+            $section->created_at = auth()->user()->id;
             $section->academic_id = !moduleStatusCheck('University') ? getAcademicId() : null;
             if (moduleStatusCheck('University')) {
                 $section->un_academic_id = getAcademicId();
@@ -75,38 +75,35 @@ class SmSectionController extends Controller
             Toastr::success('Operation successful', 'Success');
             return redirect()->back();
         } catch (\Exception $e) {
-            
+
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();
         }
-
-
-
     }
     public function edit(Request $request, $id)
     {
 
         try {
-            $section = SmSection::where('id',$id)->where('school_id',auth()->user()->school_id)->first();
-            if(is_null($section)){
+            $section = SmSection::where('id', $id)->where('school_id', auth()->user()->school_id)->first();
+            if (is_null($section)) {
                 Toastr::error('Operation Failed', 'Failed');
                 return redirect()->back();
             }
             $sections = SmSection::query();
-            if(moduleStatusCheck('University')){
-            $data = $sections->where('un_academic_id',getAcademicId());
-            }else{
-                $data = $sections->whereNull('un_academic_id')->where('academic_id',getAcademicId());
+            if (moduleStatusCheck('University')) {
+                $data = $sections->where('un_academic_id', getAcademicId());
+            } else {
+                $data = $sections->whereNull('un_academic_id')->where('academic_id', getAcademicId());
             }
-            $sections = $data->where('school_id',auth()->user()->school_id)->get();
+            $sections = $data->where('school_id', auth()->user()->school_id)->get();
             $unAcademics = null;
             if (moduleStatusCheck('University')) {
                 $unAcademics = UnAcademicYear::where('school_id', auth()->user()->school_id)->get()
-                ->pluck('name', 'id')
-                ->prepend(__('university::un.select_academic'), ' *')
-                ->toArray();
+                    ->pluck('name', 'id')
+                    ->prepend(__('university::un.select_academic'), ' *')
+                    ->toArray();
             }
-       
+
             return view('backEnd.academics.section', compact('section', 'sections', 'unAcademics'));
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');
@@ -116,7 +113,7 @@ class SmSectionController extends Controller
     public function update(SectionRequest $request)
     {
         try {
-          
+
             $section = SmSection::find($request->id);
             $section->section_name = $request->name;
             $result = $section->save();
@@ -127,7 +124,7 @@ class SmSectionController extends Controller
                 } else {
                     return ApiBaseMethod::sendError('Something went wrong, please try again.');
                 }
-            } 
+            }
             Toastr::success('Operation successful', 'Success');
             return redirect('section');
         } catch (\Exception $e) {
@@ -139,16 +136,15 @@ class SmSectionController extends Controller
     {
         try {
             $tables = SmClassSection::where('section_id', $id)->first();
-                if ($tables == null) {
-                          SmSection::destroy($request->id);
-                          Toastr::success('Operation successful', 'Success');
-                          return redirect('section');
-                } else {
-                    $msg = 'This section already assigned with class .';
-                    Toastr::warning($msg, 'Warning');
-                    return redirect()->back();
-                }
-
+            if ($tables == null) {
+                SmSection::destroy($request->id);
+                Toastr::success('Operation successful', 'Success');
+                return redirect('section');
+            } else {
+                $msg = 'This section already assigned with class.';
+                Toastr::warning($msg, 'Warning');
+                return redirect()->back();
+            }
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();

@@ -33,7 +33,7 @@ $currency = $setting->currency_symbol;
 $currency = '$';
 }
 @endphp
-<section class="sms-breadcrumb mb-40 white-box">
+<section class="sms-breadcrumb mb-20">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('fees.fees_master')</h1>
@@ -65,16 +65,6 @@ $currency = '$';
             <div class="col-lg-3">
                 <div class="row">
                     <div class="col-lg-12">
-                        <div class="main-title">
-                            <h3 class="mb-30">
-                                @if (isset($fees_master))
-                                @lang('fees.edit_fees_master')
-                                @else
-                                @lang('fees.add_fees_master')
-                                @endif
-
-                            </h3>
-                        </div>
 
                         @if (isset($fees_master))
                         {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => ['fees-master-update', $fees_master->id], 'method' => 'PUT', 'enctype' => 'multipart/form-data', 'id' => 'fees_master_form']) }}
@@ -91,6 +81,16 @@ $currency = '$';
                         @endif
                         @endif
                         <div class="white-box">
+                            <div class="main-title">
+                                <h3 class="mb-15">
+                                    @if (isset($fees_master))
+                                    @lang('fees.edit_fees_master')
+                                    @else
+                                    @lang('fees.add_fees_master')
+                                    @endif
+    
+                                </h3>
+                            </div>
                             <div class="add-visitor">
                                 <div class="row">
                                     <div class="col-lg-12">
@@ -227,172 +227,174 @@ $currency = '$';
 
 
             <div class="col-lg-9">
-                <div class="row">
-                    <div class="col-lg-4 no-gutters">
-                        <div class="main-title">
-                            <h3 class="mb-0">@lang('fees.fees_master_list')</h3>
+                <div class="white-box">
+                    <div class="row">
+                        <div class="col-lg-4 no-gutters">
+                            <div class="main-title">
+                                <h3 class="mb-15">@lang('fees.fees_master_list')</h3>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-lg-12">
-                        <x-table>
-                            <table id="table_id" class="table" cellspacing="0" width="100%">
-                                <thead>
-                                    <tr>
-                                        <th>@lang('fees.group')</th>
-                                        <th>@lang('common.type')</th>
-                                        <th>@lang('common.action')</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($fees_masters as $values)
-                                    <tr>
-                                        <td valign="top">
-                                            @php $i = 0; @endphp
-                                            @foreach ($values as $fees_master)
-                                            @php $i++; @endphp
-                                            @if ($i == 1)
-                                            {{ @$fees_master->feesGroups->name }}
-                                            @endif
-                                            @endforeach
-                                        </td>
-                                        <td>
-                                            @foreach ($values as $fees_master)
-                                            <div class="row">
-                                                <div class="col-sm-6 custom_fees_master">
-                                                    {{ $fees_master->feesTypes != '' ? @$fees_master->feesTypes->name : '' }}
-                                                </div>
-                                                <div class="col-sm-2 custom_fees_master nowrap">
-                                                    {{ currency_format((float) $fees_master->amount) }}
-                                                </div>
-                                                <div class="col-sm-2">
-                                                    <div class="dropdown CRM_dropdown">
-                                                        <button type="button"
-                                                            class="btn dropdown-toggle ml-20"
-                                                            data-toggle="dropdown">
-                                                            @lang('common.select')
-                                                        </button>
-                                                        <div class="dropdown-menu dropdown-menu-right">
-                                                            @if (userPermission('fees-master-edit'))
-                                                            <a class="dropdown-item"
-                                                                href="{{ route('fees-master-edit', [$fees_master->id]) }}">@lang('common.edit')</a>
-                                                            @endif
-                                                            @if (userPermission('fees-master-delete'))
-                                                            @if (!@$fees_master->un_semester_label_id)
-                                                            <a class="dropdown-item deleteFeesMasterSingle"
-                                                                data-toggle="modal"
-                                                                data-target="#deleteFeesMasterSingle{{ $fees_master->id }}"
-                                                                href="#"
-                                                                data-id="{{ $fees_master->id }}">
-                                                                @lang('common.delete')
-                                                            </a>
-                                                            @endif
-                                                            @endif
-                                                        </div>
+    
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <x-table>
+                                <table id="table_id" class="table" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th>@lang('fees.group')</th>
+                                            <th>@lang('common.type')</th>
+                                            <th>@lang('common.action')</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($fees_masters as $values)
+                                        <tr>
+                                            <td valign="top">
+                                                @php $i = 0; @endphp
+                                                @foreach ($values as $fees_master)
+                                                @php $i++; @endphp
+                                                @if ($i == 1)
+                                                {{ @$fees_master->feesGroups->name }}
+                                                @endif
+                                                @endforeach
+                                            </td>
+                                            <td>
+                                                @foreach ($values as $fees_master)
+                                                <div class="row">
+                                                    <div class="col-sm-6 custom_fees_master">
+                                                        {{ $fees_master->feesTypes != '' ? @$fees_master->feesTypes->name : '' }}
                                                     </div>
-
-                                                </div>
-                                            </div>
-
-                                            <div class="modal fade admin-query"
-                                                id="deleteFeesMasterSingle{{ $fees_master->id }}">
-                                                <div class="modal-dialog modal-dialog-centered">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h4 class="modal-title">@lang('fees.delete_fees_type')</h4>
-                                                            <button type="button" class="close"
-                                                                data-dismiss="modal">&times;</button>
-                                                        </div>
-
-                                                        <div class="modal-body">
-                                                            <div class="text-center">
-                                                                <h4>@lang('common.are_you_sure_to_delete')</h4>
-                                                            </div>
-
-                                                            <div class="mt-40 d-flex justify-content-between">
-                                                                <button type="button"
-                                                                    class="primary-btn tr-bg"
-                                                                    data-dismiss="modal">@lang('common.cancel')</button>
-                                                                {{ Form::open(['url' => 'fees-master-single-delete', 'method' => 'POST', 'enctype' => 'multipart/form-data']) }}
-                                                                <input type="hidden" name="id"
-                                                                    id=""
-                                                                    value="{{ $fees_master->id }}">
-                                                                <button class="primary-btn fix-gr-bg"
-                                                                    type="submit">@lang('common.delete')</button>
-                                                                {{ Form::close() }}
+                                                    <div class="col-sm-2 custom_fees_master nowrap">
+                                                        {{ currency_format((float) $fees_master->amount) }}
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <div class="dropdown CRM_dropdown">
+                                                            <button type="button"
+                                                                class="btn dropdown-toggle ml-20"
+                                                                data-toggle="dropdown">
+                                                                @lang('common.select')
+                                                            </button>
+                                                            <div class="dropdown-menu dropdown-menu-right">
+                                                                @if (userPermission('fees-master-edit'))
+                                                                <a class="dropdown-item"
+                                                                    href="{{ route('fees-master-edit', [$fees_master->id]) }}">@lang('common.edit')</a>
+                                                                @endif
+                                                                @if (userPermission('fees-master-delete'))
+                                                                @if (!@$fees_master->un_semester_label_id)
+                                                                <a class="dropdown-item deleteFeesMasterSingle"
+                                                                    data-toggle="modal"
+                                                                    data-target="#deleteFeesMasterSingle{{ $fees_master->id }}"
+                                                                    href="#"
+                                                                    data-id="{{ $fees_master->id }}">
+                                                                    @lang('common.delete')
+                                                                </a>
+                                                                @endif
+                                                                @endif
                                                             </div>
                                                         </div>
-
+    
                                                     </div>
                                                 </div>
-                                            </div>
-                                            @endforeach
-                                        </td>
-                                        <td valign="top">
-                                            @php $i = 0; @endphp
-                                            @foreach ($values as $fees_master)
-                                            @php $i++; @endphp
-                                            @if ($i == 1)
-                                            <div class="dropdown CRM_dropdown">
-                                                <button type="button" class="btn dropdown-toggle"
-                                                    data-toggle="dropdown">
-                                                    @lang('common.select')
-                                                </button>
-                                                <div class="dropdown-menu dropdown-menu-right">
-
-                                                    @if ($fees_master->fees_group_id && userPermission('fees_assign'))
-                                                    <a class="dropdown-item"
-                                                        href="{{ route('fees_assign', [$fees_master->fees_group_id]) }}">@lang('fees.assign')/@lang('common.view')</a>
-                                                    @endif
-                                                    <a class="dropdown-item deleteFeesMasterGroup"
-                                                        data-toggle="modal" href="#"
-                                                        data-id="{{ $fees_master->fees_group_id }}"
-                                                        data-target="#deleteFeesMasterGroup{{ $fees_master->fees_group_id }}">@lang('common.delete')</a>
-                                                </div>
-                                            </div>
-                                            @endif
-                                            <div class="modal fade admin-query"
-                                                id="deleteFeesMasterGroup{{ $fees_master->fees_group_id }}">
-                                                <div class="modal-dialog modal-dialog-centered">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h4 class="modal-title">@lang('fees.delete_fees_master')
-                                                            </h4>
-                                                            <button type="button" class="close"
-                                                                data-dismiss="modal">&times;</button>
-                                                        </div>
-
-                                                        <div class="modal-body">
-                                                            <div class="text-center">
-                                                                <h4>@lang('common.are_you_sure_to_delete')</h4>
+    
+                                                <div class="modal fade admin-query"
+                                                    id="deleteFeesMasterSingle{{ $fees_master->id }}">
+                                                    <div class="modal-dialog modal-dialog-centered">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h4 class="modal-title">@lang('fees.delete_fees_type')</h4>
+                                                                <button type="button" class="close"
+                                                                    data-dismiss="modal">&times;</button>
                                                             </div>
-
-                                                            <div class="mt-40 d-flex justify-content-between">
-                                                                <button type="button"
-                                                                    class="primary-btn tr-bg"
-                                                                    data-dismiss="modal">@lang('common.cancel')</button>
-                                                                {{ Form::open(['url' => 'fees-master-group-delete', 'method' => 'POST', 'enctype' => 'multipart/form-data']) }}
-                                                                <input type="hidden" name="id"
-                                                                    value="{{ $fees_master->fees_group_id }}">
-                                                                <button class="primary-btn fix-gr-bg"
-                                                                    type="submit">@lang('common.delete')</button>
-                                                                {{ Form::close() }}
+    
+                                                            <div class="modal-body">
+                                                                <div class="text-center">
+                                                                    <h4>@lang('common.are_you_sure_to_delete')</h4>
+                                                                </div>
+    
+                                                                <div class="mt-40 d-flex justify-content-between">
+                                                                    <button type="button"
+                                                                        class="primary-btn tr-bg"
+                                                                        data-dismiss="modal">@lang('common.cancel')</button>
+                                                                    {{ Form::open(['url' => 'fees-master-single-delete', 'method' => 'POST', 'enctype' => 'multipart/form-data']) }}
+                                                                    <input type="hidden" name="id"
+                                                                        id=""
+                                                                        value="{{ $fees_master->id }}">
+                                                                    <button class="primary-btn fix-gr-bg"
+                                                                        type="submit">@lang('common.delete')</button>
+                                                                    {{ Form::close() }}
+                                                                </div>
                                                             </div>
+    
                                                         </div>
-
                                                     </div>
                                                 </div>
-                                            </div>
-                                            @endforeach
-
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </x-table>
+                                                @endforeach
+                                            </td>
+                                            <td valign="top">
+                                                @php $i = 0; @endphp
+                                                @foreach ($values as $fees_master)
+                                                @php $i++; @endphp
+                                                @if ($i == 1)
+                                                <div class="dropdown CRM_dropdown">
+                                                    <button type="button" class="btn dropdown-toggle"
+                                                        data-toggle="dropdown">
+                                                        @lang('common.select')
+                                                    </button>
+                                                    <div class="dropdown-menu dropdown-menu-right">
+    
+                                                        @if ($fees_master->fees_group_id && userPermission('fees_assign'))
+                                                        <a class="dropdown-item"
+                                                            href="{{ route('fees_assign', [$fees_master->fees_group_id]) }}">@lang('fees.assign')/@lang('common.view')</a>
+                                                        @endif
+                                                        <a class="dropdown-item deleteFeesMasterGroup"
+                                                            data-toggle="modal" href="#"
+                                                            data-id="{{ $fees_master->fees_group_id }}"
+                                                            data-target="#deleteFeesMasterGroup{{ $fees_master->fees_group_id }}">@lang('common.delete')</a>
+                                                    </div>
+                                                </div>
+                                                @endif
+                                                <div class="modal fade admin-query"
+                                                    id="deleteFeesMasterGroup{{ $fees_master->fees_group_id }}">
+                                                    <div class="modal-dialog modal-dialog-centered">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h4 class="modal-title">@lang('fees.delete_fees_master')
+                                                                </h4>
+                                                                <button type="button" class="close"
+                                                                    data-dismiss="modal">&times;</button>
+                                                            </div>
+    
+                                                            <div class="modal-body">
+                                                                <div class="text-center">
+                                                                    <h4>@lang('common.are_you_sure_to_delete')</h4>
+                                                                </div>
+    
+                                                                <div class="mt-40 d-flex justify-content-between">
+                                                                    <button type="button"
+                                                                        class="primary-btn tr-bg"
+                                                                        data-dismiss="modal">@lang('common.cancel')</button>
+                                                                    {{ Form::open(['url' => 'fees-master-group-delete', 'method' => 'POST', 'enctype' => 'multipart/form-data']) }}
+                                                                    <input type="hidden" name="id"
+                                                                        value="{{ $fees_master->fees_group_id }}">
+                                                                    <button class="primary-btn fix-gr-bg"
+                                                                        type="submit">@lang('common.delete')</button>
+                                                                    {{ Form::close() }}
+                                                                </div>
+                                                            </div>
+    
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                @endforeach
+    
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </x-table>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -26,7 +26,7 @@
     </style>
 @endpush
 @section('mainContent')
-    <section class="sms-breadcrumb mb-40 white-box up_breadcrumb">
+    <section class="sms-breadcrumb mb-20 up_breadcrumb">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('style.color_style')</h1>
@@ -41,18 +41,18 @@
 
     <section class="admin-visitor-area">
         <div class="container-fluid p-0">
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="main-title">
-                        <h3 class="mb-30">@lang('style.Add New Color Theme')</h3>
-                    </div>
-                </div>
-            </div>
             {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'theme-store', 'method' => 'POST', 'enctype' => 'multipart/form-data']) }}
             <input type="hidden" id="old_bg_image" value="{{ asset('/public/backEnd/img/body-bg.jpg') }}">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="white-box">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="main-title">
+                                    <h3 class="mb-15">@lang('style.Add New Color Theme')</h3>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-lg-4">
                                 <div class="primary_input">
@@ -113,8 +113,8 @@
                                         readonly>
                                         <button class="" type="button">
                                             <label class="primary-btn small fix-gr-bg"
-                                                for="browseFile">@lang('common.browse')</label>
-                                                <input type="file" class="d-none" id="browseFile" name="background_image">
+                                                for="addThemeImage">@lang('common.browse')</label>
+                                                <input type="file" class="d-none" id="addThemeImage" name="background_image">
                                         </button>
                                     </div>
                                    
@@ -126,10 +126,15 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row mt-15">
+                            <div class="col-lg-12">
+                                <img class="d-none previewImageSize" src="" alt="" id="themeImageShow" height="100%" width="100%">
+                            </div>
+                        </div>
                        
                         <div class="row">
                             @foreach ($colors as $color)
-                                <div class="col-lg-3 mt-25" id="{{ $color->name . '_div' }}">
+                                <div class="col-lg-3 mt-15" id="{{ $color->name . '_div' }}">
                                     <div class="primary_input">
 
                                         <label class="primary_input_label">{{ __('style.' . $color->name) }}<span class="text-danger"> *</span></label>
@@ -148,7 +153,7 @@
                             @endforeach
                         </div>
                         <div class="row">
-                            <div class="col-4 mt-25">
+                            <div class="col-3 mt-25 text-left">
 
                                 <div class="">
 
@@ -165,7 +170,7 @@
                                     </span>
                                 @endif
                             </div>
-                            <div class="col-4 mt-25">
+                            <div class="col-3 mt-25 text-left">
 
                                 <div class="">
 
@@ -183,7 +188,7 @@
                                 @endif
                             </div>
 
-                            <div class="col-12">
+                            <div class="col-12 mt-15">
                                 <div class="submit_btn text-center ">
                                     <button class="primary-btn semi_large2 fix-gr-bg" id="reset_to_default"
                                         type="button"><i class="ti-check"></i>{{ __('style.Reset To Default') }}
@@ -207,4 +212,11 @@
 
 @push('scripts')
     @include('backEnd.style.script')
+    <script>
+        $(document).on('change', '#addThemeImage', function(event) {
+            $('#themeImageShow').removeClass('d-none');
+            getFileName($(this).val(), '#placeholderInput');
+            imageChangeWithFile($(this)[0], '#themeImageShow');
+        });
+    </script>
 @endpush

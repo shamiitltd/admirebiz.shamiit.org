@@ -30,7 +30,7 @@ class LanguageController extends Controller
         try {
             if(empty($request->lang_files)) {
                 Toastr::error(__('system_settings.Files Empty'), __('common.error'));
-                return redirect()->route('lang-file-download', $request->lang);
+                return redirect()->back()->withInput();
             }    
            
             $fileName = $this->fileName($request->lang, $request->lang_files);
@@ -190,6 +190,7 @@ class LanguageController extends Controller
         $store->source_link = $file_name;
         $store->active_status = 1;
         $store->lang_type = $lang ?? 'en';
+        $store->academic_id = getAcademicId();
         $store->created_by = auth()->user()->id;
         $result = $store->save();
     }

@@ -11,7 +11,7 @@
 @endpush
 @section('mainContent')
     <link rel="stylesheet" href="{{ asset('public/backEnd/css/login_access_control.css') }}" />
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('rolepermission::role.fees_due_users_login_permission') </h1>
@@ -26,13 +26,6 @@
     <section class="admin-visitor-area up_admin_visitor">
         <div class="container-fluid p-0">
             <div class="row">
-                <div class="col-lg-4 col-md-6">
-                    <div class="main-title">
-                        <h3 class="mb-30">@lang('common.select_criteria')</h3>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
                 <div class="col-lg-12">
                     <div class="row">
                         <div class="col-lg-12">
@@ -40,6 +33,13 @@
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="white-box filter_card">
+                                        <div class="row">
+                                            <div class="col-lg-4 col-md-6">
+                                                <div class="main-title">
+                                                    <h3 class="mb-15">@lang('common.select_criteria')</h3>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="row">
                                             <input type="hidden" name="url" id="url" value="{{ URL::to('/') }}">
 
@@ -70,12 +70,12 @@
                                                 </div>
                                             @else
                                                 @include('backEnd.common.search_criteria', [
-                                                    'mt' => 'mt-30',
+                                                    'mt' => 'mt-0',
                                                     'div' => 'col-lg-3',
                                                     'required' => [],
                                                     'visiable' => ['class', 'section'],
                                                 ])
-                                                <div class="col-lg-3 mt-30">
+                                                <div class="col-lg-3">
                                                     <div class="primary_input sm_mb_20 ">
                                                         <label class="primary_input_label"
                                                             for="">@lang('student.search_by_name')</label>
@@ -85,7 +85,7 @@
 
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-3 mt-30">
+                                                <div class="col-lg-3">
                                                     <div class="primary_input sm_mb_20 ">
                                                         <label class="primary_input_label"
                                                             for="">@lang('student.admission_no')</label>
@@ -113,81 +113,83 @@
             @if (isset($students))
                 <div class="row mt-60">
                     <div class="col-lg-12">
-                        <div class="row">
-                            <div class="col-lg-4 no-gutters">
-                                <div class="main-title">
-                                    <h3 class="mb-3">@lang('common.student_list') ({{ @$students->count() }})</h3>
+                        <div class="white-box">
+                            <div class="row">
+                                <div class="col-lg-4 no-gutters">
+                                    <div class="main-title">
+                                        <h3 class="mb-3">@lang('common.student_list') ({{ @$students->count() }})</h3>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-
-
-                <div class="row">
-                    <div class="col-lg-12">
-                        <x-table> 
-                              <table id="table_id" class="table data-table Crm_table_active3 no-footer dtr-inline collapsed"
-                                   cellspacing="0" width="100%">
-                                   <thead>
-                                        <tr>
-                                             <th>@lang('student.admission') </th>
-                                             <th>@lang('student.roll')</th>
-                                             <th>@lang('common.name')</th>
-                                             <th>@lang('common.class')</th>
-                                             <th>@lang('rolepermission::role.student_permission')</th>
-                                             <th>@lang('student.parents')</th>
-                                             <th>@lang('rolepermission::role.parents_permission')</th>
-                                        </tr>
-                                   </thead>
-
-                                        <tbody>
-                                            @foreach ($students as $student)
-                                                <tr id="{{ @$student->user_id }}">
-                                                    <td>{{ @$student->admission_no }} </td>
-                                                    <td> {{ @$student->roll_no }}</td>
-                                                    <td>{{ @$student->first_name . ' ' . @$student->last_name }} </td>
-                                                    <td>
-                                                        @foreach ($student->studentRecords as $record)
-                                                            {{ !empty(@$record->class) ? @$record->class->class_name : '' }}
-                                                            ({{ !empty(@$record->section) ? @$record->section->section_name : '' }})
-                                                        @endforeach
-
-                                                    </td>
-                                                    <td>
-                                                        <input type="hidden" name="id"
-                                                            value="{{ $student->user_id }}">
-                                                        <label class="switch_toggle">
-                                                            <input type="checkbox" id="ch{{ @$student->user_id }}"
-                                                                onclick="enableDisable({{ @$student->user_id }},{{ @$role }})"
-                                                                class="switch-input11"
-                                                                {{ @$student->user->loginApproved ? 'checked' : '' }}>
-                                                            <span class="slider round"></span>
-                                                        </label>
-                                                    </td>
-                                                    <td> {{ $student->parents->parent_user->full_name }}</td>
-
-                                                    <td>
-
-                                                        <input type="hidden" name="ParentID"
-                                                            value="{{ @$student->parents->user_id }}"
-                                                            id="ParentID">
-
-                                                        <label class="switch_toggle">
-
-                                                            <input type="checkbox" class="parent-login-disable"
-                                                                id="pr{{ @$student->parents->parent_user->id }}"
-                                                                onclick="enableDisableParent({{ @$student->parents->parent_user->id }},{{ @$student->parents->parent_user->role_id }})"
-                                                                {{ @$student->parents->parent_user->loginApproved ? 'checked' : '' }}>
-                                                            <span class="slider round"></span>
-
-                                                        </label>
-
-                                                    </td>
-
+    
+    
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <x-table>
+                                        <table id="table_id"
+                                            class="table data-table Crm_table_active3 no-footer dtr-inline collapsed"
+                                            cellspacing="0" width="100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>@lang('student.admission') </th>
+                                                    <th>@lang('student.roll')</th>
+                                                    <th>@lang('common.name')</th>
+                                                    <th>@lang('common.class')</th>
+                                                    <th>@lang('rolepermission::role.student_permission')</th>
+                                                    <th>@lang('student.parents')</th>
+                                                    <th>@lang('rolepermission::role.parents_permission')</th>
                                                 </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </x-table>
+                                            </thead>
+    
+                                            <tbody>
+                                                @foreach ($students as $student)
+                                                    <tr id="{{ @$student->user_id }}">
+                                                        <td>{{ @$student->admission_no }} </td>
+                                                        <td> {{ @$student->roll_no }}</td>
+                                                        <td>{{ @$student->first_name . ' ' . @$student->last_name }} </td>
+                                                        <td>
+                                                            @foreach ($student->studentRecords as $record)
+                                                                {{ !empty(@$record->class) ? @$record->class->class_name : '' }}
+                                                                ({{ !empty(@$record->section) ? @$record->section->section_name : '' }})
+                                                            @endforeach
+    
+                                                        </td>
+                                                        <td>
+                                                            <input type="hidden" name="id"
+                                                                value="{{ $student->user_id }}">
+                                                            <label class="switch_toggle">
+                                                                <input type="checkbox" id="ch{{ @$student->user_id }}"
+                                                                    onclick="enableDisable({{ @$student->user_id }},{{ @$role }})"
+                                                                    class="switch-input11"
+                                                                    {{ @$student->user->loginApproved ? 'checked' : '' }}>
+                                                                <span class="slider round"></span>
+                                                            </label>
+                                                        </td>
+                                                        <td> {{ @$student->parents->parent_user->full_name }}</td>
+    
+                                                        <td>
+    
+                                                            <input type="hidden" name="ParentID"
+                                                                value="{{ @$student->parents->user_id }}" id="ParentID">
+    
+                                                            <label class="switch_toggle">
+    
+                                                                <input type="checkbox" class="parent-login-disable"
+                                                                    id="pr{{ @$student->parents->parent_user->id }}"
+                                                                    onclick="enableDisableParent({{ @$student->parents->parent_user->id }},{{ @$student->parents->parent_user->role_id }})"
+                                                                    {{ @$student->parents->parent_user->loginApproved ? 'checked' : '' }}>
+                                                                <span class="slider round"></span>
+    
+                                                            </label>
+    
+                                                        </td>
+    
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </x-table>
+                                </div>
                             </div>
                         </div>
                     </div>

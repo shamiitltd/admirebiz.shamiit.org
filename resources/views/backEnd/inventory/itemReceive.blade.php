@@ -11,16 +11,8 @@
          #productTable tbody tr td {
              min-width: 150px;
          }
-         .item-receive-table {
-            padding: 40px 30px;
-            padding-bottom: 180px;
-         }
-         .no-padding{
-            padding: 0;
-         }
-         
      </style>
-     <section class="sms-breadcrumb mb-40 white-box">
+     <section class="sms-breadcrumb mb-20">
          <div class="container-fluid">
              <div class="row justify-content-between">
                  <h1>@lang('inventory.item_receive')</h1>
@@ -53,18 +45,17 @@
                  <div class="col-lg-3">
                      <div class="row">
                          <div class="col-lg-12">
-                             <div class="main-title">
-                                 <h3 class="mb-30">
-                                     @if (isset($editData))
-                                         @lang('common.edit_receive_details')
-                                     @else
-                                         @lang('inventory.receive_details')
-                                     @endif
-
-                                 </h3>
-                             </div>
-
                              <div class="white-box">
+                                <div class="main-title">
+                                    <h3 class="mb-15">
+                                        @if (isset($editData))
+                                            @lang('common.edit_receive_details')
+                                        @else
+                                            @lang('inventory.receive_details')
+                                        @endif
+   
+                                    </h3>
+                                </div>
                                  <div class="add-visitor">
                                      <div class="row">
                                          <div class="col-lg-12 mb-15">
@@ -261,219 +252,225 @@
                  </div>
 
                  <div class="col-lg-9">
-                     <div class="row xm_3 aling-tiems-center">
-                         <div class="col-lg-4 no-gutters col-6 xs_mt_0">
-                             <div class="main-title">
-                                 <h3 class="mb-30">@lang('inventory.item_receive')</h3>
-                             </div>
-                         </div>
-
-                         <div class="offset-lg-6 col-lg-2 col-6 text-right col-md-6 col-5">
-                             <button type="button" class="primary-btn small fix-gr-bg" onclick="addRow();"
-                                 id="addRowBtn">
-                                 <span class="ti-plus pr-2"></span>
-                                 @lang('common.add')
-                             </button>
-                         </div>
-                     </div>
-
-                     <div class="row">
-                         <div class="col-lg-12">
-                             <div class="white-box no-padding">
-                                 <div class="alert alert-danger" id="errorMessage2">
-                                     <div id="itemError"></div>
-                                     <div id="priceError"></div>
-                                     <div id="quantityError"></div>
-                                 </div>
-                                 <div class="table-responsive item-receive-table">
-                                    <table class="table" id="productTable">
-                                        <thead>
-                                            <tr>
-                                                <th> @lang('inventory.product_name')* </th>
-                                                <th> @lang('inventory.unit_price')* </th>
-                                                <th> @lang('inventory.quantity')* </th>
-                                                <th>@lang('inventory.sub_total')</th>
-                                                <th>@lang('common.action')</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr id="row1" class="0">
-                                                <td class="border-top-0">
-                                                    <input type="hidden" name="url" id="url"
-                                                        value="{{ URL::to('/') }}">
-                                                    <div class="primary_input">
-                                                        <select
-                                                            class="primary_select  form-control{{ $errors->has('category_name') ? ' is-invalid' : '' }}"
-                                                            name="item_id[]" id="productName1">
-                                                            <option data-display="@lang('common.select_item')*" value="">
-                                                                @lang('common.select')*</option>
-                                                            @foreach ($items as $key => $value)
-                                                                <option value="{{ $value->id }}"
-                                                                    @if (isset($editData)) @if ($editData->category_name == $value->id)
-                                               @lang('inventory.selected') @endif
-                                                                    @endif
-                                                                    >{{ $value->item_name }}</option>
-                                                            @endforeach
-                                                        </select>
+                     <div class="white-box">
+                        <div class="row xm_3 aling-tiems-center">
+                            <div class="col-lg-4 no-gutters col-6 xs_mt_0">
+                                <div class="main-title">
+                                    <h3 class="mb-15">@lang('inventory.item_receive')</h3>
+                                </div>
+                            </div>
    
-                                                        @if ($errors->has('item_id'))
-                                                            <span class="text-danger invalid-select" role="alert">
-                                                                {{ $errors->first('item_id') }}
-                                                            </span>
+                            <div class="offset-lg-6 col-lg-2 col-6 text-right col-md-6 col-5">
+                                <button type="button" class="primary-btn small fix-gr-bg" onclick="addRow();"
+                                    id="addRowBtn">
+                                    <span class="ti-plus pr-2"></span>
+                                    @lang('common.add')
+                                </button>
+                            </div>
+                        </div>
+   
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="white-box">
+                                    <div class="alert alert-danger" id="errorMessage2">
+                                        <div id="itemError"></div>
+                                        <div id="priceError"></div>
+                                        <div id="quantityError"></div>
+                                    </div>
+                                    <div class="table-responsive">
+                                       <table class="table" id="productTable">
+                                           <thead>
+                                               <tr>
+                                                   <th> @lang('inventory.product_name')* </th>
+                                                   <th> @lang('inventory.unit_price')* </th>
+                                                   <th> @lang('inventory.quantity')* </th>
+                                                   <th>@lang('inventory.sub_total')</th>
+                                                   <th>@lang('common.action')</th>
+                                               </tr>
+                                           </thead>
+                                           <tbody>
+                                               <tr id="row1" class="0">
+                                                   <td class="border-top-0">
+                                                       <input type="hidden" name="url" id="url"
+                                                           value="{{ URL::to('/') }}">
+                                                       <div class="primary_input">
+                                                           <select
+                                                               class="primary_select  form-control{{ $errors->has('category_name') ? ' is-invalid' : '' }}"
+                                                               name="item_id[]" id="productName1">
+                                                               <option data-display="@lang('common.select_item')*" value="">
+                                                                   @lang('common.select')*</option>
+                                                               @foreach ($items as $key => $value)
+                                                                   <option value="{{ $value->id }}"
+                                                                       @if (isset($editData)) @if ($editData->category_name == $value->id)
+                                                  @lang('inventory.selected') @endif
+                                                                       @endif
+                                                                       >{{ $value->item_name }}</option>
+                                                               @endforeach
+                                                           </select>
+      
+                                                           @if ($errors->has('item_id'))
+                                                               <span class="text-danger invalid-select" role="alert">
+                                                                   {{ $errors->first('item_id') }}
+                                                               </span>
+                                                           @endif
+                                                       </div>
+                                                   </td>
+                                                   <td class="border-top-0">
+                                                       <div class="primary_input">
+                                                           <input oninput="numberCheckWithDot(this)"
+                                                               class="primary_input_field form-control{{ $errors->has('unit_price') ? ' is-invalid' : '' }}"
+                                                               type="text" step="0.1" id="unit_price1"
+                                                               name="unit_price[]" autocomplete="off"
+                                                               value="{{ isset($editData) ? $editData->unit_price : '' }}"
+                                                               onkeyup="getTotalByPrice(1)">
+      
+      
+                                                           @if ($errors->has('unit_price'))
+                                                               <span class="text-danger">
+                                                                   {{ $errors->first('unit_price') }}
+                                                               </span>
+                                                           @endif
+                                                       </div>
+                                                   </td>
+                                                   <td class="border-top-0">
+                                                       <div class="primary_input">
+                                                           <input oninput="numberCheckWithDot(this)"
+                                                               class="primary_input_field form-control{{ $errors->has('quantity') ? ' is-invalid' : '' }}"
+                                                               type="text" id="quantity1" name="quantity[]"
+                                                               autocomplete="off" onkeyup="getTotal(1);"
+                                                               value="{{ isset($editData) ? $editData->quantity : '' }}">
+      
+      
+                                                           @if ($errors->has('quantity'))
+                                                               <span class="text-danger">
+                                                                   {{ $errors->first('quantity') }}
+                                                               </span>
+                                                           @endif
+                                                       </div>
+                                                   </td>
+                                                   <td class="border-top-0">
+                                                       <div class="primary_input">
+                                                           <input oninput="numberCheckWithDot(this)"
+                                                               class="primary_input_field form-control{{ $errors->has('sub_total') ? ' is-invalid' : '' }}"
+                                                               type="text" name="total[]" id="total1" autocomplete="off"
+                                                               value="{{ isset($editData) ? $editData->sub_total : '0.00' }}">
+      
+      
+                                                           @if ($errors->has('sub_total'))
+                                                               <span class="text-danger">
+                                                                   {{ $errors->first('sub_total') }}
+                                                               </span>
+                                                           @endif
+                                                       </div>
+                                                       <input type="hidden" name="totalValue[]" id="totalValue1"
+                                                           autocomplete="off" class="form-control" />
+                                                   </td>
+                                                   <td>
+                                                       <button class="primary-btn icon-only fix-gr-bg" type="button">
+                                                           <span class="ti-trash"></span>
+                                                       </button>
+      
+                                                   </td>
+                                               </tr>
+                                           <tfoot>
+                                               <tr>
+                                                   <th class="border-top-0" colspan="2">@lang('inventory.total')</th>
+                                                   <th class="border-top-0">
+                                                       <input type="text" class="primary_input_field form-control"
+                                                           readonly="" id="subTotalQuantity" name="subTotalQuantity"
+                                                           placeholder="0.00" />
+      
+                                                       <input type="hidden" class="form-control" id="subTotalQuantityValue"
+                                                           name="subTotalQuantityValue" />
+      
+                                                   </th>
+      
+                                                   <th class="border-top-0">
+                                                       <input type="number" class="primary_input_field form-control{{ $errors->has('subTotal') ? ' is-invalid' : '' }}"
+                                                           id="subTotal" name="subTotal" placeholder="0.00" readonly="" />
+      
+                                                       <input type="hidden" class="form-control" id="subTotalValue"
+                                                           name="subTotalValue" />
+                                                        @if ($errors->has('subTotal'))
+                                                           <span class="text-danger">
+                                                               {{ $errors->first('subTotal') }}
+                                                           </span>
                                                         @endif
-                                                    </div>
-                                                </td>
-                                                <td class="border-top-0">
-                                                    <div class="primary_input">
-                                                        <input oninput="numberCheckWithDot(this)"
-                                                            class="primary_input_field form-control{{ $errors->has('unit_price') ? ' is-invalid' : '' }}"
-                                                            type="text" step="0.1" id="unit_price1"
-                                                            name="unit_price[]" autocomplete="off"
-                                                            value="{{ isset($editData) ? $editData->unit_price : '' }}"
-                                                            onkeyup="getTotalByPrice(1)">
+                                                   </th>
+                                                   <th class="border-top-0"></th>
+                                               </tr>
+                                           </tfoot>
+      
+                                           </tbody>
+                                       </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+   
+                        <div class="row mt-30">
+                            <div class="col-lg-12">
+                                <div class="white-box">
+   
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <div class="col-lg-12 mt-30">
+                                                <div class="primary_input">
+                                                    <input type="checkbox" id="full_paid"
+                                                        class="common-checkbox form-control{{ $errors->has('full_paid') ? ' is-invalid' : '' }}"
+                                                        name="full_paid" value="1">
+                                                    <label for="full_paid">@lang('inventory.full_paid')</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 mt-30-md">
+                                            <div class="col-lg-12">
+                                                <div class="primary_input md_mb_20">
+                                                    <label class="primary_input_label"
+                                                        for="">@lang('inventory.total_paid')</label>
+                                                    <input class="primary_input_field" type="number" step="0.1"
+                                                        value="0" name="totalPaid" id="totalPaid"
+                                                        onkeyup="paidAmount();">
+                                                    <input type="hidden" id="totalPaidValue" name="totalPaidValue">
    
    
-                                                        @if ($errors->has('unit_price'))
-                                                            <span class="text-danger">
-                                                                {{ $errors->first('unit_price') }}
-                                                            </span>
-                                                        @endif
-                                                    </div>
-                                                </td>
-                                                <td class="border-top-0">
-                                                    <div class="primary_input">
-                                                        <input oninput="numberCheckWithDot(this)"
-                                                            class="primary_input_field form-control{{ $errors->has('quantity') ? ' is-invalid' : '' }}"
-                                                            type="text" id="quantity1" name="quantity[]"
-                                                            autocomplete="off" onkeyup="getTotal(1);"
-                                                            value="{{ isset($editData) ? $editData->quantity : '' }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 mt-30-md">
+                                            <div class="col-lg-12">
+                                                <div class="primary_input md_mb_20">
+                                                    <label class="primary_input_label"
+                                                        for="">@lang('inventory.total_due')</label>
+                                                    <input class="primary_input_field" type="text" value="0.00"
+                                                        id="totalDue" readonly>
+                                                    <input type="hidden" id="totalDueValue" name="totalDueValue">
    
    
-                                                        @if ($errors->has('quantity'))
-                                                            <span class="text-danger">
-                                                                {{ $errors->first('quantity') }}
-                                                            </span>
-                                                        @endif
-                                                    </div>
-                                                </td>
-                                                <td class="border-top-0">
-                                                    <div class="primary_input">
-                                                        <input oninput="numberCheckWithDot(this)"
-                                                            class="primary_input_field form-control{{ $errors->has('sub_total') ? ' is-invalid' : '' }}"
-                                                            type="text" name="total[]" id="total1" autocomplete="off"
-                                                            value="{{ isset($editData) ? $editData->sub_total : '0.00' }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @php
+                                            $tooltip = '';
+                                            if (userPermission('save-item-receive-data')) {
+                                                $tooltip = '';
+                                            } else {
+                                                $tooltip = 'You have no permission to add';
+                                            }
+                                        @endphp
+                                        <div class="col-lg-12 mt-20 text-center">
+                                            <button class="primary-btn fix-gr-bg" data-toggle="tooltip"
+                                                title="{{ $tooltip }}">
+                                                <span class="ti-check"></span>
+                                                @lang('inventory.receive')
+                                            </button>
+                                        </div>
+                                    </div>
    
    
-                                                        @if ($errors->has('sub_total'))
-                                                            <span class="text-danger">
-                                                                {{ $errors->first('sub_total') }}
-                                                            </span>
-                                                        @endif
-                                                    </div>
-                                                    <input type="hidden" name="totalValue[]" id="totalValue1"
-                                                        autocomplete="off" class="form-control" />
-                                                </td>
-                                                <td>
-                                                    <button class="primary-btn icon-only fix-gr-bg" type="button">
-                                                        <span class="ti-trash"></span>
-                                                    </button>
-   
-                                                </td>
-                                            </tr>
-                                        <tfoot>
-                                            <tr>
-                                                <th class="border-top-0" colspan="2">@lang('inventory.total')</th>
-                                                <th class="border-top-0">
-                                                    <input type="text" class="primary_input_field form-control"
-                                                        readonly="" id="subTotalQuantity" name="subTotalQuantity"
-                                                        placeholder="0.00" />
-   
-                                                    <input type="hidden" class="form-control" id="subTotalQuantityValue"
-                                                        name="subTotalQuantityValue" />
-   
-                                                </th>
-   
-                                                <th class="border-top-0">
-                                                    <input type="text" class="primary_input_field form-control"
-                                                        id="subTotal" name="subTotal" placeholder="0.00" readonly="" />
-   
-                                                    <input type="hidden" class="form-control" id="subTotalValue"
-                                                        name="subTotalValue" />
-   
-                                                </th>
-                                                <th class="border-top-0"></th>
-                                            </tr>
-                                        </tfoot>
-   
-                                        </tbody>
-                                    </table>
-                                 </div>
-                             </div>
-                         </div>
-                     </div>
-
-                     <div class="row mt-30">
-                         <div class="col-lg-12">
-                             <div class="white-box">
-
-                                 <div class="row">
-                                     <div class="col-lg-4">
-                                         <div class="col-lg-12 mt-30">
-                                             <div class="primary_input">
-                                                 <input type="checkbox" id="full_paid"
-                                                     class="common-checkbox form-control{{ $errors->has('full_paid') ? ' is-invalid' : '' }}"
-                                                     name="full_paid" value="1">
-                                                 <label for="full_paid">@lang('inventory.full_paid')</label>
-                                             </div>
-                                         </div>
-                                     </div>
-                                     <div class="col-lg-4 mt-30-md">
-                                         <div class="col-lg-12">
-                                             <div class="primary_input md_mb_20">
-                                                 <label class="primary_input_label"
-                                                     for="">@lang('inventory.total_paid')</label>
-                                                 <input class="primary_input_field" type="number" step="0.1"
-                                                     value="0" name="totalPaid" id="totalPaid"
-                                                     onkeyup="paidAmount();">
-                                                 <input type="hidden" id="totalPaidValue" name="totalPaidValue">
-
-
-                                             </div>
-                                         </div>
-                                     </div>
-                                     <div class="col-lg-4 mt-30-md">
-                                         <div class="col-lg-12">
-                                             <div class="primary_input md_mb_20">
-                                                 <label class="primary_input_label"
-                                                     for="">@lang('inventory.total_due')</label>
-                                                 <input class="primary_input_field" type="text" value="0.00"
-                                                     id="totalDue" readonly>
-                                                 <input type="hidden" id="totalDueValue" name="totalDueValue">
-
-
-                                             </div>
-                                         </div>
-                                     </div>
-                                     @php
-                                         $tooltip = '';
-                                         if (userPermission('save-item-receive-data')) {
-                                             $tooltip = '';
-                                         } else {
-                                             $tooltip = 'You have no permission to add';
-                                         }
-                                     @endphp
-                                     <div class="col-lg-12 mt-20 text-center">
-                                         <button class="primary-btn fix-gr-bg" data-toggle="tooltip"
-                                             title="{{ $tooltip }}">
-                                             <span class="ti-check"></span>
-                                             @lang('inventory.receive')
-                                         </button>
-                                     </div>
-                                 </div>
-
-
-                             </div>
-                         </div>
+                                </div>
+                            </div>
+                        </div>
                      </div>
                  </div>
              </div>

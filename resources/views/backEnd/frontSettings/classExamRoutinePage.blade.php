@@ -10,7 +10,7 @@
     </style>
 @endpush
 @section('mainContent')
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('front_settings.class_exam_routine_page')</h1>
@@ -28,11 +28,6 @@
                 <div class="col-lg-12">
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="main-title">
-                                <h3 class="mb-30">
-                                    @lang('front_settings.class_exam_routine_page')
-                                </h3>
-                            </div>
                             @if (userPermission('news-heading-update'))
                                 {{ Form::open([
                                     'class' => 'form-horizontal',
@@ -43,6 +38,11 @@
                                 ]) }}
                             @endif
                             <div class="white-box">
+                                <div class="main-title">
+                                    <h3 class="mb-15">
+                                        @lang('front_settings.class_exam_routine_page')
+                                    </h3>
+                                </div>
                                 <div class="add-visitor {{ isset($update) ? '' : 'isDisabled' }}">
                                     <div class="row">
                                         <div class="col-lg-12">

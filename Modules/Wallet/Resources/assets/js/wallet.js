@@ -63,13 +63,18 @@
             url: submit_url,
             type: method,
             data: formData,
+             headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+            },
             contentType: false, // The content type used when sending data to the server.
             cache: false, // To unable request pages to be cached
             processData: false,
             dataType: 'JSON',
             success: function(response) {
                 toastr.success("Save Successfully","Successful", { timeOut: 5000,});
-                if(response.goto){
+                if (response.payment_link) {
+                    window.location.href = response.payment_link;
+                } else if(response.goto){
                    window.location.href=response.goto;
                 }else{
                     location.reload();

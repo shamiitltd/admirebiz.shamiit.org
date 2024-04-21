@@ -16,12 +16,14 @@ use App\YearCheck;
 use Carbon\Carbon;
 use App\SmAddIncome;
 use App\CheckSection;
+use App\GlobalVariable;
 use App\SmAddExpense;
 use App\SmNoticeBoard;
 use App\SmAcademicYear;
 use App\SmClassSection;
 use App\SmGeneralSettings;
 use App\InfixModuleManager;
+use App\Models\DueFeesLoginPrevent;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\SmCalendarSetting;
@@ -40,9 +42,12 @@ use Modules\Saas\Entities\SmSubscriptionPayment;
 
 class HomeController extends Controller
 {
+    private $toastr;
+
     public function __construct()
     {
         $this->middleware('auth');
+        $this->toastr = new Toastr();
     }
 
     public function dashboard()
@@ -50,34 +55,69 @@ class HomeController extends Controller
         try {
             $user = Auth::user();
             $role_id = $user->role_id;
-
-
-            if( ($user->role_id == 1) && ($user->is_administrator == "yes") && (moduleStatusCheck('Saas') == true) ){
+            $is_due_fees_login_permission   = SmGeneralSettings::where('school_id',Auth::user()->school_id)->first('due_fees_login');
+            $is_due_fees_login_permission   = $is_due_fees_login_permission->due_fees_login;
+            $student_due_fees_login_prevent = DueFeesLoginPrevent::where('user_id',$user->id)->where('school_id',$user->school_id)->where('role_id',2)->first();
+            $parent_due_fees_login_prevent  = DueFeesLoginPrevent::where('user_id',$user->id)->where('school_id',$user->school_id)->where('role_id',3)->first();
+            
+            if( ($user->role_id == 1) && ($user->is_administrator == "yes") && (moduleStatusCheck('Saas') == true) ){   #SuperAdmin
                 return redirect('superadmin-dashboard');
             }
 
-            if ($role_id == 2) {
-                return redirect('student-dashboard');
-            } elseif ($role_id == 3) {
-                return redirect('parent-dashboard');
+            if ($role_id == 2) {    #Student
+                if($is_due_fees_login_permission == 1){
+                    if($student_due_fees_login_prevent != null){
+                        $errorMessage = '';
+                        Auth::logout();
+                        session(['role_id' => '']);
+                        Session::flash('toast_message', [
+                            'type' => 'error', // 'success', 'info', 'warning', 'error'
+                            'message' => 'Operation Failed, Unable to log in due to unpaid fees.'
+                        ]);
+                        return redirect('login')->withErrors(['custom_error' => $errorMessage]);
+                    } else {
+                        return redirect('student-dashboard');
+                    }
+                } else {
+                    return redirect('student-dashboard');
+                }
+            } elseif ($role_id == 3) {  #Parent
+                if($is_due_fees_login_permission == 1){
+                    if($parent_due_fees_login_prevent != null){
+                        $errorMessage = '';
+                        Auth::logout();
+                        session(['role_id' => '']);
+                        Session::flash('toast_message', [
+                            'type' => 'error', // 'success', 'info', 'warning', 'error'
+                            'message' => 'Operation Failed, Unable to log in due to unpaid fees.'
+                        ]);
+                        return redirect('login')->withErrors(['custom_error' => $errorMessage]);
+                    }else {
+                        return redirect('parent-dashboard');
+                    }
+                } else {
+                    return redirect('parent-dashboard');
+                }
+            } elseif($role_id == GlobalVariable::isAlumni()) {  #Alumni
+                return redirect('alumni-dashboard');
             } elseif ($role_id == "") {
                 return redirect('login');
             } elseif (Auth::user()->is_saas == 1) {
                 return redirect('saasStaffDashboard');
-            } else {
+            }
+            else {
                 return redirect('admin-dashboard');
             }
         } catch (\Exception $e) {
-
-            Toastr::error('Operation Failed,' . $e->getMessage(), 'Failed');
+            $this->toastr->error('Operation Failed,' .$e->getMessage(),'Failed');
             return redirect()->back();
         }
     }
+    
     // for display dashboard
     public function index(Request $request)
     {
-
-        try {
+       try {
             $chart_data =" ";
             $day_incomes =  SmAddIncome::where('academic_id', getAcademicId())
                 ->where('name', '!=', 'Fund Transfer')
@@ -116,7 +156,6 @@ class HomeController extends Controller
 
                 $chart_data .= "{ day: '" . $i . "', income: " . @$income . ", expense:" . @$expense . " },";
             }
-            //return $chart_data;
             $chart_data_yearly = "";
             for($i = 1; $i <= date('m'); $i++){
                 $i = $i < 10? '0'.$i:$i;
@@ -174,26 +213,20 @@ class HomeController extends Controller
 
             }
 
-            // for current month
-
-
-
-
-
-
+            // for current month start
             if(moduleStatusCheck('Wallet'))
                 $monthlyWalletBalance = $this->showWalletBalance('diposit','refund','expense', 'fees_refund','Y-m-',$school_id);
             // for current month end
 
             // for current year start
             $y_total_income = $day_incomes->where('name','!=','Fund Transfer')
-                ->where('date', '>=', date('Y-01-01') . '%')
+                ->where('date', '>=', date('Y-01-01'))
                 ->sum('amount');
 
 
 
             $y_total_expense =  $day_expenses->where('name','!=','Fund Transfer')
-                ->where('date', '>=', date('Y-01-01') . '%')
+                ->where('date', '>=', date('Y-01-01'))
                 ->sum('amount');
 
 
@@ -330,7 +363,6 @@ class HomeController extends Controller
             }
 
         } catch (\Exception $e) {
-          
             Toastr::error('Operation Failed, ' . $e, 'Failed');
             Auth::logout();
             session(['role_id' => '']);

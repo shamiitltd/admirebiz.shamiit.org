@@ -3,13 +3,13 @@
     @lang('front_settings.front_result')
 @endsection
 @section('mainContent')
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('front_settings.front_result')</h1>
                 <div class="bc-pages">
                     <a href="{{ route('dashboard') }}">@lang('common.dashboard')</a>
-                    <a href="#">@lang('front_settings.front_settings')</a>
+                    <a href="#">@lang('front_settings.frontend_cms')</a>
                     <a href="{{ route('front-result') }}">@lang('front_settings.front_result')</a>
                 </div>
             </div>
@@ -20,15 +20,7 @@
             <div class="col-lg-4">
                 <div class="row">
                     <div class="col-lg-12">
-                        <div class="main-title">
-                            <h3 class="mb-30">
-                                @if (isset($add_front_result))
-                                    @lang('front_settings.edit_front_result')
-                                @else
-                                    @lang('front_settings.front_result')
-                                @endif
-                            </h3>
-                        </div>
+                        
                         @if (isset($add_front_result))
                             {{ Form::open([
                                 'class' => 'form-horizontal',
@@ -50,6 +42,15 @@
                             @endif
                         @endif
                         <div class="white-box">
+                            <div class="main-title">
+                                <h3 class="mb-15">
+                                    @if (isset($add_front_result))
+                                        @lang('front_settings.edit_front_result')
+                                    @else
+                                        @lang('front_settings.front_result')
+                                    @endif
+                                </h3>
+                            </div>
                             <div class="add-visitor">
                                 <div class="row">
                                     <div class="col-lg-12">
@@ -108,11 +109,11 @@
                                             class="primary_select form-control"
                                             name="content_type">
                                             <option data-display="@lang('front_settings.link')" value="link"
-                                                {{ old('content_type') == 'link' ? 'selected' : '' }}>
+                                                {{ @$add_front_result->link ? 'selected' : (old('content_type') == 'link' ? 'selected' : '') }}>
                                                 @lang('front_settings.link')
                                             </option>
                                             <option data-display="@lang('front_settings.file')" value="file"
-                                                {{ old('content_type') == 'file' ? 'selected' : '' }}>
+                                                {{ @$add_front_result->result_file ? 'selected' : (old('content_type') == 'file' ? 'selected' : '') }}>
                                                 @lang('front_settings.file')
                                             </option>
                                         </select>
@@ -182,58 +183,60 @@
             </div>
 
             <div class="col-lg-8">
-                <div class="row">
-                    <div class="col-lg-4 no-gutters">
-                        <div class="main-title">
-                            <h3 class="mb-0">@lang('front_settings.front_result_list')</h3>
+                <div class="white-box">
+                    <div class="row">
+                        <div class="col-lg-4 no-gutters">
+                            <div class="main-title">
+                                <h3 class="mb-15">@lang('front_settings.front_result_list')</h3>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-lg-12">
-                        <x-table>
-                            <table id="table_id" class="table" cellspacing="0" width="100%">
-                                <thead>
-                                    <tr>
-                                        <th>@lang('common.sl')</th>
-                                        <th>@lang('front_settings.title')</th>
-                                        <th>@lang('front_settings.date')</th>
-                                        <th>@lang('common.action')</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($frontResults as $key => $value)
+    
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <x-table>
+                                <table id="table_id" class="table" cellspacing="0" width="100%">
+                                    <thead>
                                         <tr>
-                                            <td>{{ $key + 1 }}</td>
-                                            <td>{{ @$value->title }}</td>
-                                            <td>{{ date('m/d/Y', strtotime(@$value->publish_date)) }}</td>
-                                            <td>
-                                                <x-drop-down>
-                                                    @if ($value->result_file)
-                                                        <a class="dropdown-item"
-                                                            href="{{ url(@$value->result_file) }}"
-                                                            download>@lang('front_settings.download')</a>
-                                                    @endif
-                                                    @if ($value->link)
-                                                        <a class="dropdown-item"
-                                                            href="{{ @$value->link }}"
-                                                            target="_blank">@lang('front_settings.link')</a>
-                                                    @endif
-                                                    <a class="dropdown-item"
-                                                        href="{{ route('front-result-edit', @$value->id) }}">@lang('common.edit')</a>
-                                                    <a href="{{ route('front-result-delete-modal', @$value->id) }}"
-                                                        class="dropdown-item small fix-gr-bg modalLink"
-                                                        title="@lang('front_settings.delete_front_result')" data-modal-size="modal-md">
-                                                        @lang('common.delete')
-                                                    </a>
-                                                </x-drop-down>
-                                            </td>
+                                            <th>@lang('common.sl')</th>
+                                            <th>@lang('front_settings.title')</th>
+                                            <th>@lang('front_settings.date')</th>
+                                            <th>@lang('common.action')</th>
                                         </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </x-table>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($frontResults as $key => $value)
+                                            <tr>
+                                                <td>{{ $key + 1 }}</td>
+                                                <td>{{ @$value->title }}</td>
+                                                <td>{{ date('m/d/Y', strtotime(@$value->publish_date)) }}</td>
+                                                <td>
+                                                    <x-drop-down>
+                                                        @if ($value->result_file)
+                                                            <a class="dropdown-item"
+                                                                href="{{ url(@$value->result_file) }}"
+                                                                download>@lang('front_settings.download')</a>
+                                                        @endif
+                                                        @if ($value->link)
+                                                            <a class="dropdown-item"
+                                                                href="{{ @$value->link }}"
+                                                                target="_blank">@lang('front_settings.link')</a>
+                                                        @endif
+                                                        <a class="dropdown-item"
+                                                            href="{{ route('front-result-edit', @$value->id) }}">@lang('common.edit')</a>
+                                                        <a href="{{ route('front-result-delete-modal', @$value->id) }}"
+                                                            class="dropdown-item small fix-gr-bg modalLink"
+                                                            title="@lang('front_settings.delete_front_result')" data-modal-size="modal-md">
+                                                            @lang('common.delete')
+                                                        </a>
+                                                    </x-drop-down>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </x-table>
+                        </div>
                     </div>
                 </div>
             </div>

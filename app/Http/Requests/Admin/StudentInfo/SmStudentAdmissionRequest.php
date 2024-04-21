@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Admin\StudentInfo;
 
+use App\GlobalVariable;
 use App\User;
 use App\SmStudent;
 use App\Traits\CustomFields;
@@ -9,6 +10,8 @@ use App\Models\StudentRecord;
 use Illuminate\Validation\Rule;
 use App\Models\SmStudentRegistrationField;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class SmStudentAdmissionRequest extends FormRequest
 {
@@ -28,7 +31,7 @@ class SmStudentAdmissionRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(Request $request)
     {
         $maxFileSize =generalSetting()->file_size*1024;
         $student = null;
@@ -47,13 +50,13 @@ class SmStudentAdmissionRequest extends FormRequest
 
 
         $field = SmStudentRegistrationField::where('school_id', $school_id)
-            ->when(auth()->user()->role_id == 2, function ($query) {
+            ->when(in_array(auth()->user()->role_id, [10, 2]), function ($query) {
                 $query->where('student_edit', 1)->where('is_required', 1);
             })
             ->when(auth()->user()->role_id == 3, function ($query) {
                 $query->where('parent_edit', 1)->where('is_required', 1);
             })
-            ->when(!in_array(auth()->user()->role_id, [2,3]), function ($query) {
+            ->when(!in_array(auth()->user()->role_id, [2,3,GlobalVariable::isAlumni()]), function ($query) {
                 $query->where('is_required', 1);
             })
             ->pluck('field_name')
@@ -71,7 +74,7 @@ class SmStudentAdmissionRequest extends FormRequest
             })
             ->first();
             if ($user) {
-                $user_role_id = $user->role_id==2 ? $user->role_id:null;
+                $user_role_id = ($user->role_id == 2 || $user->role_id == GlobalVariable::isAlumni()) ? $user->role_id : null;
             } 
         }
 
@@ -119,9 +122,7 @@ class SmStudentAdmissionRequest extends FormRequest
             'weight'=>[Rule::requiredIf(function () use ($field) {
                 return in_array('weight', $field);
             })],
-            'photo' => [Rule::requiredIf(function () use ($field) {
-                return in_array('photo', $field);
-            }),'sometimes','nullable','file','mimes:jpg,jpeg,png', 'max:'.$maxFileSize],
+           
             'fathers_name'=>[Rule::requiredIf(function () use ($field) {
                 return !$this->parent_id && !$this->staff_parent && in_array('fathers_name', $field);
             }),'max:100'],
@@ -131,9 +132,6 @@ class SmStudentAdmissionRequest extends FormRequest
             'fathers_phone'=>[Rule::requiredIf(function () use ($field) {
                 return !$this->parent_id && !$this->staff_parent && in_array('fathers_phone', $field);
             }),'max:100'],
-            'fathers_photo'=>[Rule::requiredIf(function () use ($field) {
-                return !$this->parent_id && !$this->staff_parent && in_array('fathers_photo', $field);
-            }),'sometimes','nullable','file','mimes:jpg,jpeg,png','max:'.$maxFileSize],
             'mothers_name'=>[Rule::requiredIf(function () use ($field) {
                 return !$this->parent_id && !$this->staff_parent && in_array('mothers_name', $field);
             }),'max:100'],
@@ -143,26 +141,20 @@ class SmStudentAdmissionRequest extends FormRequest
             'mothers_phone'=>[Rule::requiredIf(function () use ($field) {
                 return !$this->parent_id && !$this->staff_parent && in_array('mothers_phone', $field);
             }),'max:100'],
-            'mothers_photo'=>[Rule::requiredIf(function () use ($field) {
-                return !$this->parent_id && !$this->staff_parent && in_array('mothers_photo', $field);
-            }),'nullable','mimes:jpg,jpeg,png'],
             'guardians_name' =>[Rule::requiredIf(function () use ($field) {
                 return !$this->parent_id && !$this->staff_parent && in_array('guardians_name', $field);
             }),'max:100'],
             'relation'=>[Rule::requiredIf(function () use ($field) {
                 return !$this->parent_id && !$this->staff_parent && in_array('relation', $field);
             })],
-
-            'guardians_photo' =>[Rule::requiredIf(function () use ($field) {
-                return !$this->parent_id && !$this->staff_parent && in_array('guardians_photo', $field);
-            }), 'sometimes','nullable','file','mimes:jpg,jpeg,png','max:'.$maxFileSize],
-
+          
             'guardians_occupation'=>[Rule::requiredIf(function () use ($field) {
                 return !$this->parent_id && !$this->staff_parent && in_array('guardians_occupation', $field);
             }), 'max:100'],
             'guardians_address' => [Rule::requiredIf(function () use ($field) {
                 return !$this->parent_id && !$this->staff_parent && in_array('guardians_address', $field);
             }),'max:200'],
+          
             'current_address' => [Rule::requiredIf(function () use ($field) {
                 return in_array('current_address', $field);
             }),'max:200'],
@@ -202,18 +194,24 @@ class SmStudentAdmissionRequest extends FormRequest
             'ifsc_code'=>[Rule::requiredIf(function () use ($field) {
                 return in_array('ifsc_code', $field);
             })],
-            'document_file_1' => [Rule::requiredIf(function () use ($field) {
-                return in_array('document_file_1', $field);
-            }),'nullable','mimes:pdf,doc,docx,jpg,jpeg,png,txt','max:'.$maxFileSize],
-            'document_file_2' =>[Rule::requiredIf(function () use ($field) {
-                return in_array('document_file_2', $field);
-            }),'nullable','mimes:pdf,doc,docx,jpg,jpeg,png,txt','max:'.$maxFileSize],
-            'document_file_3' =>[Rule::requiredIf(function () use ($field) {
-                return in_array('document_file_3', $field);
-            }),'nullable','mimes:pdf,doc,docx,jpg,jpeg,png,txt','max:'.$maxFileSize],
-            'document_file_4' =>[Rule::requiredIf(function () use ($field) {
-                return in_array('document_file_4', $field);
-            }),'nullable','mimes:pdf,doc,docx,jpg,jpeg,png,txt|max:'.$maxFileSize],
+            'document_file_1' => [
+                Rule::requiredIf(function () use ($field) {
+                    return in_array('document_file_1', $field);
+                }),
+                'nullable','max:' . $maxFileSize,],
+            'document_file_2' => [
+                Rule::requiredIf(function () use ($field) {
+                    return in_array('document_file_2', $field);
+                }),'nullable','max:' . $maxFileSize,],
+            'document_file_3' => [
+                Rule::requiredIf(function () use ($field) {
+                    return in_array('document_file_3', $field);
+                }),'nullable','max:' . $maxFileSize,
+            ],
+            'document_file_4' => [
+                Rule::requiredIf(function () use ($field) {
+                    return in_array('document_file_4', $field);
+                }),'nullable','max:' . $maxFileSize,],
         ];
 
         if (moduleStatusCheck('Lead')==true) {
@@ -262,7 +260,7 @@ class SmStudentAdmissionRequest extends FormRequest
             ];
         }
 
-        if ($user_role_id !=2) {
+        if ($user_role_id !=2 || $user_role_id !=10) {
             $rules +=[
                 'email_address' => ['bail',Rule::requiredIf(function () use ($field) {
                     return in_array('email_address', $field);
@@ -287,6 +285,37 @@ class SmStudentAdmissionRequest extends FormRequest
         if (is_show('custom_field') && isMenuAllowToShow('custom_field')){
             $rules += $this->generateValidateRules("student_registration");
         }
+
+        if($request->photo != null) {
+            $rules += [
+                'photo' => [Rule::requiredIf(function () use ($field) {
+                    return in_array('photo', $field);
+                })],
+            ];
+        }
+
+        if($request->mothers_photo != null) {
+            $rules += [ 
+                'mothers_photo'=>[Rule::requiredIf(function () use ($field) {
+                    return !$this->parent_id && !$this->staff_parent && in_array('mothers_photo', $field);
+                })],
+            ];
+        }
+        if($request->fathers_photo != null) {
+            $rules += [ 
+                'fathers_photo'=>[Rule::requiredIf(function () use ($field) {
+                    return !$this->parent_id && !$this->staff_parent && in_array('fathers_photo', $field);
+                })],
+            ];
+        }
+        if($request->guardians_photo != null) {
+            $rules += [ 
+                'guardians_photo' =>[Rule::requiredIf(function () use ($field) {
+                    return !$this->parent_id && !$this->staff_parent && in_array('guardians_photo', $field);
+                })],
+            ];
+        }
+
         
         //added by abu nayem lead id number check replace of roll number
         return $rules;

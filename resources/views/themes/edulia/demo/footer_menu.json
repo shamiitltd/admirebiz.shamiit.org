@@ -75,7 +75,7 @@
                     "classes": "",
                     "custom_attributes": "",
                     "image": [
-                        "{\"type\":\"image\",\"name\":\"footer_bg.png\",\"path\":\"optionbuilder\\\/uploads\\\/938411-23-2023_0525pmfooter_bg.png\",\"mime\":\"png\",\"size\":17060,\"thumbnail\":\"[App_url]/public\\\/storage\\\/optionbuilder\\\/uploads\\\/938411-23-2023_0525pmfooter_bg.png\"}"
+                        "{\"type\":\"image\",\"name\":\"footer_bg.png\",\"path\":\"optionbuilder\\\/uploads\\\/400311-01-2023_0315pmfooter_bg.png\",\"mime\":\"png\",\"size\":17060,\"thumbnail\":\"[App_url]/public\/storage\\\/optionbuilder\\\/uploads\\\/400311-01-2023_0315pmfooter_bg.png\"}"
                     ],
                     "background-size": "",
                     "background-position": "",
@@ -86,7 +86,7 @@
                 "settings": {
                     "footer_menu_image": {
                         "value": [
-                            "{\"type\":\"image\",\"name\":\"logo.png\",\"path\":\"optionbuilder\\\/uploads\\\/687911-22-2023_0454pmlogo.png\",\"mime\":\"png\",\"size\":10490,\"thumbnail\":\"[App_url]/public\\\/storage\\\/optionbuilder\\\/uploads\\\/687911-22-2023_0454pmlogo.png\"}"
+                            "{\"type\":\"image\",\"name\":\"footer_bg.png\",\"path\":\"optionbuilder\\\/uploads\\\/72911-01-2023_0307pmfooter_bg.png\",\"mime\":\"png\",\"size\":17060,\"thumbnail\":\"[App_url]/public\/storage\\\/optionbuilder\\\/uploads\\\/72911-01-2023_0307pmfooter_bg.png\"}"
                         ],
                         "is_array": "1"
                     },
@@ -110,29 +110,29 @@
                         "value": {
                             "2641698829238": {
                                 "footer-widget-label": "About Us",
-                                "footer-widget-url": "https:\/\/aorasoft.com\/",
+                                "footer-widget-url": "https:\/\/test.com\/",
                                 "footer-widget-open-url": "new_tab"
                             },
                             "1698829261050": {
                                 "footer-widget-label": "Career",
-                                "footer-widget-url": "https:\/\/aorasoft.com\/",
+                                "footer-widget-url": "",
                                 "footer-widget-open-url": "new_tab"
                             },
                             "1698829261792": {
                                 "footer-widget-label": "Resource Center",
-                                "footer-widget-url": "https:\/\/aorasoft.com\/",
+                                "footer-widget-url": "",
                                 "footer-widget-open-url": "new_tab"
                             },
                             "1698829262475": {
                                 "footer-widget-label": "Guides",
-                                "footer-widget-url": "https:\/\/aorasoft.com\/",
+                                "footer-widget-url": "",
                                 "footer-widget-open-url": "new_tab"
                             }
                         },
                         "is_array": "1"
                     },
                     "footer-widget-bg-color": {
-                        "value": "rgb(253,253,253)",
+                        "value": "rgb(253,253,253",
                         "is_array": "0"
                     }
                 }
@@ -147,22 +147,22 @@
                         "value": {
                             "5911698829250": {
                                 "footer-widget-label": "Phd Course",
-                                "footer-widget-url": "https:\/\/aorasoft.com\/",
+                                "footer-widget-url": "https:\/\/test.com\/",
                                 "footer-widget-open-url": "new_tab"
                             },
                             "1698829327143": {
                                 "footer-widget-label": "Undergraduation",
-                                "footer-widget-url": "https:\/\/aorasoft.com\/",
+                                "footer-widget-url": "",
                                 "footer-widget-open-url": "new_tab"
                             },
                             "1698829327787": {
                                 "footer-widget-label": "Postgraduation",
-                                "footer-widget-url": "https:\/\/aorasoft.com\/",
+                                "footer-widget-url": "",
                                 "footer-widget-open-url": "new_tab"
                             },
                             "1698829328454": {
                                 "footer-widget-label": "Research",
-                                "footer-widget-url": "https:\/\/aorasoft.com\/",
+                                "footer-widget-url": "",
                                 "footer-widget-open-url": "new_tab"
                             }
                         },
@@ -177,7 +177,7 @@
             "3674574c2c": {
                 "settings": {
                     "footer-copy-right-text": {
-                        "value": "\u00a9 2023 InfixEdu. All rights reserved. Made By CodeThemes.",
+                        "value": "\u00a9 2024 SHAMIIT. All rights reserved. Made By SHAMIIT.",
                         "is_array": "0"
                     },
                     "footer-social-icons": {
@@ -229,9 +229,6 @@
                     "z-index": "",
                     "classes": "",
                     "custom_attributes": "",
-                    "image": [
-                        "{\"type\":\"image\",\"name\":\"footer_bg.png\",\"path\":\"optionbuilder\\\/uploads\\\/614811-23-2023_0526pmfooter_bg.png\",\"mime\":\"png\",\"size\":17060,\"thumbnail\":\"[App_url]/public\\\/storage\\\/optionbuilder\\\/uploads\\\/614811-23-2023_0526pmfooter_bg.png\"}"
-                    ],
                     "background-size": "",
                     "background-position": "",
                     "background-color": "rgb(18,93,233)"

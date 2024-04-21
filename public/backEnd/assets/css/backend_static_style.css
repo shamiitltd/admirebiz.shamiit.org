@@ -549,7 +549,7 @@ button:focus {
     background: var(--bg_white);
     padding: 40px 30px;
     border-radius: 10px;
-    box-shadow: 0px 10px 15px rgba(236, 208, 244, 0.3);
+    box-shadow: var(--box_shadow);
 }
 
 @media (max-width: 1300px) and (min-width: 992px) {
@@ -621,37 +621,12 @@ button:focus {
 .white-box.single-summery p {
     color: var(--text-color);
 }
-
-/* line 47, ../../xampp/htdocs/infixeduB/public/backEnd/scss/admin/_component.scss */
-.white-box.single-summery:hover {
-    background: url(../img/summery-bg1.png) no-repeat center;
-    box-shadow: 0px 10px 30px rgba(108, 39, 255, 0.3);
-    background-size: 100% 100%;
-}
-
-/* line 51, ../../xampp/htdocs/infixeduB/public/backEnd/scss/admin/_component.scss */
-.white-box.single-summery:hover:before {
-    background: url(../img/summery-bg2.png) no-repeat center;
-    top: 8px;
-}
-
-/* line 55, ../../xampp/htdocs/infixeduB/public/backEnd/scss/admin/_component.scss */
-.white-box.single-summery:hover:after {
-    background: url(../img/summery-bg3.png) no-repeat center;
-    top: 16px;
-}
-
 /* line 59, ../../xampp/htdocs/infixeduB/public/backEnd/scss/admin/_component.scss */
 .white-box.single-summery:hover h3,
 .white-box.single-summery:hover p,
 .white-box.single-summery:hover h1 {
     color : var(--text_white);
     -webkit-text-fill-color : var(--text_white);
-}
-
-/* line 67, ../../xampp/htdocs/infixeduB/public/backEnd/scss/admin/_component.scss */
-.white-box.radius-t-y-0 {
-    border-radius: 0px 0px 10px 10px;
 }
 
 /* End Boxes Area css
@@ -663,7 +638,7 @@ button:focus {
     font-weight: 500;
     text-transform: uppercase;
     border-top: 0px;
-    padding: 12px 12px 12px 0px;
+    padding: 12px 12px 12px 12px;
 }
 
 /* line 83, ../../xampp/htdocs/infixeduB/public/backEnd/scss/admin/_component.scss */
@@ -796,8 +771,7 @@ button:focus {
 
 /* line 188, ../../xampp/htdocs/infixeduB/public/backEnd/scss/admin/_component.scss */
 .modal-content .modal-header {
-    background: url(../img/modal-header-bg.png) no-repeat center;
-    background-size: cover;
+    background: var(--primary-color);
     border-radius: 5px 5px 0px 0px;
     border: 0;
     padding: 33px 40px;
@@ -1353,7 +1327,7 @@ button:focus {
   background: var(--bg_white);
     padding: 40px 30px;
     border-radius: 10px;
-    box-shadow: 0px 10px 15px rgba(236, 208, 244, 0.3);
+    box-shadow: var(--box_shadow);
     margin: 0 auto;
     clear: both;
     border-collapse: separate;
@@ -1497,6 +1471,7 @@ button:focus {
 /* line 8, ../../xampp/htdocs/infixeduB/public/backEnd/scss/admin/_predefine.scss */
 .main-wrapper ::-webkit-scrollbar {
     width: 5px;
+    height: 10px;
 }
 
 /* line 13, ../../xampp/htdocs/infixeduB/public/backEnd/scss/admin/_predefine.scss */
@@ -1548,7 +1523,7 @@ button:focus {
 .sms-accordion .card,
 .admin .navbar .right-navbar .dropdown .badge,
 .single-cms-box:hover .single-cms {
-    box-shadow: 0px 10px 20px rgba(108, 39, 255, 0.3);
+    box-shadow: var(--box_shadow);
 }
 
 /* line 42, ../../xampp/htdocs/infixeduB/public/backEnd/scss/admin/_predefine.scss */
@@ -2647,7 +2622,7 @@ body.login .footer_area a {
         max-width: 50%;
         margin-left: -50%;
         z-index: 999;
-        background: var(--bg_white);
+        background: var(--sidebar_bg);
         box-shadow: 4px 0px 8px rgba(221, 221, 221, 0.4);
     }
 }
@@ -2658,7 +2633,7 @@ body.login .footer_area a {
     #sidebar.active {
         margin-left: 0px;
         z-index: 999;
-      background: var(--bg_white);
+      background: var(--sidebar_bg);
         box-shadow: 4px 0px 8px rgba(221, 221, 221, 0.4);
     }
 }
@@ -3325,6 +3300,7 @@ body.login .footer_area a {
     padding: 8px 25px;
     margin-right: 10px;
     border-radius: 0px;
+    border: 1px solid #cad5f3;
 }
 
 /* line 31, ../../xampp/htdocs/infixeduB/public/backEnd/scss/admin/_student.scss */
@@ -3391,11 +3367,12 @@ body.login .footer_area a {
 
 /* line 91, ../../xampp/htdocs/infixeduB/public/backEnd/scss/admin/_student.scss */
 .student-meta-box .student-meta-top {
-    background: url(../img/staff/staff-details-bg-2.png) no-repeat center;
+    /* background: url(../img/staff/staff-details-bg-2.png) no-repeat center;
     background-position: center;
-    background-size: cover;
+    background-size: cover; */
     min-height: 120px;
-    border-radius: 10px 10px 0px 0px;
+    border-radius: 5px 5px 0px 0px;
+    background-color: var(--primary-color);
 }
 
 /* line 98, ../../xampp/htdocs/infixeduB/public/backEnd/scss/admin/_student.scss */
@@ -4995,7 +4972,7 @@ body.client.color {
 /* line 526, ../../xampp/htdocs/infixeduB/public/backEnd/scss/client/_home.scss */
 .client.light .fact-area .white-box.single-summery,
 .client.color .fact-area .white-box.single-summery {
-    box-shadow: 0px 10px 15px rgba(236, 208, 244, 0.3);
+    box-shadow: var(--box_shadow);
 }
 
 /* line 529, ../../xampp/htdocs/infixeduB/public/backEnd/scss/client/_home.scss */
@@ -5478,25 +5455,7 @@ body.client.color {
     }
 }
 
-/* line 246, ../../xampp/htdocs/infixeduB/public/backEnd/scss/_update.scss */
-.white-box.single-summery {
-    margin-top: 30px;
-}
-
-@media (max-width: 991px) {
-
-    /* line 246, ../../xampp/htdocs/infixeduB/public/backEnd/scss/_update.scss */
-    .white-box.single-summery {
-        margin-top: 20px;
-    }
-}
-
 @media (max-width: 575px) {
-
-    /* line 246, ../../xampp/htdocs/infixeduB/public/backEnd/scss/_update.scss */
-    .white-box.single-summery {
-        padding: 10px 15px;
-    }
 
     /* line 253, ../../xampp/htdocs/infixeduB/public/backEnd/scss/_update.scss */
     .white-box.single-summery h3 {
@@ -5807,15 +5766,6 @@ body.client.color {
 }
 
 @media (max-width: 991px) {
-
-    /* line 454, ../../xampp/htdocs/infixeduB/public/backEnd/scss/_update.scss */
-    .up_admin_visitor .dataTables_filter>label {
-        left: 47%;
-        min-width: 280px;
-        position: relative;
-        top: -8px;
-    }
-
     /* line 460, ../../xampp/htdocs/infixeduB/public/backEnd/scss/_update.scss */
     .up_admin_visitor div.dt-buttons {
         display: none;
@@ -5827,19 +5777,11 @@ body.client.color {
     }
 }
 
-@media only screen and (min-width: 576px) and (max-width: 767px) {
-
-    /* line 471, ../../xampp/htdocs/infixeduB/public/backEnd/scss/_update.scss */
-    .up_admin_visitor .dataTables_filter>label {
-        left: 1%;
-    }
-}
-
 @media only screen and (min-width: 768px) and (max-width: 991px) {
 
     /* line 476, ../../xampp/htdocs/infixeduB/public/backEnd/scss/_update.scss */
     .up_admin_visitor .dataTables_filter>label {
-        left: -12%;
+        left: auto;
     }
 }
 
@@ -5852,7 +5794,7 @@ body.client.color {
 
     /* line 485, ../../xampp/htdocs/infixeduB/public/backEnd/scss/_update.scss */
     .up_admin_visitor .dataTables_filter>label {
-        left: 47%;
+        left: auto;
     }
 }
 
@@ -5889,7 +5831,7 @@ body.client.color {
 
     /* line 514, ../../xampp/htdocs/infixeduB/public/backEnd/scss/_update.scss */
     .up_st_admin_visitor .dataTables_filter>label {
-        left: -12%;
+        left: auto;
     }
 }
 
@@ -6498,7 +6440,7 @@ div.dt-buttons {
 }
 
 .dataTables_filter>label {
-    z-index: 95 !important;
+    z-index: 10 !important;
 }
 
 .modal-header .close {
@@ -8819,7 +8761,7 @@ div.dt-buttons {
     top: -14px;
     right: 10px;
     border-width: 0 15px 20px 15px;
-    border-color: transparent transparent var(--base_color) transparent;
+    border-color: transparent transparent var(--white) transparent;
 }
 
 /* line 521, G:/laragon/www/383-infixpm_lv/public/scss/_header.scss */
@@ -13751,7 +13693,7 @@ table.dataTable {
 }
 
 .vdp-datepicker__calendar {
-    box-shadow: 0px 10px 20px rgba(108, 39, 255, 0.3);
+    box-shadow: var(--box_shadow);
     min-width: 160px;
     background: #fffffffff;
     border: 0 !important;
@@ -13901,7 +13843,7 @@ table.dataTable {
     background: -moz-linear-gradient(90deg, var(--gradient_1) 0%, var(--gradient_3) 100%) !important;
     background: -o-linear-gradient(90deg, var(--gradient_1) 0%, var(--gradient_3) 100%) !important;
     background: linear-gradient(90deg, var(--gradient_1) 0%, var(--gradient_3) 100%) !important;
-    box-shadow: 0px 10px 20px rgba(108, 39, 255, 0.3);
+    box-shadow: var(--box_shadow);
     color: #fff;
     color: #fff !important;
     border-radius: 50% !important;
@@ -13932,7 +13874,7 @@ table.dataTable {
     background: -moz-linear-gradient(90deg, var(--gradient_1) 0%, var(--gradient_3) 100%) !important;
     background: -o-linear-gradient(90deg, var(--gradient_1) 0%, var(--gradient_3) 100%) !important;
     background: linear-gradient(90deg, var(--gradient_1) 0%, var(--gradient_3) 100%) !important;
-    box-shadow: 0px 10px 20px rgba(108, 39, 255, 0.3);
+    box-shadow: var(--box_shadow);
     color: #fff;
     color: #fff !important;
     border-radius: 4px !important;
@@ -14760,7 +14702,7 @@ div.dt-buttons {
 }
 
 .vs__dropdown-menu {
-    box-shadow: 0px 10px 20px rgba(108, 39, 255, 0.3);
+    box-shadow: var(--box_shadow);
     border: 0 !important;
 }
 

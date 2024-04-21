@@ -2,10 +2,10 @@
 
 namespace App\View\Components;
 
-use App\Models\SmExpertTeacher;
 use Closure;
-use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
+use App\Models\SmExpertTeacher;
+use Illuminate\Contracts\View\View;
 
 class TeacherList extends Component
 {
@@ -25,7 +25,11 @@ class TeacherList extends Component
      */
     public function render(): View|Closure|string
     {
-        $teachers = SmExpertTeacher::where('school_id', app('school')->id)->take($this->count)->get();
-        return view('components.'.activeTheme().'.teacher-list', compact('teachers'));
+        $staffs = SmExpertTeacher::where('school_id', app('school')->id)
+                ->with('staff.designations')
+                ->take($this->count)
+                ->orderBy('position')
+                ->get();
+        return view('components.' . activeTheme() . '.teacher-list', compact('staffs'));
     }
 }

@@ -29,9 +29,10 @@ class SmStudent extends Model
     protected $fillable = [];
 
     protected $casts = [
+        'user_id' => 'integer',
+        'role_id' => 'integer',
         'admission_no' => 'integer',
         'roll_no' => 'integer',
-        'active_status' => 'integer',
         'age' => 'integer',
         'bloodgroup_id' => 'integer',
         'religion_id' => 'integer',
@@ -41,11 +42,10 @@ class SmStudent extends Model
         'dormitory_id' => 'integer',
         'height' => 'double',
         'weight' => 'double',
-        'user_id' => 'integer',
-        'role_id' => 'integer',
         'school_id' => 'integer',
+        'gender_id' => 'integer',
         'academic_id' => 'integer',
-        'gender_id' => 'integer'
+        'active_status' => 'integer'
     ];
 
     protected static function boot()
@@ -88,7 +88,7 @@ class SmStudent extends Model
 
     public function gender()
     {
-        return $this->belongsTo('App\SmBaseSetup', 'gender_id', 'id')->withDefault()->withDefault();
+        return $this->belongsTo('App\SmBaseSetup', 'gender_id', 'id')->withDefault();
     }
 
     public function school()
@@ -98,17 +98,17 @@ class SmStudent extends Model
 
     public function religion()
     {
-        return $this->belongsTo('App\SmBaseSetup', 'religion_id', 'id')->withDefault()->withDefault();
+        return $this->belongsTo('App\SmBaseSetup', 'religion_id', 'id')->withDefault();
     }
 
     public function bloodGroup()
     {
-        return $this->belongsTo('App\SmBaseSetup', 'bloodgroup_id', 'id');
+        return $this->belongsTo('App\SmBaseSetup', 'bloodgroup_id', 'id')->withDefault();
     }
 
     public function category()
     {
-        return $this->belongsTo('App\SmStudentCategory', 'student_category_id', 'id')->withDefault()->withDefault();
+        return $this->belongsTo('App\SmStudentCategory', 'student_category_id', 'id')->withDefault();
     }
 
     public function group()
@@ -774,7 +774,7 @@ class SmStudent extends Model
     }
     public function recordClass()
     {
-        return $this->hasOne(StudentRecord::class, 'student_id')->where('is_promote', 0)->where('class_id', request()->class)->where('academic_id', getAcademicId())->where('school_id', Auth::user()->school_id);
+        return $this->hasOne(StudentRecord::class, 'student_id')->where('is_promote', 0)->where('class_id', request()->class)->where('academic_id', getAcademicId())->where('school_id', app('school')->id);
     }
 
     public function recordClassSaas()

@@ -13,8 +13,6 @@
         #table_id1 th {
             border: 1px solid var(--border_color);
             text-align: center;
-            padding: .5rem !important;
-            font-size: 10px !important;
         }
 
         .main-wrapper {
@@ -64,21 +62,16 @@
         hr {
             margin: 0px;
         }
-
-        .th {
-            padding: .5rem !important;
-            font-size: 10px !important;
-        }
     </style>
 @endpush
 <div role="tabpanel" class="tab-pane fade" id="subjectAttendance">
-    <div class="white-box">
+    <div class="p-3">
         @if (isset($subjectAttendance))
             <section class="student-attendance">
                 <div class="container-fluid p-0">
-                    <div class="row mt-40">
-                        <div class="col-lg-6 no-gutters">
-                            <div class="main-title mb-30">
+                    <div class="row">
+                        <div class="col-lg-6 p-0 no-gutters">
+                            <div class="main-title mb-15">
                                 <h3 class="mb-0">@lang('student.student_attendance_report')
                                     <small>
                                         <span class="text-success">P:<span id="total_present"></span></span>
@@ -100,7 +93,7 @@
                         </div> --}}
                     </div>
                     <div class="row">
-                        <div class="col-lg-12">
+                        <div class="col-lg-12 p-0">
                             <div class="lateday d-flex flex-wrap">
                                 <div class="mr-3 mb-10">@lang('student.present'): <span class="text-success">P</span></div>
                                 <div class="mr-3 mb-10">@lang('student.late'): <span class="text-warning">L</span></div>

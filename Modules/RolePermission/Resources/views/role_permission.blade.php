@@ -1,9 +1,10 @@
 @extends('backEnd.master')
+@section('title') @lang('rolepermission::role.role_permission') @endsection
 @section('mainContent')
     <link rel="stylesheet" href="{{ asset('/Modules/RolePermission/public/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('/Modules/RolePermission/public/css/custom.css') }}">
 
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('system_settings.role_permission') </h1>

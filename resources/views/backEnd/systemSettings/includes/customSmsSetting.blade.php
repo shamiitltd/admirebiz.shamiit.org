@@ -57,15 +57,15 @@
                     </a>
                 </div>
             @endif
-            <div class=" add_new_form pb-4 border-bottom" id="add_new_form">
+            <div class=" add_new_form pb-4 px-3 border-bottom" id="add_new_form">
                 @if (isset($editData))
                     {{ Form::open(['class' => 'form-horizontal mb-0', 'files' => true, 'route' => 'update-custom-sms-setting', 'id' => 'update-custom-sms-setting']) }}
                     <input type="hidden" name="id" value="{{ @$editData->id }}">
                 @else
                     {{ Form::open(['class' => 'form-horizontal mb-0', 'files' => true, 'route' => 'save-custom-sms-setting', 'id' => 'save-custom-sms-setting']) }}
                 @endif
-                <div class="row mb-30 mt-30">
-                    <div class="col-lg-4 mb-30">
+                <div class="row mb-15 mt-0">
+                    <div class="col-lg-4 mb-15">
                         <div class="primary_input">
                             <label class="primary_input_label" for="">@lang('system_settings.gateway_name') <span class="text-danger"> *</span></label>
                             <input
@@ -83,7 +83,7 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-4 mb-30">
+                    <div class="col-lg-4 mb-15">
                         <div class="primary_input">
                             <label class="primary_input_label" for="">@lang('system_settings.gateway_url') <span class="text-danger"> *</span></label>
                             <input
@@ -101,7 +101,7 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-4 mb-30">
+                    <div class="col-lg-4 mb-15">
                         <div class="primary_input">
                             <label class="primary_input_label" for="">@lang('system_settings.request_method') <span class="text-danger"> *</span> </label>
                             <select
@@ -119,7 +119,7 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-4 mb-30">
+                    <div class="col-lg-4 mb-15">
                         <div class="primary_input">
                             <label class="primary_input_label" for="">@lang('system_settings.send_to_parameter_name') <span class="text-danger"> *</span> </label>
                             <input
@@ -137,7 +137,7 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-4 mb-30">
+                    <div class="col-lg-4 mb-15">
                         <div class="primary_input">
                             <label class="primary_input_label" for="">@lang('system_settings.messege_to_parameter_name') <span class="text-danger"> *</span> </label>
                             <input
@@ -155,7 +155,7 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-4 mb-30 d-flex relation-button mt-30">
+                    <div class="col-lg-4 mb-15 d-flex relation-button mt-30">
                         <p class="text-uppercase mb-0 mt-10">@lang('system_settings.set_authetication')</p>
                         <div class="d-flex radio-btn-flex ml-30">
                             <div class="mr-20 mt-10">
@@ -179,7 +179,7 @@
                 <div class="row mb-30">
                     <div class="col-md-6">
                         <div class="row">
-                            <div class="col-lg-6 mb-30">
+                            <div class="col-lg-6 mb-15">
                                 <div class="primary_input">
                                     <label class="primary_input_label" for="">@lang('system_settings.param_key_1') </label>
                                     <input
@@ -196,7 +196,7 @@
                                     @endif
                                 </div>
                             </div>
-                            <div class="col-lg-6 mb-30">
+                            <div class="col-lg-6 mb-15">
                                 <div class="primary_input">
                                     <label class="primary_input_label" for="">@lang('system_settings.param_value_1') </label>
                                     <input
@@ -214,7 +214,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-lg-6 mb-30">
+                            <div class="col-lg-6 mb-15">
                                 <div class="primary_input">
                                     <label class="primary_input_label" for="">@lang('system_settings.param_key_3') </label>
                                     <input
@@ -231,7 +231,7 @@
                                     @endif
                                 </div>
                             </div>
-                            <div class="col-lg-6 mb-30">
+                            <div class="col-lg-6 mb-15">
                                 <div class="primary_input">
                                     <label class="primary_input_label" for="">@lang('system_settings.param_value_3') </label>
                                     <input
@@ -252,7 +252,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="row">
-                            <div class="col-lg-6 mb-30">
+                            <div class="col-lg-6 mb-15">
                                 <div class="primary_input">
                                     <label class="primary_input_label" for="">@lang('system_settings.param_key_2') </label>
                                     <input
@@ -269,7 +269,7 @@
                                     @endif
                                 </div>
                             </div>
-                            <div class="col-lg-6 mb-30">
+                            <div class="col-lg-6 mb-15">
                                 <div class="primary_input">
                                     <label class="primary_input_label" for="">@lang('system_settings.param_value_2') </label>
                                     <input
@@ -287,7 +287,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-lg-6 mb-30">
+                            <div class="col-lg-6 mb-15">
                                 <div class="primary_input">
                                     <label class="primary_input_label" for="">@lang('system_settings.param_key_4') </label>
                                     <input
@@ -304,7 +304,7 @@
                                     @endif
                                 </div>
                             </div>
-                            <div class="col-lg-6 mb-30">
+                            <div class="col-lg-6 mb-15">
                                 <div class="primary_input">
                                     <label class="primary_input_label" for="">@lang('system_settings.param_value_4') </label>
                                     <input
@@ -325,7 +325,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="row">
-                            <div class="col-lg-6 mb-30">
+                            <div class="col-lg-6 mb-15">
                                 <div class="primary_input">
                                     <label class="primary_input_label" for="">@lang('system_settings.param_key_5') </label>
                                     <input
@@ -342,7 +342,7 @@
                                     @endif
                                 </div>
                             </div>
-                            <div class="col-lg-6 mb-30">
+                            <div class="col-lg-6 mb-15">
                                 <div class="primary_input">
                                     <label class="primary_input_label" for="">@lang('system_settings.param_value_5') </label>
                                     <input
@@ -360,7 +360,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-lg-6 mb-30">
+                            <div class="col-lg-6 mb-15">
                                 <div class="primary_input">
                                     <label class="primary_input_label" for="">@lang('system_settings.param_key_7') </label>
                                     <input
@@ -377,7 +377,7 @@
                                     @endif
                                 </div>
                             </div>
-                            <div class="col-lg-6 mb-30">
+                            <div class="col-lg-6 mb-15">
                                 <div class="primary_input">
                                     <label class="primary_input_label" for="">@lang('system_settings.param_value_7') </label>
                                     <input
@@ -398,7 +398,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="row">
-                            <div class="col-lg-6 mb-30">
+                            <div class="col-lg-6 mb-15">
                                 <div class="primary_input">
                                     <label class="primary_input_label" for="">@lang('system_settings.param_key_6') </label>
                                     <input
@@ -415,7 +415,7 @@
                                     @endif
                                 </div>
                             </div>
-                            <div class="col-lg-6 mb-30">
+                            <div class="col-lg-6 mb-15">
                                 <div class="primary_input">
                                     <label class="primary_input_label" for="">@lang('system_settings.param_value_6')</label>
                                     <input
@@ -433,7 +433,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-lg-6 mb-30">
+                            <div class="col-lg-6 mb-15">
                                 <div class="primary_input">
                                     <label class="primary_input_label" for="">@lang('system_settings.param_key_8') </label>
                                     <input
@@ -450,7 +450,7 @@
                                     @endif
                                 </div>
                             </div>
-                            <div class="col-lg-6 mb-30">
+                            <div class="col-lg-6 mb-15">
                                 <div class="primary_input">
                                     <label class="primary_input_label" for="">@lang('system_settings.param_value_8') </label>
                                     <input
@@ -487,7 +487,7 @@
             </div>
 
             @if (!isset($editData))
-                <div class="col-lg-12">
+                <div class="col-lg-12 mt-15">
                     <x-table>
                         <div class="table-responsive">
                             <table id="noSearch" class="table shadow-none" cellspacing="0" width="100%">

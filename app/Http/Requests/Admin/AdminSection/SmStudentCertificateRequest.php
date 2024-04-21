@@ -23,6 +23,10 @@ class SmStudentCertificateRequest extends FormRequest
             'footer_center_text' => "nullable",
             'footer_right_text' => "nullable",
             'student_photo' => "nullable",
+            'layout' => "required",
+            'body_font_size' => "required",
+            'height' => "required",
+            'width' => "required",
             'file' => "mimes:jpg,jpeg,png|max:".$maxFileSize
         ];
 

@@ -33,13 +33,12 @@ class CreateSmCoursesTable extends Migration
             $table->foreign('school_id')->references('id')->on('sm_schools')->onDelete('cascade');
         });
 
-
         $faker = Faker::create();
 
         for ($i = 1; $i <= 5; $i++) {
             $new = new SmCourse();
             $new->title = $faker->text(50);
-            $new->image = 'public/uploads/course/academic1.jpg';
+            $new->image = 'public/uploads/theme/edulia/course/academic1.jpg';
             $new->overview = $faker->text(2000);
             $new->outline = $faker->text(2000);
             $new->prerequisites = $faker->text(2000);

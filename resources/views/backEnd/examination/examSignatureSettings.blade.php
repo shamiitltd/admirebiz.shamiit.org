@@ -3,7 +3,7 @@
         @lang('exam.exam_signature_settings')
     @endsection
 @section('mainContent')
-<section class="sms-breadcrumb mb-40 white-box">
+<section class="sms-breadcrumb mb-20">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('exam.exam_signature_settings')</h1>
@@ -18,14 +18,6 @@
 <section class="mb-40 student-details">
     <div class="container-fluid p-0">
         <div class="row">
-            <div class="offset-lg-10 col-lg-2 text-right col-md-12 mb-20">
-                <a href="javascript:void(0)" class="primary-btn small fix-gr-bg" id="addExam-Signature">
-                    <span class="ti-plus pr-2"></span>
-                    @lang('exam.add_signature')
-                </a>
-            </div>
-        </div>
-        <div class="row pt-20">
             <div class="col-lg-12 ">
                 <p class="alert alert-warning mb-2 text-center">{{ __('exam.signature_tips') }}</p>
             </div>
@@ -36,6 +28,14 @@
                     {{ Form::open(['route' => 'exam-signature-settings-store', 'method' => 'POST', 'enctype' => 'multipart/form-data']) }}
                 @endif
                 <div class="white-box">
+                    <div class="row mb-15">
+                        <div class="col-lg-12 text-right col-md-12">
+                            <a href="javascript:void(0)" class="primary-btn small fix-gr-bg" id="addExam-Signature">
+                                <span class="ti-plus pr-2"></span>
+                                @lang('exam.add_signature')
+                            </a>
+                        </div>
+                    </div>
                         <div id="showExamSignature">
                             @foreach($allSignature as $key => $signatureData)
                                 <div class="row mb-20 allDiv-Rm">

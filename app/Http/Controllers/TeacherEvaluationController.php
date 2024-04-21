@@ -18,6 +18,14 @@ class TeacherEvaluationController extends Controller
     }
     public function teacherEvaluationSettingUpdate(Request $request)
     {
+        $input = $request->all();
+        $validator = Validator::make($input, [
+            'endDate' => 'after:startDate',
+        ]);
+        if ($validator->fails()) {
+            Toastr::error('End Date cannot be before Start Date', 'Failed');
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
         try {
             $teacherEvaluationSetting = TeacherEvaluationSetting::find(1);
             if ($request->type == 'evaluation') {

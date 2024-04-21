@@ -17,6 +17,7 @@ use Carbon\Carbon;
 use Clickatell\Rest;
 use App\SmSmsGateway;
 use App\ApiBaseMethod;
+use App\GlobalVariable;
 use App\SmEmailSmsLog;
 use App\SmNoticeBoard;
 use App\SmEmailSetting;
@@ -33,6 +34,7 @@ use App\Notifications\CommunicateNotification;
 use Modules\RolePermission\Entities\InfixRole;
 use App\Http\Requests\Admin\Communicate\SendEmailSmsRequest;
 use App\Models\StudentRecord;
+use Modules\Alumni\Entities\Alumni;
 use Modules\University\Http\Controllers\CommunicateController;
 use Modules\University\Http\Controllers\UnCommonController;
 use Modules\University\Http\Controllers\UnCommunicateController;
@@ -59,8 +61,8 @@ class SmCommunicateController extends Controller
     public function sendEmailSms(SendEmailSmsRequest $request)
     {
         try {
-            $mobile_sms = SmSmsGateway::where('gateway_name','Mobile SMS')->first('device_info');
-            $device_info = json_decode(@$mobile_sms->device_info) ;
+            $mobile_sms = SmSmsGateway::where('gateway_name', 'Mobile SMS')->first('device_info');
+            $device_info = json_decode(@$mobile_sms->device_info);
             $device_status = @$device_info->status;
             if (moduleStatusCheck('University')) {
                 $unCommunicate = new UnCommunicateController();
@@ -88,8 +90,20 @@ class SmCommunicateController extends Controller
                                         ->get();
                                 } elseif ($role_id == 3) {
                                     $receiverDetails = SmParent::select('guardians_email as email', 'fathers_name as full_name', 'fathers_mobile as mobile')
+                                        ->where('active_status', 1)
                                         ->where('academic_id', getAcademicId())
                                         ->get();
+                                } elseif ($role_id == GlobalVariable::isAlumni()) {
+                                    $receiverDetails = Alumni::with('student')
+                                        ->select('email', 'mobile', 'full_name')
+                                        ->get()
+                                        ->map(function ($alumni) {
+                                            return [
+                                                'email'     => optional($alumni->student)->email,
+                                                'full_name' => optional($alumni->student)->full_name,
+                                                'mobile'    => $alumni->mobile ?? optional($alumni->student)->mobile,
+                                            ];
+                                        });
                                 } else {
                                     $receiverDetails = SmStaff::select('email', 'full_name', 'mobile')
                                         ->where('role_id', $role_id)
@@ -115,6 +129,10 @@ class SmCommunicateController extends Controller
                             Toastr::success('Operation successful', 'Success');
                             return redirect()->back();
                         } else {
+                            if (activeSmsGateway() == null) {
+                                Toastr::error('No SMS gateway found', 'Failed');
+                                return redirect()->back();
+                            }
                             $to_name = '';
                             $to_email = '';
                             $to_mobile = '';
@@ -132,6 +150,17 @@ class SmCommunicateController extends Controller
                                         ->where('school_id', Auth::user()->school_id)
                                         ->where('academic_id', getAcademicId())
                                         ->get();
+                                } elseif ($role_id == GlobalVariable::isAlumni()) {
+                                    $receiverDetails = Alumni::with('student')
+                                        ->select('email', 'mobile', 'full_name')
+                                        ->get()
+                                        ->map(function ($alumni) {
+                                            return [
+                                                'email'     => optional($alumni->student)->email,
+                                                'full_name' => optional($alumni->student)->full_name,
+                                                'mobile'    => $alumni->mobile ?? optional($alumni->student)->mobile,
+                                            ];
+                                        });
                                 } else {
                                     $receiverDetails = SmStaff::select('email', 'full_name', 'mobile')
                                         ->where('role_id', $role_id)
@@ -155,8 +184,8 @@ class SmCommunicateController extends Controller
 
                                 // Send SMS Convert to Flutter Notification Start
                                 try {
-                                    
-                                    if (activeSmsGateway()->gateway_name == 'Mobile SMS' && apk_secret() && $device_status ==1) {
+
+                                    if (activeSmsGateway()->gateway_name == 'Mobile SMS' && apk_secret() && $device_status == 1) {
                                         config(['services.fcm.key' => apk_secret()]);
                                         $user = User::find(Auth::user()->id);
                                         $job = (new sendSmsJob($request->description, $request->email_sms_title, $receiver_numbers, $user))
@@ -204,6 +233,10 @@ class SmCommunicateController extends Controller
                             Toastr::success('Operation successful', 'Success');
                             return redirect()->back();
                         } else {
+                            if (activeSmsGateway() == null) {
+                                Toastr::error('No SMS gateway found', 'Failed');
+                                return redirect()->back();
+                            }
                             $message_to_individual = $request->message_to_individual;
                             $receiver_numbers = [];
 
@@ -224,7 +257,7 @@ class SmCommunicateController extends Controller
                                 }
                             }
                             // Send SMS Convert to Flutter Notification Start
-                            if (activeSmsGateway()->gateway_name == 'Mobile SMS' && apk_secret() && $device_status ==1 ) {
+                            if (activeSmsGateway()->gateway_name == 'Mobile SMS' && apk_secret() && $device_status == 1) {
                                 config(['services.fcm.key' => apk_secret()]);
                                 $user = User::find(Auth::user()->id);
                                 $job = (new sendSmsJob($request->description, $request->email_sms_title, $receiver_numbers, $user))
@@ -292,6 +325,10 @@ class SmCommunicateController extends Controller
                             Toastr::success('Operation successful', 'Success');
                             return redirect()->back();
                         } else {
+                            if (activeSmsGateway() == null) {
+                                Toastr::error('No SMS gateway found', 'Failed');
+                                return redirect()->back();
+                            }
                             $class_id = $request->class_id;
                             $selectedSections = $request->message_to_section;
 
@@ -341,7 +378,7 @@ class SmCommunicateController extends Controller
                                         }
                                     }
                                     // Send SMS Convert to Flutter Notification Start
-                                    if (activeSmsGateway()->gateway_name == 'Mobile SMS' && apk_secret() && $device_status ==1) {
+                                    if (activeSmsGateway()->gateway_name == 'Mobile SMS' && apk_secret() && $device_status == 1) {
                                         config(['services.fcm.key' => apk_secret()]);
                                         $user = User::find(Auth::user()->id);
                                         $job = (new sendSmsJob($request->description, $request->email_sms_title, $receiver_numbers, $user))
@@ -358,7 +395,7 @@ class SmCommunicateController extends Controller
                 }
             }
         } catch (Exception $e) {
-           
+            dd($e);
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();
         }
@@ -382,6 +419,16 @@ class SmCommunicateController extends Controller
                 $Parents = SmParent::where('school_id', Auth::user()->school_id)
                     ->get();
                 return response()->json([$Parents]);
+            }
+
+            if ($request->id == 10) {
+                $allAlumnis  = Alumni::where('school_id', Auth::user()->school_id)->with('student')
+                    ->get();
+                $alumnis = [];
+                foreach ($allAlumnis as $allAlumni) {
+                    $alumnis[] = Alumni::find($allAlumni->id)->student;
+                }
+                return response()->json([$alumnis]);
             }
 
             if ($request->id != 2 and $request->id != 3) {

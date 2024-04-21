@@ -18,7 +18,7 @@
     }
 </style>
 @endpush
-<section class="sms-breadcrumb mb-40 white-box">
+<section class="sms-breadcrumb mb-20">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('accounts.bank_transaction')</h1>
@@ -34,15 +34,17 @@
     <div class="container-fluid p-0">        
         <div class="row ">
             <div class="col-lg-12">
+                <div class="white-box">
                 <div class="row">
-                    <div class="col-lg-6 no-gutters">
+                    <div class="col-lg-12 no-gutters">
                         <div class="main-title">
-                            <h3 class="mb-0">@lang('accounts.bank_transaction') ({{$bank_name->bank_name .' '.'-'.' '. $bank_name->account_name}})</h3>
+                            <h3 class="mb-15">@lang('accounts.bank_transaction') ({{$bank_name->bank_name .' '.'-'.' '. $bank_name->account_name}})</h3>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-12">
+                        <div class="table-responsive">
                         <x-table>
                             <table id="tableWithoutSort" class="table" cellspacing="0" width="100%">
                                 <thead>
@@ -106,7 +108,9 @@
                                 </tfoot>
                             </table>
                         </x-table>
+                        </div>
                     </div>
+                </div>
                 </div>
             </div>
         </div>

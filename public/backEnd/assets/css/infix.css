@@ -255,7 +255,7 @@ creator:rashed;
     background: #ffffff;
     padding: 40px 30px;
     border-radius: 10px;
-    box-shadow: 0px 10px 15px rgba(236, 208, 244, 0.3);
+    box-shadow: var(--box_shadow);
     margin: 0 auto;
     clear: both;
     border-collapse: separate;
@@ -280,7 +280,7 @@ creator:rashed;
     background: #ffffff;
     padding: 15px 24px;
     border-radius: 10px;
-    box-shadow: 0px 10px 15px rgba(236, 208, 244, 0.3);
+    box-shadow: var(--box_shadow);
     margin: 0 auto;
     clear: both;
     border-collapse: separate;
@@ -304,7 +304,7 @@ creator:rashed;
     background: #ffffff;
     padding: 10px 30px;
     border-radius: 10px;
-    box-shadow: 0px 10px 15px rgba(236, 208, 244, 0.3);
+    box-shadow: var(--box_shadow);
 }
 
 .tt {
@@ -429,7 +429,7 @@ creator:rashed;
 #liveStudentSearch {
     position: absolute;
     background-color: #fff;
-    box-shadow: 0px 10px 20px rgba(108, 39, 255, 0.3);
+    box-shadow: var(--box_shadow);
     width: 100%;
     border-radius: 0 0 10px 10px;
     z-index: 999 !important;
@@ -531,14 +531,7 @@ table.dataTable td {
 }
 
 .datepicker table tr td.day:hover {
-    background: -webkit-linear-gradient(90deg,
-            #7c32ff 0%,
-            #c738d8 100%) !important;
-    background: -moz-linear-gradient(90deg,
-            #7c32ff 0%,
-            #c738d8 100%) !important;
-    background: -o-linear-gradient(90deg, #7c32ff 0%, #c738d8 100%) !important;
-    background: linear-gradient(90deg, #7c32ff 0%, #c738d8 100%) !important;
+    background: var(--primary-color)!important;
 }
 
 

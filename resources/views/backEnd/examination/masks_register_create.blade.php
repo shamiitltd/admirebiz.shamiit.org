@@ -11,7 +11,7 @@
     </style>
 @endpush
 @section('mainContent')
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('exam.add_marks') </h1>
@@ -26,16 +26,17 @@
     </section>
     <section class="admin-visitor-area">
         <div class="container-fluid p-0">
-            <div class="row">
-                <div class="col-lg-8 col-md-6 col-sm-6">
-                    <div class="main-title">
-                        <h3 class="mb-30">@lang('common.select_criteria') </h3>
-                    </div>
-                </div>
-            </div>
+
             <div class="row">
                 <div class="col-lg-12">
                     <div class="white-box">
+                    <div class="row">
+                        <div class="col-lg-8 col-md-6 col-sm-6">
+                            <div class="main-title">
+                                <h3 class="mb-15">@lang('common.select_criteria') </h3>
+                            </div>
+                        </div>
+                    </div>
                         {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'marks_register_create_search', 'method' => 'POST', 'enctype' => 'multipart/form-data', 'id' => 'search_student']) }}
                         <div class="row">
                             <input type="hidden" name="url" id="url" value="{{ URL::to('/') }}">
@@ -87,11 +88,20 @@
                                         name="exam">
                                         <option data-display="@lang('exam.select_exam') *" value="">@lang('exam.select_exam') *
                                         </option>
-                                        @foreach ($exam_types as $exam_type)
-                                            <option value="{{ $exam_type->id }}"
-                                                {{ isset($exam_id) ? ($exam_id == $exam_type->id ? 'selected' : '') : '' }}>
-                                                {{ $exam_type->title }}</option>
+                                        {{-- @foreach ($exams as $exam)
+                                            <option value="{{ $exam->id }}"
+                                                {{ isset($exam_id) ? ($exam_id == $exam->id ? 'selected' : '') : '' }}>
+                                                {{ $exam->examType->title }}/{{ $exam->class->class_name }}({{ $exam->section->section_name }})
+                                            </option>
+                                        @endforeach --}}
+
+                                        @foreach ($exams as $exam)
+                                            <option value="{{ $exam->id }}"
+                                                {{ isset($exam_id) ? ($exam_id == $exam->id ? 'selected' : '') : '' }}>
+                                                {{ $exam->title }}
+                                            </option>
                                         @endforeach
+
                                     </select>
                                     @if ($errors->has('exam'))
                                         <span class="text-danger invalid-select" role="alert">
@@ -173,7 +183,8 @@
             @if (isset($students))
                 @if (moduleStatusCheck('University'))
                     <div class="container-fluid p-0">
-                        <div class="row mt-40">
+                        <div class="white-box mt-40">
+                        <div class="row">
                             <div class="col-lg-12 col-md-6 mb-30">
                                 <div class="main-title">
                                     <h3>@lang('exam.add_marks') | @lang('exam.exam'): {{ @$exam_type->title }}</h3>
@@ -320,13 +331,15 @@
                                 </table>
                             </div>
                         </div>
+                        </div>
                     </div>
                 @else
                     <div class="container-fluid p-0">
-                        <div class="row mt-40">
+                        <div class="white-box mt-40">
+                        <div class="row">
                             <div class="col-lg-6 col-md-6">
                                 <div class="main-title">
-                                    <h3 class="mb-30">@lang('exam.add_marks') |
+                                    <h3 class="mb-15">@lang('exam.add_marks') |
                                         <small>@lang('exam.exam'): {{ $search_info['exam_name'] }}, @lang('common.class'):
                                             {{ $search_info['class_name'] }}, @lang('common.section'):
                                             {{ $search_info['section_name'] }}
@@ -370,7 +383,7 @@
                                             @endphp
                                             @foreach ($students as $record)
                                                 @php
-                                                    $absent_check = App\SmMarksRegister::is_absent_check($exam_id, $class_id, $record->section_id, $subject_id, $record->student_id, $record->id);
+                                                    $absent_check = App\SmMarksRegister::is_absent_check($exam_type->id, $class_id, $record->section_id, $subject_id, $record->student_id, $record->id);
                                                 @endphp
                                                 <tr>
                                                     <td>
@@ -430,7 +443,7 @@
                                                         </td>
                                                     @endforeach
                                                     <?php
-                                                    $teacher_remarks = App\SmMarkStore::teacher_remarks($record->student_id, $exam_id, $record->class_id, $record->section_id, $subject_id, $record->id);
+                                                    $teacher_remarks = App\SmMarkStore::teacher_remarks($record->student_id, $exam_type->id, $record->class_id, $record->section_id, $subject_id, $record->id);
                                                     ?>
                                                     <td>
                                                         <div class="primary_input">
@@ -455,29 +468,6 @@
                                                     </td>
                                                 </tr>
                                             @endforeach
-                                            <?php
-                                            $teacher_remarks = App\SmMarkStore::teacher_remarks($record->student_id, $exam_id, $record->class_id, $record->section_id, $subject_id, $record->id);
-                                            ?>
-                                            <td>
-                                                <div class="primary_input mt-10">
-                                                    <input class="primary_input_field" type="text"
-                                                        name="markStore[{{ $record->id }}][teacher_remarks]"
-                                                        value="{{ $teacher_remarks }}"
-                                                        {{ @($absent_check->attendance_type == 'A' || @$absent_check->attendance_type == '') && !isSkip('exam_attendance') ? 'readonly' : '' }}>
-                                                </div>
-                                            </td>
-                                            <?php $exam_attendance = App\SmMarksRegister::exam_attendance_check($part->exam_id, $record->id); ?>
-                                            <td>
-                                                <div class="primary_input">
-                                                    @if ($exam_attendance && $exam_attendance->attendance_type == 'P')
-                                                        <button class="primary-btn small fix-gr-bg"
-                                                            type="button">@lang('exam.present')</button>
-                                                    @elseif($exam_attendance && $exam_attendance->attendance_type == 'A')
-                                                        <button class="primary-btn small bg-danger text-white border-0"
-                                                            type="button">@lang('exam.absent')</button>
-                                                    @endif
-                                                </div>
-                                            </td>
                                             </tr>
                                             @if (userPermission('marks_register_create'))
                                                 <tr>
@@ -494,6 +484,7 @@
                                     </table>
                                 </div>
                             </div>
+                        </div>
                         </div>
                     </div>
                 @endif

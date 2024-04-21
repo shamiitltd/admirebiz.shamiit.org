@@ -6,7 +6,7 @@
 <nav id="sidebar" class="sidebar">
 
     <div class="sidebar-header update_sidebar">
-        @if (Auth::user()->role_id != 2 && Auth::user()->role_id != 3)
+        @if (Auth::user()->role_id != 2 && Auth::user()->role_id != 3 && Auth::user()->role_id != 10)
             @if (userPermission('dashboard'))
                 @if (moduleStatusCheck('Saas') == true &&
                         Auth::user()->is_administrator == 'yes' &&
@@ -41,17 +41,18 @@
                     Auth::user()->role_id == 1)
                 @include('saas::menu.Saas')
             @else
-                @if (auth()->user()->role_id != 3)
+                @if (auth()->user()->role_id != 3 && auth()->user()->role_id != App\GlobalVariable::isAlumni())
                     @isset($sidebar_menus)
                     
                         @foreach ($sidebar_menus as $sidebar_menu)
-                    
+                        
                             @if($sidebar_menu->subModule->count() > 0 && sidebarPermission($sidebar_menu->permissionInfo)==true)
                                 @if ($sidebar_menu->permissionInfo->name)
                                     <span class="menu_seperator" id="seperator_{{ $sidebar_menu->permissionInfo->route }}" data-section="{{ $sidebar_menu->permissionInfo->route }}">{{ $sidebar_menu->permissionInfo->name }} </span>
                                 @endif
                             
                                 @foreach($sidebar_menu->subModule as $item)
+
                                     @if(sidebarPermission($item->permissionInfo)==true)
                                         <li class="{{ spn_active_link(subModuleRoute($item), 'mm-active') }} {{ $sidebar_menu->permissionInfo->route }}">
 
@@ -89,10 +90,13 @@
                                                                     @foreach ($sub->subModule as $child)
                                                                         @if(sidebarPermission($child)==true)
                                                                             <li>
-                                                                                <a
+                                                                                <a  class="has-arrow" aria-expanded="false"
                                                                                     href="{{ validRouteUrl($child->permissionInfo->route) }}">
                                                                                     {{ __($child->permissionInfo->lang_name) }} 
                                                                                 </a>
+                                                                                <ul class="list-unstyled">
+                                                                                    <li>Third level</li>
+                                                                                </ul>
                                                                             </li>
                                                                         @endif
                                                                     @endforeach
@@ -110,6 +114,105 @@
                         @endforeach
                     @endisset
                 @endif
+
+                @if(auth()->user()->role_id == 10)
+                    @isset($sidebar_menus)                                    
+                        @foreach ($sidebar_menus as $sidebar_menu)
+                            @if(sidebarPermission($sidebar_menu->permissionInfo)==true)
+                                @if($sidebar_menu->permissionInfo->lang_name)
+                                    <span class="menu_seperator">{{ __($sidebar_menu->permissionInfo->lang_name) }}</span>
+                                    @endif
+                                    @foreach ($sidebar_menu->subModule as $item)
+                                        @if(sidebarPermission($item->permissionInfo)==true)
+                                            <li class="{{ spn_active_link(subModuleRoute($item), 'mm-active') }}">
+                                                
+                                                @if (
+                                                    ($item->subModule->count() > 0 && $item->permissionInfo->route != 'dashboard') ||
+                                                        $item->permissionInfo->relate_to_child == 1)
+                                                    <a href="javascript:void(0)" class="has-arrow" aria-expanded="false">
+                                                    @else
+                                                        <a href="{{ validRouteUrl($item->permissionInfo->route) }}">
+                                                @endif
+                                                <div class="nav_icon_small">
+                                                    <span class="{{ $item->permissionInfo->icon }}"></span>
+                                                </div>
+                                                <div class="nav_title">
+                                                        <span>{{ __($item->permissionInfo->lang_name) }}</span>
+                                                        @if (config('app.app_sync') && $item->permissionInfo->module && in_array($item->permissionInfo->module, $paid_modules))
+                                                        @if (config('app.app_sync'))
+                                                            <span class="demo_addons">Addon</span>
+                                                        @endif
+                                                    @endif
+                                                </div>
+                                                </a>
+                                                <ul class="mm-collapse">
+                                                    @if (@$item->subModule)
+                                                        @foreach (@$item->subModule as $key => $sub)
+                                                            @if ($sub->permissionInfo->relate_to_child == 1 && $item->permissionInfo->is_parent == 1 && sidebarPermission($sub->permissionInfo))
+                                                                @foreach ($childrens as $children)
+                                                      
+                                                                @if(! in_array($item->permissionInfo->module , ["fees_collection", "Fees"]) && (hasDueFees($children->id) )) @continue  @endif 
+                                                                   
+                                                                        <li>
+                                                                            <a href="{{ validRouteUrl($sub->permissionInfo->route, $children->id) }}"
+                                                                                class="{{ spn_active_link(subModuleRoute($sub), 'active') }}">
+
+                                                                                {{ __($sub->permissionInfo->lang_name) }} - {{ $children->full_name }}
+                                                                            </a>
+                                                                        </li>
+                                                                            
+                                                                       
+                                                                        
+                                                                    
+                                                                @endforeach
+                                                            @else
+                                                            @if(sidebarPermission($sub->permissionInfo))
+                                                                <li>
+                                                                    <a href="{{ validRouteUrl($sub->permissionInfo->route) }}"
+                                                                        class="{{ spn_active_link(subModuleRoute($sub), 'active') }}">
+
+                                                                        {{ __($sub->permissionInfo->lang_name) }} 
+                                                                    </a>
+
+                                                                </li>
+                                                                @endif
+                                                            @endif
+                                                        @endforeach
+                                                    @endif
+                                                    @if (
+                                                        $item->permissionInfo->relate_to_child == 1 &&
+                                                            $item->permissionInfo->is_parent == 1 &&
+                                                            count($item->subModule) == 0 && sidebarPermission($item->permissionInfo))
+                                                        @foreach ($childrens as $children)
+                                                       
+                                                            @if(! in_array($item->permissionInfo->module , ["fees_collection", "Fees"]) && (hasDueFees($children->id) )) @continue  @endif 
+                                                                
+                                                                    <li>
+                                                                        <a href="{{ validRouteUrl($item->permissionInfo->route, $children->id) }}"
+                                                                            class="{{ spn_active_link(subModuleRoute($item), 'active') }}">
+
+                                                                            {{ __($item->permissionInfo->lang_name) }} -
+                                                                            {{ $children->full_name }}</a>
+
+                                                                    </li>
+                                                        
+                                                               
+                                                           
+                                                             
+
+                                                            
+                                                        @endforeach
+                                                    @endif
+
+                                                </ul>
+                                            </li>
+                                        @endif
+                                    @endforeach
+                            @endif
+                        @endforeach
+                    @endisset
+                @endif
+
                 @if(auth()->user()->role_id == 3)
                     @isset($sidebar_menus)                                    
                         @foreach ($sidebar_menus as $sidebar_menu)

@@ -372,4 +372,5 @@ return [
     'PDF Exam Result' => 'PDF Exam Result',
     'average_passing_examination' => 'Average Passing Examination',
     'is_average_passing_exam' => 'Is Average Passing Exam',
+    'already_taken' => 'Already Taken',
 ];

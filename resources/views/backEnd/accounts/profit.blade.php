@@ -4,7 +4,7 @@
 @endsection
 @section('mainContent')
 @php  $setting = generalSetting(); if(!empty(@$setting->currency_symbol)){ @$currency = @$setting->currency_symbol; }else{ @$currency = '$'; } @endphp
-<section class="sms-breadcrumb mb-40 white-box">
+<section class="sms-breadcrumb mb-20">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('accounts.profit_&_loss')</h1>
@@ -19,16 +19,16 @@
 <section class="admin-visitor-area up_admin_visitor">
     <div class="container-fluid p-0">
             <div class="row">
-                <div class="col-lg-4 col-md-6">
-                    <div class="main-title">
-                        <h3 class="mb-30">@lang('common.select_criteria') </h3>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
                 <div class="col-lg-12">
                     
                     <div class="white-box">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-6">
+                                <div class="main-title">
+                                    <h3 class="mb-15">@lang('common.select_criteria') </h3>
+                                </div>
+                            </div>
+                        </div>
                        {!! Form::open(['route' => 'search_profit_by_dates', 'method' => 'POST' ]) !!}
                        
                             <div class="row">
@@ -61,48 +61,50 @@
             </div>
             <div class="row mt-40">
                 <div class="col-lg-12">
-                    <div class="row">
-                        <div class="col-lg-6 no-gutters">
-                            <div class="main-title">
-                                <h3 class="mb-0">@lang('accounts.profit_&_loss')</h3>
+                    <div class="white-box">
+                        <div class="row">
+                            <div class="col-lg-6 no-gutters">
+                                <div class="main-title">
+                                    <h3 class="mb-15">@lang('accounts.profit_&_loss')</h3>
+                                </div>
                             </div>
-                        </div>
-                    </div>                
-                    <!-- </div> -->
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <x-table>
-                            <table id="table_id" class="table" cellspacing="0" width="100%">
-                                <thead>
-                                    <tr>
-                                        <th>@lang('common.time')</th>
-                                        <th>@lang('accounts.income')</th>
-                                        <th>@lang('accounts.expense')</th>
-                                        <th>@lang('accounts.profit_/_loss')</th>
-                                    </tr>
-                                </thead>
-                                <tbody>                                   
-                                    <tr>
-                                        <td >
-                                            {{isset($date_time_from)? dateConvert($date_time_from).' - '.dateConvert($date_time_to): "All"}}  
-                                        </td>
-                                        <td>
-                                            {{currency_format(@$total_income)}}
-                                        </td>
-                                        <td>
-                                            {{currency_format(@$total_expense)}}
-                                        </td>
-                                        <td>
-                                            @php
-                                                $total=@$total_income-@$total_expense;
-                                            @endphp
-                                            
-                                            {{currency_format(@$total)}}
-                                        </td>
-                                    </tr>
-                                    
-                            </table>
-                            </x-table>
+                        </div>                
+                        <!-- </div> -->
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <x-table>
+                                <table id="table_id" class="table" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th>@lang('common.time')</th>
+                                            <th>@lang('accounts.income')</th>
+                                            <th>@lang('accounts.expense')</th>
+                                            <th>@lang('accounts.profit_/_loss')</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>                                   
+                                        <tr>
+                                            <td >
+                                                {{isset($date_time_from)? dateConvert($date_time_from).' - '.dateConvert($date_time_to): "All"}}  
+                                            </td>
+                                            <td>
+                                                {{currency_format(@$total_income)}}
+                                            </td>
+                                            <td>
+                                                {{currency_format(@$total_expense)}}
+                                            </td>
+                                            <td>
+                                                @php
+                                                    $total=@$total_income-@$total_expense;
+                                                @endphp
+                                                
+                                                {{currency_format(@$total)}}
+                                            </td>
+                                        </tr>
+                                        
+                                </table>
+                                </x-table>
+                            </div>
                         </div>
                     </div>
                 </div>

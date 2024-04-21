@@ -3,7 +3,7 @@
 @lang('exam.take_online_exam')
 @endsection
 @section('mainContent')
-<section class="sms-breadcrumb mb-40 white-box">
+<section class="sms-breadcrumb mb-20">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>Examinations </h1>
@@ -28,7 +28,7 @@
                         </div>
                     </div>
                 </div>
-                {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'student_done_online_exam', 'method' => 'POST', 'enctype' => 'multipart/form-data', 'id' => 'online_take_exam']) }}
+                {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'student_online_exam_submit', 'method' => 'POST', 'enctype' => 'multipart/form-data', 'id' => 'online_take_exam']) }}
                 <div class="row">
                     <input type="hidden" name="online_exam_id" id="online_exam_id" value="{{@$online_exam->id}}">
                     <div class="col-lg-12">

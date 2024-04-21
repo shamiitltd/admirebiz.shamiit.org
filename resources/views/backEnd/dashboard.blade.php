@@ -15,20 +15,39 @@
             right: 18px !important;
         }
 
-        .fc-button-group button {
-            width: fit-content;
-        }
-
-        button.fc-today-button {
-            width: fit-content;
-        }
-
         .fc-icon-chevron-left::before {
-            content: "" !important;
+            content: "";
         }
 
         .fc-icon-chevron-right::before {
-            content: "" !important;
+            content: "";
+        }
+
+        .fc-button {
+            width: auto;
+        }
+        .white-box.single-summery{
+            margin-top: 0px
+        }
+        @media (max-width: 1399px){
+            .chart_grid.chart_container {
+                display: grid;
+                grid-template-columns: repeat(1, 1fr);
+                gap: 40px
+            }
+        }
+        @media (min-width: 1400px){
+            .chart_grid.chart_container {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 30px
+            }
+        }
+        .chart_container h1{
+            font-size: 14px
+        }
+        .chart_container p{
+            font-size: 13px
         }
     </style>
 @endpush
@@ -37,252 +56,262 @@
 @section('mainContent')
     <section class="mb-40">
         <div class="container-fluid p-0">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="main-title">
-                        @if (isSubscriptionEnabled() && auth()->user()->role_id == 1 && saasDomain() != 'school')
-                            <h3 class="mb-0">@lang('dashboard.welcome') - {{ @Auth::user()->school->school_name }} |
-                                {{ @Auth::user()->roles->name }} |
-                                @lang('dashboard.active_package') : {{ @$package_info['package_name'] }} |
-                                @lang('dashboard.remain_days') : {{ @$package_info['remaining_days'] }} |
-                                @lang('dashboard.student') : {{ @$totalStudents }} out {{ @$package_info['student_quantity'] }} |
-                                @lang('common.staff') : {{ @$totalStaffs }} out {{ @$package_info['staff_quantity'] }}
-                            </h3>
-                        @else
-                            <h3 class="mb-0">@lang('dashboard.welcome') - {{ @Auth::user()->school->school_name }} |
-                                {{ @Auth::user()->roles->name }}</h3>
+            <div class="white-box">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="main-title">
+                            @if (isSubscriptionEnabled() && auth()->user()->role_id == 1 && saasDomain() != 'school')
+                                <h3 class="mb-15">@lang('dashboard.welcome') - {{ @Auth::user()->school->school_name }} |
+                                    {{ @Auth::user()->roles->name }} |
+                                    @lang('dashboard.active_package') : {{ @$package_info['package_name'] }} |
+                                    @lang('dashboard.remain_days') : {{ @$package_info['remaining_days'] }} |
+                                    @lang('dashboard.student') : {{ @$totalStudents }} out {{ @$package_info['student_quantity'] }} |
+                                    @lang('common.staff') : {{ @$totalStaffs }} out {{ @$package_info['staff_quantity'] }}
+                                </h3>
+                            @else
+                                <h3 class="mb-15">@lang('dashboard.welcome') - {{ @Auth::user()->school->school_name }} |
+                                    {{ @Auth::user()->roles->name }}</h3>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+    
+                @if (Auth::user()->is_saas == 0)
+                    <div class="row row-gap-24">
+                        @if (userPermission('number-of-student'))
+                            <div class="col-lg-3 col-md-6 col-sm-6">
+                                <a href="{{ route('student_list') }}" class="d-block">
+                                    <div class="white-box single-summery cyan">
+                                        <div class="d-flex justify-content-between">
+                                            <div>
+                                                <h3>@lang('dashboard.student')</h3>
+                                                <p class="mb-0">@lang('dashboard.total_students')</p>
+                                            </div>
+                                            <h1 class="gradient-color2">
+                                                @if (isset($totalStudents))
+                                                    {{ $totalStudents }}
+                                                @endif
+                                            </h1>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        @endif
+                        @if (userPermission('number-of-teacher'))
+                            <div class="col-lg-3 col-md-6 col-sm-6">
+                                <a href="{{ route('staff_directory') }}" class="d-block">
+                                    <div class="white-box single-summery violet">
+                                        <div class="d-flex justify-content-between">
+                                            <div>
+                                                <h3>@lang('common.teachers')</h3>
+                                                <p class="mb-0">@lang('dashboard.total_teachers')</p>
+                                            </div>
+                                            <h1 class="gradient-color2">
+                                                @if (isset($totalTeachers))
+                                                    {{ $totalTeachers }}
+                                                @endif
+                                            </h1>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        @endif
+                        @if (userPermission('number-of-parent'))
+                            {{-- mt-30-md --}}
+                            <div class="col-lg-3 col-md-6 col-sm-6">
+                                <a href="#" class="d-block">
+                                    <div class="white-box single-summery blue">
+                                        <div class="d-flex justify-content-between">
+                                            <div>
+                                                <h3>@lang('dashboard.parents')</h3>
+                                                <p class="mb-0">@lang('dashboard.total_parents')</p>
+                                            </div>
+                                            <h1 class="gradient-color2">
+                                                @if (isset($totalParents))
+                                                    {{ $totalParents }}
+                                                @endif
+                                            </h1>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        @endif
+                        @if (userPermission('number-of-staff'))
+                            <div class="col-lg-3 col-md-6 col-sm-6">
+                                <a href="{{ route('staff_directory') }}" class="d-block">
+                                    <div class="white-box single-summery fuchsia">
+                                        <div class="d-flex justify-content-between">
+                                            <div>
+                                                <h3>@lang('dashboard.staffs')</h3>
+                                                <p class="mb-0">@lang('dashboard.total_staffs')</p>
+                                            </div>
+                                            <h1 class="gradient-color2">
+                                                @if (isset($totalStaffs))
+                                                    {{ $totalStaffs }}
+                                                @endif
+                                            </h1>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
                         @endif
                     </div>
-                </div>
+                @endif
+    
+                @if (Auth::user()->is_saas == 1)
+    
+                    <div class="row">
+                        @if (userPermission('number-of-student'))
+                            <div class="col-lg-3 col-md-6 col-sm-6">
+                                <a href="#" class="d-block">
+                                    <div class="white-box single-summery">
+                                        <div class="d-flex justify-content-between">
+                                            <div>
+                                                <h3>@lang('dashboard.student')</h3>
+                                                <p class="mb-0">@lang('dashboard.total_students')</p>
+                                            </div>
+                                            <h1 class="gradient-color2">
+    
+                                                @if (isset($totalStudents))
+                                                    {{ $totalStudents }}
+                                                @endif
+                                            </h1>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        @endif
+                        @if (userPermission('number-of-teacher'))
+                            <div class="col-lg-3 col-md-6 col-sm-6">
+                                <a href="#" class="d-block">
+                                    <div class="white-box single-summery">
+                                        <div class="d-flex justify-content-between">
+                                            <div>
+                                                <h3>@lang('common.teachers')</h3>
+                                                <p class="mb-0">@lang('dashboard.total_teachers')</p>
+                                            </div>
+                                            <h1 class="gradient-color2">
+                                                @if (isset($totalTeachers))
+                                                    {{ $totalTeachers }}
+                                                @endif
+                                            </h1>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        @endif
+                        @if (userPermission('number-of-parent'))
+                            {{-- mt-30-md --}}
+                            <div class="col-lg-3 col-md-6 col-sm-6">
+                                <a href="#" class="d-block">
+                                    <div class="white-box single-summery">
+                                        <div class="d-flex justify-content-between">
+                                            <div>
+                                                <h3>@lang('dashboard.parents')</h3>
+                                                <p class="mb-0">@lang('dashboard.total_parents')</p>
+                                            </div>
+                                            <h1 class="gradient-color2">
+                                                @if (isset($totalParents))
+                                                    {{ $totalParents }}
+                                                @endif
+                                            </h1>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        @endif
+                        @if (userPermission('number-of-staff'))
+                            <div class="col-lg-3 col-md-6 col-sm-6">
+                                <a href="#" class="d-block">
+                                    <div class="white-box single-summery">
+                                        <div class="d-flex justify-content-between">
+                                            <div>
+                                                <h3>@lang('dashboard.staffs')</h3>
+                                                <p class="mb-0">@lang('dashboard.total_staffs')</p>
+                                            </div>
+                                            <h1 class="gradient-color2">
+                                                @if (isset($totalStaffs))
+                                                    {{ $totalStaffs }}
+                                                @endif
+                                            </h1>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        @endif
+                    </div>
+                @endif
             </div>
-
-            @if (Auth::user()->is_saas == 0)
-                <div class="row">
-                    @if (userPermission('number-of-student'))
-                        <div class="col-lg-3 col-md-6 col-sm-6">
-                            <a href="{{ route('student_list') }}" class="d-block">
-                                <div class="white-box single-summery">
-                                    <div class="d-flex justify-content-between">
-                                        <div>
-                                            <h3>@lang('dashboard.student')</h3>
-                                            <p class="mb-0">@lang('dashboard.total_students')</p>
-                                        </div>
-                                        <h1 class="gradient-color2">
-                                            @if (isset($totalStudents))
-                                                {{ $totalStudents }}
-                                            @endif
-                                        </h1>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    @endif
-                    @if (userPermission('number-of-teacher'))
-                        <div class="col-lg-3 col-md-6 col-sm-6">
-                            <a href="{{ route('staff_directory') }}" class="d-block">
-                                <div class="white-box single-summery">
-                                    <div class="d-flex justify-content-between">
-                                        <div>
-                                            <h3>@lang('common.teachers')</h3>
-                                            <p class="mb-0">@lang('dashboard.total_teachers')</p>
-                                        </div>
-                                        <h1 class="gradient-color2">
-                                            @if (isset($totalTeachers))
-                                                {{ $totalTeachers }}
-                                            @endif
-                                        </h1>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    @endif
-                    @if (userPermission('number-of-parent'))
-                        {{-- mt-30-md --}}
-                        <div class="col-lg-3 col-md-6 col-sm-6">
-                            <a href="#" class="d-block">
-                                <div class="white-box single-summery">
-                                    <div class="d-flex justify-content-between">
-                                        <div>
-                                            <h3>@lang('dashboard.parents')</h3>
-                                            <p class="mb-0">@lang('dashboard.total_parents')</p>
-                                        </div>
-                                        <h1 class="gradient-color2">
-                                            @if (isset($totalParents))
-                                                {{ $totalParents }}
-                                            @endif
-                                        </h1>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    @endif
-                    @if (userPermission('number-of-staff'))
-                        <div class="col-lg-3 col-md-6 col-sm-6">
-                            <a href="{{ route('staff_directory') }}" class="d-block">
-                                <div class="white-box single-summery">
-                                    <div class="d-flex justify-content-between">
-                                        <div>
-                                            <h3>@lang('dashboard.staffs')</h3>
-                                            <p class="mb-0">@lang('dashboard.total_staffs')</p>
-                                        </div>
-                                        <h1 class="gradient-color2">
-                                            @if (isset($totalStaffs))
-                                                {{ $totalStaffs }}
-                                            @endif
-                                        </h1>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    @endif
-                </div>
-            @endif
-
-            @if (Auth::user()->is_saas == 1)
-
-                <div class="row">
-                    @if (userPermission('number-of-student'))
-                        <div class="col-lg-3 col-md-6 col-sm-6">
-                            <a href="#" class="d-block">
-                                <div class="white-box single-summery">
-                                    <div class="d-flex justify-content-between">
-                                        <div>
-                                            <h3>@lang('dashboard.student')</h3>
-                                            <p class="mb-0">@lang('dashboard.total_students')</p>
-                                        </div>
-                                        <h1 class="gradient-color2">
-
-                                            @if (isset($totalStudents))
-                                                {{ $totalStudents }}
-                                            @endif
-                                        </h1>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    @endif
-                    @if (userPermission('number-of-teacher'))
-                        <div class="col-lg-3 col-md-6 col-sm-6">
-                            <a href="#" class="d-block">
-                                <div class="white-box single-summery">
-                                    <div class="d-flex justify-content-between">
-                                        <div>
-                                            <h3>@lang('common.teachers')</h3>
-                                            <p class="mb-0">@lang('dashboard.total_teachers')</p>
-                                        </div>
-                                        <h1 class="gradient-color2">
-                                            @if (isset($totalTeachers))
-                                                {{ $totalTeachers }}
-                                            @endif
-                                        </h1>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    @endif
-                    @if (userPermission('number-of-parent'))
-                        {{-- mt-30-md --}}
-                        <div class="col-lg-3 col-md-6 col-sm-6">
-                            <a href="#" class="d-block">
-                                <div class="white-box single-summery">
-                                    <div class="d-flex justify-content-between">
-                                        <div>
-                                            <h3>@lang('dashboard.parents')</h3>
-                                            <p class="mb-0">@lang('dashboard.total_parents')</p>
-                                        </div>
-                                        <h1 class="gradient-color2">
-                                            @if (isset($totalParents))
-                                                {{ $totalParents }}
-                                            @endif
-                                        </h1>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    @endif
-                    @if (userPermission('number-of-staff'))
-                        <div class="col-lg-3 col-md-6 col-sm-6">
-                            <a href="#" class="d-block">
-                                <div class="white-box single-summery">
-                                    <div class="d-flex justify-content-between">
-                                        <div>
-                                            <h3>@lang('dashboard.staffs')</h3>
-                                            <p class="mb-0">@lang('dashboard.total_staffs')</p>
-                                        </div>
-                                        <h1 class="gradient-color2">
-                                            @if (isset($totalStaffs))
-                                                {{ $totalStaffs }}
-                                            @endif
-                                        </h1>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    @endif
-                </div>
-            @endif
         </div>
     </section>
-    @if (userPermission('month-income-expense'))
+    <div class="chart_grid chart_container">
+
+        @if (userPermission('month-income-expense'))
         <section class="" id="incomeExpenseDiv">
             <div class="container-fluid p-0">
-                <div class="row">
-                    <div class="col-lg-8 col-md-9 col-8">
-                        <div class="main-title">
-                            <h3 class="mb-30"> @lang('dashboard.income_and_expenses_for') {{ date('M') }} {{ $year }} </h3>
+                <div class="white-box">
+                    <div class="row justify-content-between">
+                        <div class="col-lg-8 col-md-9 col-8">
+                            <div class="main-title">
+                                <h3 class="mb-0"> @lang('dashboard.income_and_expenses_for') {{ date('M') }} {{ $year }} </h3>
+                            </div>
                         </div>
-                    </div>
-                    <div class="offset-lg-2 col-lg-2 text-right col-md-3 col-4">
-                        <button type="button" class="primary-btn small tr-bg icon-only" id="barChartBtn">
-                            <span class="pr ti-move"></span>
-                        </button>
+                        <div class="col-lg-4 text-right col-md-3 col-4 nowrap">
+                            <button type="button" class="primary-btn small tr-bg icon-only  dashboard_collapse"
+                                id="barChartBtn">
+                                <span class="pr ti-angle-down"></span>
+                            </button>
 
-                        <button type="button" class="primary-btn small fix-gr-bg icon-only ml-10" id="barChartBtnRemovetn">
-                            <span class="pr ti-close"></span>
-                        </button>
-                    </div>
-                    <div class="col-lg-12">
-                        <div class="white-box" id="barChartDiv">
-                            <div class="row">
-                                <div class="col-lg-2 col-md-6 col-6">
-                                    <div class="text-center">
-
-                                        <h1>({{ generalSetting()->currency_symbol }}) {{ number_format($m_total_income) }}
-                                        </h1>
-                                        <p>@lang('dashboard.total_income')</p>
-                                    </div>
-                                </div>
-                                <div class="col-lg-2 col-md-6 col-6">
-                                    <div class="text-center">
-                                        <h1>({{ generalSetting()->currency_symbol }})
-                                            {{ number_format($m_total_expense) }}</h1>
-                                        <p>@lang('dashboard.total_expenses')</p>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3 col-md-6 col-6">
-                                    <div class="text-center">
-                                        <h1>({{ generalSetting()->currency_symbol }})
-                                            {{ number_format($m_total_income - $m_total_expense) }}</h1>
-                                        <p>@lang('dashboard.total_profit')</p>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3 col-md-6 col-6">
-                                    <div class="text-center">
-                                        <h1>({{ generalSetting()->currency_symbol }}) {{ number_format($m_total_income) }}
-                                        </h1>
-                                        <p>@lang('dashboard.total_revenue')</p>
-                                    </div>
-                                </div>
-                                @if (moduleStatusCheck('Wallet'))
+                            <button type="button" class="primary-btn small fix-gr-bg icon-only ml-10"
+                                id="barChartBtnRemovetn">
+                                <span class="pr ti-close"></span>
+                            </button>
+                        </div>
+                        <div class="col-lg-12">
+                            <div id="barChartDiv" class="mt-15">
+                                <div class="row padding4 row-gap-24">
                                     <div class="col-lg-2 col-md-6 col-6">
                                         <div class="text-center">
-                                            <h1>{{ currency_format($monthlyWalletBalance) }}</h1>
-                                            <p>@lang('dashboard.wallet_balance')</p>
+
+                                            <h1>({{ generalSetting()->currency_symbol }})
+                                                {{ number_format($m_total_income) }}
+                                            </h1>
+                                            <p>@lang('dashboard.total_income')</p>
                                         </div>
                                     </div>
-                                @endif
-                                <div class="col-lg-12">
-                                    <div id="commonBarChart" style="height: 350px; padding-right: 20px;"></div>
+                                    <div class="col-lg-2 col-md-6 col-6">
+                                        <div class="text-center">
+                                            <h1>({{ generalSetting()->currency_symbol }})
+                                                {{ number_format($m_total_expense) }}</h1>
+                                            <p>@lang('dashboard.total_expenses')</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-6 col-6">
+                                        <div class="text-center">
+                                            <h1>({{ generalSetting()->currency_symbol }})
+                                                {{ number_format($m_total_income - $m_total_expense) }}</h1>
+                                            <p>@lang('dashboard.total_profit')</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-6 col-6">
+                                        <div class="text-center">
+                                            <h1>({{ generalSetting()->currency_symbol }})
+                                                {{ number_format($m_total_income) }}
+                                            </h1>
+                                            <p>@lang('dashboard.total_revenue')</p>
+                                        </div>
+                                    </div>
+                                    @if (moduleStatusCheck('Wallet'))
+                                        <div class="col-lg-2 col-md-6 col-6">
+                                            <div class="text-center">
+                                                <h1>{{ currency_format($monthlyWalletBalance) }}</h1>
+                                                <p>@lang('dashboard.wallet_balance')</p>
+                                            </div>
+                                        </div>
+                                    @endif
+                                    <div class="col-lg-12">
+                                        <div id="commonBarChart" style="height: 350px; padding-right: 20px;"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -294,67 +323,72 @@
 
 
     @if (userPermission('year-income-expense'))
-        <section class="mt-50" id="incomeExpenseSessionDiv">
+        <section id="incomeExpenseSessionDiv">
             <div class="container-fluid p-0">
-                <div class="row">
-                    <div class="col-lg-8 col-md-9 col-8">
-                        <div class="main-title">
-                            <h3 class="mb-30">@lang('dashboard.income_and_expenses_for') {{ $year }}</h3>
+                <div class="white-box">
+                    <div class="row">
+                        <div class="col-lg-8 col-md-9 col-8">
+                            <div class="main-title">
+                                <h3 class="mb-0">@lang('dashboard.income_and_expenses_for') {{ $year }}</h3>
+                            </div>
                         </div>
-                    </div>
-                    <div class="offset-lg-2 col-lg-2 text-right col-md-3 col-4">
-                        <button type="button" class="primary-btn small tr-bg icon-only" id="areaChartBtn">
-                            <span class="pr ti-move"></span>
-                        </button>
+                        <div class="col-lg-4 text-right col-md-3 col-4 nowrap">
+                            <button type="button" class="primary-btn small tr-bg icon-only dashboard_collapse"
+                                id="areaChartBtn">
+                                <span class="pr ti-angle-down"></span>
+                            </button>
 
-                        <button type="button" class="primary-btn small fix-gr-bg icon-only ml-10"
-                            id="areaChartBtnRemovetn">
-                            <span class="pr ti-close"></span>
-                        </button>
-                    </div>
-                    <div class="col-lg-12">
-                        <div class="white-box" id="areaChartDiv">
-                            <div class="row">
-                                <div class="col-lg-3 col-md-6 col-6">
-                                    <div class="text-center">
-                                        <h1>({{ generalSetting()->currency_symbol }}) {{ number_format($y_total_income) }}
-                                        </h1>
-                                        <p>@lang('dashboard.total_income')</p>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3 col-md-6 col-6">
-                                    <div class="text-center">
-
-                                        <h1>({{ generalSetting()->currency_symbol }})
-                                            {{ number_format($y_total_expense) }}</h1>
-                                        <p>@lang('dashboard.total_expenses')</p>
-                                    </div>
-                                </div>
-                                <div class="col-lg-2 col-md-6 col-6">
-                                    <div class="text-center">
-                                        <h1>({{ generalSetting()->currency_symbol }})
-                                            {{ number_format($y_total_income - $y_total_expense) }}</h1>
-                                        <p>@lang('dashboard.total_profit')</p>
-                                    </div>
-                                </div>
-                                <div class="col-lg-2 col-md-6 col-6">
-                                    <div class="text-center">
-                                        <h1>({{ generalSetting()->currency_symbol }}) {{ number_format($y_total_income) }}
-                                        </h1>
-                                        <p>@lang('dashboard.total_revenue')</p>
-                                    </div>
-                                </div>
-                                @if (moduleStatusCheck('Wallet'))
-                                    <div class="col-lg-2 col-md-6 col-6">
+                            <button type="button" class="primary-btn small fix-gr-bg icon-only ml-10"
+                                id="areaChartBtnRemovetn">
+                                <span class="pr ti-close"></span>
+                            </button>
+                        </div>
+                        <div class="col-lg-12">
+                            <div id="areaChartDiv" class="mt-15">
+                                <div class="row padding4 row-gap-24">
+                                    <div class="col-lg-3 col-md-6 col-6">
                                         <div class="text-center">
-                                            <h1>{{ currency_format($yearlyWalletBalance) }}</h1>
-                                            <p>@lang('dashboard.wallet_balance')</p>
+                                            <h1>({{ generalSetting()->currency_symbol }})
+                                                {{ number_format($y_total_income) }}
+                                            </h1>
+                                            <p>@lang('dashboard.total_income')</p>
                                         </div>
                                     </div>
-                                @endif
+                                    <div class="col-lg-3 col-md-6 col-6">
+                                        <div class="text-center">
 
-                                <div class="col-lg-12">
-                                    <div id="commonAreaChart" style="height: 350px;"></div>
+                                            <h1>({{ generalSetting()->currency_symbol }})
+                                                {{ number_format($y_total_expense) }}</h1>
+                                            <p>@lang('dashboard.total_expenses')</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2 col-md-6 col-6">
+                                        <div class="text-center">
+                                            <h1>({{ generalSetting()->currency_symbol }})
+                                                {{ number_format($y_total_income - $y_total_expense) }}</h1>
+                                            <p>@lang('dashboard.total_profit')</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2 col-md-6 col-6">
+                                        <div class="text-center">
+                                            <h1>({{ generalSetting()->currency_symbol }})
+                                                {{ number_format($y_total_income) }}
+                                            </h1>
+                                            <p>@lang('dashboard.total_revenue')</p>
+                                        </div>
+                                    </div>
+                                    @if (moduleStatusCheck('Wallet'))
+                                        <div class="col-lg-2 col-md-6 col-6">
+                                            <div class="text-center">
+                                                <h1>{{ currency_format($yearlyWalletBalance) }}</h1>
+                                                <p>@lang('dashboard.wallet_balance')</p>
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                    <div class="col-lg-12">
+                                        <div id="commonAreaChart" style="height: 350px;"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -363,71 +397,74 @@
             </div>
         </section>
     @endif
+    </div>
 
 
     @if (userPermission('notice-board'))
-        <section class="mt-50">
+        <section class="mt-40">
             <div class="container-fluid p-0">
-                <div class="row">
-                    <div class="col-lg-6 col-7">
-                        <div class="main-title">
-                            <h3 class="mb-30">@lang('communicate.notice_board')</h3>
+                <div class="white-box">
+                    <div class="row">
+                        <div class="col-lg-6 col-7">
+                            <div class="main-title">
+                                <h3 class="mb-15">@lang('communicate.notice_board')</h3>
+                            </div>
                         </div>
-                    </div>
-                    @if (userPermission('add-notice'))
-                        <div class="col-lg-6 col-5 ml-auto pull-right text-right">
-                            <a href="{{ route('add-notice') }}" class="primary-btn small fix-gr-bg"> <span
-                                    class="ti-plus pr-2"></span> @lang('common.add') </a>
+                        @if (userPermission('add-notice'))
+                            <div class="col-lg-6 col-5 ml-auto pull-right text-right text-nowrap">
+                                <a href="{{ route('add-notice') }}" class="primary-btn small fix-gr-bg"> <span
+                                        class="ti-plus pr-2"></span> @lang('common.add') </a>
+                            </div>
+                        @endif
+
+                        <div class="col-lg-12">
+                            <table class="school-table-style w-100">
+                                <thead>
+                                    <tr>
+                                        <th>@lang('common.date')</th>
+                                        <th>@lang('dashboard.title')</th>
+                                        <th class="d-flex justify-content-around">@lang('common.actions')</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <?php $role_id = Auth()->user()->role_id; ?>
+
+                                    <?php if (isset($notices)) {
+    
+                                foreach ($notices as $notice) {
+                                // $inform_to = explode(',', @$notice->inform_to);
+                                // if (in_array($role_id, $inform_to)) {
+                                ?>
+                                    <tr>
+                                        <td>
+
+                                            {{ @$notice->publish_on != '' ? dateConvert(@$notice->publish_on) : '' }}
+
+                                        </td>
+                                        <td>{{ @$notice->notice_title }}</td>
+                                        <td class="d-flex justify-content-around">
+                                            <a href="{{ route('view-notice', @$notice->id) }}" title="@lang('common.view_notice')"
+                                                class="primary-btn small tr-bg modalLink" data-modal-size="modal-lg"><span
+                                                    class="ti-eye"></span></a>
+                                        </td>
+                                    </tr>
+                                    <?php
+                                // }
+                                }
+                                }
+    
+                                ?>
+                                </tbody>
+                            </table>
                         </div>
-                    @endif
-
-                    <div class="col-lg-12">
-                        <table class="school-table-style w-100">
-                            <thead>
-                                <tr>
-                                    <th>@lang('common.date')</th>
-                                    <th>@lang('dashboard.title')</th>
-                                    <th class="d-flex justify-content-around">@lang('common.actions')</th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                                <?php $role_id = Auth()->user()->role_id; ?>
-
-                                <?php if (isset($notices)) {
-
-                            foreach ($notices as $notice) {
-                            // $inform_to = explode(',', @$notice->inform_to);
-                            // if (in_array($role_id, $inform_to)) {
-                            ?>
-                                <tr>
-                                    <td>
-
-                                        {{ @$notice->publish_on != '' ? dateConvert(@$notice->publish_on) : '' }}
-
-                                    </td>
-                                    <td>{{ @$notice->notice_title }}</td>
-                                    <td class="d-flex justify-content-around">
-                                        <a href="{{ route('view-notice', @$notice->id) }}" title="@lang('common.view_notice')"
-                                            class="primary-btn small tr-bg modalLink"
-                                            data-modal-size="modal-lg">@lang('common.view')</a>
-                                    </td>
-                                </tr>
-                                <?php
-                            // }
-                            }
-                            }
-
-                            ?>
-                            </tbody>
-                        </table>
                     </div>
                 </div>
             </div>
         </section>
     @endif
 
-    <section class="mt-50">
+    <section class="mt-40">
         <div class="container-fluid p-0">
             <div class="row">
                 @if (userPermission('calender-section'))
@@ -440,23 +477,6 @@
                     </div>
                 @endif
                 <div class="col-lg-5 col-xl-4 mt-50-md md_infix_50">
-                    @if (userPermission('to-do-list'))
-                        <div class="row">
-                            <div class="col-lg-6 col-md-6 col-6">
-                                <div class="main-title">
-                                    <h3 class="mb-30">@lang('dashboard.to_do_list')</h3>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 text-right col-md-6 col-6">
-                                <a href="#" data-toggle="modal" class="primary-btn small fix-gr-bg"
-                                    data-target="#add_to_do" title="Add To Do" data-modal-size="modal-md">
-                                    <span class="ti-plus pr-2"></span>
-                                    @lang('common.add')
-                                </a>
-                            </div>
-                        </div>
-                    @endif
-
                     <div class="modal fade admin-query" id="add_to_do">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
@@ -536,6 +556,23 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="white-box school-table">
+                                @if (userPermission('to-do-list'))
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-6 col-6">
+                                            <div class="main-title">
+                                                <h3 class="mb-15">@lang('dashboard.to_do_list')</h3>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 text-right col-md-6 col-6">
+                                            <a href="#" data-toggle="modal" class="primary-btn small fix-gr-bg"
+                                                data-target="#add_to_do" title="Add To Do" data-modal-size="modal-md">
+                                                <span class="ti-plus pr-2"></span>
+                                                @lang('common.add')
+                                            </a>
+                                        </div>
+                                    </div>
+                                @endif
+
                                 <div class="row to-do-list mb-20">
                                     <div class="col-md-12 d-flex align-items-center justify-content-between ">
                                         <button class="primary-btn small fix-gr-bg"

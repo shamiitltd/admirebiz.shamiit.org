@@ -11,6 +11,15 @@ class WalletTransaction extends Model
     use HasFactory;
 
     protected $fillable = [];
+
+    protected $casts = [
+        'user_id' => 'integer',
+        'school_id' => 'integer',
+        'amount' => 'float',
+        'bank_id' => 'integer',
+        'expense' => 'float',
+        'academic_id' => 'integer'
+    ];
     
     protected static function newFactory()
     {

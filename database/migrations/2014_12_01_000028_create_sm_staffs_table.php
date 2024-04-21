@@ -54,6 +54,7 @@ class CreateSmStaffsTable extends Migration
             $table->string('other_document', 500)->nullable();
             $table->string('notes', 500)->nullable();
             $table->tinyInteger('active_status')->default(1);
+            $table->tinyInteger('show_public')->default(0);
             $table->string('driving_license', 255)->nullable();
             $table->date('driving_license_ex_date')->nullable();
             $table->text('custom_field')->nullable();
@@ -98,7 +99,7 @@ class CreateSmStaffsTable extends Migration
                 'first_name'       => 'Super',
                 'last_name'        => 'Admin',
                 'full_name'        => 'Super Admin',
-                'email'            => 'admin@infixedu.com',
+                'email'            => 'admin@edu.shamiit.com',
                 'created_at' => date('Y-m-d h:i:s')
             ]
         ]);

@@ -546,7 +546,7 @@ button:focus {
   background: #ffffff;
   padding: 40px 30px;
   border-radius: 10px;
-  box-shadow: 0px 10px 15px rgba(236, 208, 244, 0.3);
+  box-shadow: var(--box_shadow);
 }
 
 @media (max-width: 1300px) and (min-width: 992px) {
@@ -863,8 +863,7 @@ button:focus {
 
 /* line 188, ../../xampp/htdocs/infixeduB/public/backEnd/scss/admin/_component.scss */
 .modal-content .modal-header {
-  background: url(../img/modal-header-bg.png) no-repeat center;
-  background-size: cover;
+  background: var(--primary-color);
   border-radius: 5px 5px 0px 0px;
   border: 0;
   padding: 33px 40px;
@@ -1408,7 +1407,7 @@ button:focus {
   background: #ffffff;
   padding: 40px 30px;
   border-radius: 10px;
-  box-shadow: 0px 10px 15px rgba(236, 208, 244, 0.3);
+  box-shadow: var(--box_shadow);
   margin: 0 auto;
   clear: both;
   border-collapse: separate;
@@ -1583,7 +1582,7 @@ button:focus {
 /* line 38, ../../xampp/htdocs/infixeduB/public/backEnd/scss/admin/_predefine.scss */
 .common-box-shadow, .school-table .dropdown .dropdown-toggle:hover, .school-table .dropdown .dropdown-toggle:focus, .school-table .dropdown .dropdown-menu, .bootstrap-datetimepicker-widget table td.hour:hover, .bootstrap-datetimepicker-widget table td.minute:hover, .bootstrap-datetimepicker-widget table td span.glyphicon-chevron-up:hover:after, .bootstrap-datetimepicker-widget table td span.glyphicon-chevron-down:hover:after, .datepicker.dropdown-menu, .datepicker table tr td.active.day, .datepicker table tr td.day:hover, .datepicker thead tr:first-child th:hover, .pagination .page-link:hover, .common-calendar .fc-month-view .fc-day.fc-widget-content.fc-today, .common-calendar .fc-state-default.fc-corner-left:hover,
 .common-calendar .fc-button.fc-state-default:hover, .primary-btn:hover, .primary-btn.fix-gr-bg:hover, .nice-select .list, .sms-accordion .card, .admin .navbar .right-navbar .dropdown .badge, .single-cms-box:hover .single-cms {
-  box-shadow: 0px 10px 20px rgba(108, 39, 255, 0.3);
+  box-shadow: var(--box_shadow);
 }
 
 /* line 42, ../../xampp/htdocs/infixeduB/public/backEnd/scss/admin/_predefine.scss */
@@ -4950,7 +4949,7 @@ body.client.color {
 
 /* line 526, ../../xampp/htdocs/infixeduB/public/backEnd/scss/client/_home.scss */
 .client.light .fact-area .white-box.single-summery, .client.color .fact-area .white-box.single-summery {
-  box-shadow: 0px 10px 15px rgba(236, 208, 244, 0.3);
+  box-shadow: var(--box_shadow);
 }
 
 /* line 529, ../../xampp/htdocs/infixeduB/public/backEnd/scss/client/_home.scss */

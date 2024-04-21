@@ -7,9 +7,8 @@
         .input-right-icon {
             z-index: inherit !important;
         }
-
-        .check_box_table table.dataTable.dtr-inline.collapsed>tbody>tr[role='row']>td:first-child::before,
-        .check_box_table table.dataTable.dtr-inline.collapsed>tbody>tr[role='row']>th:first-child::before {
+        .check_box_table table.dataTable.dtr-inline.collapsed > tbody > tr[role='row'] > td:first-child::before, 
+        .check_box_table table.dataTable.dtr-inline.collapsed > tbody > tr[role='row'] > th:first-child::before {
             left: 10px;
             top: 55px;
             line-height: 18px;
@@ -17,7 +16,7 @@
     </style>
 @endpush
 @section('mainContent')
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('exam.online_exam')</h1>
@@ -47,15 +46,6 @@
                 <div class="col-lg-3">
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="main-title">
-                                <h3 class="mb-30">
-                                    @if (isset($online_exam))
-                                        @lang('exam.edit_online_exam')
-                                    @else
-                                        @lang('exam.add_online_exam')
-                                    @endif
-                                </h3>
-                            </div>
                             @if (isset($online_exam))
                                 {{ Form::open(['class' => 'form-horizontal', 'route' => ['online-exam-update', $online_exam->id], 'method' => 'PUT']) }}
                             @else
@@ -65,24 +55,51 @@
                             @endif
                             <input type="hidden" name="url" id="url" value="{{ URL::to('/') }}">
                             <div class="white-box">
+                                <div class="main-title">
+                                    <h3 class="mb-15">
+                                        @if (isset($online_exam))
+                                            @lang('exam.edit_online_exam')
+                                        @else
+                                            @lang('exam.add_online_exam')
+                                        @endif
+                                    </h3>
+                                </div>
                                 <div class="add-visitor">
                                     <div class="row">
                                         <div class="col-lg-12">
                                             <div class="primary_input">
                                                 <label class="primary_input_label" for="">@lang('exam.exam_title')
                                                     <span class="text-danger"> *</span></label>
-                                                <input class="primary_input_field " type="text" name="title"
+                                                <input class="primary_input_field  form-control{{ $errors->has('title') ? ' is-invalid' : '' }}" type="text" name="title"
                                                     autocomplete="off"
                                                     value="{{ isset($online_exam) ? $online_exam->title : old('title') }}">
                                                 <input type="hidden" name="id"
                                                     value="{{ isset($online_exam) ? $online_exam->id : '' }}">
                                                 @if ($errors->has('title'))
                                                     <span class="text-danger">
-                                                        {{ $errors->first('title') }}</span>
+                                                        {{ $errors->first('title') }}
+                                                    </span>
                                                 @endif
                                             </div>
                                         </div>
                                     </div>
+                                @if(moduleStatusCheck('University'))
+                                    @if(isset($editData))
+                                        @includeIf('university::common.session_faculty_depart_academic_semester_level',
+                                        [
+                                            'required' => ['USN', 'UD', 'UA', 'US', 'USL','USEC','USUB'],
+                                            'div'=>'col-lg-12','row'=>1,'mt'=>'mt-0' ,'subject'=>true, 
+                                        ])
+                                    @else
+                                        @includeIf('university::common.session_faculty_depart_academic_semester_level',
+                                        [
+                                            'required' => ['USN', 'UD', 'UA', 'US', 'USL','USEC','USUB'],
+                                            'div'=>'col-lg-12','row'=>1,'mt'=>'mt-0' ,'subject'=>true, 
+                                            'multipleSelect' => 1,
+                                        ])
+                                    @endif
+                                  @else 
+
                                     <div class="row mt-15">
                                         <div class="col-lg-12">
                                             <label class="primary_input_label" for="">@lang('common.class')
@@ -166,17 +183,16 @@
                                                 <label for="checkbox" class="mb-2">
                                                     @lang('common.section')<span class="text-danger">*</span>
                                                 </label>
-                                                <select multiple class="multypol_check_select active position-relative"
-                                                    id="selectSectionss" name="section[]" style="width:300px"></select>
+                                                <select multiple class="multypol_check_select active position-relative" id="selectSectionss" name="section[]" style="width:300px"></select>
                                                 @if ($errors->has('section'))
-                                                    <span class="text-danger invalid-select" role="alert"
-                                                        style="display:block">
-                                                        <strong style="top:-25px">{{ $errors->first('section') }}</strong>
+                                                    <span class="text-danger invalid-select" role="alert" style="display:block">
+                                                        <span style="top:-25px">{{ $errors->first('section') }}</span>
                                                     </span>
                                                 @endif
                                             </div>
                                         @endif
                                     </div>
+                                    @endif
                                     <div class="row mt-15">
                                         <div class="col-lg-12">
                                             <div class="primary_input">
@@ -244,6 +260,7 @@
                                                                     class="primary_input_field primary_input_field time"
                                                                     type="text" name="start_time" id="start_time"
                                                                     value="{{ isset($online_exam) ? date('H:i', strtotime($online_exam->start_time)) : (old('end_date') != '' ? old('end_date') : date('H:i')) }}">
+
                                                                 @if ($errors->has('start_time'))
                                                                     <span class="text-danger d-block">
                                                                         {{ $errors->first('start_time') }}
@@ -313,15 +330,10 @@
                                     <div class="row mt-15">
                                         <div class="col-lg-12">
                                             <div class="primary_input">
-                                                <label class="primary_input_label d-flex"
-                                                    for="">@lang('exam.instruction')
-                                                    <span class="text-danger"> *</span>
-                                                    @if (moduleStatusCheck('AiContent'))
-                                                        @include('aicontent::inc.button')
-                                                    @endif
-                                                </label>
+                                                <label class="primary_input_label" for="">@lang('exam.instruction')
+                                                    <span class="text-danger"> *</span></label>
                                                 <textarea
-                                                    class="generated-text primary_input_field form-control{{ $errors->has('instruction') ? ' is-invalid' : '' }}"
+                                                    class="primary_input_field form-control{{ $errors->has('instruction') ? ' is-invalid' : '' }}"
                                                     cols="0" rows="4"
                                                     name="instruction">{{ isset($online_exam) ? $online_exam->instruction : old('instruction') }}</textarea>
                                                 @if ($errors->has('instruction'))
@@ -331,6 +343,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    {{-- For next update --}}
                                     <div class="row mt-15">
                                         <div class="col-lg-12">
                                             <div class="primary_input">
@@ -372,33 +385,39 @@
                     </div>
                 </div>
                 <div class="col-lg-9">
-                    <div class="row">
-                        <div class="col-lg-4 no-gutters">
-                            <div class="main-title">
-                                <h3 class="mb-0">@lang('exam.online_exam_list')</h3>
+                    <div class="white-box">
+                        <div class="row">
+                            <div class="col-lg-4 no-gutters">
+                                <div class="main-title">
+                                    <h3 class="mb-15">@lang('exam.online_exam_list')</h3>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <x-table>
-                                <table id="table_id" class="table data-table" cellspacing="0" width="100%">
-                                    <thead>
-                                        <tr>
-                                            <th>@lang('exam.title')</th>
-                                            <th>@lang('common.class_Sec')</th>
-                                            <th>@lang('exam.subject')</th>
-                                            <th>@lang('exam.exam_date')</th>
-                                            <th>@lang('exam.duration')</th>
-                                            <th>@lang('exam.minimum_percentage')</th>
-                                            <th>@lang('common.status')</th>
-                                            <th style="width: 25%">@lang('common.action')</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
-                            </x-table>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <x-table>
+                                    <table id="table_id" class="table data-table" cellspacing="0" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th>@lang('exam.title')</th>
+                                                @if(moduleStatusCheck('University'))
+                                                    <th> @lang('university::un.semester_label') (@lang('common.section'))</th>
+                                                @else
+                                                    <th>@lang('common.class_Sec')</th>
+                                                @endif
+                                                <th>@lang('exam.subject')</th>
+                                                <th>@lang('exam.exam_date')</th>
+                                                <th>@lang('exam.duration')</th>
+                                                <th>@lang('exam.minimum_percentage')</th>
+                                                <th>@lang('common.status')</th>
+                                                <th style="width: 25%">@lang('common.action')</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </x-table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -428,6 +447,7 @@
             </div>
         </div>
     </div>
+
 @endsection
 @include('backEnd.partials.data_table_js')
 @include('backEnd.partials.date_picker_css_js')
@@ -444,45 +464,20 @@
             $('.data-table').DataTable({
                 processing: true,
                 serverSide: true,
-                "ajax": $.fn.dataTable.pipeline({
-                    url: "{{ url('online-exam-datatable') }}",
+                "ajax": $.fn.dataTable.pipeline( {
+                    url: "{{url('online-exam-datatable')}}",
                     data: {},
-                    pages: "{{ generalSetting()->ss_page_load }}" // number of pages to cache
-                }),
-                columns: [{
-                        data: 'title',
-                        name: 'title'
-                    },
-                    {
-                        data: 'class_section',
-                        name: 'class_section'
-                    },
-                    {
-                        data: 'subject_name',
-                        name: 'subject_name'
-                    },
-                    {
-                        data: 'exam_time',
-                        name: 'exam_time'
-                    },
-                    {
-                        data: 'duration',
-                        name: 'duration'
-                    },
-                    {
-                        data: 'percentage',
-                        name: 'percentage'
-                    },
-                    {
-                        data: 'status_button',
-                        name: 'status_button'
-                    },
-                    {
-                        data: 'action',
-                        name: 'action',
-                        orderable: false,
-                        searchable: false
-                    },
+                    pages: "{{generalSetting()->ss_page_load}}" // number of pages to cache
+                } ),
+                columns: [
+                    {data: 'title', name: 'title'},
+                    {data: 'class_section', name: 'class_section'},
+                    {data: 'subject_name', name: 'subject_name'},
+                    {data: 'exam_time', name: 'exam_time'},
+                    {data: 'duration', name: 'duration'},
+                    {data: 'percentage', name: 'percentage'},
+                    {data: 'status_button', name: 'status_button'},
+                    {data: 'action', name: 'action', orderable: false, searchable: false},
                 ],
                 bLengthChange: false,
                 bDestroy: true,
@@ -495,7 +490,8 @@
                     },
                 },
                 dom: "Bfrtip",
-                buttons: [{
+                buttons: [
+                    {
                         extend: "copyHtml5",
                         text: '<i class="fa fa-files-o"></i>',
                         title: $("#logo_title").val(),
@@ -562,11 +558,13 @@
                         postfixButtons: ["colvisRestore"],
                     },
                 ],
-                columnDefs: [{
-                    visible: false,
-                }, ],
+                columnDefs: [
+                    {
+                        visible: false,
+                    }, 
+                ],
                 responsive: true,
             });
-        });
+        } );
     </script>
 @endpush

@@ -4,7 +4,7 @@
 @endsection
 @section('mainContent')
 
-<section class="sms-breadcrumb mb-40 white-box">
+<section class="sms-breadcrumb mb-20">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('accounts.add_income') </h1>
@@ -33,18 +33,9 @@
         @endif
         <div class="row">
            
-            <div class="col-lg-3">
+            <div class="col-lg-4 col-xl-3">
                 <div class="row">
                     <div class="col-lg-12">
-                        <div class="main-title">
-                            <h3 class="mb-30">@if(isset($add_income))
-                                    @lang('accounts.edit_income')
-                                @else
-                                    @lang('accounts.add_income')
-                                @endif
-                                
-                            </h3>
-                        </div>
                         @if(isset($add_income))
                         {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'add_income_update',
                         'method' => 'POST', 'enctype' => 'multipart/form-data', 'id' => 'add-income-update']) }}
@@ -56,6 +47,15 @@
                         @endif
                         @endif
                         <div class="white-box">
+                            <div class="main-title">
+                                <h3 class="mb-15">@if(isset($add_income))
+                                        @lang('accounts.edit_income')
+                                    @else
+                                        @lang('accounts.add_income')
+                                    @endif
+                                    
+                                </h3>
+                            </div>
                             <div class="add-visitor">
                                 <div class="row">
                                     <div class="col-lg-12">
@@ -193,7 +193,7 @@
                                                 </button>
                                             </div>
                                         </div>
-                                        <code>(PDF,DOC,DOCX,JPG,JPEG,PNG,TXT are allowed for upload)</code>
+                                        <code>(PDF,DOC,DOCX,JPG,JPEG,PNG are allowed for upload)</code>
                                         @if ($errors->has('file'))
                                         <span class="text-danger d-block">
                                             {{ $errors->first('file') }}
@@ -241,38 +241,40 @@
                 </div>
             </div>
 
-            <div class="col-lg-9">
-                <div class="row">
-                    <div class="col-lg-4 no-gutters">
-                        <div class="main-title">
-                            <h3 class="mb-0">@lang('accounts.income_list')</h3>
+            <div class="col-lg-8 col-xl-9">
+                <div class="white-box">
+                    <div class="row">
+                        <div class="col-lg-4 no-gutters">
+                            <div class="main-title">
+                                <h3 class="mb-15">@lang('accounts.income_list')</h3>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-lg-12">
-                        <x-table>
-                        <table id="table_id" class="table data-table" cellspacing="0" width="100%">
-                            <thead>
-                                <tr>
-                                    <th>si</th>
-                                    <th>@lang('common.name')</th>
-                                    <th>@lang('accounts.payment_method')</th>
-                                    <th>@lang('common.date')</th>
-                                    <th>
-                                        @lang('accounts.a_c_Head') 
-                                    </th>
-                                    <th>@lang('accounts.amount')</th>
-                                    <th>@lang('common.action')</th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                               
-                            </tbody>
-                        </table>
-                    </x-table>
+    
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <x-table>
+                            <table id="table_id" class="table data-table" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>si</th>
+                                        <th>@lang('common.name')</th>
+                                        <th>@lang('accounts.payment_method')</th>
+                                        <th>@lang('common.date')</th>
+                                        <th>
+                                            @lang('accounts.a_c_Head') 
+                                        </th>
+                                        <th>@lang('accounts.amount')</th>
+                                        <th>@lang('common.action')</th>
+                                    </tr>
+                                </thead>
+    
+                                <tbody>
+                                   
+                                </tbody>
+                            </table>
+                        </x-table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -344,6 +346,9 @@
                        {data: 'action', name: 'action',orderable: false, searchable: true},
                        
                     ],
+                    "createdRow": function( row, data, dataIndex ) {
+                        $(row).closest('tr').attr('e_id', data.id);
+                    },
                     bLengthChange: false,
                     bDestroy: true,
                     language: {
@@ -428,14 +433,7 @@
                 responsive: true,
             });
         } );
-
-        $(".data-table>tbody").sortable({
-            update: function (event, ui) {
-                var data = $(this).sortable('serialize');
-                console.log(event, ui);
-                // POST to server using $.post or $.ajax
-            }
-        });
+        datableArrange('.data-tablett', 'sm_add_incomes');
         function deleteIncome(id){
             var modal = $('#deleteIncomeModal');
             modal.find('input[name=id]').val(id);

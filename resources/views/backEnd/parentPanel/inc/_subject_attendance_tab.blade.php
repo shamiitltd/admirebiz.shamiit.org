@@ -13,8 +13,6 @@
         #table_id1 th {
             border: 1px solid var(--border_color);
             text-align: center;
-            padding: .5rem !important;
-            font-size: 10px !important;
         }
 
         .main-wrapper {
@@ -63,11 +61,6 @@
 
         hr {
             margin: 0px;
-        }
-
-        .th {
-            padding: .5rem !important;
-            font-size: 10px !important;
         }
     </style>
 @endpush

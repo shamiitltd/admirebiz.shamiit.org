@@ -10,7 +10,7 @@
     @lang('system_settings.sms_settings')
 @endsection
 @section('mainContent')
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('system_settings.sms_settings')</h1>
@@ -515,36 +515,38 @@
                             id="Mobile_SMS">
                             <div class="white-box">
                                 <div class="row mb-30">
-                                    <ul class="list-unstyled">
-                                        @php
-                                            if ($sms_services['Mobile SMS']->device_info) {
-                                                $data = json_decode($sms_services['Mobile SMS']->device_info);
-                                            }
-                                        @endphp
-
-                                        @if ($sms_services['Mobile SMS']->device_info)
-
-
-                                            <li>Device ID : {{ $data->deviceId }}</li>
-                                            <br>
-                                            <li>Device Model :{{ $data->deviceName }} </li>
-                                            <br>
-                                            <li>
-                                                <strong>@lang('common.status') :</strong>
-                                                @if ($data->status == 0)
-                                                    <button
-                                                        class="primary-btn small bg-danger text-white border-0">offline</button>
-                                                @else
-                                                    <button
-                                                        class="primary-btn small bg-success text-white border-0  tr-bg">@lang('common.online')</button>
-                                                @endif
-                                            </li>
-                                        @else
-                                            <li>No Device Connected !</li>
-
-                                        @endif
-
-                                    </ul>
+                                    <div class="col-lg-12">
+                                        <ul class="list-unstyled">
+                                            @php
+                                                if ($sms_services['Mobile SMS']->device_info) {
+                                                    $data = json_decode($sms_services['Mobile SMS']->device_info);
+                                                }
+                                            @endphp
+    
+                                            @if ($sms_services['Mobile SMS']->device_info)
+    
+    
+                                                <li>Device ID : {{ $data->deviceId }}</li>
+                                                <br>
+                                                <li>Device Model :{{ $data->deviceName }} </li>
+                                                <br>
+                                                <li>
+                                                    <strong>@lang('common.status') :</strong>
+                                                    @if ($data->status == 0)
+                                                        <button
+                                                            class="primary-btn small bg-danger text-white border-0">offline</button>
+                                                    @else
+                                                        <button
+                                                            class="primary-btn small bg-success text-white border-0  tr-bg">@lang('common.online')</button>
+                                                    @endif
+                                                </li>
+                                            @else
+                                                <li>No Device Connected !</li>
+    
+                                            @endif
+    
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                         </div>

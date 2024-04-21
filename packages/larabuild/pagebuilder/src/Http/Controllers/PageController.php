@@ -71,8 +71,13 @@ class PageController extends Controller
     public function statusUpdate(Request $request)
     {
 
-        if (isDemoSite())
+        if(config('app.app_sync')){
+            return response()->json(['Waring' => 'Restricted In Demo Mode']);
+        }
+        if (isDemoSite()){
             return response()->json(['success' => 'demo']);
+        }
+           
         return PageSettings::updateStatus($request);
     }
 

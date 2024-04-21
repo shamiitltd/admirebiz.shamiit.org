@@ -18,9 +18,10 @@ class CreatePagesTable extends Migration
             $table->string('name')->fullText();
             $table->string('title');
             $table->text('description')->nullable();
-            $table->string('slug')->nullable()->unique();
+            $table->string('slug')->nullable();
             $table->longText('settings')->nullable();
             $table->boolean('home_page')->default(false)->nullable();
+            $table->boolean('is_default')->default(false)->nullable();
             $table->enum('status', ['draft', 'published'])->default('draft')->index();
             $table->integer('created_by')->nullable();
             $table->integer('updated_by')->nullable();

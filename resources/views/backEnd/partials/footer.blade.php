@@ -3,7 +3,7 @@
     if(isset($setting->copyright_text)){
     $copyright_text = $setting->copyright_text;
     }else{
-    $copyright_text = 'Copyright 2019 All rights reserved by Codethemes';
+    $copyright_text = 'Copyright 2019 All rights reserved by SHAMIIT';
     }
 @endphp
 
@@ -64,7 +64,7 @@
     </div>
 </div>
 <!--================Footer Area ================= -->
-<footer class="footer-area">
+<footer class="footer-area new-footer">
     <div class="container">
         <div class="row">
             <div class="col-lg-12 text-center">
@@ -131,7 +131,9 @@
 <script type="text/javascript" src="{{asset('public/backEnd/')}}/vendors/js/toastr.min.js"></script>
 <script type="text/javascript" src="{{asset('public/backEnd/')}}/vendors/js/moment.min.js"></script>
 
-
+@if(moduleStatusCheck('WhatsappSupport'))
+<script src="{{ asset('public/whatsapp-support/scripts.js') }}"></script>
+@endif 
 
 
 <script type="text/javascript" src="{{asset('public/backEnd/')}}/js/jquery.validate.min.js"></script>
@@ -143,8 +145,6 @@
 <script src="{{asset('public/')}}/js/registration_custom.js"></script>
 <script src="{{asset('public/backEnd/')}}/js/developer.js"></script>
 <script src="{{url('Modules\Wallet\Resources\assets\js\wallet.js')}}"></script>
-<script src="{{ asset('public/backEnd/') }}/vendors/editor/summernote-bs4.js"></script>
-<script src="{{ asset('public/whatsapp-support/scripts.js') }}"></script>
 <script>
     $('.close_modal').on('click', function() {
         $('.custom_notification').removeClass('open_notification');
@@ -174,6 +174,7 @@
 @yield('script')
 @stack('script')
 @stack('scripts')
+
 @if(moduleStatusCheck('Lead')==true)
 
     @foreach ($reminders as $item)
@@ -195,7 +196,6 @@
     </script>
     @endforeach
 @endif
-
 </body>
 
 </html>

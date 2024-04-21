@@ -41,9 +41,11 @@ if ($("#table_id, .school-table-data").length) {
           text: '<i class="fa fa-files-o"></i>',
           title: $("#logo_title").val(),
           titleAttr: window.jsLang("copy_table"),
-          exportOptions: {
-            columns: 'th:not(:last-child)'
-          },
+          @if (is_null(@$i))
+            exportOptions: {
+              columns: 'th:not(:last-child)'
+            },
+          @endif
         },
         {
           extend: "excelHtml5",
@@ -51,26 +53,32 @@ if ($("#table_id, .school-table-data").length) {
           titleAttr: window.jsLang("export_to_excel"),
           title: $("#logo_title").val(),
           margin: [10, 10, 10, 0],
-          exportOptions: {
-            columns: 'th:not(:last-child)'
-          },
+          @if (is_null(@$i))
+            exportOptions: {
+              columns: 'th:not(:last-child)'
+            },
+          @endif
         },
         {
           extend: "csvHtml5",
           text: '<i class="fa fa-file-text-o"></i>',
           titleAttr: window.jsLang("export_to_csv"),
-          exportOptions: {
-            columns: 'th:not(:last-child)'
-          },
+          @if (is_null(@$i))
+            exportOptions: {
+              columns: 'th:not(:last-child)'
+            },
+          @endif
         },
         {
           extend: "pdfHtml5",
           text: '<i class="fa fa-file-pdf-o"></i>',
           title: $("#logo_title").val(),
           titleAttr: window.jsLang("export_to_pdf"),
-          exportOptions: {
-            columns: 'th:not(:last-child)'
-          },
+          @if (is_null(@$i))
+            exportOptions: {
+              columns: 'th:not(:last-child)'
+            },
+          @endif
           orientation: "landscape",
           pageSize: "A4",
           margin: [0, 0, 0, 12],
@@ -93,9 +101,11 @@ if ($("#table_id, .school-table-data").length) {
           text: '<i class="fa fa-print"></i>',
           titleAttr: window.jsLang("print"),
           title: $("#logo_title").val(),
-          exportOptions: {
-            columns: 'th:not(:last-child)'
-          },
+          @if (is_null(@$i))
+            exportOptions: {
+              columns: 'th:not(:last-child)'
+            },
+          @endif
         },
         {
           extend: "colvis",

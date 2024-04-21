@@ -4,7 +4,7 @@
 @endsection
 @section('mainContent')
 
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('system_settings.utilities') </h1>
@@ -21,9 +21,10 @@
 
     <section class="admin-visitor-area up_admin_visitor empty_table_tab">
         <div class="container-fluid p-0">
-        <div class="row">
+        <div class="white-box">
+        <div class="row row-gap-24">
                 <div class="col-md-4 col-lg-3 col-sm-6">
-                    <a class="white-box single-summery d-block btn-ajax"
+                    <a class="white-box single-summery cyan d-block btn-ajax"
                        href="{{ route('utilities','optimize_clear') }}">
                         <div class="d-block mt-10 text-center ">
                             <h3><i class="ti-cloud font_30"></i></h3>
@@ -33,7 +34,7 @@
                 </div>
 
                 <div class="col-md-4 col-lg-3 col-sm-6">
-                    <a class="white-box single-summery d-block btn-ajax"
+                    <a class="white-box single-summery violet d-block btn-ajax"
                        href="{{ route('utilities','clear_log') }}">
                         <div class="d-block mt-10 text-center ">
                             <h3><i class="ti-receipt font_30"></i></h3>
@@ -43,7 +44,7 @@
                 </div>
 
                 <div class="col-md-4 col-lg-3 col-sm-6">
-                    <a class="white-box single-summery d-block btn-ajax"
+                    <a class="white-box single-summery blue d-block btn-ajax"
                        href="{{ route('utilities','change_debug') }}">
                         <div class="d-block mt-10 text-center ">
                             <h3><i class="ti-blackboard font_30"></i></h3>
@@ -54,7 +55,7 @@
 
 
                 <div class="col-md-4 col-lg-3 col-sm-6">
-                    <a class="white-box single-summery d-block btn-ajax"
+                    <a class="white-box single-summery fuchsia d-block btn-ajax"
                        href="{{ route('utilities', 'force_https') }}">
                         <div class="d-block mt-10 text-center ">
                             <h3><i class="ti-lock font_30"></i></h3>
@@ -65,6 +66,7 @@
 
 
             </div>
+        </div>
         </div>
 
 
@@ -84,7 +86,7 @@
                                                 <p class="text-uppercase fw-500 mb-10">@lang('system_settings.maintenance_mode_')</p>
                                             </div>
                                             <div class="col-lg-7">
-                                                <div class="d-flex radio-btn-flex"> 
+                                                <div class="d-flex radio-btn-flex flex-wrap"> 
 
                                                 <div class="mr-30">
                                                         <input type="radio" name="maintenance_mode" id="via_sms" class="common-radio relationButton copy_per_th" {{@$setting->maintenance_mode == 1? 'checked':''}}  value="1" >
@@ -119,11 +121,11 @@
                                 <div class="row mb-40 mt-40">
                                     <div class="col-lg-12">
                                         <div class="row">
-                                            <div class="col-lg-2 d-flex">
+                                            <div class="col-lg-3 d-flex">
                                                 <p class="text-uppercase fw-500 mb-10">@lang('auth.applicable_for')</p>
                                             </div>
-                                            <div class="col-lg-10">
-                                                <div class="d-flex radio-btn-flex"> 
+                                            <div class="col-lg-9">
+                                                <div class="d-flex radio-btn-flex gap-10 flex-column flex-sm-row flex-wrap"> 
                                                     @foreach ($roles as $role)
                                                         <div class="mr-30">
                                                             <input type="checkbox" name="applicable_for[]" id="applicable_for_{{$role->id}}" class="common-radio relationButton copy_per_th" value="{{$role->id}}" @if(is_null($setting->applicable_for) ||  in_array($role->id,$setting->applicable_for)) checked @endif>

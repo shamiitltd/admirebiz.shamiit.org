@@ -1479,7 +1479,7 @@ button:focus {
   margin: 0.1em 0;
 }
 
-/******* infix update header *******/
+/******* shamiit update header *******/
 /* line 709, /Applications/MAMP/htdocs/InfixEduTheme/public/backEnd/scss/6_lawngreen_version/admin/_component.scss */
 .logoimage {
   max-width: 150px !important;
@@ -5013,7 +5013,7 @@ body.client.color {
 
 /* line 550, /Applications/MAMP/htdocs/InfixEduTheme/public/backEnd/scss/6_lawngreen_version/client/_home.scss */
 .client.light .fact-area .white-box.single-summery, .client.color .fact-area .white-box.single-summery {
-  box-shadow: 0px 10px 15px rgba(236, 208, 244, 0.3);
+  box-shadow: var(--box_shadow);
 }
 
 /* line 553, /Applications/MAMP/htdocs/InfixEduTheme/public/backEnd/scss/6_lawngreen_version/client/_home.scss */

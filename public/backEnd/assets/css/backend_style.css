@@ -549,7 +549,7 @@ button:focus {
   background: var(--bg_white);
   padding: 40px 30px;
   border-radius: 10px;
-  box-shadow: 0px 10px 15px rgba(236, 208, 244, 0.3);
+  box-shadow: var(--box_shadow);
 }
 
 @media (max-width: 1300px) and (min-width: 992px) {
@@ -795,8 +795,7 @@ button:focus {
 
 /* line 188, ../../xampp/htdocs/infixeduB/public/backEnd/scss/admin/_component.scss */
 .modal-content .modal-header {
-  background: url(../img/modal-header-bg.png) no-repeat center;
-  background-size: cover;
+  background: var(--primary-color);
   border-radius: 5px 5px 0px 0px;
   border: 0;
   padding: 33px 40px;
@@ -1340,7 +1339,7 @@ button:focus {
   background: var(--bg_white);
   padding: 40px 30px;
   border-radius: 10px;
-  box-shadow: 0px 10px 15px rgba(236, 208, 244, 0.3);
+  box-shadow: var(--box_shadow);
   margin: 0 auto;
   clear: both;
   border-collapse: separate;
@@ -1515,7 +1514,7 @@ button:focus {
 /* line 38, ../../xampp/htdocs/infixeduB/public/backEnd/scss/admin/_predefine.scss */
 .common-box-shadow, .school-table .dropdown .dropdown-toggle:hover, .school-table .dropdown .dropdown-toggle:focus, .school-table .dropdown .dropdown-menu, .bootstrap-datetimepicker-widget table td.hour:hover, .bootstrap-datetimepicker-widget table td.minute:hover, .bootstrap-datetimepicker-widget table td span.glyphicon-chevron-up:hover:after, .bootstrap-datetimepicker-widget table td span.glyphicon-chevron-down:hover:after, .datepicker.dropdown-menu, .datepicker table tr td.active.day, .datepicker table tr td.day:hover, .datepicker thead tr:first-child th:hover, .pagination .page-link:hover, .common-calendar .fc-month-view .fc-day.fc-widget-content.fc-today, .common-calendar .fc-state-default.fc-corner-left:hover,
 .common-calendar .fc-button.fc-state-default:hover, .primary-btn:hover, .primary-btn.fix-gr-bg:hover, .nice-select .list, .sms-accordion .card, .admin .navbar .right-navbar .dropdown .badge, .single-cms-box:hover .single-cms {
-  box-shadow: 0px 10px 20px rgba(108, 39, 255, 0.3);
+  box-shadow: var(--box_shadow);
 }
 
 /* line 42, ../../xampp/htdocs/infixeduB/public/backEnd/scss/admin/_predefine.scss */
@@ -4884,7 +4883,7 @@ body.client.color {
 
 /* line 526, ../../xampp/htdocs/infixeduB/public/backEnd/scss/client/_home.scss */
 .client.light .fact-area .white-box.single-summery, .client.color .fact-area .white-box.single-summery {
-  box-shadow: 0px 10px 15px rgba(236, 208, 244, 0.3);
+  box-shadow: var(--box_shadow);
 }
 
 /* line 529, ../../xampp/htdocs/infixeduB/public/backEnd/scss/client/_home.scss */
@@ -6229,7 +6228,7 @@ div.dt-buttons {
 }
 .dataTables_filter > label
 {
-    z-index: 95 !important;
+    z-index: 10 !important;
 }
 .modal-header .close{
     color: black !important;
@@ -8480,7 +8479,7 @@ div.dt-buttons {
   top: -14px;
   right: 10px;
   border-width: 0 15px 20px 15px;
-  border-color: transparent transparent var(--base_color) transparent;
+  border-color: transparent transparent var(--white) transparent;
 }
 
 /* line 521, G:/laragon/www/383-infixpm_lv/public/scss/_header.scss */
@@ -13282,7 +13281,7 @@ table.dataTable {
 }
 
 .vdp-datepicker__calendar{
-  box-shadow: 0px 10px 20px rgba(108, 39, 255, 0.3);
+  box-shadow: var(--box_shadow);
   min-width: 160px;
   background: var(--bg_white)fff;
   border: 0 !important;
@@ -13423,7 +13422,7 @@ table.dataTable {
   background: -moz-linear-gradient(90deg, var(--gradient_1) 0%, var(--gradient_3) 100%) !important;
   background: -o-linear-gradient(90deg, var(--gradient_1) 0%, var(--gradient_3) 100%) !important;
   background: linear-gradient(90deg, var(--gradient_1) 0%, var(--gradient_3) 100%) !important;
-  box-shadow: 0px 10px 20px rgba(108, 39, 255, 0.3);
+  box-shadow: var(--box_shadow);
   color: #fff;
   color: #fff !important;
   border-radius: 50% !important;
@@ -13450,7 +13449,7 @@ table.dataTable {
 	background: -moz-linear-gradient(90deg, var(--gradient_1) 0%, var(--gradient_3) 100%) !important;
 	background: -o-linear-gradient(90deg, var(--gradient_1) 0%, var(--gradient_3) 100%) !important;
 	background: linear-gradient(90deg, var(--gradient_1) 0%, var(--gradient_3) 100%) !important;
-	box-shadow: 0px 10px 20px rgba(108, 39, 255, 0.3);
+	box-shadow: var(--box_shadow);
 	color: #fff;
 	color: #fff !important;
 	border-radius: 4px !important;
@@ -14181,7 +14180,7 @@ div.dt-buttons{
 	z-index: inherit;
 }
 .vs__dropdown-menu {
-	box-shadow: 0px 10px 20px rgba(108, 39, 255, 0.3);
+	box-shadow: var(--box_shadow);
 	border: 0 !important;
 }
 .vs__dropdown-option{

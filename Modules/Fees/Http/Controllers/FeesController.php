@@ -457,13 +457,23 @@ class FeesController extends Controller
                 }
 
                 if ($request->types) {
-                    foreach ($request->types as $type) {
+                    if(empty($request->singleInvoice)){
                         $tfeesType = [];
                         $tamount = [];
                         $tweaver = [];
                         $tsub_total = [];
                         $tnote = [];
                         $tpaid_amount = [];
+                    }
+                    foreach ($request->types as $type) {
+                        if($request->singleInvoice == 1){
+                            $tfeesType = [];
+                            $tamount = [];
+                            $tweaver = [];
+                            $tsub_total = [];
+                            $tnote = [];
+                            $tpaid_amount = [];
+                        }
 
                         $tfeesType[] = gv($type, 'feesType');
                         $tamount[] = gv($type, 'amount');
@@ -471,21 +481,23 @@ class FeesController extends Controller
                         $tsub_total[] = gv($type, 'sub_total');
                         $tnote[] = gv($type, 'note');
                         $tpaid_amount[] = gv($type, 'paid_amount');
-                        $feesCarry = feesCarryForward($student->id, $tfeesType, $tamount, $tsub_total);
-                        if($feesCarry){
-                            if($feesCarry['type'] == 'due'){
-                                $tfeesType = $feesCarry['feesTypes'];
-                                $tamount = $feesCarry['amount'];
-                            }elseif($feesCarry['type'] == 'full_paid_add_xtra_amount'){
-                                $tpaid_amount = $feesCarry['paymentAmount'];
-                                $payment_method = $feesCarry['paymentMethod'];
-                            }elseif($feesCarry['type']=='multi_payment'){
-                                $tpaid_amount = $feesCarry['paidFeesAmount'];
-                                $payment_method = $feesCarry['paymentMethod'];
+                        if($request->singleInvoice == 1){
+                            $feesCarry = feesCarryForward($student->id, $tfeesType, $tamount, $tsub_total);
+                            if($feesCarry){
+                                if($feesCarry['type'] == 'due'){
+                                    $tfeesType = $feesCarry['feesTypes'];
+                                    $tamount = $feesCarry['amount'];
+                                }elseif($feesCarry['type'] == 'full_paid_add_xtra_amount'){
+                                    $tpaid_amount = $feesCarry['paymentAmount'];
+                                    $payment_method = $feesCarry['paymentMethod'];
+                                }elseif($feesCarry['type']=='multi_payment'){
+                                    $tpaid_amount = $feesCarry['paidFeesAmount'];
+                                    $payment_method = $feesCarry['paymentMethod'];
+                                }
                             }
-                        }
-                        $invoiceStore->invStore($request->merge(
-                            ['student' => $student->student_id,
+                            $invoiceStore->invStore($request->merge(
+                            [
+                                'student' => $student->student_id,
                                 'record_id' => $student->id,
                                 'feesType' => $tfeesType,
                                 'amount' => $tamount,
@@ -495,6 +507,33 @@ class FeesController extends Controller
                                 'paid_amount' => $tpaid_amount,
                                 'payment_method' => $payment_method,
                             ]));
+                        }
+                    }
+                    if(empty($request->singleInvoice)){
+                        $feesCarry = feesCarryForward($request->student, $tfeesType, $tamount, $tsub_total);
+                        if($feesCarry){
+                            if($feesCarry['type'] == 'due'){
+                                $tfeesType = $feesCarry['feesTypes'];
+                                $tamount = $feesCarry['amount'];
+                                $tsub_total = $feesCarry['sub_total'];
+                            }elseif($feesCarry['type'] == 'full_paid_add_xtra_amount'){
+                                $tpaid_amount = $feesCarry['paymentAmount'];
+                                $payment_method = $feesCarry['paymentMethod'];
+                            }elseif($feesCarry['type']=='multi_payment'){
+                                $tpaid_amount = $feesCarry['paidFeesAmount'];
+                                $payment_method = $feesCarry['paymentMethod'];
+                            }
+                        }
+                        $invoiceStore->invStore($request->merge(['student' => $student->student_id,
+                            'record_id' => $student->id,
+                            'feesType' => $tfeesType,
+                            'amount' => $tamount,
+                            'weaver' => $tweaver,
+                            'sub_total' => $tsub_total,
+                            'note' => $tnote,
+                            'paid_amount' => $tpaid_amount,
+                            'payment_method' => $payment_method,
+                        ]));
                     }
                 }
                 //Notification
@@ -646,6 +685,7 @@ class FeesController extends Controller
             Toastr::success('Store Successful', 'Success');
             return redirect()->route('fees.fees-invoice');
         } catch (\Exception $e) {
+            dd($e);
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();
         }
@@ -1272,7 +1312,16 @@ class FeesController extends Controller
 
     public function feesInvoiceDatatable()
     {
-        $studentInvoices = FmFeesInvoice::where('type', 'fees')
+        $previous_url = url()->previous();
+        $previous_route = app('router')->getRoutes()->match(app('request')->create($previous_url))->getName();
+
+        if($previous_route == 'lms.fees-invoice'){
+            $fees_type='lms';
+        }else{
+            $fees_type='fees';
+        }
+        
+        $studentInvoices = FmFeesInvoice::where('type', $fees_type)
             ->with('studentInfo')
             ->select('fm_fees_invoices.*')
             ->where('school_id', Auth::user()->school_id)

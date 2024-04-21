@@ -14,7 +14,7 @@
     @lang('behaviourRecords.assign_incident')
 @endsection
 @section('mainContent')
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('behaviourRecords.assign_incident')</h1>
@@ -28,17 +28,17 @@
     </section>
     <section class="admin-visitor-area up_admin_visitor">
         <div class="container-fluid p-0">
-            <div class="row">
-                <div class="col-lg-8 col-md-6">
-                    <div class="main-title">
-                        <h3 class="mb-30">@lang('behaviourRecords.select_criteria') </h3>
-                    </div>
-                </div>
-            </div>
             {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'behaviour_records.assign_incident_search', 'method' => 'POST', 'enctype' => 'multipart/form-data', 'id' => 'infix_form']) }}
             <div class="row">
                 <div class="col-lg-12">
                     <div class="white-box filter_card">
+                        <div class="row">
+                            <div class="col-lg-8 col-md-6">
+                                <div class="main-title">
+                                    <h3 class="mb-15">@lang('behaviourRecords.select_criteria') </h3>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row">
                             <input type="hidden" name="url" id="url" value="{{ URL::to('/') }}">
                             @if (moduleStatusCheck('University'))
@@ -48,9 +48,9 @@
                                 )
                                 <div class="col-lg-3 mt-25">
                                     <div class="primary_input ">
+                                        <label class="primary_input_label" for="">@lang('student.search_by_name')</label>
                                         <input class="primary_input_field" type="text" placeholder="Name" name="name"
                                             value="{{ isset($name) ? $name : '' }}">
-                                        <label class="primary_input_label" for="">@lang('student.search_by_name')</label>
                                     </div>
                                 </div>
                                 <div class="col-lg-3 mt-25">
@@ -62,19 +62,19 @@
                                 </div>
                             @else
                                 @include('backEnd.common.search_criteria', [
-                                    'mt' => 'mt-30',
+                                    'mt' => 'mt-0',
                                     'div' => 'col-lg-3',
                                     'required' => ['academic'],
                                     'visiable' => ['academic', 'class', 'section'],
                                 ])
-                                <div class="col-lg-2 mt-30">
+                                <div class="col-lg-2 mt-0">
                                     <div class="primary_input sm_mb_20 ">
                                         <label class="primary_input_label" for="">@lang('student.search_by_name')</label>
                                         <input class="primary_input_field" type="text" placeholder="Name" name="name"
                                             value="{{ isset($name) ? $name : old('name') }}">
                                     </div>
                                 </div>
-                                <div class="col-lg-1 mt-30">
+                                <div class="col-lg-1 mt-0">
                                     <div class="primary_input sm_mb_20 ">
                                         <label class="primary_input_label" for="">@lang('student.search_by_roll')</label>
                                         <input class="primary_input_field" type="text" placeholder="Roll" name="roll_no"
@@ -104,35 +104,37 @@
             <input type="hidden" id="un_semester_label" value="{{ @$data['un_semester_label_id'] }}">
             <input type="hidden" id="un_section" value="{{ @$data['un_section_id'] }}">
             {{ Form::close() }}
-            <div class="row mt-20">
+            <div class="row mt-40">
                 <div class="col-lg-12">
-                    <div class="row">
-                        <div class="col-lg-4 no-gutters">
-                            <div class="main-title">
-                                <h3 class="mb-0">@lang('behaviourRecords.assign_incident_list') </h3>
+                    <div class="white-box">
+                        <div class="row">
+                            <div class="col-lg-4 no-gutters">
+                                <div class="main-title">
+                                    <h3 class="mb-15">@lang('behaviourRecords.assign_incident_list') </h3>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <x-table>
-                                <table id="table_id" class="table data-table" cellspacing="0" width="100%">
-                                    <thead>
-                                        <tr>
-                                            <th>@lang('behaviourRecords.admission_no')</th>
-                                            <th>@lang('behaviourRecords.student_name')</th>
-                                            <th>@lang('behaviourRecords.class')</th>
-                                            <th>@lang('behaviourRecords.gender')</th>
-                                            <th>@lang('behaviourRecords.phone')</th>
-                                            <th>@lang('behaviourRecords.total_points')</th>
-                                            <th>@lang('behaviourRecords.total_incidents')</th>
-                                            <th>@lang('behaviourRecords.actions')</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
-                            </x-table>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <x-table>
+                                    <table id="table_id" class="table data-table" cellspacing="0" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th>@lang('behaviourRecords.admission_no')</th>
+                                                <th>@lang('behaviourRecords.student_name')</th>
+                                                <th>@lang('behaviourRecords.class')</th>
+                                                <th>@lang('behaviourRecords.gender')</th>
+                                                <th>@lang('behaviourRecords.phone')</th>
+                                                <th>@lang('behaviourRecords.total_points')</th>
+                                                <th>@lang('behaviourRecords.total_incidents')</th>
+                                                <th>@lang('behaviourRecords.actions')</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </x-table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -155,7 +157,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row mt-20">
+                        <div class="row mt-40">
                             <div class="col-lg-9" id="selectIncidentsDiv" style="margin-top: -25px;">
                                 <label for="checkbox" class="mb-20 mt-20 primary_input_label">@lang('behaviourRecords.incidents')</label>
                                 <select multiple="multiple" id="selectIncidents" name="incident_ids[]"

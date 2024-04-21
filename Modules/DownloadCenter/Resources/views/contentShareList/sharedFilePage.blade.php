@@ -10,7 +10,7 @@
     @else
         <link rel="icon" href="{{ asset('public/uploads/settings/favicon.png') }}" type="image/png" />
     @endif
-    <title>{{ @schoolConfig()->school_name ? @schoolConfig()->school_name : 'Infix Edu ERP' }} |
+    <title>{{ @schoolConfig()->school_name ? @schoolConfig()->school_name : 'EDU SHAMIIT ERP' }} |
         @lang('downloadCenter.shared_content')
     </title>
     <style>
@@ -81,7 +81,7 @@
     <div class="shared-link-container">
         <div class="shared-link-content-container">
             <div class="company_logo">
-                <img src="{{ asset('public/uploads/settings/logo.png') }}" alt="logo">
+                <img src="{{  asset(schoolConfig()->logo ? schoolConfig()->logo : 'public/uploads/settings/logo.png') }}" alt="logo" style="max-width:180px">
             </div>
             <h2 class="section_title">{{ $sharedContent->title }}</h2>
             <div class="value_grid">

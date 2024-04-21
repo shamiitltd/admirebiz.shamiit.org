@@ -707,7 +707,7 @@
                             "</strong></div>"
                         );
                         $("#parent_info input").val(parent_id);
-                        $("#parent_details").hide();
+                        $(".guardian_section").hide(); 
                     } else if(data[3] == 'staff') {
                         $("#parent_info div").remove();
                         $("#parent_info").append(
@@ -718,7 +718,7 @@
                             "]</strong></div>"
                         );
                         $("#staff_parent").val(data[2].id);
-                        $("#parent_details").hide();
+                        $(".guardian_section").hide(); 
 
                         
                        
@@ -766,11 +766,11 @@
     // student admission onclick sibling remove
 
     $(document).on("click", "#parent_remove", function(e) {
-        
         $("#parent_info div").remove();
         $("#parent_info input").val("");
         $("#staff_parent").val("");
         $("#parent_details").show();
+        $(".guardian_section").show(); 
     });
 
     // student admission onclick address pass
@@ -1698,9 +1698,10 @@
     $(document).ready(function() {
         $("#class_library_member").on("change", function() {
             var url = $("#url").val();
-
+            var member_type = $("#member_type").val();
             var formData = {
                 id: $(this).val(),
+                member_type: member_type
             };
             // get section for student
             $.ajax({
@@ -1816,7 +1817,6 @@
     $(document).ready(function() {
         $("#select_section_member").on("change", function() {
             var url = $("#url").val();
-            var i = 0;
             var select_class = $("#select_class").val();
             if(!select_class) {
                 var select_class = $("#class_library_member").val();
@@ -1824,6 +1824,7 @@
             var formData = {
                 section: $(this).val(),
                 class: select_class,
+                member_type: $("#member_type").val()
             };
             console.log(formData);
             // get section for student
@@ -2097,22 +2098,22 @@
                         if (item.length) {
                             $("#select_parent").find("option").not(":first").remove();
                             $("#select_parent_div ul").find("li").not(":first").remove();
-
                             $.each(item, function(i, student) {
-                                $("#select_parent").append(
-                                    $("<option>", {
-                                        value: student.parent_user_id,
-                                        text: student.parent_name,
-                                    })
-                                );
-
-                                $("#select_parent_div ul").append(
-                                    "<li data-value='" +
-                                    student.parent_user_id +
-                                    "' class='option'>" +
-                                    student.parent_name +
-                                    "</li>"
-                                );
+                                if(student.parent_name != null){
+                                    $("#select_parent").append(
+                                        $("<option>", {
+                                            value: student.parent_user_id,
+                                            text: student.parent_name,
+                                        })
+                                    );
+                                    $("#select_parent_div ul").append(
+                                        "<li data-value='" +
+                                        student.parent_user_id +
+                                        "' class='option'>" +
+                                        student.parent_name +
+                                        "</li>"
+                                    );
+                                }
                             });
                         } else {
                             $("#select_parent_div .current").html(jsLang('select_parent') +" *");
@@ -5148,6 +5149,9 @@
     $(document).ready(function() {
         $("#background-color").hide();
         $("#background-image").hide();
+        if($("#background-type").val() == "color"){
+            $("#themeImageDiv").hide();
+        }
     });
 
     $(document).ready(function() {
@@ -5155,12 +5159,15 @@
             if ($(this).val() == "") {
                 $("#background-color").hide();
                 $("#background-image").hide();
+                $("#themeImageDiv").hide();
             } else if ($(this).val() == "color") {
                 $("#background-color").show();
                 $("#background-image").hide();
+                $("#themeImageDiv").hide();
             } else if ($(this).val() == "image") {
                 $("#background-color").hide();
                 $("#background-image").show();
+                $("#themeImageDiv").show();
             }
         });
     });
@@ -6510,6 +6517,23 @@
         });
         
 
+        $(document).ready(function() {
+
+            if ($('#sidebar .sidebar_menu').find('.mm-active').length > 0) {
+                const activeMenu = $('#sidebar .sidebar_menu').find('.mm-active').offset().top;
+                const mainMenu = $('#sidebar .sidebar_menu').offset().top;
+                const totalOffset = activeMenu - mainMenu;
+                $('#sidebar.sidebar').animate({
+                    scrollTop: totalOffset + 'px',
+                }, 1000);
+            }
+
+
+            // Collapse Dashboard chart
+            $(".dashboard_collapse").on("click", function(){
+                $(this).toggleClass('flip-icon')
+            });
+        });
 
         $(document).ready(function() {
             if ($('#sidebar .sidebar_menu').find('.mm-active').length > 0) {

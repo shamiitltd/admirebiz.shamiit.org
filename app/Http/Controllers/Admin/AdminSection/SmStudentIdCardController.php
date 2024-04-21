@@ -217,7 +217,8 @@ class SmStudentIdCardController extends Controller
         try {
             $id_cards = SmStudentIdCard::get();
             $roles = Role::get();
-            return view('backEnd.admin.idCard.generate_id_card', compact('id_cards','roles'));
+            $classes = SmClass::get();
+            return view('backEnd.admin.idCard.generate_id_card', compact('id_cards','roles','classes'));
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();
@@ -232,8 +233,18 @@ class SmStudentIdCardController extends Controller
             'grid_gap' => 'required',
         ]);
         if ($request->role==2) {
-            $s_students = SmStudent::query()->with('parents', 'bloodGroup');
-            $s_students = $s_students->get();
+            $s_students = SmStudent::when($request->class, function($q) use($request){
+                    $q->whereHas('studentRecord', function($query) use($request){
+                        $query->where('class_id', $request->class);
+                    });
+                })
+                ->when($request->section, function($q) use($request){
+                    $q->whereHas('studentRecord', function($query) use($request){
+                        $query->where('section_id', $request->section);
+                    });
+                })
+                ->with('parents', 'bloodGroup')
+                ->get();
         } elseif ($request->role==3) {
             $studentGuardian = SmStudent::get('parent_id');
             $s_students = SmParent::whereIn('id', $studentGuardian)->get();

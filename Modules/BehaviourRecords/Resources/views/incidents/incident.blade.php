@@ -3,7 +3,7 @@
     @lang('behaviourRecords.incidents')
 @endsection
 @section('mainContent')
-    <section class="sms-breadcrumb mb-0 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('behaviourRecords.incidents')</h1>
@@ -19,7 +19,8 @@
         <div class="container-fluid p-0">
             <div class="row mt-40">
                 <div class="col-lg-12">
-                    <div class="col-lg-12 text-md-right col-md-6 mb-30-lg col-6 text-right mb-20">
+                    <div class="white-box">
+                    <div class="col-lg-12 text-md-right col-md-6 mb-30-lg col-6 mb-20 p-0">
                         <button class="primary-btn-small-input primary-btn small fix-gr-bg" type="button"
                             data-toggle="modal" data-target="#addIncident">
                             <span class="ti-plus pr-2"></span>
@@ -29,7 +30,7 @@
                     <div class="row">
                         <div class="col-lg-8 no-gutters">
                             <div class="main-title">
-                                <h3 class="mb-0">@lang('behaviourRecords.incident_list')</h3>
+                                <h3 class="mb-15">@lang('behaviourRecords.incident_list')</h3>
                             </div>
                         </div>
                     </div>
@@ -193,6 +194,7 @@
                                 </table>
                             </x-table>
                         </div>
+                    </div>
                     </div>
                 </div>
             </div>

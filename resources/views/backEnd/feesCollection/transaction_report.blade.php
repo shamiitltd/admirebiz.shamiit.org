@@ -16,7 +16,7 @@
             $currency = '$';
         }
     @endphp
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('fees.collection_report')</h1>
@@ -77,7 +77,7 @@
                                     </div>
                                     <!-- @if ($errors->has('section'))
                                         <span class="text-danger invalid-select" role="alert">
-{{ $errors->first('section') }}
+                                        {{ $errors->first('section') }}
                                         </span>
 
                                     @endif -->

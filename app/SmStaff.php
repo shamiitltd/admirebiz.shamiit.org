@@ -2,10 +2,11 @@
 
 namespace App;
 
-use App\Scopes\ActiveStatusSchoolScope;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\TeacherEvaluation;
 use Illuminate\Support\Facades\Auth;
+use App\Scopes\ActiveStatusSchoolScope;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class SmStaff extends Model
 {
@@ -20,7 +21,7 @@ class SmStaff extends Model
 
     public function roles()
     {
-        return $this->belongsTo('Modules\RolePermission\Entities\InfixRole', 'role_id', 'id');
+        return $this->belongsTo('Modules\RolePermission\Entities\InfixRole', 'role_id', 'id')->withDefault();
     }
 
     public function departments()
@@ -35,12 +36,12 @@ class SmStaff extends Model
 
     public function genders()
     {
-        return $this->belongsTo('App\SmBaseSetup', 'gender_id', 'id');
+        return $this->belongsTo('App\SmBaseSetup', 'gender_id', 'id')->withDefault();
     }
 
     public function staff_user()
     {
-        return $this->belongsTo('App\User', 'user_id', 'id');
+        return $this->belongsTo('App\User', 'user_id', 'id')->withDefault();
     }
     public function attendances()
     {

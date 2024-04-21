@@ -1,7 +1,7 @@
 <section class="section_padding noticeboard">
-    <div class="container">
+    <div class="container p-0">
         <div class="row">
-            <div class="col-xl-7 offset-xl-2 col-lg-10 offset-lg-1 col-md-12">
+            <div class="offset-lg-2 col-lg-10">
                 <div class="noticeboard_inner">
                     <div class="noticeboard_inner_head">
                         <h5>{{ pagesetting('notice_heading') }}</h5>

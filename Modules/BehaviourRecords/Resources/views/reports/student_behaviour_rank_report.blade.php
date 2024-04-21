@@ -3,7 +3,7 @@
     @lang('behaviourRecords.student_behaviour_rank_report')
 @endsection
 @section('mainContent')
-    <section class="sms-breadcrumb mb-0 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('behaviourRecords.student_behaviour_rank_report')</h1>
@@ -20,16 +20,16 @@
             <div class="row mt-20">
                 <div class="col-lg-12 student-details up_admin_visitor">
                     <div class="row">
-                        <div class="col-lg-8 col-md-6">
-                            <div class="main-title">
-                                <h3 class="mb-30">@lang('behaviourRecords.select_criteria') </h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
                         <div class="col-lg-12">
                             {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'behaviour_records.student_behaviour_rank_report_search', 'method' => 'GET', 'enctype' => 'multipart/form-data']) }}
                             <div class="white-box">
+                                <div class="row">
+                                    <div class="col-lg-8 col-md-6">
+                                        <div class="main-title">
+                                            <h3 class="mb-15">@lang('behaviourRecords.select_criteria') </h3>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="row">
                                     @include('backEnd.common.search_criteria', [
                                         'div' => 'col-lg-3',
@@ -70,66 +70,68 @@
                     @isset($students)
                         <div class="row mt-40">
                             <div class="col-lg-12">
-                                <div class="row">
-                                    <div class="col-lg-4 no-gutters">
-                                        <div class="main-title">
-                                            <h3 class="mb-0">@lang('behaviourRecords.student_behaviour_rank_list') </h3>
+                                <div class="white-box">
+                                    <div class="row">
+                                        <div class="col-lg-4 no-gutters">
+                                            <div class="main-title">
+                                                <h3 class="mb-15">@lang('behaviourRecords.student_behaviour_rank_list') </h3>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <x-table>
-                                            <table id="table_id" class="table data-table" cellspacing="0" width="100%">
-                                                <thead>
-                                                    <tr>
-                                                        <th>@lang('behaviourRecords.rank')</th>
-                                                        <th>@lang('behaviourRecords.admission_no')</th>
-                                                        <th>@lang('behaviourRecords.student_name')</th>
-                                                        <th>@lang('behaviourRecords.class')(@lang('behaviourRecords.section'))</th>
-                                                        <th>@lang('behaviourRecords.gender')</th>
-                                                        <th>@lang('behaviourRecords.phone')</th>
-                                                        <th>@lang('behaviourRecords.total_points')</th>
-                                                        <th>@lang('behaviourRecords.actions')</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @foreach ($students as $key => $data)
-                                                        @php
-                                                            $incident = 0;
-                                                            foreach ($data->incidents as $student_point) {
-                                                                $incident += $student_point->incident->point;
-                                                            }
-                                                        @endphp
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <x-table>
+                                                <table id="table_id" class="table data-table" cellspacing="0" width="100%">
+                                                    <thead>
                                                         <tr>
-                                                            <td>{{ $key + 1 }}</td>
-                                                            <td>{{ $data->admission_no }}</td>
-                                                            <td>
-                                                                <a target="_blank"
-                                                                    href="{{ route('student_view', [$data->id]) }}">{{ $data->first_name }}
-                                                                    {{ $data->last_name }}</a>
-                                                            </td>
-                                                            <td>
-                                                                @foreach ($data->studentRecords as $studentRecord)
-                                                                    {{ $studentRecord->class->class_name }}({{ $studentRecord->section->section_name }})
-                                                                @endforeach
-                                                            </td>
-                                                            <td>{{ $data->gender->base_setup_name }}</td>
-                                                            <td>{{ $data->mobile }}</td>
-                                                            <td>{{ $data->incidents_sum_point }}</td>
-                                                            <td>
-                                                                <x-drop-down>
-                                                                    <a class="dropdown-item modalLink"
-                                                                        data-modal-size="large-modal"
-                                                                        title="Behaviour Rank-{{ $data->full_name }}"
-                                                                        href="{{ route('behaviour_records.view_behaviour_rank_modal', [$data->id]) }}">@lang('common.view')</a>
-                                                                </x-drop-down>
-                                                            </td>
+                                                            <th>@lang('behaviourRecords.rank')</th>
+                                                            <th>@lang('behaviourRecords.admission_no')</th>
+                                                            <th>@lang('behaviourRecords.student_name')</th>
+                                                            <th>@lang('behaviourRecords.class')(@lang('behaviourRecords.section'))</th>
+                                                            <th>@lang('behaviourRecords.gender')</th>
+                                                            <th>@lang('behaviourRecords.phone')</th>
+                                                            <th>@lang('behaviourRecords.total_points')</th>
+                                                            <th>@lang('behaviourRecords.actions')</th>
                                                         </tr>
-                                                    @endforeach
-                                                </tbody>
-                                            </table>
-                                        </x-table>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach ($students as $key => $data)
+                                                            @php
+                                                                $incident = 0;
+                                                                foreach ($data->incidents as $student_point) {
+                                                                    $incident += $student_point->incident->point;
+                                                                }
+                                                            @endphp
+                                                            <tr>
+                                                                <td>{{ $key + 1 }}</td>
+                                                                <td>{{ $data->admission_no }}</td>
+                                                                <td>
+                                                                    <a target="_blank"
+                                                                        href="{{ route('student_view', [$data->id]) }}">{{ $data->first_name }}
+                                                                        {{ $data->last_name }}</a>
+                                                                </td>
+                                                                <td>
+                                                                    @foreach ($data->studentRecords as $studentRecord)
+                                                                        {{ $studentRecord->class->class_name }}({{ $studentRecord->section->section_name }})
+                                                                    @endforeach
+                                                                </td>
+                                                                <td>{{ $data->gender->base_setup_name }}</td>
+                                                                <td>{{ $data->mobile }}</td>
+                                                                <td>{{ $data->incidents_sum_point }}</td>
+                                                                <td>
+                                                                    <x-drop-down>
+                                                                        <a class="dropdown-item modalLink"
+                                                                            data-modal-size="large-modal"
+                                                                            title="Behaviour Rank-{{ $data->full_name }}"
+                                                                            href="{{ route('behaviour_records.view_behaviour_rank_modal', [$data->id]) }}">@lang('common.view')</a>
+                                                                    </x-drop-down>
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </x-table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

@@ -1,7 +1,7 @@
 <div role="tabpanel"
      class="tab-pane fade {{ $type == '' && Session::get('studentDocuments') == '' ? 'show active' : '' }}"
      id="studentProfile">
-    <div class="white-box">
+    <div>
         {{--        <h4 class="stu-sub-head">@lang('student.personal_info')</h4>--}}
         @if (is_show('admission_date'))
             <div class="single-info">

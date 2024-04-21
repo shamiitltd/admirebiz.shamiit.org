@@ -23,17 +23,28 @@ use Modules\ExamPlan\Entities\AdmitCard;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Contracts\Support\Renderable;
 use Modules\ExamPlan\Entities\AdmitCardSetting;
+use Modules\University\Entities\UnAssignSubject;
 
 class AdmitCardSettingController extends Controller
 {
     use NotificationSend;
     public function setting()
     {
-        $setting = AdmitCardSetting::where('school_id', Auth::user()->school_id)->where('academic_id', getAcademicId())->first();
+        $setting = AdmitCardSetting::where('school_id', Auth::user()->school_id);
+        if (moduleStatusCheck('University')) {
+            $setting = $setting->where('un_academic_id', getAcademicId());
+        } else {
+            $setting = $setting->where('academic_id', getAcademicId());
+        }
+        $setting =$setting->first();
         if (!$setting) {
             $oldSetting = AdmitCardSetting::where('school_id', Auth::user()->school_id)->latest()->first();
             $setting = $oldSetting->replicate();
-            $setting->academic_id = getAcademicId();
+            if (moduleStatusCheck('University')) {
+                $setting->un_academic_id = getAcademicId();
+            } else {
+                $setting->academic_id = getAcademicId();
+            }
             $setting->save();
         }
 
@@ -174,41 +185,54 @@ class AdmitCardSettingController extends Controller
     {
         return view('examplan::create');
     }
-
-
-    public function admitcardSearch(Request $request)
+    function universityAdmitCardSearch($request)
     {
+        
         try {
             $input = $request->all();
             $validator = Validator::make($input, [
-                'exam' => 'required',
-                'class' => 'required',
-                'section' => 'required',
+                'un_session_id' => 'required',
+                'un_faculty_id'=>'required',
+                'un_department_id'=>'required',
+                'un_academic_id'=>'required',
+                'un_semester_id'=>'required',
+                'un_semester_label_id'=>'required',
+                'un_section_id'=>'required',
+                'exam_type'=>'required',
+            ],[
+                'un_session_id.required'=>'The session field is required',
+                'un_faculty_id.required'=>'The faculty field is required',
+                'un_department_id.required'=>'The department field is required',
+                'un_academic_id.required'=>'The academic field is required',
+                'un_semester_id.required'=>'The semester field is required',
+                'un_semester_label_id.required'=>'The semester label field is required',
+                'un_section_id.required'=>'The section field is required',
+                'exam_type.required'=>'The exam type field is required',
             ]);
             if ($validator->fails()) {
                 return redirect()->route('examplan.admitcard.index')
                     ->withErrors($validator)
                     ->withInput();
             }
-
+            // dd($request->all());
             $exam = SmExamSchedule::query();
-            $exam_id = $request->exam;
+            $exam_id = $request->exam_type;
             $class_id = $request->class;
             $exam->where('school_id', auth()->user()->school_id)->where('academic_id', getAcademicId());
-            if ($request->exam != "") {
-                $exam->where('exam_term_id', $request->exam);
+            if ($request->exam_type != "") {
+                $exam->where('exam_term_id', $request->exam_type);
             }
-            if ($request->class != "") {
-                $exam->where('class_id', $request->class);
+            if ($request->un_semester_label_id != "") {
+                $exam->where('un_semester_label_id', $request->un_semester_label_id);
             }
-            if ($request->section != "") {
-                $exam->where('section_id', $request->section);
+            if ($request->un_section_id != "") {
+                $exam->where('un_section_id', $request->un_section_id);
             }
             $exam_routine = $exam->get();
-
-            $old_admits = AdmitCard::where('exam_type_id', $request->exam)
+           
+            $old_admits = AdmitCard::where('exam_type_id', $request->exam_type)
                 ->where('school_id', Auth::user()->school_id)
-                ->where('academic_id', getAcademicId())
+                ->where('un_academic_id', getAcademicId())
                 ->get(['student_record_id']);
 
             $old_admit_ids = [];
@@ -219,29 +243,23 @@ class AdmitCardSettingController extends Controller
             if ($exam_routine) {
                 $student_records = StudentRecord::query();
                 $student_records->where('school_id', auth()->user()->school_id)
-                    ->where('academic_id', getAcademicId())
+                    ->where('un_academic_id', getAcademicId())
                     ->whereHas('student', function ($q) {
                         $q->where('active_status', 1);
-                    })
-                    ->where('is_promote', 0);
-                if ($request->class != "") {
-                    $student_records->where('class_id', $request->class);
+                    });
+                    // ->where('is_promote', 0);
+                if ($request->un_semester_label_id != "") {
+                    $student_records->where('un_semester_label_id', $request->un_semester_label_id);
                 }
-                if ($request->section != "") {
-                    $student_records->where('section_id', $request->section);
+                if ($request->un_section_id != "") {
+                    $student_records->where('un_section_id', $request->un_section_id);
                 }
 
                 $records = $student_records->get();
 
-
-                $exams = SmExamType::where('active_status', 1)
-                    ->where('academic_id', getAcademicId())
-                    ->where('school_id', Auth::user()->school_id)
-                    ->get();
-                $classes = SmClass::where('academic_id', getAcademicId())
-                    ->where('school_id', auth()->user()->school_id)
-                    ->get();
-                return view('examplan::admitCard', compact('exams', 'classes', 'records', 'exam_id', 'class_id', 'old_admit_ids'));
+                // dd($records);
+                
+                return view('examplan::admitCard', compact('records', 'exam_id', 'class_id', 'old_admit_ids'));
             } else {
                 Toastr::warning('Exam shedule is not ready', 'warning');
                 return redirect()->back();
@@ -252,18 +270,97 @@ class AdmitCardSettingController extends Controller
         }
     }
 
-    public function admitcardGenerate(Request $request)
+    public function admitcardSearch(Request $request)
     {
+        if (moduleStatusCheck('University')) {
+            return  $this->universityAdmitCardSearch($request);
+        } else {
+            try {
+                $input = $request->all();
+                $validator = Validator::make($input, [
+                    'exam' => 'required',
+                    'class' => 'required',
+                    'section' => 'required',
+                ]);
+                if ($validator->fails()) {
+                    return redirect()->route('examplan.admitcard.index')
+                        ->withErrors($validator)
+                        ->withInput();
+                }
+
+                $exam = SmExamSchedule::query();
+                $exam_id = $request->exam;
+                $class_id = $request->class;
+                $exam->where('school_id', auth()->user()->school_id)->where('academic_id', getAcademicId());
+                if ($request->exam != "") {
+                    $exam->where('exam_term_id', $request->exam);
+                }
+                if ($request->class != "") {
+                    $exam->where('class_id', $request->class);
+                }
+                if ($request->section != "") {
+                    $exam->where('section_id', $request->section);
+                }
+                $exam_routine = $exam->get();
+
+                $old_admits = AdmitCard::where('exam_type_id', $request->exam)
+                    ->where('school_id', Auth::user()->school_id)
+                    ->where('academic_id', getAcademicId())
+                    ->get(['student_record_id']);
+
+                $old_admit_ids = [];
+                foreach ($old_admits as $admit) {
+                    $old_admit_ids[] = $admit->student_record_id;
+                }
+                $active_status = 1;
+                if ($exam_routine) {
+                    $student_records = StudentRecord::query();
+                    $student_records->where('school_id', auth()->user()->school_id)
+                        ->where('academic_id', getAcademicId())
+                        ->whereHas('student', function ($q) {
+                            $q->where('active_status', 1);
+                        })
+                        ->where('is_promote', 0);
+                    if ($request->class != "") {
+                        $student_records->where('class_id', $request->class);
+                    }
+                    if ($request->section != "") {
+                        $student_records->where('section_id', $request->section);
+                    }
+
+                    $records = $student_records->get();
+
+
+                    $exams = SmExamType::where('active_status', 1)
+                        ->where('academic_id', getAcademicId())
+                        ->where('school_id', Auth::user()->school_id)
+                        ->get();
+                    $classes = SmClass::where('academic_id', getAcademicId())
+                        ->where('school_id', auth()->user()->school_id)
+                        ->get();
+                    return view('examplan::admitCard', compact('exams', 'classes', 'records', 'exam_id', 'class_id', 'old_admit_ids'));
+                } else {
+                    Toastr::warning('Exam shedule is not ready', 'warning');
+                    return redirect()->back();
+                }
+            } catch (\Exception $e) {
+                Toastr::error('Operation Failed', 'Error');
+                return redirect()->back();
+            }
+        }
+    }
+    function UniversityAdmitCardGenerate($request){
         try {
             $student_records = [];
             $studentRecord = null;
-            $setting = AdmitCardSetting::where('school_id', Auth::user()->school_id)->where('academic_id', getAcademicId())->first();
+            $setting = AdmitCardSetting::where('school_id', Auth::user()->school_id)->where('un_academic_id', getAcademicId())->first();
             if (!$setting) {
                 $oldSetting = AdmitCardSetting::where('school_id', Auth::user()->school_id)->latest()->first();
                 $setting = $oldSetting->replicate();
-                $setting->academic_id = getAcademicId();
+                $setting->un_academic_id = getAcademicId();
                 $setting->save();
             }
+           
             if ($request->data) {
                 foreach ($request->data as $key => $data) {
                     if (count($data) == 2) {
@@ -273,6 +370,7 @@ class AdmitCardSettingController extends Controller
 
                 foreach ($student_records as $record) {
                     $admit_card = AdmitCard::where('exam_type_id', $request->exam_type_id)->where('student_record_id', $record)->first();
+                   
                     $studentRecord = StudentRecord::find($record);
                     if (!$admit_card) {
                         $new_admit = new AdmitCard();
@@ -280,33 +378,95 @@ class AdmitCardSettingController extends Controller
                         $new_admit->exam_type_id = $request->exam_type_id;
                         $new_admit->created_by = Auth::id();
                         $new_admit->school_id = Auth::user()->school_id;
-                        $new_admit->academic_id = getAcademicId();
+                        $new_admit->un_academic_id = getAcademicId();
                         $new_admit->save();
 
-                        $data['class_id'] = $new_admit->studentRecord->class_id;
-                        $data['section_id'] = $new_admit->studentRecord->section_id;
-                        $records = $this->studentRecordInfo($new_admit->studentRecord->class_id, $new_admit->studentRecord->section_id)->pluck('studentDetail.user_id');
+                        $un_semester_label_id = $new_admit->studentRecord->un_semester_label_id;
+                        $un_section_id = $new_admit->studentRecord->un_section_id;
+                        $records=StudentRecord::with('studentDetail')->where('un_semester_label_id',$un_semester_label_id)->where('un_section_id',$un_section_id)->distinct('student_id')->get();
+                        $records=$records->pluck('studentDetail.user_id');
                         $this->sent_notifications('Exam_Admit_Card', $records, $data, ['Student', 'Parent']);
                     }
                 }
                 $admitcards = AdmitCard::whereIn('student_record_id', $student_records)->where('exam_type_id', $request->exam_type_id)->with('studentRecord')->get();
-                $assign_subjects = SmAssignSubject::where('class_id', $studentRecord->class_id)->where('section_id', $studentRecord->section_id)
-                    ->where('academic_id', getAcademicId())->where('school_id', Auth::user()->school_id)->get();
-                $exam_routines = SmExamSchedule::where('class_id', $studentRecord->class_id)
-                    ->where('section_id', $studentRecord->section_id)
+                $assign_subjects = UnAssignSubject::where('un_semester_label_id', $studentRecord->un_semester_label_id)->where('school_id', Auth::user()->school_id)->get();
+                $exam_routines = SmExamSchedule::where('un_semester_label_id', $studentRecord->un_semester_label_id)
+                    ->where('un_section_id', $studentRecord->un_section_id)
                     ->where('exam_term_id', $request->exam_type_id)->orderBy('date', 'ASC')->get();
 
                 if ($setting->admit_layout == 2) {
-
-                    return view('examplan::admitcardPrint_2', compact('setting', 'assign_subjects', 'exam_routines', 'admitcards'));
+                    return view('university::exam_plan.admitcardPrint_2', compact('setting', 'assign_subjects', 'exam_routines', 'admitcards'));
                 } elseif ($setting->admit_layout == 1) {
-                    return view('examplan::admitcardPrint', compact('setting', 'assign_subjects', 'exam_routines', 'admitcards'));
+                    return view('university::exam_plan.admitcardPrint', compact('setting', 'assign_subjects', 'exam_routines', 'admitcards'));
                 }
             }
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Error');
             return redirect()->route('examplan.admitcard.index');
         }
+    }
+
+    public function admitcardGenerate(Request $request)
+    {
+        if(moduleStatusCheck('University')){
+            return $this->UniversityAdmitCardGenerate($request);
+        }else{
+            try {
+                $student_records = [];
+                $studentRecord = null;
+                $setting = AdmitCardSetting::where('school_id', Auth::user()->school_id)->where('academic_id', getAcademicId())->first();
+                if (!$setting) {
+                    $oldSetting = AdmitCardSetting::where('school_id', Auth::user()->school_id)->latest()->first();
+                    $setting = $oldSetting->replicate();
+                    $setting->academic_id = getAcademicId();
+                    $setting->save();
+                }
+                if ($request->data) {
+                    foreach ($request->data as $key => $data) {
+                        if (count($data) == 2) {
+                            $student_records[] = $data['student_record_id'];
+                        }
+                    }
+    
+                    foreach ($student_records as $record) {
+                        $admit_card = AdmitCard::where('exam_type_id', $request->exam_type_id)->where('student_record_id', $record)->first();
+                        $studentRecord = StudentRecord::find($record);
+                        if (!$admit_card) {
+                            $new_admit = new AdmitCard();
+                            $new_admit->student_record_id = $record;
+                            $new_admit->exam_type_id = $request->exam_type_id;
+                            $new_admit->created_by = Auth::id();
+                            $new_admit->school_id = Auth::user()->school_id;
+                            $new_admit->academic_id = getAcademicId();
+                            $new_admit->save();
+    
+                            $data['class_id'] = $new_admit->studentRecord->class_id;
+                            $data['section_id'] = $new_admit->studentRecord->section_id;
+                            $records = $this->studentRecordInfo($data['class_id'], $data['section_id'])->pluck('studentDetail.user_id');
+                            $this->sent_notifications('Exam_Admit_Card', $records, $data, ['Student', 'Parent']);
+    
+                        }
+                    }
+                    $admitcards = AdmitCard::whereIn('student_record_id', $student_records)->where('exam_type_id', $request->exam_type_id)->with('studentRecord')->get();
+                    $assign_subjects = SmAssignSubject::where('class_id', $studentRecord->class_id)->where('section_id', $studentRecord->section_id)
+                        ->where('academic_id', getAcademicId())->where('school_id', Auth::user()->school_id)->get();
+                    $exam_routines = SmExamSchedule::where('class_id', $studentRecord->class_id)
+                        ->where('section_id', $studentRecord->section_id)
+                        ->where('exam_term_id', $request->exam_type_id)->orderBy('date', 'ASC')->get();
+    
+                    if ($setting->admit_layout == 2) {
+    
+                        return view('examplan::admitcardPrint_2', compact('setting', 'assign_subjects', 'exam_routines', 'admitcards'));
+                    } elseif ($setting->admit_layout == 1) {
+                        return view('examplan::admitcardPrint', compact('setting', 'assign_subjects', 'exam_routines', 'admitcards'));
+                    }
+                }
+            } catch (\Exception $e) {
+                Toastr::error('Operation Failed', 'Error');
+                return redirect()->route('examplan.admitcard.index');
+            }
+        }
+       
     }
 
     public function changeAdmitCardLayout(Request $request)

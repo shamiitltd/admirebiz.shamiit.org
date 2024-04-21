@@ -5,69 +5,76 @@
 @endsection
 
 @section('mainContent')
-    @php
-        $breadCrumbs = [
-            'h1' => __('student.delete_student_record'),
-            'bgPages' => ['<a href="#">' . __('student.student_information') . '</a>'],
-        ];
-    @endphp
-    <x-bread-crumb-component :breadCrumbs="$breadCrumbs" />
+    <section class="sms-breadcrumb mb-20 up_breadcrumb">
+        <div class="container-fluid">
+            <div class="row justify-content-between">
+                <h1>@lang('student.delete_student_record')</h1>
+                <div class="bc-pages">
+                    <a href="{{ route('dashboard') }}">@lang('common.dashboard')</a>
+                    <a href="#">@lang('student.student_information')</a>
+                    <a href="#">@lang('student.delete_student_record')</a>
+                </div>
+            </div>
+        </div>
+    </section>
     <section class="admin-visitor-area up_admin_visitor full_wide_table">
         <div class="container-fluid p-0">
-            <div class="row mt-40">
-                <div class="col-lg-12">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <x-table>
-                                <table id="table_id" class="table Crm_table_active3" cellspacing="0" width="100%">
-                                    <thead>
-
-                                        <tr>
-                                            <th>@lang('student.admission_no')</th>
-                                            <th>@lang('student.roll_no')</th>
-                                            <th>@lang('student.name')</th>
-                                            <th>@lang('common.class_sec')</th>
-                                            @if (generalSetting()->with_guardian)
-                                                <th>@lang('student.father_name')</th>
-                                            @endif
-                                            <th>@lang('common.date_of_birth')</th>
-
-                                            <th>@lang('common.phone')</th>
-                                            <th>@lang('common.actions')</th>
-                                        </tr>
-                                    </thead>
-
-                                    <tbody>
-                                        @foreach ($studentRecords as $record)
+            <div class="white-box mt-40">
+                <div class="row mt-40">
+                    <div class="col-lg-12">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <x-table>
+                                    <table id="table_id" class="table Crm_table_active3" cellspacing="0" width="100%">
+                                        <thead>
+    
                                             <tr>
-                                                <td>{{ $record->studentDetail->admission_no }}</td>
-                                                <td>{{ $record->roll_no ? $record->roll_no : '' }}</td>
-                                                <td>{{ $record->studentDetail->first_name . ' ' . $record->studentDetail->last_name }}
-                                                </td>
-                                                <td>{{ $record->class != '' ? $record->class->class_name : '' }}
-                                                    {{ $record->section ? '(' . $record->section->section_name . ')' : '' }}
-                                                </td>
+                                                <th>@lang('student.admission_no')</th>
+                                                <th>@lang('student.roll_no')</th>
+                                                <th>@lang('student.name')</th>
+                                                <th>@lang('common.class_sec')</th>
                                                 @if (generalSetting()->with_guardian)
-                                                    <td>{{ $record->studentDetail->parents != '' ? $record->studentDetail->parents->fathers_name : '' }}
-                                                    </td>
+                                                    <th>@lang('student.father_name')</th>
                                                 @endif
-                                                <td data-sort="{{ strtotime($record->studentDetail->date_of_birth) }}">
-                                                    {{ $record->studentDetail->date_of_birth != '' ? dateConvert($record->studentDetail->date_of_birth) : '' }}
-                                                </td>
-
-
-                                                <td>{{ $record->studentDetail->mobile }}</td>
-                                                <td>
-                                                    @php
-                                                        $routeList = ['<a class="dropdown-item" href="' . route('student-record-restore', [$record->id]) . '"> <i class="fa-solid fa-rotate"></i>' . __('common.restore') . '</a>', userPermission('disable_student_delete') ? '<a onclick="deleteId(' . $record->id . ');" class="dropdown-item" href="#" data-toggle="modal" data-target="#deleteStudentModal" data-id="' . $record->id . '">' . __('common.delete forever') . '</a>' : null];
-                                                    @endphp
-                                                    <x-drop-down-action-component :routeList="$routeList" />
-                                                </td>
+                                                <th>@lang('common.date_of_birth')</th>
+    
+                                                <th>@lang('common.phone')</th>
+                                                <th>@lang('common.actions')</th>
                                             </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </x-table>
+                                        </thead>
+    
+                                        <tbody>
+                                            @foreach ($studentRecords as $record)
+                                                <tr>
+                                                    <td>{{ $record->studentDetail->admission_no }}</td>
+                                                    <td>{{ $record->roll_no ? $record->roll_no : '' }}</td>
+                                                    <td>{{ $record->studentDetail->first_name . ' ' . $record->studentDetail->last_name }}
+                                                    </td>
+                                                    <td>{{ $record->class != '' ? $record->class->class_name : '' }}
+                                                        {{ $record->section ? '(' . $record->section->section_name . ')' : '' }}
+                                                    </td>
+                                                    @if (generalSetting()->with_guardian)
+                                                        <td>{{ $record->studentDetail->parents != '' ? $record->studentDetail->parents->fathers_name : '' }}
+                                                        </td>
+                                                    @endif
+                                                    <td data-sort="{{ strtotime($record->studentDetail->date_of_birth) }}">
+                                                        {{ $record->studentDetail->date_of_birth != '' ? dateConvert($record->studentDetail->date_of_birth) : '' }}
+                                                    </td>
+    
+    
+                                                    <td>{{ $record->studentDetail->mobile }}</td>
+                                                    <td>
+                                                        @php
+                                                            $routeList = ['<a class="dropdown-item" href="' . route('student-record-restore', [$record->id]) . '"> <i class="fa-solid fa-rotate"></i>' . __('common.restore') . '</a>', userPermission('disable_student_delete') ? '<a onclick="deleteId(' . $record->id . ');" class="dropdown-item" href="#" data-toggle="modal" data-target="#deleteStudentModal" data-id="' . $record->id . '">' . __('common.delete forever') . '</a>' : null];
+                                                        @endphp
+                                                        <x-drop-down-action-component :routeList="$routeList" />
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </x-table>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -663,18 +663,29 @@
         $("body").on("change", "#member_type", function(e) {
             e.preventDefault();
             role_id = $(this).val();
+            var is_alumni = $("#is_alumni").val();
             if (role_id == "2") {
                 $(".forStudentWrapper").slideDown(1000);
                 $("#selectStaffsDiv").slideUp(1000);
                 $(".forParentWrapper").slideUp(1000);
                 $("#selectStaffs").find("option").not(":first").remove();
                 $("#selectStaffsDiv ul").find("li").not(":first").remove();
+                $("#member_type_hidden").val("");
+
             } else if(role_id == "3"){
                 $(".forParentWrapper").slideDown(1000);
                 $(".forStudentWrapper").slideUp(1000);
                 $("#selectStaffsDiv").slideUp(1000);
                 $("#selectStaffs").find("option").not(":first").remove();
                 $("#selectStaffsDiv ul").find("li").not(":first").remove();
+                $("#member_type_hidden").val("");
+            } else if(role_id == is_alumni) {
+                 $(".forStudentWrapper").slideDown(1000);
+                $("#selectStaffsDiv").slideUp(1000);
+                $(".forParentWrapper").slideUp(1000);
+                $("#selectStaffs").find("option").not(":first").remove();
+                $("#selectStaffsDiv ul").find("li").not(":first").remove();
+                $("#member_type_hidden").val("10");
             }
             else {
                 $(".forStudentWrapper").slideUp(1000);
@@ -683,6 +694,7 @@
 
                 $("#select_student").find("option").not(":first").remove();
                 $("#select_student_div ul").find("li").not(":first").remove();
+                $("#member_type_hidden").addValue("");
 
                 var url = $("#url").val();
                 var formData = {
@@ -1550,6 +1562,28 @@
                         $('#selectStaffss').multiselect('reset');
                     }
 
+
+                    if (formData.id == 9) {
+                        $.each(data, function(i, item) {
+                            if (item.length) { 
+                                $.each(item, function(i, alumnis) {
+                                    $("#selectStaffss").append(
+                                        $("<option>", {
+                                            value: alumnis.full_name +
+                                                "-" +
+                                                alumnis.email +
+                                                "-" +
+                                                alumnis.mobile,
+                                            text: alumnis.full_name,
+                                        })
+                                    );
+                                });
+                                
+                            } 
+                        });
+                        $('#selectStaffss').multiselect('reset');
+                    }
+
                     if (formData.id != 2 && formData.id != 3) {
                         $.each(data, function(i, item) {
                             if (item.length) {
@@ -2067,28 +2101,57 @@
     });
 
     $(document).on("keyup", ".exam_mark", function(event) {
+        var currentInput = $(this);
         var totalMarks = 0;
+    
         $('tr#row1 input[name^="exam_mark"]').each(function() {
-            if ($(this).val() != "") {
-                totalMarks += parseInt($(this).val());
+            var inputField = $(this);
+            if (inputField.val() != "") {
+                totalMarks += parseInt(inputField.val());
             }
         });
-
-        if (totalMarks > parseInt($("#exam_mark_main").val())) {
-            alert("you have distributed marks more than exam mark");
-            $(this).val(0);
-            var totalMarks = 0;
-            $('tr#row1 input[name^="exam_mark"]').each(function() {
-                if ($(this).val() != "") {
-                    totalMarks += parseInt($(this).val());
-                }
-            });
+    
+        var mainExamMark = $("#exam_mark_main");
+        var alertContainer = $("#messageAlert");
+    
+        if (totalMarks > parseInt(mainExamMark.val())) {
+            alertContainer.text("You have distributed marks more than the exam mark");
+    
+            setTimeout(function() {
+                alertContainer.text("");
+            }, 3000);
+    
+            currentInput.val(0);
             $("th#totalMark input").val(totalMarks);
             return false;
         }
-
+    
         $("td#totalMark input").val(totalMarks);
     });
+    
+    // $(document).on("keyup", ".exam_mark", function(event) {
+    //     var totalMarks = 0;
+    //     $('tr#row1 input[name^="exam_mark"]').each(function() {
+    //         if ($(this).val() != "") {
+    //             totalMarks += parseInt($(this).val());
+    //         }
+    //     });
+
+    //     if (totalMarks > parseInt($("#exam_mark_main").val())) {
+    //         alert("you have distributed marks more than exam mark");
+    //         $(this).val(0);
+    //         var totalMarks = 0;
+    //         $('tr#row1 input[name^="exam_mark"]').each(function() {
+    //             if ($(this).val() != "") {
+    //                 totalMarks += parseInt($(this).val());
+    //             }
+    //         });
+    //         $("th#totalMark input").val(totalMarks);
+    //         return false;
+    //     }
+
+    //     $("td#totalMark input").val(totalMarks);
+    // });
 
     function readURL(input) {
         if (input.files && input.files[0]) {
@@ -2098,6 +2161,15 @@
                 $("#blah").attr("src", e.target.result);
             };
 
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    function imageChangeWithFile(input, srcId) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $(srcId).attr('src', e.target.result);
+            };
             reader.readAsDataURL(input.files[0]);
         }
     }
@@ -2747,3 +2819,35 @@ function createSlug(value, slug_id) {
     $(slug_id).val('');
     $(slug_id).val(data);
 }
+
+function datableArrange(tableSelector, tableName){
+    $(tableSelector).sortable({
+        items: 'tr',
+        update: function(e, ui) {
+            var url = $("#url").val();
+            var table_name = tableName;
+            let ids = $(this).sortable('toArray', {
+                attribute: 'e_id'
+            });
+
+            $.ajax({
+                type: "POST",
+                data: {
+                    table_name : table_name,
+                    element_id : ids
+                },
+                url: url + "/" + "arrange-table-row-position",
+                success: function(data) {
+                    
+                },
+                error: function(data) {
+                    console.log("Error:", data);
+                },
+            });
+        }
+    });
+    $(tableSelector).disableSelection();
+}
+$(document).on('submit', 'form', function(){
+    $(this).find('[type="submit"]').not('#form_submit_btn').not('#aoraPageDelete').not('#onlineRegistrationSubmitButton').prop('disabled', true);
+});

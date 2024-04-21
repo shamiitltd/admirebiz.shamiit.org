@@ -3,7 +3,7 @@
     @lang('academics.teacher_class_routine_report')
 @endsection
 @section('mainContent')
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('academics.teacher_class_routine_report')</h1>
@@ -17,17 +17,18 @@
     </section>
     <section class="admin-visitor-area">
         <div class="container-fluid p-0">
+            <div class="white-box">
             <div class="row">
                 <div class="col-lg-8 col-md-6">
                     <div class="main-title">
-                        <h3 class="mb-30">@lang('common.select_criteria') </h3>
+                        <h3 class="mb-15">@lang('common.select_criteria') </h3>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-lg-12">
 
-                    <div class="white-box">
+                    <div>
                         {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'teacher-class-routine-report', 'method' => 'POST', 'enctype' => 'multipart/form-data']) }}
                         <div class="row">
                             <input type="hidden" name="url" id="url" value="{{ URL::to('/') }}">
@@ -65,23 +66,27 @@
                     </div>
                 </div>
             </div>
+            </div>
         </div>
     </section>
 
     @if (isset($class_times))
         <section class="mt-20">
             <div class="container-fluid p-0">
-                <div class="row mt-40">
-                    <div class="col-lg-4 no-gutters">
-                        <div class="main-title">
-                            <h3 class="mb-30">@lang('academics.class_routine')</h3>
-                        </div>
-                    </div>
-                    <div class="col-lg-8 pull-right mb-30">
+                <div class="white-box mt-40">
+                <div class="row justify-content-end">
+                    <div class="col-lg-8 pull-right mb-15">
                         <a href="{{ route('print-teacher-routine', [$teacher_id]) }}"
                             class="primary-btn small fix-gr-bg pull-right" target="_blank"><i class="ti-printer"> </i>
                             @lang('academics.print')</a>
 
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4 no-gutters">
+                        <div class="main-title">
+                            <h3 class="mb-15">@lang('academics.class_routine')</h3>
+                        </div>
                     </div>
                 </div>
 
@@ -197,6 +202,7 @@
                         </table>
                        </x-table>
                     </div>
+                </div>
                 </div>
             </div>
         </section>

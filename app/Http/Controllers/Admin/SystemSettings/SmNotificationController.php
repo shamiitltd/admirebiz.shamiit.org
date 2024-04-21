@@ -18,6 +18,21 @@ class SmNotificationController extends Controller
     {
         try {
             $notificationSettings = SmNotificationSetting::where('school_id', auth()->user()->school_id)->get();
+            if(count($notificationSettings) == 0){
+                $olds = SmNotificationSetting::where('school_id', 1)->get();
+                foreach($olds as $old){
+                    $new = new SmNotificationSetting(); 
+                    $new->event = $old->event;
+                    $new->destination = $old->destination;
+                    $new->recipient = $old->recipient;
+                    $new->subject = $old->subject;
+                    $new->template = $old->template;
+                    $new->school_id = auth()->user()->school_id;
+                    $new->shortcode = $old->shortcode;
+                    $new->save();
+                }
+            }
+
             return view('backEnd.notification_setting.notification_setting', compact('notificationSettings'));
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');

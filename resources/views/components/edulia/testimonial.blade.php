@@ -22,7 +22,7 @@
                     @endfor
                 @endif
             </div>
-            <h3>“ {{ $testimonial->description }} ”</h3>
+            <h3>“ {{ mb_strimwidth($testimonial->description, 0, 100, "...") }} ”</h3>
             <p>{{ $testimonial->name }}, <span>{{ $testimonial->designation }}
                     {{ $testimonial->institution_name }}</span></p>
         </div>

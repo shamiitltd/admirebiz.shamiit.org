@@ -4,6 +4,9 @@
 @endsection
 @section('mainContent')
 <style>
+    table.dataTable thead th{
+        white-space: nowrap;
+    }
     table.dataTable thead .sorting_asc:after {
         top: 10px;
         left: 5px;
@@ -15,7 +18,7 @@
     }
 
 </style>
-<section class="sms-breadcrumb mb-40 white-box">
+<section class="sms-breadcrumb mb-20">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('exam.exam_attendance') </h1>
@@ -29,27 +32,27 @@
 </section>
 <section class="admin-visitor-area up_admin_visitor">
     <div class="container-fluid p-0">
-        <div class="row mb-20">
-            <div class="col-lg-6 col-md-6 col-sm-6">
-                <div class="main-title sm_mb_20">
-                    <h3 class="mb-0">@lang('common.select_criteria') </h3>
-                </div>
-            </div>
-
-            @if(userPermission('exam_attendance_create'))
-            <div class="col-lg-6 text-right col-md-6 text_xs_left col-sm-6">
-                <a href="{{route('exam_attendance_create')}}" class="primary-btn small fix-gr-bg">
-                    <span class="ti-plus pr-2"></span>
-                    @lang('exam.attendance_create')
-                </a>
-            </div>
-            @endif
-
-        </div>
         <div class="row">
             <div class="col-lg-12">
 
                 <div class="white-box">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="main-title sm_mb_20">
+                                <h3 class="mb-15">@lang('common.select_criteria') </h3>
+                            </div>
+                        </div>
+            
+                        @if(userPermission('exam_attendance_create'))
+                        <div class="col-lg-6 text-right col-md-6 text_xs_left col-sm-6">
+                            <a href="{{route('exam_attendance_create')}}" class="primary-btn small fix-gr-bg">
+                                <span class="ti-plus pr-2"></span>
+                                @lang('exam.attendance_create')
+                            </a>
+                        </div>
+                        @endif
+            
+                    </div>
                     {{ Form::open(['class' => 'form-horizontal', 'route' => 'exam_attendance_search', 'method' => 'POST', 'id' => 'search_student']) }}
                     <div class="row">
                         <input type="hidden" name="url" id="url" value="{{URL::to('/')}}">
@@ -179,8 +182,9 @@
         @if(moduleStatusCheck('University'))
         <div class="row mt-40">
             <div class="col-lg-12">
+                <div class="white-box">
                 <div class="row">
-                    <div class="col-lg-12 no-gutters mb-30">
+                    <div class="col-lg-12 no-gutters mb-15">
                         <div class="main-title">
                             <h3>@lang('exam.exam_attendance') | <strong>@lang('exam.subject')</strong>:
                                 {{$subjectName->subject_name}}</h3>
@@ -223,15 +227,17 @@
                         </table>
                     </div>
                 </div>
+                </div>
             </div>
         </div>
         @else
         <div class="row mt-40">
             <div class="col-lg-12">
+                <div class="white-box">
                 <div class="row">
                     <div class="col-lg-6 no-gutters">
                         <div class="main-title">
-                            <h3 class="mb-30">@lang('exam.exam_attendance')</h3>
+                            <h3 class="mb-15">@lang('exam.exam_attendance')</h3>
                         </div>
                     </div>
                 </div>
@@ -273,6 +279,7 @@
                             </tbody>
                         </table>
                     </div>
+                </div>
                 </div>
             </div>
         </div>

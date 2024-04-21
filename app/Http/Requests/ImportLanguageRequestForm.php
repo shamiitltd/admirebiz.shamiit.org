@@ -25,8 +25,8 @@ class ImportLanguageRequestForm extends FormRequest
     public function rules()
     {
         return [
-            'language'=>['required', 'string'],
-            'language_file'=>['required', 'mimes:zip'],
+            'language'=>'required|string',
+            'language_file'=>'required|mimes:zip'
         ];
     }
 }

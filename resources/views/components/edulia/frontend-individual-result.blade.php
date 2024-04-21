@@ -1,7 +1,7 @@
 <form method="GET" action="{{ route('frontend.indiviual-result') }}">
     <div class="row align-items-end">
         @csrf
-        <div class="col-lg-5 col-md-4 col-sm-6 d-flex flex-column">
+        <div class="col-lg-5 col-md-4 col-sm-6">
             <div class="mb-2">@lang('edulia.exam') <span class="required">*</span> </div>
             <select id="academic_year_selector" class="w-100" name="exam">
                 <option value="@lang('edulia.select')">@lang('edulia.select')</option>

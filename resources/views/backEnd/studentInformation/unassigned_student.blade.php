@@ -5,7 +5,7 @@
 @endsection
 
 @section('mainContent')
-    <section class="sms-breadcrumb mb-40 up_breadcrumb white-box">
+    <section class="sms-breadcrumb mb-20 up_breadcrumb">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>{{ @$pt }}</h1>
@@ -20,62 +20,64 @@
 
     <section class="admin-visitor-area up_admin_visitor full_wide_table">
         <div class="container-fluid p-0">
-            <div class="row mt-40">
-                <div class="col-lg-12">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <x-table>
-                                <table id="table_id" class="table data-table Crm_table_active3" cellspacing="0" width="100%">
-                                    <thead>
-
-                                        <tr>
-                                            <th>@lang('student.admission_no')</th>
-                                            <th>@lang('student.roll_no')</th>
-                                            <th>@lang('student.name')</th>
-                                            @if (generalSetting()->with_guardian)
-                                                <th>@lang('student.father_name')</th>
-                                            @endif
-                                            <th>@lang('common.date_of_birth')</th>
-                                            <th>@lang('common.gender')</th>
-                                            <th>@lang('common.type')</th>
-                                            <th>@lang('common.phone')</th>
-                                            <th>@lang('common.actions')</th>
-                                        </tr>
-                                    </thead>
-
-                                    <tbody>
-                                        {{-- @foreach ($students as $student)
+            <div class="white-box mt-40">
+                <div class="row mt-40">
+                    <div class="col-lg-12">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <x-table>
+                                    <table id="table_id" class="table data-table Crm_table_active3" cellspacing="0" width="100%">
+                                        <thead>
+    
                                             <tr>
-                                                <td>{{ $student->admission_no }}</td>
-                                                <td>{{ $student->roll_no }}</td>
-                                                <td>{{ $student->first_name . ' ' . $student->last_name }}</td>
-                                                <td>{{ $student->class != '' ? $student->class->class_name : '' }}</td>
+                                                <th>@lang('student.admission_no')</th>
+                                                <th>@lang('student.roll_no')</th>
+                                                <th>@lang('student.name')</th>
                                                 @if (generalSetting()->with_guardian)
-                                                    <td>{{ $student->parents != '' ? $student->parents->fathers_name : '' }}</td>
+                                                    <th>@lang('student.father_name')</th>
                                                 @endif
-                                                <td data-sort="{{ strtotime($student->date_of_birth) }}">
-                                                    {{ $student->date_of_birth != '' ? dateConvert($student->date_of_birth) : '' }}
-                                                </td>
-                                                <td>{{ $student->gender != '' ? $student->gender->base_setup_name : '' }}</td>
-                                                <td>{{ $student->category != '' ? $student->category->category_name : '' }}</td>
-                                                <td>{{ $student->mobile }}</td>
-                                                <td>
-                                                    @php
-                                                        $routeList = [
-                                                            '<a class="dropdown-item" href="'.route('student_view', [$student->id]).'">'.__('common.view').'</a>',
-
-                                                            '<a class="dropdown-item" href="' . route('student.assign-class', [$student->id]) . '"> <i class="fa-solid fa-rotate"></i>' . __('student.assign_class') . '</a>', 
-
-                                                            userPermission('disable_student_delete') ? '<a onclick="deleteId(' . $student->id . ');" class="dropdown-item" href="#" data-toggle="modal" data-target="#deleteStudentModal" data-id="' . $student->id . '">' . __('common.delete') . '</a>' : null
-                                                        ];
-                                                    @endphp
-                                                    <x-drop-down-action-component :routeList="$routeList" />
-                                                </td>
+                                                <th>@lang('common.date_of_birth')</th>
+                                                <th>@lang('common.gender')</th>
+                                                <th>@lang('common.type')</th>
+                                                <th>@lang('common.phone')</th>
+                                                <th>@lang('common.actions')</th>
                                             </tr>
-                                        @endforeach --}}
-                                    </tbody>
-                                </table>
-                            </x-table>
+                                        </thead>
+    
+                                        <tbody>
+                                            {{-- @foreach ($students as $student)
+                                                <tr>
+                                                    <td>{{ $student->admission_no }}</td>
+                                                    <td>{{ $student->roll_no }}</td>
+                                                    <td>{{ $student->first_name . ' ' . $student->last_name }}</td>
+                                                    <td>{{ $student->class != '' ? $student->class->class_name : '' }}</td>
+                                                    @if (generalSetting()->with_guardian)
+                                                        <td>{{ $student->parents != '' ? $student->parents->fathers_name : '' }}</td>
+                                                    @endif
+                                                    <td data-sort="{{ strtotime($student->date_of_birth) }}">
+                                                        {{ $student->date_of_birth != '' ? dateConvert($student->date_of_birth) : '' }}
+                                                    </td>
+                                                    <td>{{ $student->gender != '' ? $student->gender->base_setup_name : '' }}</td>
+                                                    <td>{{ $student->category != '' ? $student->category->category_name : '' }}</td>
+                                                    <td>{{ $student->mobile }}</td>
+                                                    <td>
+                                                        @php
+                                                            $routeList = [
+                                                                '<a class="dropdown-item" href="'.route('student_view', [$student->id]).'">'.__('common.view').'</a>',
+    
+                                                                '<a class="dropdown-item" href="' . route('student.assign-class', [$student->id]) . '"> <i class="fa-solid fa-rotate"></i>' . __('student.assign_class') . '</a>', 
+    
+                                                                userPermission('disable_student_delete') ? '<a onclick="deleteId(' . $student->id . ');" class="dropdown-item" href="#" data-toggle="modal" data-target="#deleteStudentModal" data-id="' . $student->id . '">' . __('common.delete') . '</a>' : null
+                                                            ];
+                                                        @endphp
+                                                        <x-drop-down-action-component :routeList="$routeList" />
+                                                    </td>
+                                                </tr>
+                                            @endforeach --}}
+                                        </tbody>
+                                    </table>
+                                </x-table>
+                            </div>
                         </div>
                     </div>
                 </div>

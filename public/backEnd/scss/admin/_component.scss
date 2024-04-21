@@ -4,7 +4,7 @@
     background: $white;
     padding: 40px 30px;
     border-radius: 10px;
-    box-shadow: 0px 10px 15px rgba(236, 208, 244, 0.3);
+    box-shadow: var(--box_shadow);
     @media (max-width: 1300px) and (min-width: 992px) {
         padding: 30px 15px;
     }
@@ -186,8 +186,7 @@
 .modal-content {
     border: 0;
     .modal-header {
-        background: url(../img/modal-header-bg.png) no-repeat center;
-        background-size: cover;
+        background: var(--primary-color);
         border-radius: 5px 5px 0px 0px;
         border: 0;
         padding: 33px 40px;
@@ -602,7 +601,7 @@
     background: #ffffff;
     padding: 40px 30px;
     border-radius: 10px;
-    box-shadow: 0px 10px 15px rgba(236, 208, 244, 0.3);
+    box-shadow: var(--box_shadow);
     margin: 0 auto;
     clear: both;
     border-collapse: separate;

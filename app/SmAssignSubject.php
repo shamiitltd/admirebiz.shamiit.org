@@ -15,10 +15,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class SmAssignSubject extends Model
 {
-    protected $casts = [
-        'subject_id' => 'integer'
-    ];
-
     protected static function boot()
     {
         parent::boot();

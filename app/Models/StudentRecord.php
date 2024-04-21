@@ -45,20 +45,20 @@ use Modules\OnlineExam\Entities\InfixStudentTakeOnlineExam;
 class StudentRecord extends Model
 {
     use HasFactory;
-    protected $guarded = [
-        'id'
-    ];
-
     protected $casts = [
-        'student_id' => 'integer',
         'class_id' => 'integer',
         'section_id' => 'integer',
+        'student_id' => 'integer',
+        'student_id' => 'integer',
         'academic_id' => 'integer',
-        'session_id' => 'integer',
         'is_default' => 'integer',
         'is_promote' => 'integer',
-        'school_id' => 'integer',
-        'active_status' => 'integer'
+        'session_id' => 'integer',
+        'school_id' => 'integer'
+    ];
+
+    protected $guarded = [
+        'id'
     ];
 
 
@@ -80,6 +80,10 @@ class StudentRecord extends Model
         } else {
             return $this->belongsTo('App\SmSection', 'section_id', 'id')->withDefault()->withoutGlobalScope(StatusAcademicSchoolScope::class);
         }
+    }
+    public function smClass()
+    {
+        return $this->belongsTo(SmClass::class, 'class_id');
     }
 
     public function unSection()
@@ -155,14 +159,9 @@ class StudentRecord extends Model
     }
     public function getHomeWorkAttribute()
     {
-        return SmHomework::with('classes', 'sections', 'subjects')
-        ->withCount('homeworkCompleted')
-        ->where('class_id', $this->class_id)
-        ->where('section_id', $this->section_id)
-        ->whereNull('course_id')
-        ->where('sm_homeworks.academic_id', getAcademicId())
-        ->where('school_id', Auth::user()->school_id)
-        ->get();
+        return SmHomework::with('classes', 'sections', 'subjects')->where('class_id', $this->class_id)->where('section_id', $this->section_id)
+            ->whereNull('course_id')
+            ->where('sm_homeworks.academic_id', getAcademicId())->where('school_id', Auth::user()->school_id)->get();
     }
 
     public function getUploadContent($type, $is_university = null)
@@ -404,7 +403,7 @@ class StudentRecord extends Model
     public function getStudentCoursesAttribute()
     {
         return Course::where(function ($q) {
-            return $q->where('class_id', $this->class_id)->orWhere('class_id', 0);
+            return $q->where('class_id', $this->class_id)->orWhere('class_id', null);
         })->where(function ($q) {
             return $q->where('section_id', $this->section_id)->orWhere('section_id', null);
         })->withCount('chapters', 'lessons')->where('active_status', 1)->where('publish', 1)->get();

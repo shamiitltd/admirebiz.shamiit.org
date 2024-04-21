@@ -19,7 +19,7 @@ class SmClassFactory extends Factory
      *
      * @return array
      */
-    public $class = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
+    public $class = ['Class 1', 'Class 2', 'Class 3', 'Class 4', 'Class 5', 'Class 6', 'Class 7', 'Class 8', 'Class 9', 'Class 10'];
     public $i = 0;
     public function definition(): array
     {

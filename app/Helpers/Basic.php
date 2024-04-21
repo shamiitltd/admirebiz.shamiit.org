@@ -1,5 +1,6 @@
 <?php
 
+use App\GlobalVariable;
 use App\SmClass;
 use App\SmSection;
 use App\SmStudent;
@@ -301,18 +302,17 @@ if (!function_exists('sidebar_menus')) {
                 ->whereNull('parent')
                 ->whereHas('permissionInfo', function ($q) use ($user) {
                     $q->where('menu_status', 1)
-                        ->when($user->role_id == 2, function ($q) {
+                        ->when($user->role_id == 2 || $user->role_id == GlobalVariable::isAlumni(), function ($q) {
                             $q->where('is_student', 1);
                         })->when($user->role_id == 3, function ($q) {
                             $q->where('is_parent', 1);
-                        })->when(!in_array($user->role_id, [2, 3]), function ($q) {
+                        })->when(!in_array($user->role_id, [2, 3, GlobalVariable::isAlumni()]), function ($q) {
                             $q->where('is_admin', 1);
                         });
                 })
                 ->where('user_id', $user->id)->where('role_id', $user->role_id)->where('active_status', 1)
                 ->orderBy('position', 'ASC')->get();
         });
-
     }
 }
 
@@ -425,6 +425,13 @@ if (!function_exists('sidebarPermission')) {
         if ($permission->alternate_module == 'OnlineExam') {
             if (moduleStatusCheck('OnlineExam')) {
                 if ($permission->route != 'online_exam' && $permission->alternate_module == 'OnlineExam') {
+                    $access = false;
+                }
+            }
+        }
+        if ($permission->alternate_module == 'University') {
+            if (moduleStatusCheck('University')) {
+                if ($permission->alternate_module == 'University') {
                     $access = false;
                 }
             }

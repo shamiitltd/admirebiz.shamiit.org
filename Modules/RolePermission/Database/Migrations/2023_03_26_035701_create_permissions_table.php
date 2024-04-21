@@ -69,10 +69,7 @@ class CreatePermissionsTable extends Migration
          foreach($permissionSections as $item){           
             storePermissionData($item , 1);
          }
-        //disable default theme routes
-        $default_routes = ['admin-home-page','conpactPage','about-page','news-heading-update','course-heading-update','custom-links','social-media','course-details-heading','class-exam-routine-page','exam-result-page'];
-        Permission::where('school_id', 1)
-        ->whereIn('route',$default_routes)->update(['status'=>0,'menu_status'=>0]);
+   
     }
 
     /**

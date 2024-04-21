@@ -1,4 +1,4 @@
-<section class="section_padding">
+<section class="section_padding events">
     <div class="container">
         <div class="row">
             <x-event-gallery 

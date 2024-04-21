@@ -113,7 +113,7 @@
             @endif
         </style>
     @endpush
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('reports.merit_list_report') </h1>
@@ -149,7 +149,8 @@
                                         ['USN', 'UD', 'UA', 'US', 'USL'],'hide'=> ['USUB']
                                     ])
 
-                                    <div class="col-lg-3 mt-30" id="select_exam_typ_subject_div">
+                                    <div class="col-lg-3 mt-15" id="select_exam_typ_subject_div">
+                                        <label for=""> @lang('exam.select_exam') *</label>
                                         {{ Form::select('exam_type',[""=>__('exam.select_exam').'*'], null , ['class' => 'primary_select  form-control'. ($errors->has('exam_type') ? ' is-invalid' : ''), 'id'=>'select_exam_typ_subject']) }}
                                         
                                         <div class="pull-right loader loader_style" id="select_exam_type_loader">
@@ -158,19 +159,6 @@
                                         @if ($errors->has('exam_type'))
                                             <span class="text-danger custom-error-message" role="alert">
                                                 {{ @$errors->first('exam_type') }}
-                                            </span>
-                                        @endif
-                                    </div>
-
-                                    <div class="col-lg-3 mt-30" id="select_un_student_div">
-                                        {{ Form::select('student_id',[""=>__('common.select_student').'*'], null , ['class' => 'primary_select  form-control'. ($errors->has('student_id') ? ' is-invalid' : ''), 'id'=>'select_un_student']) }}
-                                        
-                                        <div class="pull-right loader loader_style" id="select_un_student_loader">
-                                            <img class="loader_img_style" src="{{asset('public/backEnd/img/demo_wait.gif')}}" alt="loader">
-                                        </div>
-                                        @if ($errors->has('student_id'))
-                                            <span class="text-danger custom-error-message" role="alert">
-                                                {{ @$errors->first('student_id') }}
                                             </span>
                                         @endif
                                     </div>
@@ -251,13 +239,13 @@
                                         <div class="single-report-admit">
                                             <div class="card">
                                                 <div class="card-header">
-                                                    <div class="d-flex">
-                                                        <div class="col-lg-2">
+                                                    <div class="row">
+                                                        <div class="col-xl-2 text-center mb-3 mb-xl-0 text-xl-left">
                                                             <img class="logo-img" src="{{ generalSetting()->logo }}" alt="{{generalSetting()->school_name}}">
                                                         </div>
-                                                        <div class="col-lg-8 text-center">
-                                                            <h3 class="text-white" style="font-size: 30px;margin-bottom: 0px;"> {{isset(generalSetting()->school_name)?generalSetting()->school_name:'Infix School Management ERP'}} </h3>
-                                                            <p class="text-white mb-0" style="font-size: 16px;"> {{isset(generalSetting()->address)?generalSetting()->address:'Infix School Address'}} </p>
+                                                        <div class="col-xl-8 text-center">
+                                                            <h3 class="text-white" style="font-size: 30px;margin-bottom: 0px;"> {{isset(generalSetting()->school_name)?generalSetting()->school_name:'SHAMIIT School Management ERP'}} </h3>
+                                                            <p class="text-white mb-0" style="font-size: 16px;"> {{isset(generalSetting()->address)?generalSetting()->address:'SHAMIIT School Address'}} </p>
                                                             <p class="text-white mb-0" style="font-size: 16px;">@lang('common.email'):  {{isset(generalSetting()->email)? generalSetting()->email:'admin@demo.com'}} ,   @lang('common.phone'):  {{isset(generalSetting()->phone)?generalSetting()->phone:'admin@demo.com'}} </p>
                                                         </div>
 
@@ -288,7 +276,7 @@
                                                                         <ul class="subjectList">
                                                                             @foreach($assign_subjects as $subject)
                                                                                 <li>
-                                                                                    <p class="mb-0">
+                                                                                    <p class="mb-0" >
                                                                                         <span class="primary-color fw-500">{{$subject->subject->subject_name}}</span>
                                                                                     </p>
                                                                                 </li>

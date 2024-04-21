@@ -29,7 +29,7 @@
 </style>
 @endpush
 @section('mainContent')
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('system_settings.language')</h1>
@@ -50,15 +50,6 @@
                 <div class="col-lg-3">
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="main-title">
-                                <h3 class="mb-30">@if(isset($editData))
-                                        @lang('system_settings.edit_language')
-                                    @else
-                                        @lang('system_settings.add_language')
-                                    @endif
-                                    
-                                </h3>
-                            </div>
                             @if(isset($editData))
                                 {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'language_update', 'method' => 'POST', 'enctype' => 'multipart/form-data']) }}
                                 <input type="hidden" name="id" value="{{isset($editData)? @$editData->id: ''}}">
@@ -68,6 +59,15 @@
                                 @endif
                             @endif
                             <div class="white-box">
+                                <div class="main-title">
+                                    <h3 class="mb-15">@if(isset($editData))
+                                            @lang('system_settings.edit_language')
+                                        @else
+                                            @lang('system_settings.add_language')
+                                        @endif
+                                        
+                                    </h3>
+                                </div>
                                 <div class="add-visitor">
                                     <div class="row"> 
                                         <div class="col-lg-12">
@@ -155,87 +155,89 @@
                 </div>
 
                 <div class="col-lg-9">
-                    <div class="row">
-                        <div class="col-lg-4 no-gutters">
-                            <div class="main-title">
-                                <h3 class="mb-30">@lang('system_settings.language_list')</h3>
+                    <div class="white-box">
+                        <div class="row">
+                            <div class="col-lg-4 no-gutters">
+                                <div class="main-title">
+                                    <h3 class="mb-15">@lang('system_settings.language_list')</h3>
+                                </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <x-table>
-                                <table id="table_id" class="table" cellspacing="0" width="100%">
-
-
-                                    <thead>
-                                    
-                                    <tr>
-                                        <th>@lang('common.sl')</th>
-                                        <th>@lang('common.name')</th>
-                                        <th>@lang('system_settings.code')</th>
-                                        <th>@lang('system_settings.native')</th> 
-                                        <th>@lang('system_settings.text_alignment')</th> 
-                                        <th>@lang('common.action')</th>
-                                    </tr>
-                                    </thead>
-
-                                    <tbody>
-                                    @php $i=1;  @endphp
-
-                                    @foreach($languages as $value)
+    
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <x-table>
+                                    <table id="table_id" class="table" cellspacing="0" width="100%">
+    
+    
+                                        <thead>
+                                        
                                         <tr>
-                                            <td>{{$i++}}
-                                            <td>{{@$value->name}}</td>
-                                            <td>{{@$value->code}}</td>
-                                            <td>{{@$value->native}}</td>
-                                            <td>
-                                                @if($value->rtl == 1) 
-                                                RTL
-                                                @else 
-                                                LTL  
-                                                @endif 
-                                            </td> 
-                                            <td>
-
-                                            <x-drop-down>
-                                                    @if(userPermission('language_edit'))
-                                                        <a class="dropdown-item" href="{{route('language_edit', [@$value->id])}}">@lang('common.edit')</a>
-                                                    @endif
-                                                    @if(userPermission('language_delete'))
-                                                        <a class="dropdown-item" data-toggle="modal" data-target="#deleteCurrency{{@$value->id}}"  href="{{route('currency_delete', [@$value->id])}}">@lang('common.delete')</a>
-                                                    @endif
-                                            </x-drop-down>
-                                            </td>
-
-                                                <div class="modal fade admin-query" id="deleteCurrency{{@$value->id}}" >
-                                                    <div class="modal-dialog modal-dialog-centered">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h4 class="modal-title">@lang('system_settings.delete_language')</h4>
-                                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <div class="text-center">
-                                                                    <h4>@lang('common.are_you_sure_to_delete')</h4>
-                                                                </div>
-                                                                <div class="mt-40 d-flex justify-content-between">
-                                                                    <button type="button" class="primary-btn tr-bg" data-dismiss="modal">@lang('common.cancel')</button>
-                                                                    <a href="{{route('language_delete', [@$value->id])}}" class="text-light">
-                                                                    <button class="primary-btn fix-gr-bg" type="submit">@lang('common.delete')</button>
-                                                                    </a>
-                                                                </div>
-                                                            </div>
-
-                                                        </div>
-                                                    </div>
-                                                </div> 
+                                            <th>@lang('common.sl')</th>
+                                            <th>@lang('common.name')</th>
+                                            <th>@lang('system_settings.code')</th>
+                                            <th>@lang('system_settings.native')</th> 
+                                            <th>@lang('system_settings.text_alignment')</th> 
+                                            <th>@lang('common.action')</th>
                                         </tr>
-                                    @endforeach
-                                    </tbody>
-                                </table>
-                            </x-table>
+                                        </thead>
+    
+                                        <tbody>
+                                        @php $i=1;  @endphp
+    
+                                        @foreach($languages as $value)
+                                            <tr>
+                                                <td>{{$i++}}
+                                                <td>{{@$value->name}}</td>
+                                                <td>{{@$value->code}}</td>
+                                                <td>{{@$value->native}}</td>
+                                                <td>
+                                                    @if($value->rtl == 1) 
+                                                    RTL
+                                                    @else 
+                                                    LTL  
+                                                    @endif 
+                                                </td> 
+                                                <td>
+    
+                                                <x-drop-down>
+                                                        @if(userPermission('language_edit'))
+                                                            <a class="dropdown-item" href="{{route('language_edit', [@$value->id])}}">@lang('common.edit')</a>
+                                                        @endif
+                                                        @if(userPermission('language_delete'))
+                                                            <a class="dropdown-item" data-toggle="modal" data-target="#deleteCurrency{{@$value->id}}"  href="{{route('currency_delete', [@$value->id])}}">@lang('common.delete')</a>
+                                                        @endif
+                                                </x-drop-down>
+                                                </td>
+    
+                                                    <div class="modal fade admin-query" id="deleteCurrency{{@$value->id}}" >
+                                                        <div class="modal-dialog modal-dialog-centered">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h4 class="modal-title">@lang('system_settings.delete_language')</h4>
+                                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <div class="text-center">
+                                                                        <h4>@lang('common.are_you_sure_to_delete')</h4>
+                                                                    </div>
+                                                                    <div class="mt-40 d-flex justify-content-between">
+                                                                        <button type="button" class="primary-btn tr-bg" data-dismiss="modal">@lang('common.cancel')</button>
+                                                                        <a href="{{route('language_delete', [@$value->id])}}" class="text-light">
+                                                                        <button class="primary-btn fix-gr-bg" type="submit">@lang('common.delete')</button>
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+    
+                                                            </div>
+                                                        </div>
+                                                    </div> 
+                                            </tr>
+                                        @endforeach
+                                        </tbody>
+                                    </table>
+                                </x-table>
+                            </div>
                         </div>
                     </div>
                 </div>

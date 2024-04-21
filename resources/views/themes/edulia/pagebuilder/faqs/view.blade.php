@@ -1,6 +1,8 @@
 <section class="section_padding faq_area">
-    {{-- <h2>{{ pagesetting('faqs_heading') }}</h2> --}}
-    <div class="container">
+  @if (pagesetting('faqs_heading'))
+    <h2>{{ pagesetting('faqs_heading') }}</h2>
+  @endif
+    <div class="container mt-20">
       <div class="row">
         @if (!empty(pagesetting('faq_datas')))
           <div class="faq_area_accordion" id="accordionExample">

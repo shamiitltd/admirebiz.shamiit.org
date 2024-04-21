@@ -1,5 +1,6 @@
 <?php
 
+use App\GlobalVariable;
 use Illuminate\Support\Facades\Schema;
 use Modules\MenuManage\Entities\Sidebar;
 use Illuminate\Database\Schema\Blueprint;
@@ -136,7 +137,13 @@ class CreateAssignPermissionsTable extends Migration
             $permission->save();
         }
 
-
+        // alumni
+        // for ($j = 1; $j <= 55; $j++) {
+        //     $permission = new AssignPermission();
+        //     $permission->permission_id = @Permission::where('old_id', $j)->where('is_alumni', 1)->value('id');
+        //     $permission->role_id = GlobalVariable::isAlumni();
+        //     $permission->save();
+        // }    
         //  for sidebar
 
         // drop migration file and column old_id

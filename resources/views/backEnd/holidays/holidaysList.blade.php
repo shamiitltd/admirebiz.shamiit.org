@@ -10,7 +10,7 @@
     }
 
 </style>
-<section class="sms-breadcrumb mb-40 white-box">
+<section class="sms-breadcrumb mb-20">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('system_settings.holiday_list')</h1>
@@ -40,15 +40,6 @@
             <div class="col-lg-3">
                 <div class="row">
                     <div class="col-lg-12">
-                        <div class="main-title">
-                            <h3 class="mb-30">
-                                @if (isset($editData))
-                                @lang('system_settings.edit_holiday')
-                                @else
-                                @lang('system_settings.add_holiday')
-                                @endif
-                            </h3>
-                        </div>
                         @if (isset($editData))
                         {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'url' => 'holiday/' . $editData->id, 'method' => 'PUT', 'enctype' => 'multipart/form-data']) }}
                         @else
@@ -63,6 +54,15 @@
                         @endif
                         @endif
                         <div class="white-box">
+                            <div class="main-title">
+                                <h3 class="mb-15">
+                                    @if (isset($editData))
+                                    @lang('system_settings.edit_holiday')
+                                    @else
+                                    @lang('system_settings.add_holiday')
+                                    @endif
+                                </h3>
+                            </div>
                             <div class="add-visitor">
                                 <div class="row">
 
@@ -219,86 +219,88 @@
             </div>
 
             <div class="col-lg-9">
-                <div class="row">
-                    <div class="col-lg-4 no-gutters">
-                        <div class="main-title">
-                            <h3 class="mb-0">@lang('system_settings.holiday_list')</h3>
+                <div class="white-box">
+                    <div class="row">
+                        <div class="col-lg-4 no-gutters">
+                            <div class="main-title">
+                                <h3 class="mb-15">@lang('system_settings.holiday_list')</h3>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="row">
-
-                    <div class="col-lg-12">
-                        <x-table>
-                            <table id="table_id" class="table" cellspacing="0" width="100%">
-
-                                <thead>
-
-                                    <tr>
-                                        <th>@lang('common.sl')</th>
-                                        <th>@lang('system_settings.holiday_title')</th>
-                                        <th>@lang('system_settings.from_date')</th>
-                                        <th>@lang('system_settings.to_date')</th>
-                                        <th>@lang('common.days')</th>
-                                        <th>@lang('system_settings.details')</th>
-                                        <th>@lang('common.action')</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-                                    @if (isset($holidays))
-                                    @foreach ($holidays as $key => $value)
-                                    @php
-
-                                    $start = strtotime($value->from_date);
-                                    $end = strtotime($value->to_date);
-
-                                    $days_between = ceil(abs($end - $start) / 86400);
-                                    $days = $days_between + 1;
-
-                                    @endphp
-                                    <tr>
-                                        <td>{{ $key + 1 }}</td>
-                                        <td>{{ $value->holiday_title }}</td>
-                                        <td data-sort="{{ strtotime($value->from_date) }}">
-                                            {{ $value->from_date != '' ? dateConvert($value->from_date) : '' }}
-
-                                        </td>
-                                        <td data-sort="{{ strtotime($value->to_date) }}">
-                                            {{ $value->to_date != '' ? dateConvert($value->to_date) : '' }}
-
-                                        </td>
-                                        <td>{{ $days == 1 ? $days . ' day' : $days . ' days' }}</td>
-                                        <td>{{ Illuminate\Support\Str::limit(@$value->details, 50) }}</td>
-
-
-                                        <td>
-                                            <x-drop-down>
-                                                @if (userPermission("holiday-edit"))
-                                                <a class="dropdown-item"
-                                                    href="{{ url('holiday/' . $value->id . '/edit') }}">@lang('common.edit')</a>
-                                                @endif
-                                                @if (userPermission("delete-holiday-data-view"))
-                                                <a class="deleteUrl dropdown-item" data-modal-size="modal-md"
-                                                    title="@lang('system_settings.delete_holiday')"
-                                                    href="{{ url('delete-holiday-data-view/' . $value->id) }}">@lang('common.delete')</a>
-                                                @endif
-                                                @if ($value->upload_image_file != '')
-                                                <a class="dropdown-item" href="{{ url($value->upload_image_file) }}"
-                                                    download>
-                                                    @lang('common.download') <span
-                                                        class="pl ti-download"></span>
+    
+                    <div class="row">
+    
+                        <div class="col-lg-12">
+                            <x-table>
+                                <table id="table_id" class="table" cellspacing="0" width="100%">
+    
+                                    <thead>
+    
+                                        <tr>
+                                            <th>@lang('common.sl')</th>
+                                            <th>@lang('system_settings.holiday_title')</th>
+                                            <th>@lang('system_settings.from_date')</th>
+                                            <th>@lang('system_settings.to_date')</th>
+                                            <th>@lang('common.days')</th>
+                                            <th>@lang('system_settings.details')</th>
+                                            <th>@lang('common.action')</th>
+                                        </tr>
+                                    </thead>
+    
+                                    <tbody>
+                                        @if (isset($holidays))
+                                        @foreach ($holidays as $key => $value)
+                                        @php
+    
+                                        $start = strtotime($value->from_date);
+                                        $end = strtotime($value->to_date);
+    
+                                        $days_between = ceil(abs($end - $start) / 86400);
+                                        $days = $days_between + 1;
+    
+                                        @endphp
+                                        <tr>
+                                            <td>{{ $key + 1 }}</td>
+                                            <td>{{ $value->holiday_title }}</td>
+                                            <td data-sort="{{ strtotime($value->from_date) }}">
+                                                {{ $value->from_date != '' ? dateConvert($value->from_date) : '' }}
+    
+                                            </td>
+                                            <td data-sort="{{ strtotime($value->to_date) }}">
+                                                {{ $value->to_date != '' ? dateConvert($value->to_date) : '' }}
+    
+                                            </td>
+                                            <td>{{ $days == 1 ? $days . ' day' : $days . ' days' }}</td>
+                                            <td>{{ Illuminate\Support\Str::limit(@$value->details, 50) }}</td>
+    
+    
+                                            <td>
+                                                <x-drop-down>
+                                                    @if (userPermission("holiday-edit"))
+                                                    <a class="dropdown-item"
+                                                        href="{{ url('holiday/' . $value->id . '/edit') }}">@lang('common.edit')</a>
                                                     @endif
-
-                                            </x-drop-down>
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                    @endif
-                                </tbody>
-                            </table>
-                        </x-table>
+                                                    @if (userPermission("delete-holiday-data-view"))
+                                                    <a class="deleteUrl dropdown-item" data-modal-size="modal-md"
+                                                        title="@lang('system_settings.delete_holiday')"
+                                                        href="{{ url('delete-holiday-data-view/' . $value->id) }}">@lang('common.delete')</a>
+                                                    @endif
+                                                    @if ($value->upload_image_file != '')
+                                                    <a class="dropdown-item" href="{{ url($value->upload_image_file) }}"
+                                                        download>
+                                                        @lang('common.download') <span
+                                                            class="pl ti-download"></span>
+                                                        @endif
+    
+                                                </x-drop-down>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                        @endif
+                                    </tbody>
+                                </table>
+                            </x-table>
+                        </div>
                     </div>
                 </div>
             </div>

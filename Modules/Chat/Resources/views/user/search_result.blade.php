@@ -8,6 +8,7 @@
             <div class="row justify-content-center">
                 <div class="col-12">
                     <div class="chat_main_wrapper">
+                        <div class="white-box">
                         <side-panel-component
                                 :settings="{{ json_encode(generalSetting()->only(['teacher_phone_view', 'teacher_email_view'])) }}"
                             :search_url="{{ json_encode(route('chat.user.search')) }}"
@@ -21,7 +22,8 @@
                             :can_create_group="{{ json_encode(createGroupPermission())}}"
                             :asset_type="{{ json_encode('/public') }}"
                         ></side-panel-component>
-                        <div class="chat_flow_list_wrapper ">
+                        </div>
+                        <div class="chat_flow_list_wrapper white-box">
                             <div class="box_header">
                                 <div class="main-title">
                                     <h3 class="m-0">{{ __('common.search_result_of') }} '{{ $keywords }}'</h3>

@@ -2,10 +2,12 @@
 
 namespace App\Http\Middleware;
 
+use App\GlobalVariable;
 use Auth;
 use Closure;
-use Session;
 use App\User;
+use Illuminate\Support\Facades\Session;
+
 
 class StudentMiddleware
 {
@@ -24,11 +26,13 @@ class StudentMiddleware
 
         session_start();
         $role_id = Session::get('role_id');
-
         if ($role_id == 2) {
             return $next($request);
-        } elseif ($role_id != "") {
-            return redirect('admin-dashboard');
+        } else if($role_id == GlobalVariable::isAlumni()) {
+            return redirect('alumni-dashboard');
+        }
+         elseif ($role_id != "") {
+            return redirect('student-dashboard');
         } else {
             return redirect('login');
         }

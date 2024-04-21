@@ -16,7 +16,7 @@ class HeaderContentMobileMenu extends Component
 
     public function render(): View|Closure|string
     {
-        $menus = SmHeaderMenuManager::where('theme', activeTheme())->where('school_id', app('school')->id)->where('parent_id', null)->orderBy('position')->get();
+        $menus = SmHeaderMenuManager::where('school_id', app('school')->id)->where('theme', 'edulia')->whereNull('parent_id')->orderBy('position')->get();
         return view('components.'.activeTheme().'.header-content-mobile-menu',compact('menus'));
     }
 }

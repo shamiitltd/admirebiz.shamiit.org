@@ -18,7 +18,7 @@ class ApiStudentRecordController extends Controller
         $records = StudentRecord::where('student_id',$student_id)->where('academic_id', SmAcademicYear::SINGLE_SCHOOL_API_ACADEMIC_YEAR())->get()->map(function ($record) {
             return[
                 'id'=>$record->id,
-                'student_id'=> $record->student_id,
+                'student_id'=>$record->student_id,
                 'full_name'=>$record->student->full_name,
                 'class'=>$record->class->class_name,
                 'section'=>$record->section->section_name,

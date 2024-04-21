@@ -30,12 +30,15 @@ class SmHomeworkRequest extends FormRequest
                 'un_semester_label_id' => ['required'],
                 'un_subject_id' => ['required']
             ];
-        } if(!moduleStatusCheck('Lms')) {
-            $rules += [
-                'class_id' => ['required'],
-                'section_id' => ['required'],
-                'subject_id' => ['required']
-            ];
+        }else{
+            if(!moduleStatusCheck('Lms')) {
+                $rules += [
+                    'class_id' => ['required'],
+                    'section_id' => ['required'],
+                    'subject_id' => ['required']
+                ];
+            }
+        
         }
 
         return $rules;
@@ -47,6 +50,23 @@ class SmHomeworkRequest extends FormRequest
             'class_id.required' => 'Class field is required.',
             'section_id.required' => 'Section field is required.',
             'subject_id.required' => 'Subject field is required.',
+            'un_session_id.required' => 'Session field is required.',
+            'un_department_id.required' => 'Department field is required.',
+            'un_academic_id.required' => 'Academic field is required.',
+            'un_semester_id.required' => 'Semester field is required.',
+            'un_semester_label_id.required' => 'Semester Label field is required.',
+            'un_subject_id.required' => 'Subject field is required.',
+            'marks.required' => 'Marks field is required.',
+            'marks.numeric' => 'Marks must be a number.',
+            'marks.min' => 'Marks must be greater than 0.',
+            'description.required' => 'Description field is required.',
+            'homework_date.required' => 'Homework Date field is required.',
+            'homework_date.date' => 'Homework Date must be a date.',
+            'submission_date.required' => 'Submission Date field is required.',
+            'submission_date.after_or_equal' => 'Submission Date must be a date after or equal to Homework Date.',
+            'homework_file.mimes' => 'File type must be pdf,doc,docx,txt,jpg,jpeg,png,mp4,ogx,oga,ogv,ogg,webm,mp3.',
+            'homework_file.max' => 'File size must be less than '.generalSetting()->file_size.' MB.'
+
         ];
     }
 }

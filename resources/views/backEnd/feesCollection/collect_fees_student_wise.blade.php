@@ -12,7 +12,7 @@ $total_disc = 0;
 $total_balance = 0;
 $record = $student;
 @endphp
-<section class="sms-breadcrumb mb-40 white-box">
+<section class="sms-breadcrumb mb-20">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('fees.fees_collection')</h1>
@@ -594,7 +594,7 @@ $record = $student;
                                           <div class="dropdown-menu dropdown-menu-right">
     
                                               <a class="dropdown-item modalLink" data-modal-size="modal-md" 
-                                              title="{{@$feesInstallment->installment->title}} / {{@$payment->fees_type_id.'/'.@$payment->id}}"  
+                                              title="@lang('fees.installment'): {{@$feesInstallment->installment->title}}, @lang('fees.payment_ID'): {{@$payment->fees_type_id.'/'.@$payment->id}}"
                                               href="{{route('directFees.editSubPaymentModal',[$payment->id,$payment->paid_amount])}}" >@lang('common.edit') </a>
     
                                               <a onclick="deletePayment({{$payment->id}});"  class="dropdown-item" href="#" data-toggle="modal">@lang('common.delete')</a>
@@ -644,7 +644,7 @@ $record = $student;
                                                               <div class="primary_input ">
                                                                 <label class="primary_input_label" for="">@lang('fees.due_date') <span class="text-danger"> *</span></label>
                                                                   <input class="primary_input_field  primary_input_field date form-control form-control{{ $errors->has('due_date') ? ' is-invalid' : '' }}" id="startDate" type="text"
-                                                                       name="due_date" value="{{date('m/d/Y', strtotime(@$feesInstallment->installment->due_date))}}" autocomplete="off">
+                                                                       name="due_date" value="{{date('m/d/Y', strtotime(@$feesInstallment->due_date))}}" autocomplete="off">
                                                                        <button class="btn-date" style="top: 70% !important;" data-id="#date_of_birth" type="button">
                                                                         <label class="m-0 p-0" for="date_of_birth">
                                                                             <i class="ti-calendar" id="start-date-icon"></i>
@@ -763,7 +763,7 @@ $record = $student;
                                     </div>
                                                    
                                 <div class="mt-40 d-flex justify-content-between">
-                                    <button type="button" class="primary-btn fix-gr-bg" data-dismiss="modal">{{ __('common.cancel') }}</button>
+                                    <button type="button" class="primary-btn tr-bg" data-dismiss="modal">{{ __('common.cancel') }}</button>
                                     <button class="primary-btn fix-gr-bg" type="submit">@lang('common.delete') </button>
                                     
                                 </div>
@@ -994,7 +994,7 @@ $record = $student;
                     </div>
                                    
                 <div class="mt-40 d-flex justify-content-between">
-                    <button type="button" class="primary-btn fix-gr-bg" data-dismiss="modal">{{ __('common.cancel') }}</button>
+                    <button type="button" class="primary-btn tr-bg" data-dismiss="modal">{{ __('common.cancel') }}</button>
                     <button class="primary-btn fix-gr-bg" type="submit">@lang('common.delete') </button>
                     
                 </div>
@@ -1025,7 +1025,7 @@ $record = $student;
                     </div>
                                    
                 <div class="mt-40 d-flex justify-content-between">
-                    <button type="button" class="primary-btn fix-gr-bg" data-dismiss="modal">{{ __('common.cancel') }}</button>
+                    <button type="button" class="primary-btn tr-bg" data-dismiss="modal">{{ __('common.cancel') }}</button>
                     <button class="primary-btn fix-gr-bg" type="submit">@lang('common.delete') </button>
                     
                 </div>

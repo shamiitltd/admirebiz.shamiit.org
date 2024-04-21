@@ -3,7 +3,7 @@
     @lang('behaviourRecords.class_section_wise_rank_report')
 @endsection
 @section('mainContent')
-    <section class="sms-breadcrumb mb-0 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('behaviourRecords.class_section_wise_rank_report')</h1>
@@ -19,18 +19,20 @@
         <div class="container-fluid p-0">
             <div class="row mt-20">
                 <div class="col-lg-12 student-details up_admin_visitor">
+                    <div class="white-box">
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="row">
                                 <div class="col-lg-4 no-gutters">
                                     <div class="main-title">
-                                        <h3 class="mb-0">@lang('behaviourRecords.class_section_wise_rank_report') </h3>
+                                        <h3 class="mb-15">@lang('behaviourRecords.class_section_wise_rank_report') </h3>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-lg-12 mb-20">
                                     <x-table>
+                                        <div class="table-responsive">
                                         <table class="table table-alignment rank-report-alignment" cellspacing="0"
                                             width="100%">
                                             <thead>
@@ -95,10 +97,12 @@
                                                 @endforeach
                                             </tbody>
                                         </table>
+                                        </div>
                                     </x-table>
                                 </div>
                             </div>
                         </div>
+                    </div>
                     </div>
                 </div>
             </div>

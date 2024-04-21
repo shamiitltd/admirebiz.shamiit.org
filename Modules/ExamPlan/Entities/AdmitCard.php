@@ -13,10 +13,6 @@ class AdmitCard extends Model
 
     protected $fillable = [];
     
-    protected static function newFactory()
-    {
-        return \Modules\ExamPlan\Database\factories\AdmitCardFactory::new();
-    }
 
     public function studentRecord(){
         return $this->belongsTo(StudentRecord::class,'student_record_id','id');

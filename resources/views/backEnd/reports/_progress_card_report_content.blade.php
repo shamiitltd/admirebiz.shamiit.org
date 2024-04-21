@@ -42,6 +42,14 @@
     .center-table tr:first-child th:first-child{
         text-align: left !important;
     }
+    @media (max-width: 576px){
+            .single-report-admit .report-admit-img{
+                position: initial;
+                margin: auto;
+                margin-top: 20px;
+            }
+        }
+
 </style>
 @endif
 <style>
@@ -59,41 +67,43 @@
 <section class="student-details">
     <div class="container-fluid p-0">
         <div class="row">
-            <div class="col-lg-12 no-gutters">
-                <div class="main-title d-flex ">
-                    <h3 class="mb-30 flex-fill">@lang('reports.progress_card_report')</h3>
-                    <div class="print_button pull-right">
-                        {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'progress-card/print', 'method' => 'POST', 'enctype' => 'multipart/form-data', 'id' => 'search_student', 'target' => '_blank']) }}
-
-                        <input type="hidden" name="class_id" value="{{$class_id}}">
-                        <input type="hidden" name="section_id" value="{{$section_id}}">
-                        <input type="hidden" name="student_id" value="{{$studentDetails->id}}">
-                        <input type="hidden" name="academic_id" value="{{$academic_id}}">
-                        <input type="hidden" name="custom_mark_report" value="{{@$custom_mark_report}}">
-
-                        <button type="submit" class="primary-btn small fix-gr-bg"><i class="ti-printer"> </i> @lang('common.print')
-                        </button>
-                        {{ Form::close() }}
-                    </div>
-                </div>
-            </div>
             <div class="col-lg-12">
                 <div class="white-box">
+                    <div class="row">
+                        <div class="col-lg-12 no-gutters">
+                            <div class="main-title d-flex ">
+                                <h3 class="mb-15 flex-fill">@lang('reports.progress_card_report')</h3>
+                                <div class="print_button pull-right">
+                                    {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'progress-card/print', 'method' => 'POST', 'enctype' => 'multipart/form-data', 'id' => 'search_student', 'target' => '_blank']) }}
+            
+                                    <input type="hidden" name="class_id" value="{{$class_id}}">
+                                    <input type="hidden" name="section_id" value="{{$section_id}}">
+                                    <input type="hidden" name="student_id" value="{{$studentDetails->id}}">
+                                    <input type="hidden" name="academic_id" value="{{$academic_id}}">
+                                    <input type="hidden" name="custom_mark_report" value="{{@$custom_mark_report}}">
+            
+                                    <button type="submit" class="primary-btn small fix-gr-bg"><i class="ti-printer"> </i> @lang('common.print')
+                                    </button>
+                                    {{ Form::close() }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="row justify-content-center">
                         <div class="col-lg-12">
                             <div class="single-report-admit">
                                 <div class="card">
                                     <div class="card-header">
-                                        <div class="d-flex">
-                                            <div class="col-lg-2">
+                                        <div class="row">
+                                            <div class="col-xl-2 col-sm-8 text-center text-xl-left mb-3 mb-xl-0">
                                                 <img class="logo-img" src="{{ generalSetting()->logo }}" alt="{{generalSetting()->school_name}}">
                                             </div>
-                                            <div class="col-lg-8 text-center">
+                                            <div class="col-xl-8 col-sm-8  text-center">
                                                 <h3 class="text-white" style="font-size: 30px; margin-bottom: 0px;">
-                                                    {{isset(generalSetting()->school_name)?generalSetting()->school_name:'Infix School Management ERP'}}
+                                                    {{isset(generalSetting()->school_name)?generalSetting()->school_name:'SHAMIIT School Management ERP'}}
                                                 </h3>
                                                 <p class="text-white mb-0" style="font-size: 16px;">
-                                                    {{isset(generalSetting()->address)?generalSetting()->address:'Infix School Address'}}
+                                                    {{isset(generalSetting()->address)?generalSetting()->address:'SHAMIIT School Address'}}
                                                 </p>
                                                 <p class="text-white mb-0" style="font-size: 16px;">
                                                     @lang('common.email'):  {{isset(generalSetting()->email)?generalSetting()->email:'admin@demo.com'}},   @lang('common.phone'):  {{isset(generalSetting()->phone)?generalSetting()->phone:'+8801841412141'}}
@@ -169,6 +179,7 @@
                                                 <div class="col-12 text-center mb-3">
                                                     <h3> <span style="border-bottom: 3px double;">@lang('reports.progress_report')</span></h3>
                                                 </div>
+                                                <div class="table-responsive">
                                                 <table class="table mb-0 center-table">
                                                     <thead>
                                                     <tr class="text-center">
@@ -393,6 +404,7 @@
 
                                                     </tbody>
                                                 </table>
+                                                </div>
                                                 <table style="max-width: 400px; margin-bottom: 20px;" class="table border_table gray_header_table mb_30 max-width-400 ml-auto mr-auto report_table  @if(resultPrintStatus('vertical_boarder')) mt-5 @endif">
                                                     <tbody>
                                                     {{-- Total Marks Start --}}

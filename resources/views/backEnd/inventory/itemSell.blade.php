@@ -13,7 +13,7 @@
     }
 </style>
 @endpush
-<section class="sms-breadcrumb mb-40 white-box">
+<section class="sms-breadcrumb mb-20">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('inventory.item_sell')</h1>
@@ -344,8 +344,13 @@
                                  <input type="hidden" class="form-control" id="subTotalQuantityValue" name="subTotalQuantityValue" />
                              </th>
                              <th class="border-top-0">
-                                 <input type="text" class="primary_input_field form-control" id="subTotal" name="subTotal" placeholder="0.00" readonly="" />
+                                 <input type="number" class="primary_input_field form-control{{ $errors->has('subTotal') ? ' is-invalid' : '' }}" id="subTotal" name="subTotal" placeholder="0.00" readonly="" />
                                  <input type="hidden" class="form-control" id="subTotalValue" name="subTotalValue" />
+                                 @if ($errors->has('subTotal'))
+                                    <span class="text-danger">
+                                        {{ $errors->first('subTotal') }}
+                                    </span>
+                                 @endif
                              </th>
                              <th class="border-top-0"></th>
                          </tr>

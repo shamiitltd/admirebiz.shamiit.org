@@ -307,7 +307,7 @@ return [
     'pading_left'=>'Padding left',
     'use'=>'Use',
     'variable_for_showing_static_profile_image'=>'Variable For Showing Static Profile Image',
-    'no_of_person'=>'No Of Person',
+    'no_of_person'=>'No of Person',
     'certificate_no' => 'Certificate No',
     'body_two_max_character_lenght_500' => 'Body two (Max character lenght 500)',
     'actions'=>'Actions',

@@ -13,7 +13,7 @@
         z-index: inherit !important;
     }
 </style>
-<section class="sms-breadcrumb mb-40 white-box">
+<section class="sms-breadcrumb mb-20">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('exam.exam_setup')</h1>
@@ -32,7 +32,7 @@
         <div class="row">
             <div class="offset-lg-10 col-lg-2 text-right col-md-12 mb-20">
                 <a href="{{ route('exam') }}" class="primary-btn small fix-gr-bg">
-                    <span class="ti-plus pr-2"></span>
+                    <span class="ti-plus"></span>
                     @lang('common.add')
                 </a>
             </div>
@@ -42,7 +42,7 @@
 
         <div class="row">
 
-            <div class="col-lg-4">
+            <div class="col-lg-5 col-xl-4">
                 @if (isset($exam))
                 {{ Form::open(['class' => 'form-horizontal', 'route' => ['exam-update', $exam->id], 'method' => 'PUT']) }}
                 @else
@@ -52,16 +52,16 @@
                 @endif
                 <div class="row">
                     <div class="col-lg-12">
-                        <div class="main-title mt-0">
-                            <h3 class="mb-30">
-                                @if (isset($exam))
-                                @lang('exam.edit_exam')
-                                @else
-                                @lang('exam.add_exam')
-                                @endif
-                            </h3>
-                        </div>
                         <div class="white-box">
+                            <div class="main-title mt-0">
+                                <h3 class="mb-15">
+                                    @if (isset($exam))
+                                    @lang('exam.edit_exam')
+                                    @else
+                                    @lang('exam.add_exam')
+                                    @endif
+                                </h3>
+                            </div>
                             <div class="add-visitor">
                                 <div class="row">
                                     <div class="col-lg-12" id="error-message">
@@ -113,7 +113,7 @@
                                                 onkeypress="return isNumberKey(event)"
                                                 value="{{ isset($exam) ? $exam->exam_mark : 0 }}" required="">
 
-
+                                                <div class="text-danger" id="messageAlert"></div>
                                             @if ($errors->has('exam_marks'))
                                             <span class="text-danger">
                                                 {{ $errors->first('exam_marks') }}</span>
@@ -133,7 +133,6 @@
                                                 onkeypress="return isNumberKey(event)"
                                                 value="{{ isset($exam) ? $exam->pass_mark : 0 }}" required="">
 
-
                                             @if ($errors->has('pass_mark'))
                                             <span class="text-danger">
                                                 {{ $errors->first('pass_mark') }}
@@ -152,20 +151,21 @@
                     <div class="col-lg-12">
                         <div class="white-box mt-10">
                             <div class="row">
-                                <div class="col-lg-10 col-9">
+                                <div class="col-xl-10 col-9">
                                     <div class="main-title mt-0">
                                         <h5>@lang('exam.add_mark_distributions') </h5>
                                     </div>
                                 </div>
-                                <div class="col-lg-2 col-3 text-right">
+                                <div class="col-xl-2 col-3 text-right">
                                     <button style="position: relative; top: -5px;" type="button"
                                         class="primary-btn icon-only fix-gr-bg" onclick="addRowMark();" id="addRowBtn">
-                                        <span class="ti-plus pr-2"></span></button>
+                                        <span class="ti-plus"></span></button>
                                 </div>
                             </div>
-                            <div class="col-lg-12">
+                            <div class="col-lg-12 p-0">
+                                <div class="table-responsive">
                                 <table class="table" id="productTable">
-                                    <thead>
+                                    <thead class="text-nowrap">
                                         <tr>
                                             <th>@lang('exam.exam_title')</th>
                                             <th>@lang('exam.exam_mark')</th>
@@ -197,14 +197,11 @@
                                             </td>
                                             <td class="border-0">
                                                 <button style="position: relative; top: 6px;"
-                                                    class="primary-btn icon-only fix-gr-bg" type="button">
+                                                    class="primary-btn icon-only fix-gr-bg ml-2" type="button">
                                                     <span class="ti-trash"></span>
                                                 </button>
                                             </td>
                                         </tr>
-
-
-
                                     </tbody>
                                     <tfoot>
                                         <tr>
@@ -218,6 +215,7 @@
                                         </tr>
                                     </tfoot>
                                 </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -394,117 +392,119 @@
             </div>
 
 
-            <div class="col-lg-8">
-                <div class="row">
-                    <div class="col-lg-4 no-gutters">
-                        <div class="main-title mt-0">
-                            <h3 class="mb-0">@lang('exam.exam_list')</h3>
+            <div class="col-lg-7 col-xl-8">
+                <div class="white-box">
+                    <div class="row">
+                        <div class="col-lg-4 no-gutters">
+                            <div class="main-title mt-0">
+                                <h3 class="mb-15">@lang('exam.exam_list')</h3>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12">
-                        <x-table>
-                            <table id="table_id" class="table" cellspacing="0" width="100%">
-                                <thead>
-                                    <tr>
-                                        <th>@lang('common.sl')</th>
-                                        <th>@lang('exam.exam_title')</th>
-                                        @if (moduleStatusCheck('University'))
-                                        <th>@lang('common.session')</th>
-                                        <th>@lang('university::un.faculty_department')</th>
-                                        <th>@lang('common.academic_year')</th>
-                                        <th>@lang('university::un.semester')</th>
-                                        @else
-                                        <th>@lang('common.class')</th>
-                                        <th>@lang('common.section')</th>
-                                        @endif
-                                        <th>@lang('exam.subject')</th>
-                                        <th>@lang('exam.total_mark')</th>
-                                        @if (@generalSetting()->result_type == 'mark')
-                                        <th>@lang('exam.pass_mark')</th>
-                                        @endif
-                                        <th>@lang('exam.mark_distribution')</th>
-                                        <th>@lang('common.action')</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-                                    @php $count =1 ; @endphp
-                                    @foreach ($exams as $exam)
-                                    <tr>
-                                        <td>{{ $count++ }}</td>
-                                        <td>{{ $exam->GetExamTitle != '' ? $exam->GetExamTitle->title : '' }}</td>
-                                        @if (moduleStatusCheck('University'))
-                                        <td>{{ $exam->sessionDetails->name }}</td>
-                                        <td>{{ $exam->facultyDetails->name . '(' . $exam->departmentDetails->name . ')' }}
-                                        </td>
-                                        <td>{{ $exam->academicYearDetails->name }}</td>
-                                        <td>{{ $exam->semesterDetails->name }}</td>
-                                        @else
-                                        <td>{{ $exam->class != '' ? $exam->class->class_name : '' }}</td>
-                                        <td>{{ $exam->section != '' ? $exam->section->section_name : '' }}</td>
-                                        @endif
-                                        <td>{{ $exam->subject != '' ? $exam->subject->subject_name : '' }}</td>
-                                        <td>{{ $exam->exam_mark }}</td>
-                                        @if (@generalSetting()->result_type == 'mark')
-                                        <td>{{ $exam->pass_mark }}</td>
-                                        @endif
-                                        <td>
-                                            @foreach ($exam->markDistributions as $row)
-                                            <div class="row">
-                                                <div class="col-sm-6"> {{ $row->exam_title }} </div>
-                                                <div class="col-sm-4"><strong> {{ $row->exam_mark }} </strong>
-                                                </div>
-                                            </div>
-                                            @endforeach
-                                        </td>
-                                        <td>
-                                            <x-drop-down>
-
-                                                @if ($exam->markRegistered == '')
-                                                @if (userPermission('exam-edit'))
-                                                <a class="dropdown-item"
-                                                    href="{{ route('exam-edit', $exam->id) }}">@lang('common.edit')</a>
-                                                @endif
-
-                                                @if (userPermission('exam-delete'))
-                                                <a class="dropdown-item" data-toggle="modal"
-                                                    data-target="#deleteExamModal{{ $exam->id }}"
-                                                    href="#">@lang('common.delete')</a>
-                                                @endif
-                                                @endif
-                                            </x-drop-down>
-                                        </td>
-                                    </tr>
-                                    <div class="modal fade admin-query" id="deleteExamModal{{ $exam->id }}">
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h4 class="modal-title">@lang('exam.delete_exam')</h4>
-                                                    <button type="button" class="close"
-                                                        data-dismiss="modal">&times;</button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div class="text-center">
-                                                        <h4>@lang('common.are_you_sure_to_delete')</h4>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <x-table>
+                                <table id="table_id" class="table" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th>@lang('common.sl')</th>
+                                            <th>@lang('exam.exam_title')</th>
+                                            @if (moduleStatusCheck('University'))
+                                            <th>@lang('common.session')</th>
+                                            <th>@lang('university::un.faculty_department')</th>
+                                            <th>@lang('common.academic_year')</th>
+                                            <th>@lang('university::un.semester')</th>
+                                            @else
+                                            <th>@lang('common.class')</th>
+                                            <th>@lang('common.section')</th>
+                                            @endif
+                                            <th>@lang('exam.subject')</th>
+                                            <th>@lang('exam.total_mark')</th>
+                                            @if (@generalSetting()->result_type == 'mark')
+                                            <th>@lang('exam.pass_mark')</th>
+                                            @endif
+                                            <th>@lang('exam.mark_distribution')</th>
+                                            <th>@lang('common.action')</th>
+                                        </tr>
+                                    </thead>
+    
+                                    <tbody>
+                                        @php $count =1 ; @endphp
+                                        @foreach ($exams as $exam)
+                                        <tr>
+                                            <td>{{ $count++ }}</td>
+                                            <td>{{ $exam->GetExamTitle != '' ? $exam->GetExamTitle->title : '' }}</td>
+                                            @if (moduleStatusCheck('University'))
+                                            <td>{{ $exam->sessionDetails->name }}</td>
+                                            <td>{{ $exam->facultyDetails->name . '(' . $exam->departmentDetails->name . ')' }}
+                                            </td>
+                                            <td>{{ $exam->academicYearDetails->name }}</td>
+                                            <td>{{ $exam->semesterDetails->name }}</td>
+                                            @else
+                                            <td>{{ $exam->class != '' ? $exam->class->class_name : '' }}</td>
+                                            <td>{{ $exam->section != '' ? $exam->section->section_name : '' }}</td>
+                                            @endif
+                                            <td>{{ $exam->subject != '' ? $exam->subject->subject_name : '' }}</td>
+                                            <td>{{ $exam->exam_mark }}</td>
+                                            @if (@generalSetting()->result_type == 'mark')
+                                            <td>{{ $exam->pass_mark }}</td>
+                                            @endif
+                                            <td>
+                                                @foreach ($exam->markDistributions as $row)
+                                                <div class="row">
+                                                    <div class="col-sm-6"> {{ $row->exam_title }} </div>
+                                                    <div class="col-sm-4"><strong> {{ $row->exam_mark }} </strong>
                                                     </div>
-                                                    <div class="mt-40 d-flex justify-content-between">
-                                                        <button type="button" class="primary-btn tr-bg"
-                                                            data-dismiss="modal">@lang('common.cancel')</button>
-                                                        {{ Form::open(['route' => ['exam-delete', $exam->id], 'method' => 'DELETE', 'enctype' => 'multipart/form-data']) }}
-                                                        <button class="primary-btn fix-gr-bg"
-                                                            type="submit">@lang('common.delete')</button>
-                                                        {{ Form::close() }}
+                                                </div>
+                                                @endforeach
+                                            </td>
+                                            <td>
+                                                <x-drop-down>
+    
+                                                    @if ($exam->markRegistered == '')
+                                                    @if (userPermission('exam-edit'))
+                                                    <a class="dropdown-item"
+                                                        href="{{ route('exam-edit', $exam->id) }}">@lang('common.edit')</a>
+                                                    @endif
+    
+                                                    @if (userPermission('exam-delete'))
+                                                    <a class="dropdown-item" data-toggle="modal"
+                                                        data-target="#deleteExamModal{{ $exam->id }}"
+                                                        href="#">@lang('common.delete')</a>
+                                                    @endif
+                                                    @endif
+                                                </x-drop-down>
+                                            </td>
+                                        </tr>
+                                        <div class="modal fade admin-query" id="deleteExamModal{{ $exam->id }}">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">@lang('exam.delete_exam')</h4>
+                                                        <button type="button" class="close"
+                                                            data-dismiss="modal">&times;</button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="text-center">
+                                                            <h4>@lang('common.are_you_sure_to_delete')</h4>
+                                                        </div>
+                                                        <div class="mt-40 d-flex justify-content-between">
+                                                            <button type="button" class="primary-btn tr-bg"
+                                                                data-dismiss="modal">@lang('common.cancel')</button>
+                                                            {{ Form::open(['route' => ['exam-delete', $exam->id], 'method' => 'DELETE', 'enctype' => 'multipart/form-data']) }}
+                                                            <button class="primary-btn fix-gr-bg"
+                                                                type="submit">@lang('common.delete')</button>
+                                                            {{ Form::close() }}
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </x-table>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </x-table>
+                        </div>
                     </div>
                 </div>
             </div>

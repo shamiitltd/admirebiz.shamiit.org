@@ -94,6 +94,35 @@
 
         });
 
+        // HERO SLIDER
+        $('.home_speech_section .owl-carousel').owlCarousel({
+            nav: true,
+            navText: ['<i class="far fa-angle-left"></i>', '<i class="far fa-angle-right"></i>'],
+            dots: false,
+            items: 3,
+            loop: true,
+            margin: 20,
+            autoplay: true,
+            autoplayTimeout: 5000,
+            autoplayHoverPause: true,
+            responsive:{
+                0: {
+                    items: 1,
+                    nav: false,
+                },
+                576:{
+                    nav: true,
+                    items: 1,
+                },
+                767:{
+                    items: 2,
+                },
+                991:{
+                    items: 3,
+                },
+            }
+        });
+
         // ACTIVE MOBLE MENU JS
         // MOBILE MENU ACTIVE JS
         var zeynep = $('.zeynep').zeynep({})
@@ -348,6 +377,8 @@
 
     // notification area
 
+    var isAnimating = false;
+
     $(function() {
         let tickerLength = $('.notification-container ul li').length;
         let tickerHeight = $('.notification-container ul li').outerHeight();
@@ -356,12 +387,16 @@
         
         var timer;
         function moveTop() {
-          $('.notification-container ul').animate({
-            top: -tickerHeight - 10
-          }, 600, function() {
-            $('.notification-container ul li:first-child').appendTo('.notification-container ul');
-            $('.notification-container ul').css('top', '');
-          });
+            if (!isAnimating) {
+                isAnimating = true;
+                $('.notification-container ul').animate({
+                  top: -tickerHeight - 10
+                }, 600, function() {
+                  isAnimating = false;
+                  $('.notification-container ul li:first-child').appendTo('.notification-container ul');
+                  $('.notification-container ul').css('top', '');
+                });
+            }
         }
         
         // Check if the mouse is hovered over the notification container
@@ -373,11 +408,11 @@
         });
         
         // Pause the animation when the mouse is hovered over the notification container
-        timer = setInterval(moveTop, 3000);
+        timer = setInterval(moveTop, 5000);
         $('.notification-container').on('mouseenter', function() {
           clearInterval(timer);
         }).on('mouseleave', function() {
-          timer = setInterval(moveTop, 3000);
+          timer = setInterval(moveTop, 5000);
         });
     });
 
@@ -385,6 +420,7 @@
 
     $(".common_data_table table").DataTable({
         responsive: true,
+        stripeClasses:[],
         language: {
             searchPlaceholder: "Search ...",
             search: "<i class='far fa-search datatable-search'></i>",
@@ -403,5 +439,12 @@
             type:'iframe',
         });
       });
+
+    //   Search show hide table
+    $('.user_list_container.student_list').hide();
+    $('#searchStudent').on('click', function(e){
+        e.preventDefault();
+        $('.user_list_container.student_list').show('slow')
+    })
 
 })();

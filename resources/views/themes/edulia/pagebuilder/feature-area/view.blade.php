@@ -21,8 +21,8 @@
                             </div>
                             <div class="feature_item_right">
                                 <div class="feature_item_inner">
-                                    <h4>{{ gv($item, 'item_heading') }}</h4>
-                                    <p>{!! gv($item, 'item_description') !!}</p>
+                                    <h4>{{ $item['item_heading'] }}</h4>
+                                    <p>{!! $item['item_description'] !!}</p>
                                 </div>
                             </div>
                         </div>

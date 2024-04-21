@@ -10,7 +10,7 @@
         }
     </style>
 @endpush
-<section class="sms-breadcrumb mb-40 white-box">
+<section class="sms-breadcrumb mb-20">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('wallet::wallet.refund_request')</h1>
@@ -25,31 +25,33 @@
 
 <section class="admin-visitor-area up_st_admin_visitor mt-20">
     <div class="container-fluid p-0">
-        <div class="row">
-            <div class="col-lg-12">
-                <x-table>
-                    <table id="table_id" class="table data-table" cellspacing="0" width="100%">
-                        <thead>
-                            <tr>
-                                <th>@lang('common.sl')</th>
-                                <th>@lang('common.name')</th>
-                                <th>@lang('wallet::wallet.method')</th>
-                                <th>@lang('common.pending')</th>
-                                <th>@lang('wallet::wallet.approve')</th>
-                                <th>@lang('wallet::wallet.reject')</th>
-                                <th>@lang('common.note')</th>
-                                <th>@lang('common.status')</th>
-                                <th>@lang('common.file')</th>
-                                <th>@lang('wallet::wallet.create_date')</th>
-                                <th>@lang('common.action')</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            
-                        </tbody>
-                       
-                    </table>
-                </x-table>
+        <div class="white-box">
+            <div class="row mt-40">
+                <div class="col-lg-12">
+                    <x-table>
+                        <table id="table_id" class="table data-table" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>@lang('common.sl')</th>
+                                    <th>@lang('common.name')</th>
+                                    <th>@lang('wallet::wallet.method')</th>
+                                    <th>@lang('common.pending')</th>
+                                    <th>@lang('wallet::wallet.approve')</th>
+                                    <th>@lang('wallet::wallet.reject')</th>
+                                    <th>@lang('common.note')</th>
+                                    <th>@lang('common.status')</th>
+                                    <th>@lang('common.file')</th>
+                                    <th>@lang('wallet::wallet.create_date')</th>
+                                    <th>@lang('common.action')</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+                            </tbody>
+                           
+                        </table>
+                    </x-table>
+                </div>
             </div>
         </div>
     </div>
@@ -123,6 +125,36 @@
                     </div>
                     <div class="mt-40 d-flex justify-content-between">
                         <button type="button" class="primary-btn fix-gr-bg" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade admin-query" id="showFile">
+        <div class="modal-dialog modal-dialog-centered large-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">@lang('wallet::wallet.view_file')</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body p-0 mt-30">
+                    <div class="container student-certificate">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-12 text-center">
+                                <input type="hidden" name="fileId" value="">
+                                <div class="mb-5">
+                                    <img class="img-fluid"
+                                        src="">
+                                </div>
+                                <br>
+                                <div class="mb-5">
+                                    <a href="" class="file" download>
+                                        @lang('common.download') 
+                                        <span class="pl ti-download"></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -255,6 +287,15 @@
             var modal = $('#refundNoteModal');
             var note = $('.note_'+ id).data('note');
             modal.find('textarea').val(note)
+            modal.modal('show');
+        }
+
+        function fileView(id){
+            var modal = $('#showFile');
+            var file = $('.file_'+ id).data('file');
+            modal.find('input[name=fileId]').val(id);
+            modal.find('img[class=img-fluid]').attr("src", file);
+            modal.find('a[class=file]').attr("href", file);
             modal.modal('show');
         }
 

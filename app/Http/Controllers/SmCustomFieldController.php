@@ -227,6 +227,116 @@ class SmCustomFieldController extends Controller
         }
     }
 
+
+    // donor registration start
+    public function donor_reg_custom_field(){
+        $custom_fields = SmCustomField::where('form_name','donor_registration')->where('school_id',Auth::user()->school_id)->orderby('id','DESC')->get();
+        return view('backEnd.customField.donorRegistration',compact('custom_fields'));
+    }
+
+    public function store_donor_registration_custom_field(Request $request){
+        $validator = Validator::make($request->all(), [
+            'label' => 'required',
+            'type' => 'required',
+            'width'=> 'required',
+            // 'min_max_length.*'=> 'integer|min:1',
+            'name_value.*'=> 'required_if:type,radioInput|required_if:type,checkboxInput|required_if:type,dropdownInput',
+            'name_value'=> 'required_if:type,radioInput|required_if:type,checkboxInput|required_if:type,dropdownInput',
+        ], [
+            'min_max_length.1' => 'The Max Length must be at least 1.'
+        ]);
+        if($validator->fails()){
+            $errors = $validator->errors();
+            foreach($errors->all() as $error){
+                Toastr::warning($error, 'Failed');
+            }
+            return redirect()->back()->withInput();
+        }
+
+        $exist = SmCustomField::where('form_name','donor_registration')
+                                ->where('school_id',Auth::user()->school_id)
+                                ->where('label',$request->label)->first();
+
+            if($exist){
+                Toastr::warning("Label Name Already Exist !", 'Warning');
+                return redirect()->back()->withInput();
+            }
+
+        try{
+            $name = "donor_registration";
+            $this->storeData($request,$name);
+
+            Toastr::success('Operation successful', 'Success');
+            return redirect('donor-reg-custom-field');
+
+        }catch(Throwable $e){
+            Toastr::error('Operation Failed', 'Failed');
+            return redirect()->back();
+        }
+    }
+
+    public function edit_donor_custom_field($id){
+        $v_custom_field = SmCustomField::find($id);
+        $custom_fields = SmCustomField::where('form_name','donor_registration')->where('school_id',Auth::user()->school_id)->get();
+        return view('backEnd.customField.donorRegistration',compact('custom_fields','v_custom_field'));
+    }
+
+    public function update_donor_custom_field(Request $request){
+        $validator = Validator::make($request->all(), [
+            'label' => 'required',
+            'type' => 'required',
+            'width'=> 'required',
+            'min_max_length.*'=> 'integer|min:1',
+            'name_value.*'=> 'required_if:type,radioInput|required_if:type,checkboxInput|required_if:type,dropdownInput',
+            'name_value'=> 'required_if:type,radioInput|required_if:type,checkboxInput|required_if:type,dropdownInput',
+        ], [
+            'min_max_length.1' => 'The Max Length must be at least 1.'
+        ]);
+        if($validator->fails()){
+            $errors = $validator->errors();
+            foreach($errors->all() as $error){
+                Toastr::warning($error, 'Failed');
+            }
+            return redirect()->back()->withInput();
+        }
+
+        $valueExist = SmCustomField::where('id', '!=', $request->id)
+                ->where('form_name','donor_registration')
+                ->where('school_id',Auth::user()->school_id)
+                ->where('label',$request->label)
+                ->get();
+
+        if(count($valueExist) > 0){
+            Toastr::warning("Label Name Already Exist !", 'Warning');
+            return redirect()->back()->withInput();
+        }
+        
+        try{
+            $name = "donor_registration";
+            $this->updateData($request,$name);
+
+            Toastr::success('Operation successful', 'Success');
+            return redirect('donor-reg-custom-field');
+        }catch(Throwable $e){
+            Toastr::error('Operation Failed', 'Failed');
+            return redirect()->back();
+        }
+    }
+
+    public function delete_donor_custom_field(Request $request)
+    {
+        try{
+            $this->deleteData($request->id);
+
+            Toastr::success('Operation successful', 'Success');
+            return redirect('donor-reg-custom-field');
+        }catch(Throwable $e){
+            Toastr::error('Operation Failed', 'Failed');
+            return redirect()->back();
+        }
+    }
+    // donor registration end
+
 //Add, Update, Delete Data
     public static function storeData($request, $name) {
         $store= new SmCustomField();

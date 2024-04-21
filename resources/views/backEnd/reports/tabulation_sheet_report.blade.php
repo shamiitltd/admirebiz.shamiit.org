@@ -109,9 +109,9 @@
             }
 
             .single-report-admit table tr th {
-                border: 0;
+                /* border: 0; */
                 border-bottom: 1px solid rgba(67, 89, 187, 0.15) !important;
-                text-align: left
+                /* text-align: left */
             }
 
             .single-report-admit table tbody tr:first-of-type td {
@@ -123,7 +123,7 @@
                 font-size: 12px;
                 color: #828BB2;
                 font-weight: 400;
-                border: 0;
+                /* border: 0; */
                 border-bottom: 1px solid rgba(130, 139, 178, 0.15) !important;
                 text-align: left;
                 background: #fff !important;
@@ -174,6 +174,7 @@
             ul.student_info.info2 li p:first-child {
                 flex: 100px 0 0;
             }
+
         </style>
 
         @if(resultPrintStatus('vertical_boarder'))
@@ -184,7 +185,7 @@
             </style>
         @endif
     @endpush
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('reports.tabulation_sheet_report') </h1>
@@ -197,18 +198,19 @@
         </div>
     </section>
     <section class="admin-visitor-area">
+        <div class="white-box">
         <div class="container-fluid p-0">
             <div class="row">
                 <div class="col-lg-8 col-md-6">
                     <div class="main-title">
-                        <h3 class="mb-30">@lang('common.select_criteria') </h3>
+                        <h3 class="mb-15">@lang('common.select_criteria') </h3>
                     </div>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-lg-12">
-                <div class="white-box">
+                <div>
                     {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'tabulation_sheet_report_search', 'method' => 'POST', 'enctype' => 'multipart/form-data', 'id' => 'search_student']) }}
                     <div class="row">
                         <input type="hidden" name="url" id="url" value="{{URL::to('/')}}">
@@ -220,7 +222,8 @@
                                         ['USN', 'UD', 'UA', 'US', 'USL'],'hide'=> ['USUB']
                                     ])
 
-                                    <div class="col-lg-3 mt-30" id="select_exam_typ_subject_div">
+                                    <div class="col-lg-3 mt-15" id="select_exam_typ_subject_div">
+                                        <label for="">@lang('exam.select_exam')</label>
                                         {{ Form::select('exam_type',[""=>__('exam.select_exam').'*'], null , ['class' => 'primary_select  form-control'. ($errors->has('exam_type') ? ' is-invalid' : ''), 'id'=>'select_exam_typ_subject']) }}
                                         
                                         <div class="pull-right loader loader_style" id="select_exam_type_loader">
@@ -233,7 +236,8 @@
                                         @endif
                                     </div>
 
-                                    <div class="col-lg-3 mt-30" id="select_un_student_div">
+                                    <div class="col-lg-3 mt-15" id="select_un_student_div">
+                                        <label for="">@lang('common.select_student')</label>
                                         {{ Form::select('student_id',[""=>__('common.select_student').'*'], null , ['class' => 'primary_select  form-control'. ($errors->has('student_id') ? ' is-invalid' : ''), 'id'=>'select_un_student']) }}
                                         
                                         <div class="pull-right loader loader_style" id="select_un_student_loader">
@@ -317,23 +321,25 @@
                 </div>
             </div>
         </div>
+        </div>
     </section>
     @if(isset($marks))
         @if(moduleStatusCheck('University'))
             @includeIf('university::exam.tabulation_sheet_report')
         @else
             @if (isset($single))
-                <section class="student-details mt-20">
+                <section class="student-details mt-40">
                     <div class="container-fluid p-0">
+                        <div class="white-box">
                         <div class="row">
                             <div class="col-lg-4 no-gutters">
                                 <div class="main-title">
-                                    <h3 class="mb-30 mt-30"> 
+                                    <h3 class="mb-15 mt-0"> 
                                         @lang('reports.tabulation_sheet_report')
                                     </h3>
                                 </div>
                             </div>
-                            <div class="col-lg-8 pull-right mt-20">
+                            <div class="col-lg-8 pull-right mt-0">
                                 <div class="print_button pull-right">
                                     {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'tabulation-sheet/print', 'method' => 'POST', 'enctype' => 'multipart/form-data', 'id' => 'search_student', 'target' => '_blank']) }}
                                     <input type="hidden" name="exam_term_id" value="{{$exam_term_id}}">
@@ -356,8 +362,8 @@
                                                 <img class="logo-img" src="{{ generalSetting()->logo }}" alt="{{ generalSetting()->school_name }}">
                                             </div>
                                             <div class=" col-lg-8 text-left text-lg-right mt-30-md">
-                                                <h3 class="text-white"> {{isset(generalSetting()->school_name)?generalSetting()->school_name:'Infix School Management ERP'}} </h3>
-                                                <p class="text-white mb-0"> {{isset(generalSetting()->address)?generalSetting()->address:'Infix School Adress'}} </p>
+                                                <h3 class="text-white"> {{isset(generalSetting()->school_name)?generalSetting()->school_name:'SHAMIIT School Management ERP'}} </h3>
+                                                <p class="text-white mb-0"> {{isset(generalSetting()->address)?generalSetting()->address:'SHAMIIT School Adress'}} </p>
                                                 <p class="text-white mb-0"> @lang('common.email'): {{isset(generalSetting()->email)?generalSetting()->email:'admin@demo.com'}} , @lang('common.phone'): {{isset(generalSetting()->phone)?generalSetting()->phone:'+8801841412141'}}</p>
                                             </div>
                                         </div>
@@ -409,7 +415,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="single-report-admit">
+                                    <div class="single-report-admit mt-50">
                                         <div class="student_marks_table pt-0 mt-0">
                                             <div class="table-responsive">
                                                 <table class="mt-0 mb-20 table table-striped table-bordered scrolled_table">
@@ -745,20 +751,22 @@
                                 </div>
                             </div>
                         </div>
+                        </div>
                     </div>
                 </section>
             @elseif (isset($allClass))
-                <section class="student-details mt-20">
+                <section class="student-details mt-40">
                     <div class="container-fluid p-0">
+                        <div class="white-box">
                         <div class="row">
                             <div class="col-lg-4 no-gutters">
                                 <div class="main-title">
-                                    <h3 class="mb-30 mt-30"> 
+                                    <h3 class="mb-15 mt-0"> 
                                         @lang('reports.tabulation_sheet_report')
                                     </h3>
                                 </div>
                             </div>
-                            <div class="col-lg-8 pull-right mt-20">
+                            <div class="col-lg-8 pull-right">
                                 <div class="print_button pull-right">
                                     {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'tabulation-sheet/print', 'method' => 'POST', 'enctype' => 'multipart/form-data', 'id' => 'search_student', 'target' => '_blank']) }}
                                     <input type="hidden" name="allSection" value="allSection">
@@ -785,8 +793,8 @@
                                                 <p class="text-white mb-0">@lang('common.section') : {{$tabulation_details['section']}}</p>
                                             </div>
                                             <div class=" col-lg-4 text-left text-lg-right mt-30-md">
-                                                <h3 class="text-white"> {{isset(generalSetting()->school_name)?generalSetting()->school_name:'Infix School Management ERP'}} </h3>
-                                                <p class="text-white mb-0"> {{isset(generalSetting()->address)?generalSetting()->address:'Infix School Adress'}} </p>
+                                                <h3 class="text-white"> {{isset(generalSetting()->school_name)?generalSetting()->school_name:'SHAMIIT School Management ERP'}} </h3>
+                                                <p class="text-white mb-0"> {{isset(generalSetting()->address)?generalSetting()->address:'SHAMIIT School Adress'}} </p>
                                                 <p class="text-white mb-0">
                                                     @lang('common.email'): {{isset(generalSetting()->email)?generalSetting()->email:'admin@demo.com'}} ,
                                                     @lang('common.phone'): {{isset(generalSetting()->phone)?generalSetting()->phone:'+8801841412141'}}
@@ -1099,6 +1107,7 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
                     </div>
                 </section>
             @endif

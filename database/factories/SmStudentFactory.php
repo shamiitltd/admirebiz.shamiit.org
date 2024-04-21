@@ -20,44 +20,42 @@ class SmStudentFactory extends Factory
      *
      * @return array
      */
-    public $i = 1;
+    public $i=1;
     public function definition()
     {
-        $firstName = $this->faker->firstNameMale;
-        $lastName = $this->faker->lastName;
-        $i = $this->i++;
-        return [
-            'admission_no'            => $this->faker->numberBetween($min = 10000, $max = 90000),
-            'roll_no'                 => $this->faker->numberBetween($min = 10000, $max = 90000),
-            'student_category_id'     => 1,
-            'session_id'              => 1,
-            'caste'                   => 'Asian',
-            'bloodgroup_id'           => 3,
+        $i=$this->i++;
+        return [   
+                'admission_no'            => $this->faker->numberBetween($min = 10000, $max = 90000),
+                'roll_no'                 => $this->faker->numberBetween($min = 10000, $max = 90000),          
+                'student_category_id'     => 1,  
+                'session_id'              => 1,
+                'caste'                   => 'Asian',
+                'bloodgroup_id'           => 3,
+                //transport section
+                'religion_id'             => rand(1,2),
+                'height'                  => 56,
+                'weight'                  => 45,
 
-            'religion_id'             => rand(1, 2),
-            'height'                  => 56,
-            'weight'                  => 45,
+                'first_name'              => $this->faker->firstName($gender = 'male'|'female'),
+                'last_name'               => $this->faker->lastName,
+                'full_name'               => 'first_name'.' '.'last_name',
 
-            'first_name'              => $firstName,
-            'last_name'               => $lastName,
-            'full_name'               => $firstName . ' ' . $lastName,
+                'date_of_birth'           => $this->faker->date($format = 'Y-m-d', $max = 'now'),
+                'admission_date'          => $this->faker->date($format = 'Y-m-d', $max = 'now'),
 
-            'date_of_birth'           => $this->faker->date($format = 'Y-m-d', $max = 'now'),
-            'admission_date'          => $this->faker->date($format = 'Y-m-d', $max = 'now'),
+                'gender_id'               => rand(1,2),
+                'role_id'                 => 2,
+                'email'                   => 'student_'. uniqid() .'@edu.shamiit.com',
+                'mobile'                  => '+8801234567' . $i,
+                'bank_account_no'         => '+8801234567' . $i,
 
-            'gender_id'               => 1,
-            'role_id'                 => 2,
-            'email'                   => 'student_' . uniqid() . '@infixedu.com',
-            'mobile'                  => '+8801234567' . $i,
-            'bank_account_no'         => '+8801234567' . $i,
+                'bank_name'               => 'DBBL',               
+                'current_address'         => 'Bangladesh',
+                'previous_school_details' => 'Bangladesh',
+                'aditional_notes'         => 'Bangladesh',
 
-            'bank_name'               => 'DBBL',
-            'current_address'         => 'Bangladesh',
-            'previous_school_details' => 'Bangladesh',
-            'aditional_notes'         => 'Bangladesh',
-
-            'permanent_address'       => 'Bangladesh',
-            'created_at' => date('Y-m-d h:i:s')
+                'permanent_address'       => 'Bangladesh',
+                'created_at'              => date('Y-m-d h:i:s')
         ];
     }
 }

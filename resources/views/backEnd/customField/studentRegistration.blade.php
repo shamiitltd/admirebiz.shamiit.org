@@ -3,7 +3,7 @@
 @lang('student.student_registration')
 @endsection
 @section('mainContent')
-<section class="sms-breadcrumb mb-40 up_breadcrumb white-box">
+<section class="sms-breadcrumb mb-20 up_breadcrumb">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('student.student_registration')</h1>
@@ -28,21 +28,21 @@
         </div>
         @endif
         <div class="row">
-            <div class="col-lg-8 col-md-6 col-sm-6">
-                <div class="main-title mt_0_sm mt_0_md">
-                    <h3 class="mb-30">
-                        @if (isset($v_custom_field))
-                        @lang('student.edit_custom_field')
-                        @else
-                        @lang('student.add_custom_field')
-                        @endif
-
-                </div>
-            </div>
-        </div>
-        <div class="row">
             <div class="col-lg-12">
                 <div class="white-box">
+                <div class="row">
+                    <div class="col-lg-8 col-md-6 col-sm-6">
+                        <div class="main-title mt_0_sm mt_0_md">
+                            <h3 class="mb-15">
+                                @if (isset($v_custom_field))
+                                @lang('student.edit_custom_field')
+                                @else
+                                @lang('student.add_custom_field')
+                                @endif
+
+                        </div>
+                    </div>
+                </div>
                     @if (isset($v_custom_field))
                     {{ Form::open(['class' => 'form-horizontal', 'route' => 'update-student-registration-custom-field', 'method' => 'POST']) }}
                     <input type="hidden" name="id" value="{{ $v_custom_field->id }}">
@@ -56,10 +56,11 @@
         </div>
         <div class="row mt-40 full_wide_table">
             <div class="col-lg-12">
+                <div class="white-box">
                 <div class="row">
                     <div class="col-lg-4 no-gutters">
                         <div class="main-title">
-                            <h3 class="mb-0">@lang('student.custom_field_list')</h3>
+                            <h3 class="mb-15">@lang('student.custom_field_list')</h3>
                         </div>
                     </div>
                 </div>
@@ -135,13 +136,13 @@
                                             @endif
                                         </td>
                                         <td>
-                                            @if ($custom_field->width == 'col-lg-12')
+                                            @if ($custom_field->width == 'col-12')
                                             @lang('student.full_width')
-                                            @elseif ($custom_field->width == 'col-lg-6')
+                                            @elseif ($custom_field->width == 'col-6')
                                             @lang('student.half_width')
-                                            @elseif ($custom_field->width == 'col-lg-4')
+                                            @elseif ($custom_field->width == 'col-4')
                                             @lang('student.one_fourth_width')
-                                            @elseif($custom_field->width == 'col-lg-3')
+                                            @elseif($custom_field->width == 'col-3')
                                             @lang('student.one_thired_width')
                                             @endif
                                         </td>
@@ -228,6 +229,7 @@
                             </table>
                         </x-table>
                     </div>
+                </div>
                 </div>
             </div>
         </div>

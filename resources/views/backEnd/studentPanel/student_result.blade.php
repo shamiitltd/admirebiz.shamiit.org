@@ -17,7 +17,7 @@
 </style>
 @endpush
 @section('mainContent')
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('reports.result')</h1>
@@ -35,6 +35,7 @@
             {{-- @includeIf('university::exam.partials._exam_report') --}}
             @includeIf('university::exam.student_exam_tab')
         @else
+        <div class="white-box">
             <ul class="nav nav-tabs tabs_scroll_nav ml-0" role="tablist">
 
                 @foreach ($records as $key => $record)
@@ -45,9 +46,9 @@
                 @endforeach
 
             </ul>
-            <div class="tab-content mt-40">
+            <div class="tab-content">
                 @foreach ($records as $key => $record)
-                    <div role="tabpanel" class="tab-pane fade @if ($record->is_default == 1) active show @endif" id="tab{{ $key }}">
+                    <div role="tabpanel" class="tab-pane mt-60 fade @if ($record->is_default == 1) active show @endif" id="tab{{ $key }}">
                         <div class="container-fluid p-0 ">
                             <div class="row">
                                 <div class="col-lg-12">
@@ -71,21 +72,21 @@
                                                     $optional_subject = 0;
                                                     $optional_gpa = 0;
                                                 @endphp
-                                                @isset($exam->examSettings->publish_date)
+                                                @if(@$exam->examSettings && $exam->examSettings->publish_date)
                                                     @if ($exam->examSettings->publish_date <= $today)
                                                     <x-table>
-                                                        <table id="table_id" class="table mb-5" cellspacing="0"
+                                                        <table id="" class="table mb-5" cellspacing="0"
                                                             width="100%">
                                                             <thead>
                                                                 <tr>
                                                                     <th>@lang('common.date')</th>
                                                                     <th>@lang('exam.subject_full_marks')</th>
-                                                                    <th>@lang('exam.obtained_marks')</th>
+                                                                    <th style="text-align: center">@lang('exam.obtained_marks')</th>
                                                                     @if (@generalSetting()->result_type == 'mark')
-                                                                        <th>@lang('exam.pass_fail')</th>
+                                                                        <th style="text-align: center">@lang('exam.pass_fail')</th>
                                                                     @else
-                                                                        <th>@lang('exam.grade')</th>
-                                                                        <th>@lang('exam.gpa')</th>
+                                                                        <th style="text-align: center">@lang('exam.grade')</th>
+                                                                        <th style="text-align: center">@lang('exam.gpa')</th>
                                                                     @endif
                                                                 </tr>
                                                             </thead>
@@ -236,7 +237,7 @@
                                                         </table>
                                                     </x-table>
                                                     @endif
-                                                @endisset
+                                                @endif
                                             @endif
                                         @endforeach
                                     </div>
@@ -248,7 +249,8 @@
                     </div>
                 @endforeach
             </div>  
+        </div>
         @endif
     </section>
 @endsection
-@include('backEnd.partials.data_table_js')
+{{-- @include('backEnd.partials.data_table_js') --}}

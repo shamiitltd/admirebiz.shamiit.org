@@ -12,7 +12,7 @@
         display: block;
     }
 </style>
-<section class="sms-breadcrumb mb-40 white-box">
+<section class="sms-breadcrumb mb-20">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('system_settings.email_settings') </h1>
@@ -24,25 +24,26 @@
         </div>
     </div>
 </section>
-<section class="admin-visitor-area">
+{{-- <section class="admin-visitor-area">
     <div class="container-fluid p-0">
-        <div class="row">
-            <div class="col-lg-8 col-md-8">
-                <div class="main-title">
-                    <h3 class="mb-15"> @lang('system_settings.select_email_settings')</h3>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-4 text-right">
-                {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'method' => 'POST', 'url' => 'send-test-mail', 'id' => 'email_settings1', 'enctype' => 'multipart/form-data']) }}
-                    @csrf
-                    <button class="primary-btn small fix-gr-bg" type="submit"> <i class="ti-email"></i> {{__('Send Test Mail')}} </button>
-                {{ Form::close() }}
+
+    </div>
+</section> --}}
+
+<section class="mb-40 student-details white-box">
+    <div class="row">
+        <div class="col-lg-8 col-sm-7">
+            <div class="main-title">
+                <h3 class="mb-15"> @lang('system_settings.select_email_settings')</h3>
             </div>
         </div>
+        <div class="col-lg-4 col-sm-5 text-sm-right">
+            {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'method' => 'POST', 'url' => 'send-test-mail', 'id' => 'email_settings1', 'enctype' => 'multipart/form-data']) }}
+                @csrf
+                <button class="primary-btn small fix-gr-bg" type="submit"> <i class="ti-email"></i> {{__('Send Test Mail')}} </button>
+            {{ Form::close() }}
+        </div>
     </div>
-</section>
-
-<section class="mb-40 student-details">
     <div class="container-fluid p-0">
         <div class="row">
             <!-- Start Sms Details -->
@@ -56,7 +57,7 @@
                     </li>
                     </li>  
                 </ul>
-                <div class="tab-content">
+                <div class="tab-content p-15">
                     <!-- Start Exam Tab -->
                     <div role="tabpanel" class="tab-pane fade @if ($active_mail_driver == 'smtp') show active @endif" id="smtp">
                         @if(userPermission('update-email-settings-data'))
@@ -64,7 +65,7 @@
                         @endif
                         <div class="row">
                             <div class="col-lg-12">
-                                <div class="white-box">
+                                <div>
                                     <input type="hidden" name="email_settings_url" id="email_settings_url" value="update-email-settings-data">
                                     <input type="hidden" name="url" id="url" value="{{URL::to('/')}}"> 
                                     <input type="hidden" name="engine_type" id="engine_type" value="smtp">
@@ -193,7 +194,7 @@
                         @endif
                             <div class="row">
                                 <div class="col-lg-12">
-                                    <div class="white-box">
+                                    <div>
                                         <input type="hidden" name="email_settings_url" id="email_settings_url" value="update-email-settings-data">
                                         <input type="hidden" name="url" id="url" value="{{URL::to('/')}}"> 
                                         <input type="hidden" name="engine_type" id="engine_type" value="php">
@@ -254,4 +255,3 @@
     </div>
 </section>
 @endsection
-

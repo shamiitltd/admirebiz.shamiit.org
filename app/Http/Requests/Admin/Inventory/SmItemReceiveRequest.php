@@ -37,8 +37,8 @@ class SmItemReceiveRequest extends FormRequest
             'quantity' => "required|array",
             'total' => "sometimes|nullable|array",
             'subTotalQuantity' => "sometimes|nullable",
-            'subTotal' => "sometimes|nullable",
-            'totalPaid' =>  "sometimes|nullable",
+            'subTotal' => "numeric|min:0",
+            'totalPaid' =>  "numeric|min:0",
         ];
     }
 }

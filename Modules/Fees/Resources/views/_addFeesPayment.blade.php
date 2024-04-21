@@ -10,7 +10,7 @@
     </style>
 @endpush
 
-<section class="sms-breadcrumb mb-40 white-box">
+<section class="sms-breadcrumb mb-20">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('fees::feesModule.add_fees_payment')</h1>
@@ -50,7 +50,7 @@
                          src="{{($invoiceInfo->studentInfo->student_photo)? $invoiceInfo->studentInfo->student_photo : asset('public/uploads/staff/demo/staff.jpg')}}"
                          alt="">
                     <div class="white-box radius-t-y-0">
-                        <div class="single-meta mt-10">
+                        <div class="single-meta mt-50">
                             <div class="d-flex justify-content-between">
                                 <div class="name">@lang('student.student_name')</div>
                                 <div class="value">{{$invoiceInfo->studentInfo->full_name}}</div>

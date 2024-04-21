@@ -93,7 +93,7 @@ class SmParentPanelController extends Controller
             $my_childrens = auth()->user()->parent ? auth()->user()->parent->childrens->load('assignSubjects', 'assignSubject', 'studentOnlineExams', 'studentRecords', 'studentRecords.feesInvoice', 'studentRecords.class', 'studentRecords.section', 'studentRecords.incidents', 'examSchedule', 'attendances') : [];
 
             $sm_weekends = SmWeekend::orderBy('order', 'ASC')->where('active_status', 1)->where('school_id', auth()->user()->school_id)->get();
-            $events = SmEvent::where('active_status', 1)
+            $smevents = SmEvent::where('active_status', 1)
                 ->where('academic_id', getAcademicId())
                 ->where('school_id', auth()->user()->school_id)
                 ->where(function ($q) {
@@ -120,7 +120,7 @@ class SmParentPanelController extends Controller
                 $count_event++;
             }
 
-            foreach ($events as $k => $event) {
+            foreach ($smevents as $k => $event) {
 
                 $calendar_events[$count_event]['title'] = $event->event_title;
 
@@ -148,7 +148,7 @@ class SmParentPanelController extends Controller
             $academicCalendar = new SmAcademicCalendarController();
             $data['events'] = $academicCalendar->calenderData();
 
-            return view('backEnd.parentPanel.parent_dashboard', compact('holidays', 'calendar_events', 'events', 'totalNotices', 'my_childrens', 'sm_weekends', 'currency', 'complaints'), $data);
+            return view('backEnd.parentPanel.parent_dashboard', compact('holidays', 'calendar_events', 'smevents', 'totalNotices', 'my_childrens', 'sm_weekends', 'currency', 'complaints'), $data);
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();
@@ -819,8 +819,7 @@ class SmParentPanelController extends Controller
                 ->get();
             $my_leaves = SmLeaveDefine::where('role_id', 2)->whereIn('user_id', $std_id->pluck('user_id'))->where('school_id', Auth::user()->school_id)->get();
             $apply_leaves = SmLeaveRequest::whereIn('staff_id', $std_id->pluck('user_id'))->where('role_id', 2)->where('active_status', 1)->where('academic_id', getAcademicId())->where('school_id', Auth::user()->school_id)->get();
-            $leave_types = SmLeaveDefine::where('role_id', 2)->where('active_status', 1)->where('academic_id', getAcademicId())->where('school_id', Auth::user()->school_id)->get();
-
+            $leave_types = SmLeaveDefine::where('role_id', 2)->where('active_status', 1)->whereIn('user_id', $std_id)->where('academic_id', getAcademicId())->where('school_id', Auth::user()->school_id)->get();
 
             return view('backEnd.parentPanel.apply_leave', compact('apply_leaves', 'leave_types', 'my_leaves', 'user'));
         } catch (\Exception $e) {
@@ -878,7 +877,7 @@ class SmParentPanelController extends Controller
             $apply_leave->staff_id = $request->student_id;
             $apply_leave->role_id = 2;
             $apply_leave->apply_date = date('Y-m-d', strtotime($request->apply_date));
-            $apply_leave->leave_define_id = $leaveDefine->id;
+            $apply_leave->leave_define_id = $request->leave_type;
             $apply_leave->type_id = $request->leave_type;
             $apply_leave->leave_from = date('Y-m-d', strtotime($request->leave_from));
             $apply_leave->leave_to = date('Y-m-d', strtotime($request->leave_to));
@@ -1143,10 +1142,15 @@ class SmParentPanelController extends Controller
 
     public function attendanceSearch(Request $request)
     {
-        $request->validate([
+        $input = $request->all();
+        $validator = Validator::make($input, [
             'month' => 'required',
             'year' => 'required',
         ]);
+        if ($validator->fails()) {
+            Toastr::error('Please fill the required fields', 'Failed');
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
 
         try {
             $student_detail = SmStudent::where('id', $request->student_id)->first();
@@ -1275,7 +1279,7 @@ class SmParentPanelController extends Controller
             $issueBooks = SmBookIssue::where('member_id', $library_member->student_staff_id)
                 ->leftjoin('sm_books', 'sm_books.id', 'sm_book_issues.book_id')
                 ->leftjoin('library_subjects', 'library_subjects.id', 'sm_books.book_subject_id')
-                ->where('sm_book_issues.issue_status', 'I')->where('sm_book_issues.school_id', Auth::user()->school_id)->get();
+                /* ->where('sm_book_issues.issue_status', 'I') */->where('sm_book_issues.school_id', Auth::user()->school_id)->get();
 
             return view('backEnd.parentPanel.parentBookIssue', compact('issueBooks'));
         } catch (\Exception $e) {
@@ -1397,6 +1401,8 @@ class SmParentPanelController extends Controller
     public function transport($id)
     {
         try {
+            $behaviourRecordSetting = BehaviourRecordSetting::where('id', 1)->first();
+            $studentBehaviourRecords = (moduleStatusCheck('BehaviourRecords')) ? AssignIncident::where('student_id', $id)->with('incident', 'user', 'academicYear')->get() : null;
             $student_detail = SmStudent::where('id', $id)->first();
             $routes = SmAssignVehicle::join('sm_vehicles', 'sm_assign_vehicles.vehicle_id', 'sm_vehicles.id')
                 ->join('sm_students', 'sm_vehicles.id', 'sm_students.vechile_id')
@@ -1406,7 +1412,7 @@ class SmParentPanelController extends Controller
                 ->where('sm_assign_vehicles.school_id', Auth::user()->school_id)
                 ->get();
 
-            return view('backEnd.parentPanel.transport', compact('routes', 'student_detail'));
+            return view('backEnd.parentPanel.transport', compact('routes', 'student_detail', 'behaviourRecordSetting', 'studentBehaviourRecords'));
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();
@@ -1416,12 +1422,14 @@ class SmParentPanelController extends Controller
     public function dormitory($id)
     {
         try {
+            $behaviourRecordSetting = BehaviourRecordSetting::where('id', 1)->first();
+            $studentBehaviourRecords = (moduleStatusCheck('BehaviourRecords')) ? AssignIncident::where('student_id', $id)->with('incident', 'user', 'academicYear')->get() : null;
             $student_detail = SmStudent::where('id', $id)->first();
             $room_lists = SmRoomList::where('active_status', 1)->where('id', $student_detail->room_id)->where('school_id', Auth::user()->school_id)->get();
             $room_lists = $room_lists->groupBy('dormitory_id');
             $room_types = SmRoomType::where('active_status', 1)->where('school_id', Auth::user()->school_id)->get();
             $dormitory_lists = SmDormitoryList::where('active_status', 1)->where('id', $student_detail->dormitory_id)->where('school_id', Auth::user()->school_id)->get();
-            return view('backEnd.parentPanel.dormitory', compact('room_lists', 'room_types', 'dormitory_lists', 'student_detail'));
+            return view('backEnd.parentPanel.dormitory', compact('room_lists', 'room_types', 'dormitory_lists', 'student_detail', 'behaviourRecordSetting', 'studentBehaviourRecords'));
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();

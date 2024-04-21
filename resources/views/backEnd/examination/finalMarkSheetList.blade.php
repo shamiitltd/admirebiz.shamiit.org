@@ -111,7 +111,7 @@
         }
 
 </style>
-<section class="sms-breadcrumb mb-40 white-box">
+<section class="sms-breadcrumb mb-20">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('reports.progress_card_report')</h1>
@@ -242,10 +242,10 @@
                                                             </div>
                                                             <div class="col-lg-6 ml-30">
                                                                 <h3 class="text-white"> 
-                                                                    {{isset(generalSetting()->school_name)?generalSetting()->school_name:'Infix School Management ERP'}} 
+                                                                    {{isset(generalSetting()->school_name)?generalSetting()->school_name:'SHAMIIT School Management ERP'}} 
                                                                 </h3> 
                                                                 <p class="text-white mb-0">
-                                                                    {{isset(generalSetting()->address)?generalSetting()->address:'Infix School Address'}} 
+                                                                    {{isset(generalSetting()->address)?generalSetting()->address:'SHAMIIT School Address'}} 
                                                                 </p>
                                                                 <p class="text-white mb-0">
                                                                     @lang('common.email'):  {{isset(generalSetting()->email)?generalSetting()->email:'admin@demo.com'}},   @lang('common.phone'):  {{isset(generalSetting()->phone)?generalSetting()->phone:'+8801841412141'}} 

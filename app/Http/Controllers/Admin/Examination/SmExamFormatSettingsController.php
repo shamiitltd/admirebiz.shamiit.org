@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Examination;
 
 
+use App\SmExam;
 use App\SmClass;
 use App\SmExamType;
 use App\SmMarkStore;
@@ -145,16 +146,153 @@ class SmExamFormatSettingsController extends Controller
                 ->where('school_id', Auth::user()->school_id)
                 ->get();
 
-            return view('backEnd..examination.examPositionReport', compact('exams', 'classes'));
+            return view('backEnd.examination.examPositionReport', compact('exams', 'classes'));
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();
         }
     }
 
+    function universityExamReportPositionStore($request){
+        dd($request->all());
+        $request->validate([
+            'exam' => 'required',
+            'un_semester_label_id' => 'required',
+            'un_section_id' => 'required',
+        ]);
+        try {
+            $exam = $request->exam;
+            $un_semester_label_id = $request->un_semester_label_id;
+            $un_section_id = $request->un_section_id;
+
+            $students = StudentRecord::with(['studentDetail' => function($q){
+                return $q->where('active_status', 1);
+            }])
+                ->where('un_semester_label_id', $un_semester_label_id)
+                ->where('un_section_id', $un_section_id)
+                ->orderBy('id', 'asc')
+                ->get();
+
+            $fail_grade = SmMarksGrade::where('active_status', 1)
+                ->where('academic_id', getAcademicId())
+                ->where('school_id', Auth::user()->school_id)
+                ->min('gpa');
+
+            $max_gpa = SmMarksGrade::where('active_status', 1)
+                ->where('academic_id', getAcademicId())
+                ->where('school_id', Auth::user()->school_id)
+                ->max('gpa');
+
+            $totalSubject = SmMarkStore::where('un_semester_label_id', $un_semester_label_id)
+                            ->where('un_section_id', $un_section_id)
+                            ->get()
+                            ->unique();
+
+            $passStudents = [];
+            $failStudents = [];
+
+            foreach ($students as $student) {
+                $studentMarks = SmMarkStore::where('exam_term_id', $exam)
+                    ->where('student_record_id', $student->id)
+                    ->get()
+                    ->groupBy('un_subject_id');
+
+                foreach ($studentMarks as $un_subject_id => $studentMark) {
+                    if (markGpa(subjectPercentageMark(@$studentMark->sum('total_marks'), @subjectFullMark($exam, $un_subject_id)))->gpa != $fail_grade) {
+                        $passStudents[] = $student->id;
+                    } else {
+                        $failStudents[] = $student->id;
+                    }
+                }
+            }
+
+            $studenInfos = array_diff(array_unique($passStudents), array_unique($failStudents));
+
+            if ($studenInfos) {
+                $students = StudentRecord::whereIn('id', $studenInfos)->get();
+
+                ExamMeritPosition::where('un_semester_label_id', $un_semester_label_id)
+                    ->where('un_section_id', $un_section_id)
+                    ->where('exam_term_id', $exam)
+                    ->delete();
+
+                foreach ($students as $student) {
+                    $allMarks = SmMarkStore::where('exam_term_id', $exam)
+                        ->where('student_record_id', $student->id)
+                        ->get()
+                        ->groupBy('un_subject_id');
+
+                    $totalGpa = 0;
+                    $totalMark = 0;
+                    foreach ($allMarks as $un_subject_id => $allMark) {
+                        $totalMark += $allMark->sum('total_marks');
+                        $totalGpa += markGpa(subjectPercentageMark(@$allMark->sum('total_marks'), @subjectFullMark($exam, $un_subject_id)))->gpa;
+
+                    }
+                    $gpa = $totalGpa / $totalSubject->count();
+                    if ($gpa > $max_gpa) {
+                        $gpaData = $max_gpa;
+                    } else {
+                        $gpaData = $gpa;
+                    }
+
+
+                    $data = new ExamMeritPosition();
+                    $data->un_semester_label_id = $un_semester_label_id;
+                    $data->un_section_id = $un_section_id;
+                    $data->exam_term_id = $exam;
+                    $data->total_mark = $totalMark;
+                    $data->gpa = number_format($gpaData, 2);
+                    $data->grade = gpaResult($gpaData)->grade_name;
+                    $data->admission_no = $student->studentDetail->roll_no;
+                    $data->record_id = $student->id;
+                    $data->school_id = auth()->user()->school_id;
+                    $data->un_academic_id = getAcademicId();
+                    $data->save();
+                }
+
+                $allStudentMarks = ExamMeritPosition::where('un_semester_label_id', $un_semester_label_id)
+                    ->where('un_section_id', $un_section_id)
+                    ->where('exam_term_id', $exam)
+                    ->orderBy('gpa', 'desc')
+                    ->get()
+                    ->sort(function ($a, $b) {
+                        if ($a->gpa == $b->gpa) {
+                            if ($a->total_mark != $b->total_mark) {
+                                return $a->total_mark > $b->total_mark ? -1 : 1;
+                            }
+                        }
+                    });
+
+                $position = 0;
+                $last_mark = null;
+
+                foreach ($allStudentMarks as $key => $allStudentMark) {
+
+                    if (!$last_mark || ($last_mark->total_mark != $allStudentMark->total_mark) || ($last_mark->gpa != $allStudentMark->gpa)) {
+                        $position += 1;
+                    }
+
+                    $allStudentMark->position = $position;
+                    $allStudentMark->save();
+
+                    $last_mark = $allStudentMark;
+                }
+            }
+            Toastr::success('Operation successful', 'Success');
+            return redirect()->route('exam-report-position');
+        } catch (\Exception $e) {
+            dd($e);
+            Toastr::error('Operation Failed', 'Failed');
+            return redirect()->back();
+        }
+    }
 
     public function examReportPositionStore(Request $request)
     {
+       if (moduleStatusCheck('University')) {
+        return $this->universityExamReportPositionStore($request);
+       } else {
         $request->validate([
             'exam' => 'required',
             'class' => 'required',
@@ -285,6 +423,8 @@ class SmExamFormatSettingsController extends Controller
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();
         }
+       }
+       
     }
 
 
@@ -308,21 +448,29 @@ class SmExamFormatSettingsController extends Controller
         }
     }
 
-    public function allExamReportPositionStore(Request $request)
-    {
+    function universityAllExamReportPositionStore($request){
+
+        $request->validate([
+            'un_semester_label_id' => 'required',
+            'un_section_id' => 'required',
+        ],
+        [
+            'un_semester_label_id.required' => 'Semester field is required',
+            'un_section_id.required' => 'Section field is required',
+        ]);
         try {
-            $class = $request->class;
-            $section = $request->section;
+            $un_semester_label_id = $request->un_semester_label_id;
+            $un_section_id = $request->un_section_id;
 
             $students = StudentRecord::with(['studentDetail' => function($q){
                 return $q->where('active_status', 1);
             }])
-                ->where('class_id', $class)
-                ->where('section_id', $section)
+                ->where('un_semester_label_id', $un_semester_label_id)
+                ->where('un_section_id', $un_section_id)
                 ->whereHas('studentDetail', function($q){
                     return $q->where('active_status', 1);
                 })
-                ->where('academic_id', getAcademicId())
+                ->where('un_academic_id', getAcademicId())
                 ->where('is_promote', 0)
                 ->distinct('id')
                 ->get();
@@ -337,8 +485,8 @@ class SmExamFormatSettingsController extends Controller
                 ->where('school_id', Auth::user()->school_id)
                 ->max('gpa');
 
-            $totalSubject = SmMarkStore::where('class_id', $class)
-                ->where('section_id', $section)
+            $totalSubject = SmMarkStore::where('un_semester_label_id', $un_semester_label_id)
+                ->where('un_section_id', $un_section_id)
                 ->distinct('exam_term_id')
                 ->get()
                 ->unique()->count();
@@ -348,14 +496,14 @@ class SmExamFormatSettingsController extends Controller
 
             foreach ($students as $student) {
                 $studentMarks = SmMarkStore::where('student_record_id', $student->id)
-                    ->where('academic_id', getAcademicId())
-                    ->select('subject_id', 'exam_term_id')->get()
-                    ->groupBy('subject_id');
+                    ->where('un_academic_id', getAcademicId())
+                    ->select('un_subject_id', 'exam_term_id')->get()
+                    ->groupBy('un_subject_id');
 
-                foreach ($studentMarks as $subject_id => $studentMark) {
+                foreach ($studentMarks as $un_subject_id => $studentMark) {
                     $dataGroup = $studentMark->groupBy('exam_term_id');
                     foreach($dataGroup as $exam_term_id => $data){
-                        $subFullMark = subjectFullMark($exam_term_id, $subject_id, $class, $section);
+                        $subFullMark = subjectFullMark($exam_term_id, $un_subject_id, $un_semester_label_id, $un_section_id);
                         if (markGpa(subjectPercentageMark($data->sum('total_marks'), $subFullMark))->gpa != $fail_grade) {
                             $passStudents[] = $student->id;
                         } else {
@@ -371,6 +519,155 @@ class SmExamFormatSettingsController extends Controller
             if ($studenInfos) {
                 $students = StudentRecord::whereIn('id', $studenInfos)->get();
 
+                AllExamWisePosition::where('un_semester_label_id', $un_semester_label_id)
+                    ->where('un_section_id', $un_section_id)
+                    ->delete();
+
+                foreach ($students as $student) {
+                    $allMarks = SmMarkStore::where('student_record_id', $student->id)
+                        ->where('un_academic_id', getAcademicId())
+                        ->select('un_subject_id')->get()
+                        ->groupBy('un_subject_id');
+
+                    $totalGpa = 0;
+                    $totalMark = 0;
+                    $examTerm = 0;
+                    foreach ($allMarks as $un_subject_id => $allMarkes) {
+                        foreach ($allMarkes as $allMark) {
+                            $fullMark = subjectFullMark($allMark->exam_term_id, $allMark->un_subject_id);
+                            $totalMark += subjectPercentageMark($allMark->total_marks, $fullMark);
+                            $totalGpa += markGpa(subjectPercentageMark($allMark->total_marks, $fullMark))->gpa;
+                            $examTerm += $allMark->exam_term_id;
+                        }
+                    }
+                    $gpa = $totalGpa / ($totalSubject*$examTerm);
+                    if ($gpa > $max_gpa) {
+                        $gpaData = $max_gpa;
+                    } else {
+                        $gpaData = $gpa;
+                    }
+
+                    $data = new AllExamWisePosition();
+                    $data->un_semester_label_id = $un_semester_label_id;
+                    $data->un_section_id = $un_section_id;
+                    $data->total_mark = $totalMark;
+                    $data->gpa = number_format($gpaData, 2);
+                    $data->grade = gpaResult($gpaData)->grade_name;
+                    $data->admission_no = $student->studentDetail->roll_no;
+                    $data->roll_no = $student->studentDetail->roll_no;
+                    $data->record_id = $student->id;
+                    $data->school_id = auth()->user()->school_id;
+                    $data->academic_id = getAcademicId();
+                    $data->save();
+                }
+
+                $allStudentMarks = AllExamWisePosition::where('un_semester_label_id', $un_semester_label_id)
+                    ->where('un_section_id', $un_section_id)
+                    ->orderBy('gpa', 'desc')
+                    ->get()
+                    ->sort(function ($a, $b) {
+                        if ($a->gpa == $b->gpa) {
+                            if ($a->total_mark != $b->total_mark) {
+                                return $a->total_mark > $b->total_mark ? -1 : 1;
+                            }
+                        }
+                    });
+
+                $position = 0;
+                $last_mark = null;
+
+                foreach ($allStudentMarks as $key => $allStudentMark) {
+
+                    if (!$last_mark || ($last_mark->total_mark != $allStudentMark->total_mark) || ($last_mark->gpa != $allStudentMark->gpa)) {
+                        $position += 1;
+                    }
+
+                    $allStudentMark->position = $position;
+                    $allStudentMark->save();
+
+                    $last_mark = $allStudentMark;
+                }
+            }
+            Toastr::success('Operation successful', 'Success');
+            return redirect()->route('all-exam-report-position');
+        } catch (\Exception $e) {
+            dd($e);
+            Toastr::error('Operation Failed', 'Failed');
+            return redirect()->back();
+        }
+    }
+
+    public function allExamReportPositionStore(Request $request)
+    {
+        try {
+            $class = $request->class;
+            $section = $request->section;
+
+            $students = StudentRecord::with('studentDetail')
+                ->where('class_id', $class)
+                ->where('section_id', $section)
+                ->whereHas('studentDetail', function($q){
+                    return $q->where('active_status', 1);
+                })
+                ->where('academic_id', getAcademicId())
+                ->where('is_promote', 0)
+                ->orderBy('id', 'asc')
+                ->get();
+             
+
+            $examTerm = SmExam::where('class_id', $class)
+                ->where('section_id', $section)
+                ->where('academic_id', getAcademicId())
+                ->where('school_id', Auth::user()->school_id)
+                ->groupBy('exam_type_id')
+                ->get()
+                ->unique()
+                ->count();
+
+            $fail_grade = SmMarksGrade::where('active_status', 1)
+                ->where('academic_id', getAcademicId())
+                ->where('school_id', Auth::user()->school_id)
+                ->min('gpa');
+
+            $max_gpa = SmMarksGrade::where('active_status', 1)
+                ->where('academic_id', getAcademicId())
+                ->where('school_id', Auth::user()->school_id)
+                ->max('gpa');
+
+            $passStudents = [];
+            $failStudents = [];
+
+            foreach ($students as $student) {
+                $studentMarks = SmMarkStore::where('student_record_id', $student->id)
+                    ->where('academic_id', getAcademicId())
+                    ->get()
+                    ->groupBy('subject_id');
+
+                foreach ($studentMarks as $subject_id => $studentMark) {
+
+                    $dataGroup = $studentMark->groupBy('exam_term_id');
+
+                    foreach($dataGroup as $exam_term_id => $data){
+                        $subFullMark = subjectFullMark($exam_term_id, $subject_id, $class, $section);
+                        if (markGpa(subjectPercentageMark($data->sum('total_marks'), $subFullMark))->gpa != $fail_grade) {
+                            $passStudents[] = $student->id;
+                        } else {
+                            $failStudents[] = $student->id;
+                        }
+
+                    }
+                }
+            }
+       
+
+            $studenInfos = array_diff(array_unique($passStudents), array_unique($failStudents));
+            $studenInfos = $students->pluck('id');
+        
+          
+
+            if ($studenInfos) {
+                $students = StudentRecord::whereIn('id', $studenInfos)->get();
+
                 AllExamWisePosition::where('class_id', $class)
                     ->where('section_id', $section)
                     ->delete();
@@ -378,21 +675,23 @@ class SmExamFormatSettingsController extends Controller
                 foreach ($students as $student) {
                     $allMarks = SmMarkStore::where('student_record_id', $student->id)
                         ->where('academic_id', getAcademicId())
-                        ->select('subject_id')->get()
+                        ->get()
                         ->groupBy('subject_id');
 
                     $totalGpa = 0;
                     $totalMark = 0;
-                    $examTerm = 0;
+                    $subjectGpa = 0;
                     foreach ($allMarks as $subject_id => $allMarkes) {
+                        $subjectMark = 0;
                         foreach ($allMarkes as $allMark) {
                             $fullMark = subjectFullMark($allMark->exam_term_id, $allMark->subject_id, $class, $section);
                             $totalMark += subjectPercentageMark($allMark->total_marks, $fullMark);
                             $totalGpa += markGpa(subjectPercentageMark($allMark->total_marks, $fullMark))->gpa;
-                            $examTerm += $allMark->exam_term_id;
+                            $subjectMark += subjectPercentageMark($allMark->total_marks, $fullMark);
                         }
+                        $subjectGpa += markGpa($subjectMark / count($allMarkes))->gpa;
                     }
-                    $gpa = $totalGpa / ($totalSubject*$examTerm);
+                    $gpa = $subjectGpa / $examTerm;
                     if ($gpa > $max_gpa) {
                         $gpaData = $max_gpa;
                     } else {

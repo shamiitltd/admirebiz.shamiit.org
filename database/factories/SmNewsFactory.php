@@ -28,7 +28,7 @@ class SmNewsFactory extends Factory
             'active_status' =>1,
             'news_body' =>$this->faker->text(500),
             'image'=>'public/uploads/news/news.jpg',
-            'publish_date' => '2019-06-02',        
+            'publish_date' => date('Y-m-d'),        
           
         ];
     }

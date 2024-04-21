@@ -24,13 +24,13 @@ return new class extends Migration
 
         DB::table('home_sliders')->insert([
             [
-                'image' => "public/uploads/home_slider/banner-1.jpg",
+                'image' => "public/uploads/theme/edulia/home_slider/banner-1.jpg",
             ],
             [
-                'image' => "public/uploads/home_slider/banner-1.jpg",
+                'image' => "public/uploads/theme/edulia/home_slider/banner-2.jpg",
             ],
             [
-                'image' => "public/uploads/home_slider/banner-1.jpg",
+                'image' => "public/uploads/theme/edulia/home_slider/banner-3.jpg",
             ],
         ]);
     }

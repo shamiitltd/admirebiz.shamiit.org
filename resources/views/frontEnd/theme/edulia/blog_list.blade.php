@@ -1,6 +1,7 @@
 @extends(config('pagebuilder.site_layout'), ['edit' => false])
-{{headerContent()}}
+<title>{{ __('edulia.blog_list') }} </title>
 @section(config('pagebuilder.site_section'))
+{{headerContent()}}
 @php
     $gs = generalSetting();
 @endphp

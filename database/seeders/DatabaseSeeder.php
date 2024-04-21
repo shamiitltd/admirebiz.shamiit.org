@@ -19,10 +19,12 @@ use Database\Seeders\Leave\SmLeaveTypesTableSeeder;
 use Database\Seeders\Transport\SmRoutesTableSeeder;
 use Database\Seeders\Academics\SmClassesTableSeeder;
 use Database\Seeders\Fees\SmFeesDiscountTableSeeder;
+use Database\Seeders\FrontendCMS\SmEventTableSeeder;
 use Database\Seeders\Academics\SmSectionsTableSeeder;
 use Database\Seeders\Academics\SmSubjectsTableSeeder;
 use Database\Seeders\Communicate\SmSmTodoTableSeeder;
 use Database\Seeders\Exam\SmExamSchedulesTableSeeder;
+use Database\Seeders\FrontendCMS\SmCourseTableSeeder;
 use Database\Seeders\HomeWork\SmHomeworksTableSeeder;
 use Database\Seeders\Inventory\SmSupplierTableSeeder;
 use Database\Seeders\Lesson\SmLessonPlansTableSeeder;
@@ -43,6 +45,7 @@ use Database\Seeders\Admin\SmContactMessagesTableSeeder;
 use Database\Seeders\Fees\SmFeesCarryForwardTableSeeder;
 use Database\Seeders\OnlineExam\SmOnlineExamTableSeeder;
 use Database\Seeders\Student\SmOptionSubjectTableSeeder;
+use Database\Seeders\FrontendCMS\SpeechSliderTableSeeder;
 use Database\Seeders\Library\SmBookCategoriesTableSeeder;
 use Database\Seeders\SystemSettings\SmHolidayTableSeeder;
 use Database\Seeders\Academics\SmAcademicYearsTableSeeder;
@@ -54,8 +57,10 @@ use Database\Seeders\Academics\SmAssignSubjectsTableSeeder;
 use Database\Seeders\Admin\SmStudentCertificateTableSeeder;
 use Database\Seeders\Communicate\SmEmailSmsLogsTableSeeder;
 use Database\Seeders\Dormitory\SmDormitoryListsTableSeeder;
+use Database\Seeders\FrontendCMS\SmPhotoGalleryTableSeeder;
 use Database\Seeders\Inventory\SmItemCategoriesTableSeeder;
 use Database\Seeders\Transport\SmAssignVehiclesTableSeeder;
+use Modules\Fees\Database\Seeders\FmFeesInvoiceTableSeeder;
 use Database\Seeders\HomeWork\SmHomeworkStudentsTableSeeder;
 use Database\Seeders\OnlineExam\SmQuestionGroupsTableSeeder;
 use Database\Seeders\Student\SmStudentAttendanceTableSeeder;
@@ -104,9 +109,13 @@ class DatabaseSeeder extends Seeder
 
             $this->callWith(SmStudentCategoriesTableSeeder::class, array_merge($params, ['count' => 6]));
 
-             $this->callWith(StaffsTableSeeder::class, array_merge($params, ['count' => 5]));
+            $this->callWith(StaffsTableSeeder::class, array_merge($params, ['count' => 5]));
             $this->callWith(SmBackgroundSettingsTableSeeder::class, array_merge($params, ['count' => 2]));
             $this->callWith(SmFrontendPermissionTableSeeder::class, array_merge($params, ['count' => 2]));
+            $this->callWith(SmPhotoGalleryTableSeeder::class, array_merge($params, ['count' => 4]));
+            $this->callWith(SpeechSliderTableSeeder::class, array_merge($params, ['count' => 3]));
+            $this->callWith(SmEventTableSeeder::class, array_merge($params, ['count' => 4]));
+            $this->callWith(SmCourseTableSeeder::class, array_merge($params, ['count' => 2]));
 
 
             $academicYears = SmAcademicYear::where('school_id', $school->id)->get();
@@ -120,7 +129,7 @@ class DatabaseSeeder extends Seeder
                 $this->callWith(SmSubjectsTableSeeder::class, array_merge($params, ['count' => 10]));
                 $this->callWith(SmClassesTableSeeder::class, array_merge($params, ['count' => 10]));
 
-                $this->callWith(SmStudentAttendanceTableSeeder::class, array_merge($params, ['count' => 10]));
+                // $this->callWith(SmStudentAttendanceTableSeeder::class, array_merge($params, ['count' => 10]));
 
                 $this->callWith(SmRoutesTableSeeder::class, array_merge($params, ['count' => 10]));
                 $this->callWith(SmClassRoomsTableSeeder::class, array_merge($params, ['count' => 10]));
@@ -130,13 +139,13 @@ class DatabaseSeeder extends Seeder
 
 
                  $this->callWith(SmExamTypesTableSeeder::class, array_merge($params, ['count' => 3]));
-                $this->callWith(SmStaffAttendancesTableSeeder::class, array_merge($params, ['count' => 1]));
+                // $this->callWith(SmStaffAttendancesTableSeeder::class, array_merge($params, ['count' => 1]));
                 $this->callWith(SmAssignSubjectsTableSeeder::class, array_merge($params, ['count' => 1]));
                 $this->callWith(SmAssignVehiclesTableSeeder::class, array_merge($params, ['count' => 1]));
                 $this->callWith(SmClassRoutineUpdatesTableSeeder::class, array_merge($params, ['count' => 1]));
                 $this->callWith(SmExamSchedulesTableSeeder::class, array_merge($params, ['count' => 1]));
                 $this->callWith(SmExamAttendancesTableSeeder::class, array_merge($params, ['count' => 1]));
-//                 $this->callWith(SmExamMarksRegistersTableSeeder::class, array_merge($params, ['count' => 1]));
+                // $this->callWith(SmExamMarksRegistersTableSeeder::class, array_merge($params, ['count' => 1]));
 
                 $this->callWith(SmFeesGroupsTableSeeder::class, array_merge($params, ['count' => 5]));
 
@@ -145,6 +154,8 @@ class DatabaseSeeder extends Seeder
                 $this->callWith(SmFeesAssignTableSeeder::class, array_merge($params, ['count' => 5]));
                 $this->callWith(SmFeesPaymentTableSeeder::class, array_merge($params, ['count' => 5]));
                 $this->callWith(SmFeesCarryForwardTableSeeder::class, array_merge($params, ['count' => 5]));
+
+                $this->callWith(FmFeesInvoiceTableSeeder::class, array_merge($params, ['count' => 5]));
 
                 $this->callWith(SmLeaveTypesTableSeeder::class, array_merge($params, ['count' => 5]));
 

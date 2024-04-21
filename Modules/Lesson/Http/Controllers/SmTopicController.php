@@ -265,6 +265,7 @@ class SmTopicController extends Controller
                     $topics_name.= $topicData->topic_title;
                         if(($topics_title->last()) != $topicData){
                             $topics_name.= ',';
+                            $topics_name.= '<br>';
                         }
                 }
                 return $topics_name;

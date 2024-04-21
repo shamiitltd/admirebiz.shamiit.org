@@ -7,7 +7,10 @@ use App\Models\StudentRecord;
 use App\Scopes\GlobalAcademicScope;
 use Illuminate\Database\Eloquent\Model;
 use App\Scopes\StatusAcademicSchoolScope;
+use Modules\University\Entities\UnSubject;
+use Modules\University\Entities\UnSemesterLabel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Modules\University\Entities\UnSemesterLabelAssignSection;
 
 class SmHomework extends Model
 {
@@ -19,6 +22,7 @@ class SmHomework extends Model
     protected $appends=['HomeworkPercentage'];
 
     protected $casts = [
+        'active_status' => 'integer',
         'marks' => 'double'        
     ];
 
@@ -33,7 +37,11 @@ class SmHomework extends Model
 
     public function class()
     {
-        return $this->belongsTo('App\SmClass', 'class_id', 'id');
+        if (moduleStatusCheck('University')) {
+            return $this->belongsTo(UnSemesterLabel::class, 'un_semester_label_id', 'id');
+        } else {
+            return $this->belongsTo('App\SmClass', 'class_id', 'id');
+        }
     }
 
     public function saasclass()
@@ -48,6 +56,9 @@ class SmHomework extends Model
     public function section()
     {
         return $this->belongsTo('App\SmSection', 'section_id', 'id');
+    }
+    public function unSection(){
+        return $this->belongsTo(UnSemesterLabelAssignSection::class, 'un_section_id', 'id');
     }
 
     public function saassection()
@@ -68,7 +79,11 @@ class SmHomework extends Model
 
     public function subjects()
     {
-        return $this->belongsTo('App\SmSubject', 'subject_id', 'id');
+        if (moduleStatusCheck('University')) {
+            return $this->belongsTo(UnSubject::class, 'un_subject_id', 'id');
+        } else {
+            return $this->belongsTo('App\SmSubject', 'subject_id', 'id');
+        }
     }
 
     public function saassubject()

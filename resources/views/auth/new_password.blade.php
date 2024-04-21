@@ -177,7 +177,7 @@ $css = 'background:' . $login_background->color;
 					<p>{!! $setting->copyright_text !!}</p> 
 					</p>
 					@else
-					<p>Copyright © 2019 All rights reserved | This application is made with <span class="ti-heart"></span>  by Codethemes</p> 
+					<p>Copyright © 2019 All rights reserved | This application is made with <span class="ti-heart"></span>  by SHAMIIT</p> 
 					</p>
 					@endif
 				</div>

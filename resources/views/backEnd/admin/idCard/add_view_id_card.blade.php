@@ -88,7 +88,7 @@
     </div>
 </div>
 
-<div id="vertical" class="d-none" style="margin: 0; padding: 0; font-family: 'Poppins', sans-serif;  font-size: 12px; line-height:1.02 ;">
+<div id="vertical" class="d-none overflow-auto" style="margin: 0; padding: 0; font-family: 'Poppins', sans-serif;  font-size: 12px; line-height:1.02 ;">
     <div class="vertical__card" style="line-height:1.02; background-image: url({{asset('public/backEnd/id_card/img/horizontal_bg.png')}}); width: 86mm; height: 54mm; margin: auto; background-size: 100% 100%; background-position: center center; position: relative;">
         <div class="horizontal_card_header" style="line-height:1.02; display: flex; align-items:center; justify-content:space-between; padding: 12px">
             <div class="logo__img logoImage vLogo" style="line-height:1.02; width: 80px; background-image: url('{{asset(generalSetting()->logo)}}');background-size: cover; height: 30px;background-position: center center; background-repeat: no-repeat;"></div>

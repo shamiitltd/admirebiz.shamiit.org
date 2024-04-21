@@ -39,6 +39,7 @@ use Illuminate\Support\Facades\Config;
 use App\Scopes\ActiveStatusSchoolScope;
 use App\Scopes\StatusAcademicSchoolScope;
 use Illuminate\Support\Facades\Validator;
+use Modules\Alumni\Entities\Graduate;
 
 class DatatableQueryController extends Controller
 {
@@ -597,7 +598,8 @@ class DatatableQueryController extends Controller
 
     public function emailSmsLogAjax()
     {
-        $emailSmsLogs = SmEmailSmsLog::where('academic_id', getAcademicId())->where('school_id', Auth::user()->school_id)->latest();
+        $emailSmsLogs = SmEmailSmsLog::where('academic_id', getAcademicId())->where('school_id', Auth::user()->school_id);
+        // dd($emailSmsLogs->get());
         return Datatables::of($emailSmsLogs)
             ->addIndexColumn()
             ->addColumn('date', function ($row) {
@@ -847,10 +849,12 @@ class DatatableQueryController extends Controller
     {
 
         try{
-            $leave_defines = SmLeaveDefine::select('sm_leave_defines.*')->with('role', 'user','leaveType')
-            ->where('academic_id', getAcademicId());
+            $leave_defines = SmLeaveDefine::with('role', 'user','leaveType')->where('academic_id', getAcademicId())->select('sm_leave_defines.*');
 
         return $data = Datatables::of($leave_defines)
+            ->addColumn('leave_type', function ($row) {
+                return $row->leaveType->type;
+            })
             ->addColumn('action', function ($row) {
                 $btn = '<div class="dropdown CRM_dropdown">
                                         <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">' . app('translator')->get('common.select') . '</button>
@@ -863,14 +867,12 @@ class DatatableQueryController extends Controller
 
                     (userPermission('leave-define-delete') === true ? (Config::get('app.app_sync') ? '<span  data-toggle="tooltip" title="Disabled For Demo "><a  class="dropdown-item" href="#"  >' . app('translator')->get('common.disable') . '</a></span>' :
                         '<a onclick="deleteLeaveDefine(' . $row->id . ');"  class="dropdown-item" href="#" data-toggle="modal" data-target="#deleteLeaveDefineModal" data-id="' . $row->id . '"  >' . app('translator')->get('common.delete') . '</a>') : '') .
-
-
                     '</div>
-                                    </div>';
+                    </div>';
 
                 return $btn;
             })
-            ->rawColumns(['action', 'userName'])
+            ->rawColumns(['action', 'userName', 'leave_type'])
             ->make(true);
         }
         catch(\Exception $e){
@@ -1013,6 +1015,7 @@ class DatatableQueryController extends Controller
                                 <div class="dropdown-menu dropdown-menu-right">'
                                     .(userPermission('complaint_show') === true ? '<a class="dropdown-item modalLink" data-modal-size="large-modal" title="'. app('translator')->get('admin.complaint_details') .'" href="' . route('complaint_show', [$row->id]) . '">' . app('translator')->get('admin.complaint_details') . '</a>' : '') .
                                     (userPermission('complaint_edit') === true ? '<a class="dropdown-item " href="' . route('complaint_edit', [$row->id]) . '">' . app('translator')->get('common.edit') . '</a>' : '') .
+                                    ($row->file ? '<a class="dropdown-item" href="' . url($row->file) . '" download>' . app('translator')->get('common.download') . '</a>' : '' ) .
                                     (userPermission('complaint_delete') === true ? '<a class="dropdown-item" data-toggle="modal" onclick="deleteComplaint(' . $row->id . ');"  href="#">' . app('translator')->get('common.delete') . '</a>' : '') .
 
                                 '</div>
@@ -1660,7 +1663,7 @@ class DatatableQueryController extends Controller
                 if (Auth::user()->role_id == 1) {
                     $apply_leaves = SmLeaveRequest::with('leaveType','leaveDefine','user:id,full_name')->where([['active_status', 1], ['approve_status', '!=', 'P']])->where('school_id', Auth::user()->school_id)->where('academic_id', getAcademicId());
                 } elseif(auth()->user()->staff) {
-                    $apply_leaves = SmLeaveRequest::with('leaveType','leaveDefine','user:id,full_name')->where([['active_status', 1], ['approve_status', '!=', 'P'], ['staff_id', '=', auth()->user()->staff->id]])->where('academic_id', getAcademicId());
+                    $apply_leaves = SmLeaveRequest::with('leaveType','leaveDefine','user:id,full_name')->where([['active_status', 1], ['approve_status', '!=', 'P'], ['staff_id', '=', auth()->user()->id]])->where('academic_id', getAcademicId());
                 }
 
                 return Datatables::of($apply_leaves)

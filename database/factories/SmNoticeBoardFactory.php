@@ -21,7 +21,7 @@ class SmNoticeBoardFactory extends Factory
             'notice_message' => $this->faker->text(200),
             'notice_date' => $this->faker->date,
             'publish_on' => $this->faker->date,
-            'inform_to' => '[1,2,3,5,6]',
+            'inform_to' => '1,2,3,5,6',
             'is_published' => 1
         ];
     }

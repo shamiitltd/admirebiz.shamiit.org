@@ -134,6 +134,11 @@ class ApiSmExamController extends Controller
             $exam = \App\SmExamType::find($exam_id);
             $get_results = \App\SmStudent::getExamResult(@$exam->id, @$record);
             $result = [];
+            if( $exam->examSettings && $exam->examSettings->publish_date >=   date('Y-m-d H:i:s')){
+                $data['exam_result'] = [];
+                $data['pass_marks'] = 0;
+                return ApiBaseMethod::sendResponse($data, null);
+            }
 
             if($get_results){
                 foreach($get_results as $mark){

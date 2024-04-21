@@ -10,7 +10,7 @@
         'route' => 'savePayrollPaymentData',
         'method' => 'POST',
         'enctype' => 'multipart/form-data',
-        'onsubmit' => 'return validateForm()',
+        #'onsubmit' => 'return validateForm()',
     ]) }}
     <div class="row">
         <div class="col-lg-12">

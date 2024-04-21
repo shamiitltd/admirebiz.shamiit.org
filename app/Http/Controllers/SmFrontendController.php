@@ -23,7 +23,6 @@ use App\SmCoursePage;
 use App\SmMarksGrade;
 use App\ApiBaseMethod;
 use App\SmContactPage;
-use App\SmExamSetting;
 use App\SmNoticeBoard;
 use App\SmResultStore;
 use App\SmTestimonial;
@@ -71,12 +70,12 @@ class SmFrontendController extends Controller
     public function index()
     {
         try {
-            if(activeTheme() == 'edulia'){
-                $home_page = Page::where('school_id',app('school')->id)->where('home_page',1)->first();
-                if($home_page){
+            if (activeTheme() == 'edulia') {
+                $home_page = Page::where('school_id', app('school')->id)->where('home_page', 1)->first();
+                if ($home_page) {
                     $page = $home_page;
-                }else{
-                    $page = Page::where('school_id',app('school')->id)->first();
+                } else {
+                    $page = Page::where('school_id', app('school')->id)->first();
                 }
                 $controller = new PageBuilderController();
                 return $controller->renderPage($page ? $page->slug : '/');
@@ -287,6 +286,7 @@ class SmFrontendController extends Controller
     {
         $request->validate([
             'name' => 'required',
+            'phone' => 'sometimes|required',
             'email' => 'required',
             'subject' => 'required',
             'message' => 'required',
@@ -294,6 +294,9 @@ class SmFrontendController extends Controller
         try {
             $contact_message = new SmContactMessage();
             $contact_message->name = $request->name;
+            if ($request->phone) {
+                $contact_message->phone = $request->phone;
+            }
             $contact_message->email = $request->email;
             $contact_message->subject = $request->subject;
             $contact_message->message = $request->message;
@@ -302,6 +305,9 @@ class SmFrontendController extends Controller
 
             $receiver_name = "System Admin";
             $compact['contact_name'] = $request->name;
+            if ($request->phone) {
+                $compact['contact_phone'] = $request->phone;
+            }
             $compact['contact_email'] = $request->email;
             $compact['subject'] = $request->subject;
             $compact['contact_message'] = $request->message;
@@ -523,11 +529,6 @@ class SmFrontendController extends Controller
             $school_id = app('school')->id;
             $student = SmStudent::where('admission_no', $request->admission_number)->where('school_id', $school_id)->first();
             if ($student) {
-                $exam_content = SmExamSetting::where('exam_type', $request->exam)
-                    ->where('active_status', 1)
-                    ->where('academic_id', getAcademicId())
-                    ->where('school_id', app('school')->id)
-                    ->first();
 
                 $student_detail = $studentDetails = StudentRecord::where('student_id', $student->id)
                     ->where('academic_id', getAcademicId())
@@ -657,7 +658,6 @@ class SmFrontendController extends Controller
                     'class',
                     'section',
                     'exam_detail',
-                    'exam_content',
                     'grades',
                     'student_detail',
                     'mark_sheet',

@@ -73,7 +73,6 @@ class SmStudentAttendanceController extends Controller
                 ->whereHas('studentDetail', function ($q) {
                     $q->where('active_status', 1);
                 })
-
                 ->when($request->section_id, function ($query) use ($request) {
                     $query->where('section_id', $request->section_id);
                 })->where('academic_id', getAcademicId())
@@ -193,112 +192,113 @@ class SmStudentAttendanceController extends Controller
                 }
                 $attendance->save();
 
-                $data['class_id'] = gv($student, 'class');
-                $data['section_id'] = gv($student, 'section');
-                $records = $this->studentRecordInfo($data['class_id'], $data['section_id'])->pluck('studentDetail.user_id');
+                $student_user_id = SmStudent::find($attendance->student_id)->user_id;
+                $data['class_id'] = $attendance->class_id;
+                $data['section_id'] = $attendance->section_id;
+                $data['attendance_type'] = $attendance->attendance_type;
                 try{
-                    $this->sent_notifications('Student_Attendance', $records, $data, ['Student', 'Parent']);
+                    $this->sent_notifications('Student_Attendance', [$student_user_id], $data, ['Student', 'Parent']);
                 }
                 catch (\Exception $e) {
                     Log::info($e->getMessage());
                 }
 
-                $studentInfo = StudentRecord::find($record_id);
-                $compact['attendance_date'] = date('Y-m-d', strtotime($request->date));
-                if (gv($student, 'attendance_type') == "P") {
-                    $compact['user_email'] = $studentInfo->studentDetail->email;
-                    $compact['student_name'] = $studentInfo->studentDetail->full_name;
-                    @send_sms($studentInfo->studentDetail->mobile, 'student_attendance', $compact);
+                // $studentInfo = StudentRecord::find($record_id);
+                // $compact['attendance_date'] = date('Y-m-d', strtotime($request->date));
+                // if (gv($student, 'attendance_type') == "P") {
+                //     $compact['user_email'] = $studentInfo->studentDetail->email;
+                //     $compact['student_name'] = $studentInfo->studentDetail->full_name;
+                //     @send_sms($studentInfo->studentDetail->mobile, 'student_attendance', $compact);
 
-                    $compact['user_email'] = $studentInfo->studentDetail->parents->guardians_email;
-                    $compact['parent_name'] = $studentInfo->studentDetail->parents->guardians_name;
-                    @send_sms($studentInfo->studentDetail->parents->guardians_mobile, 'student_attendance_for_parent', $compact);
-                } elseif (gv($student, 'attendance_type') == "L") {
-                    $compact['user_email'] = $studentInfo->studentDetail->email;
-                    $compact['student_name'] = $studentInfo->studentDetail->full_name;
-                    @send_sms($studentInfo->studentDetail->mobile, 'student_late', $compact);
+                //     $compact['user_email'] = $studentInfo->studentDetail->parents->guardians_email;
+                //     $compact['parent_name'] = $studentInfo->studentDetail->parents->guardians_name;
+                //     @send_sms($studentInfo->studentDetail->parents->guardians_mobile, 'student_attendance_for_parent', $compact);
+                // } elseif (gv($student, 'attendance_type') == "L") {
+                //     $compact['user_email'] = $studentInfo->studentDetail->email;
+                //     $compact['student_name'] = $studentInfo->studentDetail->full_name;
+                //     @send_sms($studentInfo->studentDetail->mobile, 'student_late', $compact);
 
-                    $compact['user_email'] = $studentInfo->studentDetail->parents->guardians_email;
-                    $compact['parent_name'] = $studentInfo->studentDetail->parents->guardians_name;
-                    @send_sms($studentInfo->studentDetail->parents->guardians_mobile, 'student_late_for_parent', $compact);
-                } elseif (gv($student, 'attendance_type') == "A") {
-                    $compact['user_email'] = $studentInfo->studentDetail->email;
-                    $compact['student_name'] = $studentInfo->studentDetail->full_name;
-                    @send_sms($studentInfo->studentDetail->mobile, 'student_absent', $compact);
+                //     $compact['user_email'] = $studentInfo->studentDetail->parents->guardians_email;
+                //     $compact['parent_name'] = $studentInfo->studentDetail->parents->guardians_name;
+                //     @send_sms($studentInfo->studentDetail->parents->guardians_mobile, 'student_late_for_parent', $compact);
+                // } elseif (gv($student, 'attendance_type') == "A") {
+                //     $compact['user_email'] = $studentInfo->studentDetail->email;
+                //     $compact['student_name'] = $studentInfo->studentDetail->full_name;
+                //     @send_sms($studentInfo->studentDetail->mobile, 'student_absent', $compact);
 
-                    $compact['user_email'] = $studentInfo->studentDetail->parents->guardians_email;
-                    $compact['parent_name'] = $studentInfo->studentDetail->parents->guardians_name;
-                    @send_sms($studentInfo->studentDetail->parents->guardians_mobile, 'student_absent_for_parent', $compact);
-                }
+                //     $compact['user_email'] = $studentInfo->studentDetail->parents->guardians_email;
+                //     $compact['parent_name'] = $studentInfo->studentDetail->parents->guardians_name;
+                //     @send_sms($studentInfo->studentDetail->parents->guardians_mobile, 'student_absent_for_parent', $compact);
+                // }
                 // futter notification & normal
-                $messege = "";
-                $date = dateConvert($attendance->attendance_date);
-                if (gv($student, 'student')) {
-                    $student_detail = SmStudent::find(gv($student, 'student'));
-                    if ($student) {
-                        if ($attendance->attendance_type == "P") {
-                            $messege = app('translator')->get('student.Your_teacher_has_marked_you_present_in_the_attendance_on ', ['date' => $date]);
-                        } elseif ($attendance->attendance_type == "L") {
-                            $messege = app('translator')->get('student.Your_teacher_has_marked_you_late_in_the_attendance_on ', ['date' => $date]);
-                        } elseif ($attendance->attendance_type == "A") {
-                            $messege = app('translator')->get('student.Your_teacher_has_marked_you_absent_in_the_attendance_on ', ['date' => $date]);
-                        } elseif ($attendance->attendance_type == "F") {
-                            $messege = app('translator')->get('student.Your_teacher_has_marked_you_halfday_in_the_attendance_on ', ['date' => $date]);
-                        }
+                // $messege = "";
+                // $date = dateConvert($attendance->attendance_date);
+                // if (gv($student, 'student')) {
+                //     $student_detail = SmStudent::find(gv($student, 'student'));
+                //     if ($student) {
+                //         if ($attendance->attendance_type == "P") {
+                //             $messege = app('translator')->get('student.Your_teacher_has_marked_you_present_in_the_attendance_on ', ['date' => $date]);
+                //         } elseif ($attendance->attendance_type == "L") {
+                //             $messege = app('translator')->get('student.Your_teacher_has_marked_you_late_in_the_attendance_on ', ['date' => $date]);
+                //         } elseif ($attendance->attendance_type == "A") {
+                //             $messege = app('translator')->get('student.Your_teacher_has_marked_you_absent_in_the_attendance_on ', ['date' => $date]);
+                //         } elseif ($attendance->attendance_type == "F") {
+                //             $messege = app('translator')->get('student.Your_teacher_has_marked_you_halfday_in_the_attendance_on ', ['date' => $date]);
+                //         }
 
-                        $notification = new SmNotification();
-                        $notification->user_id = $student_detail->user_id;
-                        $notification->role_id = 2;
-                        $notification->date = date('Y-m-d');
-                        $notification->message = $messege;
-                        $notification->school_id = Auth::user()->school_id;
-                        $notification->academic_id = getAcademicId();
-                        $notification->save();
+                //         $notification = new SmNotification();
+                //         $notification->user_id = $student_detail->user_id;
+                //         $notification->role_id = 2;
+                //         $notification->date = date('Y-m-d');
+                //         $notification->message = $messege;
+                //         $notification->school_id = Auth::user()->school_id;
+                //         $notification->academic_id = getAcademicId();
+                //         $notification->save();
 
-                        try {
-                            if ($student_detail->user) {
-                                $title = app('translator')->get('student.attendance_notication');
-                                Notification::send($student_detail->user, new FlutterAppNotification($notification, $title));
-                            }
-                        } catch (\Exception $e) {
-                            Log::info($e->getMessage());
-                        }
+                //         try {
+                //             if ($student_detail->user) {
+                //                 $title = app('translator')->get('student.attendance_notication');
+                //                 Notification::send($student_detail->user, new FlutterAppNotification($notification, $title));
+                //             }
+                //         } catch (\Exception $e) {
+                //             Log::info($e->getMessage());
+                //         }
 
-                        // for parent user 
-                        $parent = SmParent::find($student_detail->parent_id);
-                        if ($parent) {
-                            if ($attendance->attendance_type == "P") {
-                                $messege = app('translator')->get('student.Your_child_is_marked_present_in_the_attendance_on', ['date' => $date, 'student_name' => $student_detail->full_name]);
-                            } elseif ($attendance->attendance_type == "L") {
-                                $messege = app('translator')->get('student.Your_child_is_marked_late_in_the_attendance_on', ['date' => $date, 'student_name' => $student_detail->full_name]);
-                            } elseif ($attendance->attendance_type == "A") {
-                                $messege = app('translator')->get('student.Your_child_is_marked_absent_in_the_attendance_on', ['date' => $date, 'student_name' => $student_detail->full_name]);
-                            } elseif ($attendance->attendance_type == "F") {
-                                $messege = app('translator')->get('student.Your_child_is_marked_halfday_in_the_attendance_on', ['date' => $date, 'student_name' => $student_detail->full_name]);
-                            }
+                //         // for parent user 
+                //         $parent = SmParent::find($student_detail->parent_id);
+                //         if ($parent) {
+                //             if ($attendance->attendance_type == "P") {
+                //                 $messege = app('translator')->get('student.Your_child_is_marked_present_in_the_attendance_on', ['date' => $date, 'student_name' => $student_detail->full_name]);
+                //             } elseif ($attendance->attendance_type == "L") {
+                //                 $messege = app('translator')->get('student.Your_child_is_marked_late_in_the_attendance_on', ['date' => $date, 'student_name' => $student_detail->full_name]);
+                //             } elseif ($attendance->attendance_type == "A") {
+                //                 $messege = app('translator')->get('student.Your_child_is_marked_absent_in_the_attendance_on', ['date' => $date, 'student_name' => $student_detail->full_name]);
+                //             } elseif ($attendance->attendance_type == "F") {
+                //                 $messege = app('translator')->get('student.Your_child_is_marked_halfday_in_the_attendance_on', ['date' => $date, 'student_name' => $student_detail->full_name]);
+                //             }
 
 
-                            $notification = new SmNotification();
-                            $notification->user_id = $parent->user_id;
-                            $notification->role_id = 3;
-                            $notification->date = date('Y-m-d');
-                            $notification->message = $messege;
-                            $notification->school_id = Auth::user()->school_id;
-                            $notification->academic_id = getAcademicId();
-                            $notification->save();
+                //             $notification = new SmNotification();
+                //             $notification->user_id = $parent->user_id;
+                //             $notification->role_id = 3;
+                //             $notification->date = date('Y-m-d');
+                //             $notification->message = $messege;
+                //             $notification->school_id = Auth::user()->school_id;
+                //             $notification->academic_id = getAcademicId();
+                //             $notification->save();
 
-                            try {
-                                $user = User::find($notification->user_id);
-                                if ($parent->parent_user) {
-                                    $title = app('translator')->get('student.attendance_notication');
-                                    Notification::send($parent->parent_user, new FlutterAppNotification($notification, $title));
-                                }
-                            } catch (\Exception $e) {
-                                Log::info($e->getMessage());
-                            }
-                        }
-                    }
-                }
+                //             try {
+                //                 $user = User::find($notification->user_id);
+                //                 if ($parent->parent_user) {
+                //                     $title = app('translator')->get('student.attendance_notication');
+                //                     Notification::send($parent->parent_user, new FlutterAppNotification($notification, $title));
+                //                 }
+                //             } catch (\Exception $e) {
+                //                 Log::info($e->getMessage());
+                //             }
+                //         }
+                //     }
+                // }
                 // end
             }
             Toastr::success('Operation successful', 'Success');

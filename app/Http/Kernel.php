@@ -4,6 +4,7 @@ namespace App\Http;
 
 use App\Http\Middleware\HttpsProtocol;
 use App\Http\Middleware\UserRolePermission;
+use App\Http\Middleware\CheckMaintenanceMode;
 use App\Http\Middleware\ThemeCheckMiddleware;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
@@ -44,7 +45,7 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\HttpsProtocol::class,
             \App\Http\Middleware\Localization::class,
-            \App\Http\Middleware\CheckMaintenanceMode::class
+            CheckMaintenanceMode::class
         ],
 
         'api' => [
@@ -74,6 +75,7 @@ class Kernel extends HttpKernel
         'CheckUserMiddleware' => \App\Http\Middleware\CheckUserMiddleware::class,
         'CheckDashboardMiddleware' => \App\Http\Middleware\CheckDashboardMiddleware::class,
         'StudentMiddleware' => \App\Http\Middleware\StudentMiddleware::class,
+        'AlumniMiddleware' => \App\Http\Middleware\AlumniMiddleware::class,
         'ParentMiddleware' => \App\Http\Middleware\ParentMiddleware::class,
         'CustomerMiddleware' => \App\Http\Middleware\CustomerMiddleware::class,
         'PM' => \App\Http\Middleware\ProductMiddleware::class,

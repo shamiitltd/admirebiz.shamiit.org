@@ -13,7 +13,7 @@ class DownloadController extends Controller
 	{
         $this->middleware('PM');
         // User::checkAuth();
-	}:
+	}
     function downloadFile(Request $request) {
 
     }

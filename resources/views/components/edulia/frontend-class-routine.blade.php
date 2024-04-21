@@ -9,8 +9,8 @@
             <td>{{ date('d/m/Y', strtotime($frontClassRoutine->publish_date)) }}</td>
             @if ($frontClassRoutine->result_file)
                 <td class="pdf_download_option">
-                    <a href="{{ url($frontClassRoutine->result_file) }}">
-                        <i class="fas fa-file-pdf"></i> @lang('edulia.download')
+                    <a href="{{ asset($frontClassRoutine->result_file) }}">
+                        <i class="fas fa-file"></i> @lang('edulia.download')
                     </a>
                 </td>
             @endif

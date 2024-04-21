@@ -100,7 +100,7 @@ Author E-mail: info@spondonit.com
 .common-calendar .fc-button.fc-state-default:hover,
 .admin .navbar .right-navbar .dropdown .badge,
 .single-cms-box:hover .single-cms {
-  box-shadow: 0px 10px 20px rgba(108, 39, 255, 0.3);
+  box-shadow: var(--box_shadow);
 }
 
 /* line 42, /Applications/MAMP/htdocs/InfixEduTheme/public/backEnd/scss/1_default/admin/_predefine.scss */
@@ -379,7 +379,7 @@ Author E-mail: info@spondonit.com
   );
   background: -o-linear-gradient(90deg, var(--gradient_1) 0%, #c738d8 51%, var(--gradient_1) 100%);
   background: -ms-linear-gradient(90deg, var(--gradient_1) 0%, #c738d8 51%, var(--gradient_1) 100%);
-  background: linear-gradient(90deg, var(--gradient_1) 0%, #c738d8 51%, var(--gradient_1) 100%);
+  background: var(--primary-color);
   color: #ffffff;
   background-size: 200% auto;
   -webkit-transition: all 0.4s ease 0s;
@@ -969,7 +969,7 @@ html[dir="rtl"] .primary-btn.white:hover {
   background: -moz-linear-gradient(90deg, var(--gradient_1) 0%, #c738d8 100%);
   background: -o-linear-gradient(90deg, var(--gradient_1) 0%, #c738d8 100%);
   background: linear-gradient(90deg, var(--gradient_1) 0%, #c738d8 100%);
-  box-shadow: 0px 10px 20px rgba(108, 39, 255, 0.3);
+  box-shadow: var(--box_shadow);
 }
 
 /* line 40, /Applications/MAMP/htdocs/InfixEduTheme/public/backEnd/scss/1_default/style.scss */
@@ -1647,7 +1647,7 @@ html[dir="rtl"] .to-do-list.up_buttom {
   background: #ffffff;
   padding: 40px 30px;
   border-radius: 10px;
-  box-shadow: 0px 10px 15px rgba(236, 208, 244, 0.3);
+  box-shadow: var(--box_shadow);
 }
 
 @media (max-width: 1300px) and (min-width: 992px) {
@@ -1889,8 +1889,7 @@ html[dir="rtl"] .to-do-list.up_buttom {
 
 /* line 188, /Applications/MAMP/htdocs/InfixEduTheme/public/backEnd/scss/1_default/admin/_component.scss */
 .modal-content .modal-header {
-  background: url(../../img/modal-header-bg.png) no-repeat center;
-  background-size: cover;
+  background: var(--primary-color);
   border-radius: 5px 5px 0px 0px;
   border: 0;
   padding: 33px 40px;
@@ -2439,7 +2438,7 @@ html[dir="rtl"] .to-do-list.up_buttom {
   background: #ffffff;
   padding: 40px 30px;
   border-radius: 10px;
-  box-shadow: 0px 10px 15px rgba(236, 208, 244, 0.3);
+  box-shadow: var(--box_shadow);
   margin: 0 auto;
   clear: both;
   border-collapse: separate;
@@ -2575,7 +2574,7 @@ html[dir="rtl"] .school-table .dropdown .dropdown-toggle:hover {
   background: -moz-linear-gradient(90deg, var(--gradient_1) 0%, #c738d8 100%);
   background: -o-linear-gradient(90deg, var(--gradient_1) 0%, #c738d8 100%);
   background: linear-gradient(90deg, var(--gradient_1) 0%, #c738d8 100%);
-  box-shadow: 0px 10px 20px rgba(108, 39, 255, 0.3);
+  box-shadow: var(--box_shadow);
 }
 
 /* line 193, /Applications/MAMP/htdocs/InfixEduTheme/public/backEnd/scss/1_default/style.scss */
@@ -2597,7 +2596,7 @@ html[dir="rtl"] .school-table .dropdown .dropdown-toggle:focus:after {
 
 /* line 207, /Applications/MAMP/htdocs/InfixEduTheme/public/backEnd/scss/1_default/style.scss */
 html[dir="rtl"] .school-table .dropdown .dropdown-menu {
-  box-shadow: 0px 10px 20px rgba(108, 39, 255, 0.3);
+  box-shadow: var(--box_shadow);
 }
 
 /* line 1, /Applications/MAMP/htdocs/InfixEduTheme/public/backEnd/scss/1_default/admin/_login.scss */
@@ -5296,7 +5295,7 @@ html[dir="rtl"] .client .header-area .navbar .nav .nav-item {
 /* line 512, /Applications/MAMP/htdocs/InfixEduTheme/public/backEnd/scss/1_default/client/_home.scss */
 .client.light .fact-area .white-box.single-summery,
 .client.color .fact-area .white-box.single-summery {
-  box-shadow: 0px 10px 15px rgba(236, 208, 244, 0.3);
+  box-shadow: var(--box_shadow);
 }
 
 /* line 515, /Applications/MAMP/htdocs/InfixEduTheme/public/backEnd/scss/1_default/client/_home.scss */
@@ -5586,7 +5585,7 @@ html[dir="rtl"] .common-calendar .fc-button.fc-state-default:hover {
   background: -moz-linear-gradient(90deg, var(--gradient_1) 0%, #c738d8 100%);
   background: -o-linear-gradient(90deg, var(--gradient_1) 0%, #c738d8 100%);
   background: linear-gradient(90deg, var(--gradient_1) 0%, #c738d8 100%);
-  box-shadow: 0px 10px 20px rgba(108, 39, 255, 0.3);
+  box-shadow: var(--box_shadow);
 }
 
 /* line 495, /Applications/MAMP/htdocs/InfixEduTheme/public/backEnd/scss/1_default/style.scss */
@@ -6692,7 +6691,7 @@ html[dir="rtl"] .admin .navbar .right-navbar .dropdown .dropdown-toggle {
   );
   background: -o-linear-gradient(90deg, var(--gradient_1) 0%, #c738d8 51%, var(--gradient_1) 100%);
   background: -ms-linear-gradient(90deg, var(--gradient_1) 0%, #c738d8 51%, var(--gradient_1) 100%);
-  background: linear-gradient(90deg, var(--gradient_1) 0%, #c738d8 51%, var(--gradient_1) 100%);
+  background: var(--primary-color);
   color: #ffffff;
   background-size: 200% auto;
   -webkit-transition: all 0.4s ease 0s;
@@ -6742,7 +6741,7 @@ html[dir="rtl"] .admin .navbar .right-navbar .dropdown .dropdown-toggle {
   );
   background: -o-linear-gradient(90deg, var(--gradient_1) 0%, #c738d8 51%, var(--gradient_1) 100%);
   background: -ms-linear-gradient(90deg, var(--gradient_1) 0%, #c738d8 51%, var(--gradient_1) 100%);
-  background: linear-gradient(90deg, var(--gradient_1) 0%, #c738d8 51%, var(--gradient_1) 100%);
+  background: var(--primary-color);
   color: #ffffff;
   background-size: 200% auto;
   -webkit-transition: all 0.4s ease 0s;

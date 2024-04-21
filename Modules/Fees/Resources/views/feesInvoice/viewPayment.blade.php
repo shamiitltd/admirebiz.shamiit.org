@@ -12,6 +12,7 @@
     <button type="button" class="close" data-dismiss="modal">&times;</button>
 </div>
 <div class="modal-body">
+    <div class="table-responsive">
     <table class="table school-table-style shadow-none p-0" cellspacing="0" width="100%">
         <thead>
             <tr>
@@ -121,6 +122,7 @@
             @endforeach
         </tbody>
     </table>
+    </div>
 </div>
 <script>
     if ($(".primary_select").length) {

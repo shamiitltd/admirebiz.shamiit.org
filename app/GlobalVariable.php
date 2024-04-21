@@ -41,4 +41,9 @@ class GlobalVariable{
             return $data;
         }
 	}
+    
+    public static function isAlumni()
+    {
+        return 200000106;
+    }
 }

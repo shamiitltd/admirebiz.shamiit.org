@@ -3,7 +3,7 @@
         @foreach ($menus as $menu)
             @if (count($menu->childs) > 0)
                 <li class="heading_main_menu_list">
-                    <a href="#" class="heading_main_menu_list_link">
+                    <a href="index.php" class="heading_main_menu_list_link">
                         {{ $menu->title }}
                     </a>
                     <ul class="heading_main_menu_list_dropdown">
@@ -105,6 +105,8 @@
                         @if ($menu->type == 'dCourseCategory') href="{{ route('view-course-category', $menu->element_id) }}" @endif
                         @if ($menu->type == 'dNewsCategory') href="{{ route('view-news-category', $menu->element_id) }}" @endif
                         @if ($menu->type == 'dNews') href="{{ route('news-Details', $menu->element_id) }}" @endif
+                        @if ($menu->type == 'customLink') href="{{ $menu->link }}" @endif
+                        
                         @if ($menu->type == 'customLink') href="{{ $menu->link }}" @endif
                         >
                         @if ($menu->link == '/login')

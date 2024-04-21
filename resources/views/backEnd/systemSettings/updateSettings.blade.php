@@ -6,7 +6,7 @@
 
 @section('mainContent')
 
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('system_settings.update_system') </h1>
@@ -35,13 +35,13 @@
                 <div class="col-lg-3">
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="main-title">
-                                <h3 class="mb-40 cust-lawngreen">@lang('system_settings.upload_from_local_directory')</h3>
-                            </div>
                             @if(userPermission('admin/update-system'))
                             {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'url' => 'versionUpdateInstall', 'method' => 'POST', 'enctype' => 'multipart/form-data']) }}
                             @endif   
                             <div class="white-box sm_mb_20  ">
+                                <div class="main-title">
+                                    <h3 class="mb-15 cust-lawngreen">@lang('system_settings.upload_from_local_directory')</h3>
+                                </div>
                                     <div class="add-visitor">
 
                                         <div class="row no-gutters input-right-icon mb-20">
@@ -101,78 +101,80 @@
                     </div>
                 </div>
                 <div class="col-lg-9">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="main-title mb-20" >
-                                <h3 >@lang('system_settings.update_details')</h3>
+                    <div class="white-box">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="main-title mb-0" >
+                                    <h3 class="mb-15">@lang('system_settings.update_details')</h3>
+                                </div>
                             </div>
+    
                         </div>
-
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="white-box">
-                                <h1> @lang('system_settings.system_info') </h1>
-                                <div class="add-visitor">
-                                    <table style="width:100%; box-shadow: none;" class="table school-table-style">
-                                      
-                                        <tr>
-                                            <td>@lang('system_settings.software_version')</td>
-                                            <td>{{@file_get_contents('storage/app/.version')}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>@lang('system_settings.check_update')</td>
-                                            <td><a href="https://codecanyon.net/user/codethemes/portfolio" target="_blank"> <i class="ti-new-window"> </i> Update </a> </td>
-                                        </tr> 
-                                        <tr>
-                                            <td> @lang('system_settings.PHP_version')</td>
-                                            <td>{{phpversion() }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td> @lang('system_settings.curl_enable')</td>
-                                            <td>@php
-                                            if  (in_array  ('curl', get_loaded_extensions())) {
-                                                echo 'enable';
-                                            }
-                                            else {
-                                                echo 'disable';
-                                            }
-                                            @endphp</td>
-                                        </tr>
-                            
-                                        
-                                        <tr>
-                                            <td> @lang('system_settings.purchase_code')</td>
-
-                                            <td>{{__('Verified')}}
-                                            @if(! Illuminate\Support\Facades\Config::get('app.app_sync'))
-                                                 @includeIf('service::license.revoke')
-                                             @endif 
-                                             </td>
-                                        </tr>
-                            
-
-                                        <tr>
-                                            <td> @lang('system_settings.install_domain')</td>
-                                            <td>{{@$data->system_domain}}</td>
-                                        </tr>
-
-                                        <tr>
-                                            <td> @lang('system_settings.system_activation_date')</td>
-                                            <td>{{@dateConvert($data->system_activated_date)}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td> @lang('system_settings.last_update')</td>
-                                            <td>
-                                            @if(is_null($data->last_update))
-                                                 {{@dateConvert($data->system_activated_date)}}
-                                            @else
-                                                    {{@dateConvert($data->last_update)}}
-                                            @endif
-                                            </td>
-                                        </tr>
-
-                                    </table>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="main-title">
+                                    <h3> @lang('system_settings.system_info') </h3>
+                                    <div class="add-visitor">
+                                        <table style="width:100%; box-shadow: none;" class="table school-table-style">
+                                          
+                                            <tr>
+                                                <td>@lang('system_settings.software_version')</td>
+                                                <td>{{@file_get_contents('storage/app/.version')}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>@lang('system_settings.check_update')</td>
+                                                <td><a href="https://codecanyon.net/user/codethemes/portfolio" target="_blank"> <i class="ti-new-window"> </i> Update </a> </td>
+                                            </tr> 
+                                            <tr>
+                                                <td> @lang('system_settings.PHP_version')</td>
+                                                <td>{{phpversion() }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td> @lang('system_settings.curl_enable')</td>
+                                                <td>@php
+                                                if  (in_array  ('curl', get_loaded_extensions())) {
+                                                    echo 'enable';
+                                                }
+                                                else {
+                                                    echo 'disable';
+                                                }
+                                                @endphp</td>
+                                            </tr>
+                                
+                                            
+                                            <tr>
+                                                <td> @lang('system_settings.purchase_code')</td>
+    
+                                                <td>{{__('Verified')}}
+                                                @if(! Illuminate\Support\Facades\Config::get('app.app_sync'))
+                                                     @includeIf('service::license.revoke')
+                                                 @endif 
+                                                 </td>
+                                            </tr>
+                                
+    
+                                            <tr>
+                                                <td> @lang('system_settings.install_domain')</td>
+                                                <td class="text-break">{{@$data->system_domain}}</td>
+                                            </tr>
+    
+                                            <tr>
+                                                <td> @lang('system_settings.system_activation_date')</td>
+                                                <td>{{@dateConvert($data->system_activated_date)}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td> @lang('system_settings.last_update')</td>
+                                                <td>
+                                                @if(is_null($data->last_update))
+                                                     {{@dateConvert($data->system_activated_date)}}
+                                                @else
+                                                        {{@dateConvert($data->last_update)}}
+                                                @endif
+                                                </td>
+                                            </tr>
+    
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>

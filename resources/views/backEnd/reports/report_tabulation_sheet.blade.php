@@ -3,7 +3,7 @@
 Tabulation Report
 @endsection
 @section('mainContent')
-<section class="sms-breadcrumb mb-40 white-box">
+<section class="sms-breadcrumb mb-20">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>Tabulation Report </h1>
@@ -119,7 +119,7 @@ Tabulation Report
                                                 <img class="logo-img" src="{{ generalSetting()->logo }}" alt="">
                                             </div>
                                             <div class="ml-30">
-                                                <h3 class="text-white"> {{isset(generalSetting()->school_name)?generalSetting()->school_name:'Infix School Management ERP'}} </h3>
+                                                <h3 class="text-white"> {{isset(generalSetting()->school_name)?generalSetting()->school_name:'SHAMIIT School Management ERP'}} </h3>
 
                                                 <p class="text-white mb-0">House 25, Road 27, Block B, 54th Floor, New York, United States of America</p>
                                             </div>

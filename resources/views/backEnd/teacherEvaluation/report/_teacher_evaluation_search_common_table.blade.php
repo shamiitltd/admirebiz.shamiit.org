@@ -1,5 +1,12 @@
 <div class="white-box">
     <div class="row">
+        <div class="col-lg-4 no-gutters">
+            <div class="main-title">
+                <h3 class="mb-15">@lang('teacherEvaluation.teacher_pending_evaluation_report') </h3>
+            </div>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-lg-3">
             <div class="primary_input ">
                 <label class="primary_input_label"

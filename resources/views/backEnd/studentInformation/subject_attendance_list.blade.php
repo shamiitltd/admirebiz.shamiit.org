@@ -11,7 +11,7 @@
     </style>
 @endpush
 @section('mainContent')
-<section class="sms-breadcrumb mb-40 up_breadcrumb white-box">
+<section class="sms-breadcrumb mb-20 up_breadcrumb">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('student.subject_wise_attendance')</h1>
@@ -26,15 +26,15 @@
 <section class="admin-visitor-area up_st_admin_visitor">
     <div class="container-fluid p-0">
         <div class="row">
-            <div class="col-lg-6 col-md-6">
-                <div class="main-title">
-                    <h3 class="mb-30">@lang('common.select_criteria') </h3>
-                </div>
-            </div>
-        </div>
-        <div class="row">
             <div class="col-lg-12">  
                 <div class="white-box">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6">
+                            <div class="main-title">
+                                <h3 class="mb-15">@lang('common.select_criteria') </h3>
+                            </div>
+                        </div>
+                    </div>
                     {{ Form::open(['class' => 'form-horizontal','route' => 'subject-attendance-search', 'method' => 'GET', 'enctype' => 'multipart/form-data', 'id' => 'search_studentA']) }}
                         <div class="row">
                             <input type="hidden" name="url" id="url" value="{{URL::to('/')}}"> 
@@ -252,88 +252,90 @@
                     <input type="hidden" name="un_semester_label_id" value="{{isset($unSemesterLabel) ? $unSemesterLabel->id:''}}">
                     <input type="hidden" name="un_subject_id" value="{{isset($unSubject) ? $unSubject->id :''}}">
                     <input type="hidden" name="date" value="{{isset($input['attendance_date'])? $input['attendance_date']: ''}}">
-                    <div class="row ">
-                        <div class="col-lg-12">
-                            <div class="table-responsive">
-                                <table class="table school-table-style" cellspacing="0" width="100%">
-                                    <thead>
-                                        <tr>
-                                            <th>@lang('common.sl')</th>
-                                            <th>@lang('student.admission_no')</th>
-                                            <th>@lang('student.student_name')</th>
-                                            <th>@lang('student.roll_number')</th>
-                                            <th>@lang('student.attendance')</th>
-                                            <th>@lang('common.note')</th>
-                                        </tr>
-                                    </thead>
-    
-                                    <tbody>
-                                        @php $count=1; @endphp
-                                     
-                                        @foreach($students as $student)
-                                        {{-- student means student record data--}}
+                    <div class="white-box">
+                        <div class="row ">
+                            <div class="col-lg-12">
+                                <div class="table-responsive">
+                                    <table class="table school-table-style" cellspacing="0" width="100%">
+                                        <thead>
                                             <tr>
-                                                <td>{{$count++}} </td>
-                                                <td>{{$student->studentDetail->admission_no}}
-                                                    <input type="hidden" name="attendance[{{$student->id}}]" value="{{$student->id}}">
-                                                    <input type="hidden" name="attendance[{{$student->id}}][student]" value="{{$student->student_id}}">
-                                                    <input type="hidden" name="attendance[{{$student->id}}][class]" value="{{$student->class_id}}">
-                                                    <input type="hidden" name="attendance[{{$student->id}}][section]" value="{{$student->section_id}}">
-    
-                                                    @if(moduleStatusCheck('University'))
-                                                        <input type="hidden" name="attendance[{{$student->id}}][un_session_id]" value="{{$student->un_session_id}}">
-                                                        <input type="hidden" name="attendance[{{$student->id}}][un_faculty_id]" value="{{$student->un_faculty_id}}">
-                                                        <input type="hidden" name="attendance[{{$student->id}}][un_department_id]" value="{{$student->un_department_id}}">
-                                                        <input type="hidden" name="attendance[{{$student->id}}][un_academic_id]" value="{{$student->un_academic_id}}">
-                                                        <input type="hidden" name="attendance[{{$student->id}}][un_semester_id]" value="{{$student->un_semester_id}}">
-                                                        <input type="hidden" name="attendance[{{$student->id}}][un_semester_label_id]" value="{{$student->un_semester_label_id}}">
-                                                    @endif
-                                                </td>
-                                                <td>{{$student->studentDetail->first_name.' '.$student->studentDetail->last_name}}</td>
-                                                <td>{{$student->roll_no}}</td>
-                                                <td>
-                                                    <div class="d-flex radio-btn-flex">
-                                                        <div class="mr-20">
-                                                            <input type="radio" name="attendance[{{$student->id}}][attendance_type]" id="attendanceP{{$student->id}}" value="P" class="common-radio attendanceP subject_attendance_type" {{ $student->studentDetail->DateSubjectWiseAttendances !=null ? ($student->studentDetail->DateSubjectWiseAttendances->attendance_type == "P" ? 'checked' :'') : 'checked' }}>
-                                                            <label for="attendanceP{{$student->id}}">@lang('student.present')</label>
-                                                        </div>
-                                                        <div class="mr-20">
-                                                            <input type="radio" name="attendance[{{$student->id}}][attendance_type]" id="attendanceL{{$student->id}}" value="L" class="common-radio subject_attendance_type" {{ $student->studentDetail->DateSubjectWiseAttendances !=null ? ($student->studentDetail->DateSubjectWiseAttendances->attendance_type == "L" ? 'checked' :''):''}}>
-                                                            <label for="attendanceL{{$student->id}}">@lang('student.late')</label>
-                                                        </div>
-                                                        <div class="mr-20">
-                                                            <input type="radio" name="attendance[{{$student->id}}][attendance_type]" id="attendanceA{{$student->id}}" value="A" class="common-radio subject_attendance_type" {{$student->studentDetail->DateSubjectWiseAttendances !=null ? ($student->studentDetail->DateSubjectWiseAttendances->attendance_type == "A" ? 'checked' :''):''}}>
-                                                            <label for="attendanceA{{$student->id}}">@lang('student.absent')</label>
-                                                        </div>
-                                                        <div>
-                                                            <input type="radio" name="attendance[{{$student->id}}][attendance_type]" id="attendanceH{{$student->id}}" value="F" class="common-radio subject_attendance_type" {{$student->studentDetail->DateSubjectWiseAttendances !=null ? ($student->studentDetail->DateSubjectWiseAttendances->attendance_type == "F" ? 'checked' :'') : ''}}>
-                                                            <label for="attendanceH{{$student->id}}">@lang('student.half_day')</label>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="primary_input">
-                                                        <textarea class="primary_input_field form-control note_{{$student->id}}" cols="0" rows="2" name="attendance[{{$student->id}}][note]">{{$student->studentDetail->DateSubjectWiseAttendances !=null ? $student->studentDetail->DateSubjectWiseAttendances->notes :''}}</textarea>
-                                                    </div>
-                                                </td>
+                                                <th>@lang('common.sl')</th>
+                                                <th>@lang('student.admission_no')</th>
+                                                <th>@lang('student.student_name')</th>
+                                                <th>@lang('student.roll_number')</th>
+                                                <th>@lang('student.attendance')</th>
+                                                <th>@lang('common.note')</th>
                                             </tr>
-                                        @endforeach
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td class="text-center">
-                                            <button type="submit" class="primary-btn mr-40 fix-gr-bg nowrap submit">
-                                                  @lang('student.attendance')
-                                            </button>
-                                            </td>
-                                            <td></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                        </thead>
+        
+                                        <tbody>
+                                            @php $count=1; @endphp
+                                         
+                                            @foreach($students as $student)
+                                            {{-- student means student record data--}}
+                                                <tr>
+                                                    <td>{{$count++}} </td>
+                                                    <td>{{$student->studentDetail->admission_no}}
+                                                        <input type="hidden" name="attendance[{{$student->id}}]" value="{{$student->id}}">
+                                                        <input type="hidden" name="attendance[{{$student->id}}][student]" value="{{$student->student_id}}">
+                                                        <input type="hidden" name="attendance[{{$student->id}}][class]" value="{{$student->class_id}}">
+                                                        <input type="hidden" name="attendance[{{$student->id}}][section]" value="{{$student->section_id}}">
+        
+                                                        @if(moduleStatusCheck('University'))
+                                                            <input type="hidden" name="attendance[{{$student->id}}][un_session_id]" value="{{$student->un_session_id}}">
+                                                            <input type="hidden" name="attendance[{{$student->id}}][un_faculty_id]" value="{{$student->un_faculty_id}}">
+                                                            <input type="hidden" name="attendance[{{$student->id}}][un_department_id]" value="{{$student->un_department_id}}">
+                                                            <input type="hidden" name="attendance[{{$student->id}}][un_academic_id]" value="{{$student->un_academic_id}}">
+                                                            <input type="hidden" name="attendance[{{$student->id}}][un_semester_id]" value="{{$student->un_semester_id}}">
+                                                            <input type="hidden" name="attendance[{{$student->id}}][un_semester_label_id]" value="{{$student->un_semester_label_id}}">
+                                                        @endif
+                                                    </td>
+                                                    <td>{{$student->studentDetail->first_name.' '.$student->studentDetail->last_name}}</td>
+                                                    <td>{{$student->roll_no}}</td>
+                                                    <td>
+                                                        <div class="d-flex radio-btn-flex">
+                                                            <div class="mr-20">
+                                                                <input type="radio" name="attendance[{{$student->id}}][attendance_type]" id="attendanceP{{$student->id}}" value="P" class="common-radio attendanceP subject_attendance_type" {{ $student->studentDetail->DateSubjectWiseAttendances !=null ? ($student->studentDetail->DateSubjectWiseAttendances->attendance_type == "P" ? 'checked' :'') : 'checked' }}>
+                                                                <label for="attendanceP{{$student->id}}">@lang('student.present')</label>
+                                                            </div>
+                                                            <div class="mr-20">
+                                                                <input type="radio" name="attendance[{{$student->id}}][attendance_type]" id="attendanceL{{$student->id}}" value="L" class="common-radio subject_attendance_type" {{ $student->studentDetail->DateSubjectWiseAttendances !=null ? ($student->studentDetail->DateSubjectWiseAttendances->attendance_type == "L" ? 'checked' :''):''}}>
+                                                                <label for="attendanceL{{$student->id}}">@lang('student.late')</label>
+                                                            </div>
+                                                            <div class="mr-20">
+                                                                <input type="radio" name="attendance[{{$student->id}}][attendance_type]" id="attendanceA{{$student->id}}" value="A" class="common-radio subject_attendance_type" {{$student->studentDetail->DateSubjectWiseAttendances !=null ? ($student->studentDetail->DateSubjectWiseAttendances->attendance_type == "A" ? 'checked' :''):''}}>
+                                                                <label for="attendanceA{{$student->id}}">@lang('student.absent')</label>
+                                                            </div>
+                                                            <div>
+                                                                <input type="radio" name="attendance[{{$student->id}}][attendance_type]" id="attendanceH{{$student->id}}" value="F" class="common-radio subject_attendance_type" {{$student->studentDetail->DateSubjectWiseAttendances !=null ? ($student->studentDetail->DateSubjectWiseAttendances->attendance_type == "F" ? 'checked' :'') : ''}}>
+                                                                <label for="attendanceH{{$student->id}}">@lang('student.half_day')</label>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="primary_input">
+                                                            <textarea class="primary_input_field form-control note_{{$student->id}}" cols="0" rows="2" name="attendance[{{$student->id}}][note]">{{$student->studentDetail->DateSubjectWiseAttendances !=null ? $student->studentDetail->DateSubjectWiseAttendances->notes :''}}</textarea>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td class="text-center">
+                                                <button type="submit" class="primary-btn mr-40 fix-gr-bg nowrap submit">
+                                                      @lang('student.attendance')
+                                                </button>
+                                                </td>
+                                                <td></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                    {{ Form::close() }}
                             </div>
-                {{ Form::close() }}
                         </div>
                     </div>
                 </div>

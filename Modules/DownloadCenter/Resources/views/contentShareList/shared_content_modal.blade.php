@@ -1,6 +1,6 @@
 <div class="container-fluid">
     <div class="text-center">
-        <a id="textForClipboard" target="_blank"
+        <a id="textForClipboard" target="_blank" class="text-break"
             href="{{ route('download-center.content-share-link', @$sharedLink->url) }}">
             {{ route('download-center.content-share-link', @$sharedLink->url) }}
         </a>

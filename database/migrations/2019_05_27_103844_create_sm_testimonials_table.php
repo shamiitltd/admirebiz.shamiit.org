@@ -33,7 +33,7 @@ class CreateSmTestimonialsTable extends Migration
                 'designation' => 'CEO',
                 'institution_name' => 'Google',
                 'image' => 'public/uploads/staff/demo/staff.jpg',
-                'description' => 'its vast! Infix has more additional feature that will expect in a complete solution.',
+                'description' => 'Highly recommend SHAMIIT EDU for their outstanding school management system. Efficient, customizable, and excellent support. Reliable partner for any educational institution.',
                 'star_rating' => 5,
                 'created_at' => date('Y-m-d h:i:s')
             ],
@@ -42,7 +42,7 @@ class CreateSmTestimonialsTable extends Migration
                 'designation' => 'Chairman',
                 'institution_name' => 'Linkdin',
                 'image' => 'public/uploads/staff/demo/staff.jpg',
-                'description' => 'its vast! Infix has more additional feature that will expect in a complete solution.',
+                'description' => 'I strongly endorse SHAMIIT EDU for their exceptional school management system—efficient, customizable, with excellent support. A reliable partner for any educational institution.',
                 'star_rating' => 4,
                 'created_at' => date('Y-m-d h:i:s')
             ],

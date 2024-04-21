@@ -6,7 +6,7 @@
 <input type="hidden" id="classToSectionRoute" value="{{route('fees.ajax-get-all-section')}}">
 <input type="hidden" id="sectionToStudentRoute" value="{{route('fees.ajax-section-all-student')}}">
 <input type="hidden" id="classToStudentRoute" value="{{route('fees.ajax-get-all-student')}}">
-<section class="sms-breadcrumb mb-40 white-box">
+<section class="sms-breadcrumb mb-20">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('bulkprint::bulk.fees_invoice_bulk_print')</h1>
@@ -21,15 +21,15 @@
 <section class="admin-visitor-area up_admin_visitor">
     <div class="container-fluid p-0">
         <div class="row">
-            <div class="col-lg-4 col-md-6">
-                <div class="main-title">
-                    <h3 class="mb-30">@lang('common.select_criteria') </h3>
-                </div>
-            </div>
-        </div>
-        <div class="row">
             <div class="col-lg-12">
                 <div class="white-box">
+                    <div class="row">
+                        <div class="col-lg-4 col-md-6">
+                            <div class="main-title">
+                                <h3 class="mb-15">@lang('common.select_criteria') </h3>
+                            </div>
+                        </div>
+                    </div>
                     {{ Form::open(['class' => 'form-horizontal', 'route' => 'fees-invoice-bulk-print-search', 'method' => 'POST']) }}
                         <div class="row">
                             @if(moduleStatusCheck('University')==true)

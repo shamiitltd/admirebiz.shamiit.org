@@ -18,7 +18,9 @@ class CreateSchoolModulesTable extends Migration
             $table->id();
             $table->longText('modules')->nullable();
             $table->longText('menus')->nullable();
-
+            $table->string('module_name')->nullable();
+            $table->tinyInteger('active_status')->default(1);
+            $table->integer('updated_by')->nullable();
             $table->integer('school_id')->default(1)->unsigned();
             $table->foreign('school_id')->references('id')->on('sm_schools')->onDelete('cascade');
             $table->timestamps();
@@ -33,7 +35,6 @@ class CreateSchoolModulesTable extends Migration
                     $settings->module_name ='lead';
                     $settings->school_id = $school->id;
                     $settings->active_status = $school->id == 1 ? 1 : 0;
-                    $settings->updated_by = 1;
                     $settings->save();
                 }
             }

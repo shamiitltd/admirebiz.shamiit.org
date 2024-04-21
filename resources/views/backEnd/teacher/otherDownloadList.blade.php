@@ -3,7 +3,7 @@
     @lang('study.other_downloads_list')
 @endsection
 @section('mainContent')
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('study.other_downloads_list') </h1>
@@ -21,38 +21,40 @@
 
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="row">
-                        <div class="col-lg-4 no-gutters">
-                            <div class="main-title">
-                                <h3 class="mb-0">@lang('study.other_downloads_list')</h3>
+                    <div class="white-box">
+                        <div class="row">
+                            <div class="col-lg-4 no-gutters">
+                                <div class="main-title">
+                                    <h3 class="mb-15">@lang('study.other_downloads_list')</h3>
+                                </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <x-table>
-                                <table id="table_id" class="table data-table" cellspacing="0" width="100%">
-                                    <thead>
-                                        <tr>
-                                            <th>SI</th>
-                                            <th>@lang('study.content_title')</th>
-                                            <th>@lang('common.type')</th>
-                                            <th>@lang('common.date')</th>
-                                            <th>@lang('study.available_for')</th>
-                                            @if (moduleStatusCheck('University'))
-                                                <th> @lang('university::un.semester_label')</th>
-                                            @else
-                                                <th> @lang('study.classSec')</th>
-                                            @endif
-                                            <th>@lang('common.action')</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-
-                                    </tbody>
-                                </table>
-                            </x-table>
+    
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <x-table>
+                                    <table id="table_id" class="table data-table" cellspacing="0" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th>SI</th>
+                                                <th>@lang('study.content_title')</th>
+                                                <th>@lang('common.type')</th>
+                                                <th>@lang('common.date')</th>
+                                                <th>@lang('study.available_for')</th>
+                                                @if (moduleStatusCheck('University'))
+                                                    <th> @lang('university::un.semester_label')</th>
+                                                @else
+                                                    <th> @lang('study.classSec')</th>
+                                                @endif
+                                                <th>@lang('common.action')</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+    
+                                        </tbody>
+                                    </table>
+                                </x-table>
+                            </div>
                         </div>
                     </div>
                 </div>

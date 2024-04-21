@@ -47,6 +47,10 @@ class SmStudentIdCardRequest extends FormRequest
             'dob'=>'nullable',
             'blood' =>'nullable',
             'phone_number'=>'nullable',
+            'background_img'=> 'nullable|image|mimes:jpeg,png,jpg,svg|max:'.$maxFileSize,
+            'profile_image'=> 'nullable|image|mimes:jpeg,png,jpg,svg|max:'.$maxFileSize,
+            'logo'=> 'nullable|image|mimes:jpeg,png,jpg,svg|max:'.$maxFileSize,
+            'signature'=> 'nullable|image|mimes:jpeg,png,jpg,svg|max:'.$maxFileSize,
         ];
         if ($this->id) {         
             $rules['logo'] = 'sometimes|nullable|image|mimes:jpeg,png,jpg,gif,svg|max:'.$maxFileSize;

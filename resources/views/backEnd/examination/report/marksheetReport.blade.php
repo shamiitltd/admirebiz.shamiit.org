@@ -93,7 +93,7 @@
             vertical-align: middle;
         }
     </style>
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('exam.marksheet_report') </h1>
@@ -106,15 +106,6 @@
         </div>
     </section>
     <section class="admin-visitor-area">
-        <div class="container-fluid p-0">
-            <div class="row">
-                <div class="col-lg-8 col-md-6">
-                    <div class="main-title">
-                        <h3 class="mb-30">@lang('common.select_criteria')</h3>
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="row">
             <div class="col-lg-12">
                 <div class="white-box">
@@ -129,7 +120,8 @@
                                         ['USN', 'UD', 'UA', 'US', 'USL','USUB']
                                     ])
 
-                                    <div class="col-lg-3 mt-30" id="select_exam_typ_subject_div">
+                                    <div class="col-lg-3 mt-15" id="select_exam_typ_subject_div">
+                                        <label for="">@lang('exam.select_exam') *</label>
                                         {{ Form::select('exam_type',[""=>__('exam.select_exam').'*'], null , ['class' => 'primary_select  form-control'. ($errors->has('exam_type') ? ' is-invalid' : ''), 'id'=>'select_exam_typ_subject']) }}
                                         
                                         <div class="pull-right loader loader_style" id="select_exam_type_loader">
@@ -407,9 +399,9 @@
                         <div class="print_button pull-right mb-30 mt-30">
                             {{ Form::open(['class' => 'form-horizontal', 'route' => 'percent-marksheet-print', 'method' => 'POST','target' => '_blank']) }}
                                 <input type="hidden" name="exam" value="{{$examInfo->id}}">
-                                <input type="hidden" name="subject" value="{{$subjectInfo->id}}">
-                                <input type="hidden" name="class" value="{{$classInfo->id}}">
-                                <input type="hidden" name="section" value="{{$sectionInfo->id}}">
+                                <input type="hidden" name="subject" value="{{@$subjectInfo->id}}">
+                                <input type="hidden" name="class" value="{{@$classInfo->id}}">
+                                <input type="hidden" name="section" value="{{@$sectionInfo->id}}">
                                 <button type="submit" class="primary-btn small fix-gr-bg"><i class="ti-printer"></i>
                                     @lang('common.print')
                                 </button>
@@ -431,8 +423,8 @@
                                         <h3 class="text-white">@lang('common.class') : {{$classInfo->class_name}} ({{$sectionInfo->section_name}})</h3>
                                     </div>
                                     <div class=" col-lg-4 text-left text-lg-right mt-30-md">
-                                        <h3 class="text-white"> {{isset(generalSetting()->school_name)?generalSetting()->school_name:'Infix School Management ERP'}} </h3>
-                                        <p class="text-white mb-0"> {{isset(generalSetting()->address)?generalSetting()->address:'Infix School Adress'}} </p>
+                                        <h3 class="text-white"> {{isset(generalSetting()->school_name)?generalSetting()->school_name:'SHAMIIT School Management ERP'}} </h3>
+                                        <p class="text-white mb-0"> {{isset(generalSetting()->address)?generalSetting()->address:'SHAMIIT School Adress'}} </p>
                                         <p class="text-white mb-0">
                                             @lang('common.email'): {{isset(generalSetting()->email)?generalSetting()->email:'admin@demo.com'}} ,
                                             @lang('common.phone'): {{isset(generalSetting()->phone)?generalSetting()->phone:'+8801841412141'}}

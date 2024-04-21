@@ -10,7 +10,7 @@
         </style>
     @endpush
 @endif
-<section class="sms-breadcrumb mb-40 white-box">
+<section class="sms-breadcrumb mb-20">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('fees::feesModule.fees_invoice')</h1>
@@ -24,140 +24,142 @@
 </section>
 <section class="admin-visitor-area up_st_admin_visitor">
     <div class="container-fluid p-0">
-        @if (isset($role) && $role == 'admin')
-            @if (userPermission('fees.fees-invoice-store'))
-                <div class="row">
-                    <div class="col-lg-12 text-left col-md-12">
-                        <a href="{{ route('fees.fees-invoice') }}" class="primary-btn small fix-gr-bg">
-                            <span class="ti-plus pr-2"></span>
-                            @lang('common.add')
-                        </a>
+        <div class="white-box">
+            @if (isset($role) && $role == 'admin')
+                @if (userPermission('fees.fees-invoice-store'))
+                    <div class="row">
+                        <div class="col-lg-12 text-left col-md-12">
+                            <a href="{{ route('fees.fees-invoice') }}" class="primary-btn small fix-gr-bg">
+                                <span class="ti-plus pr-2"></span>
+                                @lang('common.add')
+                            </a>
+                        </div>
                     </div>
-                </div>
+                @endif
             @endif
-        @endif
-        <div class="row">
+            <div class="row mt-40">
 
-            @if ((isset($role) && $role == 'admin') || $role == 'lms')
-                <div class="col-lg-12">
-                    <x-table>
-                        <table id="table_id" class="table data-table" cellspacing="0" width="100%">
-                            <thead>
-                                <tr>
-                                    <th>@lang('common.sl')</th>
-                                    <th>@lang('common.student')</th>
-                                    <th>@lang('accounts.amount')</th>
-                                    <th>@lang('fees::feesModule.waiver')</th>
-                                    <th>@lang('fees.fine')</th>
-                                    <th>@lang('fees.paid')</th>
-                                    <th>@lang('accounts.balance')</th>
-                                    <th>@lang('common.status')</th>
-                                    <th>@lang('common.date')</th>
-                                    <th>@lang('common.action')</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
-                    </x-table>
-                </div>
-            @else
-                <div class="col-lg-12 student-details up_admin_visitor">
-                    <ul class="nav nav-tabs tabs_scroll_nav ml-0" role="tablist">
-                        @foreach ($records as $key => $record)
-                            <li class="nav-item mb-0">
-                                <a class="nav-link mb-0 @if ($key == 0) active @endif "
-                                    href="#tab{{ $key }}" role="tab"
-                                    data-toggle="tab">{{ $record->class->class_name }}
-                                    ({{ $record->section->section_name }})
-                                </a>
-                            </li>
-                        @endforeach
-                    </ul>
+                @if ((isset($role) && $role == 'admin') || $role == 'lms')
+                    <div class="col-lg-12">
+                        <x-table>
+                            <table id="table_id" class="table data-table" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>@lang('common.sl')</th>
+                                        <th>@lang('common.student')</th>
+                                        <th>@lang('accounts.amount')</th>
+                                        <th>@lang('fees::feesModule.waiver')</th>
+                                        <th>@lang('fees.fine')</th>
+                                        <th>@lang('fees.paid')</th>
+                                        <th>@lang('accounts.balance')</th>
+                                        <th>@lang('common.status')</th>
+                                        <th>@lang('common.date')</th>
+                                        <th>@lang('common.action')</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </x-table>
+                    </div>
+                @else
+                    <div class="col-lg-12 student-details up_admin_visitor mt-0">
+                        <ul class="nav nav-tabs tabs_scroll_nav mt-0 ml-0" role="tablist">
+                            @foreach ($records as $key => $record)
+                                <li class="nav-item mb-0">
+                                    <a class="nav-link mb-0 @if ($key == 0) active @endif "
+                                        href="#tab{{ $key }}" role="tab"
+                                        data-toggle="tab">{{ moduleStatusCheck('University') ? $record->unSemesterLabel->name : $record->class->class_name }}
+                                        ({{ $record->section->section_name }})
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
 
-                    <div class="tab-content mt-10">
-                        @foreach ($records as $key => $record)
-                            <div role="tabpanel"
-                                class="tab-pane fade  @if ($key == 0) active show @endif"
-                                id="tab{{ $key }}">
-                                <x-table>
-                                    <table id="table_id" class="table" cellspacing="0" width="100%">
-                                        <thead>
-                                            <tr>
-                                                <th>@lang('common.sl')</th>
-                                                <th>@lang('common.student')</th>
-                                                <th>@lang('student.class_section')</th>
-                                                <th>@lang('accounts.amount')</th>
-                                                <th>@lang('fees::feesModule.waiver')</th>
-                                                <th>@lang('fees.fine')</th>
-                                                <th>@lang('fees.paid')</th>
-                                                <th>@lang('accounts.balance')</th>
-                                                <th>@lang('common.status')</th>
-                                                <th>@lang('common.date')</th>
-                                                <th>@lang('common.action')</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($record->feesInvoice as $key => $studentInvoice)
-                                                @php
-                                                    $amount = $studentInvoice->Tamount;
-                                                    $weaver = $studentInvoice->Tweaver;
-                                                    $fine = $studentInvoice->Tfine;
-                                                    $paid_amount = $studentInvoice->Tpaidamount;
-                                                    $sub_total = $studentInvoice->Tsubtotal;
-                                                    $balance = $amount + $fine - ($paid_amount + $weaver);
-                                                @endphp
+                        <div class="tab-content" style="margin-top:70px">
+                            @foreach ($records as $key => $record)
+                                <div role="tabpanel"
+                                    class="tab-pane fade  @if ($key == 0) active show @endif"
+                                    id="tab{{ $key }}">
+                                    <x-table>
+                                        <table id="table_id" class="table" cellspacing="0" width="100%">
+                                            <thead>
                                                 <tr>
-                                                    <td>{{ $key + 1 }}</td>
-                                                    <td>
-                                                        <a href="{{ route('fees.fees-invoice-view', ['id' => $studentInvoice->id, 'state' => 'view']) }}"
-                                                            target="_blank">
-                                                            {{ @$studentInvoice->studentInfo->full_name }}
-                                                        </a>
-                                                    </td>
-                                                    <td>{{ @$studentInvoice->recordDetail->class->class_name }}
-                                                        ({{ @$studentInvoice->recordDetail->section->section_name }})
-                                                    </td>
-                                                    <td>{{ $amount }}</td>
-                                                    <td>{{ $weaver }}</td>
-                                                    <td>{{ $fine }}</td>
-                                                    <td>{{ $paid_amount }}</td>
-                                                    <td>{{ $balance }}</td>
-                                                    <td>
-                                                        @if ($balance == 0)
-                                                            <button
-                                                                class="primary-btn small bg-success text-white border-0">@lang('fees.paid')</button>
-                                                        @else
-                                                            @if ($paid_amount > 0)
-                                                                <button
-                                                                    class="primary-btn small bg-warning text-white border-0">@lang('fees.partial')</button>
-                                                            @else
-                                                                <button
-                                                                    class="primary-btn small bg-danger text-white border-0">@lang('fees.unpaid')</button>
-                                                            @endif
-                                                        @endif
-                                                    </td>
-                                                    <td>{{ dateConvert($studentInvoice->create_date) }}</td>
-                                                    <td>
-                                                        <x-drop-down>
-                                                            <a class="dropdown-item"
-                                                                href="{{ route('fees.fees-invoice-view', ['id' => $studentInvoice->id, 'state' => 'view']) }}">@lang('common.view')</a>
-                                                            @if ($balance != 0)
-                                                                <a class="dropdown-item"
-                                                                    href="{{ route('fees.student-fees-payment', $studentInvoice->id) }}">@lang('inventory.add_payment')</a>
-                                                            @endif
-                                                        </x-drop-down>
-                                                    </td>
+                                                    <th>@lang('common.sl')</th>
+                                                    <th>@lang('common.student')</th>
+                                                    <th>@lang('student.class_section')</th>
+                                                    <th>@lang('accounts.amount')</th>
+                                                    <th>@lang('fees::feesModule.waiver')</th>
+                                                    <th>@lang('fees.fine')</th>
+                                                    <th>@lang('fees.paid')</th>
+                                                    <th>@lang('accounts.balance')</th>
+                                                    <th>@lang('common.status')</th>
+                                                    <th>@lang('common.date')</th>
+                                                    <th>@lang('common.action')</th>
                                                 </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </x-table>
-                            </div>
-                        @endforeach
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($record->feesInvoice as $key => $studentInvoice)
+                                                    @php
+                                                        $amount = $studentInvoice->Tamount;
+                                                        $weaver = $studentInvoice->Tweaver;
+                                                        $fine = $studentInvoice->Tfine;
+                                                        $paid_amount = $studentInvoice->Tpaidamount;
+                                                        $sub_total = $studentInvoice->Tsubtotal;
+                                                        $balance = $amount + $fine - ($paid_amount + $weaver);
+                                                    @endphp
+                                                    <tr>
+                                                        <td>{{ $key + 1 }}</td>
+                                                        <td>
+                                                            <a href="{{ route('fees.fees-invoice-view', ['id' => $studentInvoice->id, 'state' => 'view']) }}"
+                                                                target="_blank">
+                                                                {{ @$studentInvoice->studentInfo->full_name }}
+                                                            </a>
+                                                        </td>
+                                                        <td>{{ @$studentInvoice->recordDetail->class->class_name }}
+                                                            ({{ @$studentInvoice->recordDetail->section->section_name }})
+                                                        </td>
+                                                        <td>{{ $amount }}</td>
+                                                        <td>{{ $weaver }}</td>
+                                                        <td>{{ $fine }}</td>
+                                                        <td>{{ $paid_amount }}</td>
+                                                        <td>{{ $balance }}</td>
+                                                        <td>
+                                                            @if ($balance == 0)
+                                                                <button
+                                                                    class="primary-btn small bg-success text-white border-0">@lang('fees.paid')</button>
+                                                            @else
+                                                                @if ($paid_amount > 0)
+                                                                    <button
+                                                                        class="primary-btn small bg-warning text-white border-0">@lang('fees.partial')</button>
+                                                                @else
+                                                                    <button
+                                                                        class="primary-btn small bg-danger text-white border-0">@lang('fees.unpaid')</button>
+                                                                @endif
+                                                            @endif
+                                                        </td>
+                                                        <td>{{ dateConvert($studentInvoice->create_date) }}</td>
+                                                        <td>
+                                                            <x-drop-down>
+                                                                <a class="dropdown-item"
+                                                                    href="{{ route('fees.fees-invoice-view', ['id' => $studentInvoice->id, 'state' => 'view']) }}">@lang('common.view')</a>
+                                                                @if ($balance != 0)
+                                                                    <a class="dropdown-item"
+                                                                        href="{{ route('fees.student-fees-payment', $studentInvoice->id) }}">@lang('inventory.add_payment')</a>
+                                                                @endif
+                                                            </x-drop-down>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </x-table>
+                                </div>
+                            @endforeach
+                        </div>
                     </div>
-                </div>
-            @endif
+                @endif
+            </div>
         </div>
     </div>
 </section>

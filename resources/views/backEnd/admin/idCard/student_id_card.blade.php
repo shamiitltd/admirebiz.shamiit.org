@@ -12,7 +12,7 @@
         <style>
             .user_id_card_header {
                 padding: 10px;
-                background: #c738d8;
+                background:var(--primary-color);
 
             }
 
@@ -30,7 +30,7 @@
 
             .sticky_card {
                 position: sticky;
-                top: 0;
+                top: 80px;
             }
             .input-right-icon button.primary-btn-small-input {
                 top: 8px !important;
@@ -40,7 +40,7 @@
     @endpush
     <input type="hidden" value="{{ moduleStatusCheck('University') ? 'University' :'' }}" id="module">
     <input type="hidden" value="{{ isset($id_card) ? 'edit' :'' }}" id="editIDCard">
-    <section class="sms-breadcrumb mb-40 white-box up_breadcrumb">
+    <section class="sms-breadcrumb mb-20 up_breadcrumb">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>
@@ -84,8 +84,9 @@
                 <div class="col-lg-7">
                     <div class="row">
                         <div class="col-lg-12">
+                            <div class="white-box">
                             <div class="main-title">
-                                <h3 class="mb-30">
+                                <h3 class="mb-15">
                                     @if (isset($id_card))
                                         @lang('admin.edit_id_card')
                                     @else
@@ -106,20 +107,23 @@
                             @include('backEnd.admin.idCard.form_id_card')
 
                             {{ Form::close() }}
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="col-lg-5">
+                    <div class="sticky_card white-box">
+
                     <div class="row">
-                        <div class="col-lg-4 no-gutters">
+                        <div class="col-lg-12 no-gutters">
                             <div class="main-title">
-                                <h3 class="mb-0">@lang('admin.preview_id_card') </h3>
+                                <h3 class="mb-15">@lang('admin.preview_id_card') </h3>
                             </div>
                         </div>
                     </div>
-                    <div class="sticky_card">
-                        <div class="user_id_card_header mt-30">
+
+                        <div class="user_id_card_header mt-0">
                             <h4 id="titleV">
                                 @if (isset($id_card))
                                     {{ $id_card->title }}

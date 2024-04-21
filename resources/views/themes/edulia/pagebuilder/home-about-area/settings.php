@@ -71,14 +71,5 @@ return [
             'placeholder'   => __('edulia.enter_text'),
 
         ],
-        [
-            'id'            => 'home_about_area_button_link',
-            'type'          => 'text',
-            'value'         => '#',
-            'class'         => '',
-            'label_title'   => __('edulia.link'),
-            'placeholder'   => __('edulia.enter_text'),
-
-        ],
     ]
 ];

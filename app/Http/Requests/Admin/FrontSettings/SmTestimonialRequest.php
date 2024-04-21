@@ -25,10 +25,10 @@ class SmTestimonialRequest extends FormRequest
     {
         $maxFileSize =generalSetting()->file_size*1024;
         $rules =  [
-            'name' => 'required|max:250',
-            'designation' => 'required|max:250',
-            'institution_name' => 'required|max:250',
-            'description' => 'required',
+            'name' => 'required|max:100',
+            'designation' => 'required|max:100',
+            'institution_name' => 'required|max:100',
+            'description' => 'required|max:250',
             'rating' => 'required',
         ];
         if($this->id){

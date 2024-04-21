@@ -3,7 +3,7 @@
 @lang('exam.exam_schedule')
 @endsection
 @section('mainContent')
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('exam.exam_schedule')</h1>
@@ -18,23 +18,23 @@
     <section class="admin-visitor-area">
         <div class="container-fluid p-0">
             <div class="row">
-                <div class="col-lg-8 col-md-6">
-                    <div class="main-title">
-                        <h3 class="mb-30">@lang('common.select_criteria')</h3>
-                    </div>
-                </div>
-                @if(userPermission('exam_schedule_create'))
-                    <div class="col-lg-4 text-md-right text-left col-md-6 mb-30-lg">
-                        <a href="{{route('exam_schedule_create')}}" class="primary-btn small fix-gr-bg">
-                            <span class="ti-plus pr-2"></span>
-                            @lang('exam.add_exam_schedule')
-                        </a>
-                    </div>
-                @endif
-            </div>
-            <div class="row">
                 <div class="col-lg-12">
                     <div class="white-box">
+                        <div class="row">
+                            <div class="col-lg-8 col-md-6">
+                                <div class="main-title">
+                                    <h3 class="mb-15">@lang('common.select_criteria')</h3>
+                                </div>
+                            </div>
+                            @if(userPermission('exam_schedule_create'))
+                                <div class="col-lg-4 text-md-right text-left col-md-6 mb-30-lg">
+                                    <a href="{{route('exam_schedule_create')}}" class="primary-btn small fix-gr-bg">
+                                        <span class="ti-plus pr-2"></span>
+                                        @lang('exam.add_exam_schedule')
+                                    </a>
+                                </div>
+                            @endif
+                        </div>
                         {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'exam_schedule_report_search_new', 'method' => 'POST', 'enctype' => 'multipart/form-data']) }}
                         <div class="row">
                             <input type="hidden" name="url" id="url" value="{{URL::to('/')}}">
@@ -47,7 +47,8 @@
                                             ['USN', 'UD', 'UA', 'US', 'USL','USEC'],'hide'=> ['USUB']
                                         ])
 
-                                        <div class="col-lg-3 mt-25" id="select_exam_typ_subject_div">
+                                        <div class="col-lg-3 mt-15" id="select_exam_typ_subject_div">
+                                            <label for=""> @lang('exam.select_exam') *</label>
                                             {{ Form::select('exam_type',[""=>__('exam.select_exam').'*'], null , ['class' => 'primary_select  form-control'. ($errors->has('exam_type') ? ' is-invalid' : ''), 'id'=>'select_exam_typ_subject']) }}
                                             
                                             <div class="pull-right loader loader_style" id="select_exam_type_loader">

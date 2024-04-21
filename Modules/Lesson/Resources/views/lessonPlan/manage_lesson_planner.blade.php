@@ -61,7 +61,7 @@
     </script>
 
 
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('lesson::lesson.lesson_plan_overview')</h1>
@@ -126,20 +126,21 @@
             </div>
         </div>
         @if(isset($lessonPlanner))
-            <div class="row mt-40">
+            <div class="white-box mt-40">
+                <div class="row">
                 <div class="col-lg-12">
                     <div class="row">
                         <div class="col-lg-4 col-md-6 col-sm-12 col-12 no-gutters">
                             <div class="main-title" style="padding-left: 15px;">
-                                <h3 class="mb-0">@lang('lesson::lesson.progress')
+                                <h3 class="mb-15">@lang('lesson::lesson.progress')
 
 
-                                </h3><br>@isset($total)
+                                </h3>@isset($total)
                                     {{$completed_total}}/{{$total}}
                                 @endisset
 
-                                <div id="progressbar" style="height: 10px;margin-bottom:0px"></div>
-                                <div class="pull-right" style="margin-top: -30px;">
+                                <div id="progressbar" style="height: 10px;margin-bottom:10px"></div>
+                                <div class="pull-right" style="margin-top: -40px;">
                                     @isset($percentage)
                                         {{(int)($percentage)}}  %
                                     @endisset
@@ -250,7 +251,7 @@
                         </x-table>
                     </div>
                 </div>
-            </div>
+            </div></div>
         @endif
     </section>
 

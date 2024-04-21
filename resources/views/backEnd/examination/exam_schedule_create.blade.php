@@ -3,7 +3,7 @@
 @lang('exam.exam_schedule_create')
 @endsection
 @section('mainContent')
-<section class="sms-breadcrumb mb-40 white-box">
+<section class="sms-breadcrumb mb-20">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('exam.exam_schedule_create') </h1>
@@ -19,15 +19,15 @@
 <section class="admin-visitor-area">
     <div class="container-fluid p-0">
             <div class="row">
-                <div class="col-lg-4 col-md-6">
-                    <div class="main-title">
-                        <h3 class="mb-30">@lang('common.select_criteria') </h3>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
                 <div class="col-lg-12">
                     <div class="white-box">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-6">
+                                <div class="main-title">
+                                    <h3 class="mb-15">@lang('common.select_criteria') </h3>
+                                </div>
+                            </div>
+                        </div>
                         {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'exam_schedule_create_store', 'method' => 'POST', 'enctype' => 'multipart/form-data', 'id' => 'search_student']) }}
                             <div class="row">
                                 <input type="hidden" name="url" id="url" value="{{URL::to('/')}}">
@@ -41,6 +41,9 @@
                                             ])
 
                                             <div class="col-lg-3 mt-25" id="select_exam_typ_subject_div">
+                                                <label class="primary_input_label" for="">
+                                                    {{ __('common.exam') }} *
+                                                </label>
                                                 {{ Form::select('exam_type',["" =>__('exam.select_exam').'*'], null , ['class' => 'primary_select  form-control'. ($errors->has('exam_type') ? ' is-invalid' : ''), 'id'=>'select_exam_typ_subject']) }}
                                                 
                                                 <div class="pull-right loader loader_style" id="select_exam_type_loader">
@@ -130,7 +133,7 @@
                 <div class="row mt-40">
                     <div class="col-lg-6 col-md-6">
                         <div class="main-title">
-                            <h3 class="mb-30">@lang('exam.exam_schedule')</h3>
+                            <h3 class="mb-15">@lang('exam.exam_schedule')</h3>
                         </div>
                     </div>
                 </div>

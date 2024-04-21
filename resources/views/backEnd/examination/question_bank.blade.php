@@ -11,7 +11,7 @@
     </style>
 @endpush
 @section('mainContent')
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('exam.question_bank')</h1>
@@ -38,21 +38,24 @@
                 @endif
             @endif
             <div class="row">
+
                 <div class="col-lg-4">
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="main-title">
-                                <h3 class="mb-30">
-                                    @if (isset($bank))
-                                        @lang('exam.edit_question_bank')
-                                    @else
-                                        @lang('exam.add_question_bank')
-                                    @endif
 
-                                </h3>
-                            </div>
                             <input type="hidden" name="url" id="url" value="{{ URL::to('/') }}">
                             <div class="white-box">
+                                <div class="main-title">
+                                    <h3 class="mb-15">
+                                        @if (isset($bank))
+                                            @lang('exam.edit_question_bank')
+                                        @else
+                                            @lang('exam.add_question_bank')
+                                        @endif
+    
+                                    </h3>
+                                </div>
+
                                 @if (isset($bank))
                                     {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => ['question-bank-update', $bank->id], 'method' => 'PUT', 'enctype' => 'multipart/form-data', 'id' => 'question_bank']) }}
                                 @else
@@ -98,6 +101,25 @@
                                             @endif
                                         </div>
                                     </div>
+                                    @if(moduleStatusCheck('University'))
+                                            @if(isset($editData))
+                                                @includeIf('university::common.session_faculty_depart_academic_semester_level',
+                                                [
+                                                    'required' => ['USN', 'UD', 'UA', 'US', 'USL','USEC'],
+                                                    'hide'=>['USUB'],
+                                                    'div'=>'col-lg-12','row'=>1,'mt'=>'mt-0' ,'subject'=>false, 
+                                                ])
+                                            @else
+                                                @includeIf('university::common.session_faculty_depart_academic_semester_level',
+                                                [
+                                                    'required' => ['USN', 'UD', 'UA', 'US', 'USL','USEC'],
+                                                    'hide'=>['USUB'],
+                                                    'div'=>'col-lg-12','row'=>1,'mt'=>'mt-0' ,'subject'=>false, 
+                                                    'multipleSelect' => 1,
+                                                ])
+                                            @endif
+                                        
+                                    @else 
                                     <div class="row mt-15">
                                         <div class="col-lg-12">
                                             <label class="primary_input_label" for="">
@@ -128,6 +150,7 @@
                                             @endif
                                         </div>
                                     </div>
+
                                     <div class="row mt-15">
                                         @if (!isset($bank))
                                             <div class="col-lg-12" id="selectSectionsDiv">
@@ -137,8 +160,14 @@
                                                             class="text-danger"> *</span></label>
                                                     <select name="section[]" id="selectMultiSections" multiple="multiple"
                                                         class="multypol_check_select active position-relative">
+
                                                     </select>
                                                 </div>
+                                                @if ($errors->has('section'))
+                                                    <span class="text-danger invalid-select" role="alert">
+                                                        {{ $errors->first('section') }}
+                                                    </span>
+                                                @endif
                                             </div>
                                         @else
                                             <div class="col-lg-12" id="select_section_div">
@@ -171,8 +200,9 @@
                                             </div>
                                         @endif
                                     </div>
+                                    @endif
                                     <div class="row mt-15">
-                                        <div class="col-lg-12">
+                                        {{-- <div class="col-lg-12">
                                             <label class="primary_input_label" for="">
                                                 {{ __('exam.question_type') }}
                                                 <span class="text-danger"> *</span>
@@ -204,20 +234,45 @@
                                                     {{ $errors->first('group') }}
                                                 </span>
                                             @endif
+                                        </div> --}}
+
+                                        <div class="col-lg-12">
+                                            <label class="primary_input_label" for="">
+                                                {{ __('exam.question_type') }}
+                                                <span class="text-danger"> *</span>
+                                            </label>
+                                            <select class="primary_select form-control{{ $errors->has('question_type') ? ' is-invalid' : '' }}" name="question_type" id="question-type">
+                                                <option data-display="@lang('exam.question_type') *" value="">
+                                                    @lang('exam.question_type') *</option>
+                                        
+                                                @if (moduleStatusCheck('MultipleImageQuestion') == true)
+                                                    <option value="MI" {{ isset($bank) ? ($bank->type == 'MI' ? 'selected' : 'disabled') : '' }}>
+                                                        @lang('exam.multiple_image')</option>
+                                                @endif
+                                        
+                                                <option value="M" {{ isset($bank) ? ($bank->type == 'M' ? 'selected' : 'disabled') : '' }}>
+                                                    @lang('exam.multiple_choice')</option>
+                                                <option value="T" {{ isset($bank) ? ($bank->type == 'T' ? 'selected' : 'disabled') : '' }}>
+                                                    @lang('exam.true_false')</option>
+                                                <option value="F" {{ isset($bank) ? ($bank->type == 'F' ? 'selected' : 'disabled') : '' }}>
+                                                    @lang('exam.fill_in_the_blanks')</option>
+                                            </select>
+                                            @if ($errors->has('group'))
+                                                <span class="text-danger invalid-select" role="alert">
+                                                    {{ $errors->first('group') }}
+                                                </span>
+                                            @endif
                                         </div>
                                     </div>
                                     <div class="row mt-15">
                                         <div class="col-lg-12">
                                             <div class="primary_input">
-                                                <label class="primary_input_label d-flex"
-                                                    for="">@lang('exam.question') <span class="text-danger"> *</span>
-                                                    @if (moduleStatusCheck('AiContent'))
-                                                        @include('aicontent::inc.button')
-                                                    @endif
-                                                </label>
-                                                <textarea class="generated-text primary_input_field form-control{{ $errors->has('question') ? ' is-invalid' : '' }}"
-                                                    cols="0"
+                                                <label class="primary_input_label" for="">@lang('exam.question') <span
+                                                        class="text-danger"> *</span></label>
+                                                <textarea class="primary_input_field form-control{{ $errors->has('question') ? ' is-invalid' : '' }}" cols="0"
                                                     rows="4" name="question">{{ isset($bank) ? $bank->question : (old('question') != '' ? old('question') : '') }}</textarea>
+
+
                                                 @if ($errors->has('question'))
                                                     <span
                                                         class="error text-danger">{{ $errors->first('question') }}</span>
@@ -234,6 +289,8 @@
                                                     class="primary_input_field form-control{{ $errors->has('marks') ? ' is-invalid' : '' }}"
                                                     type="text" name="marks"
                                                     value="{{ isset($bank) ? $bank->marks : (old('marks') != '' ? old('marks') : '') }}">
+
+
                                                 @if ($errors->has('marks'))
                                                     <span class="text-danger">
                                                         {{ $errors->first('marks') }}
@@ -256,7 +313,7 @@
                                     <div class="multiple-choice"
                                         id="{{ isset($multiple_choice) ? $multiple_choice : 'multiple-choice' }}">
                                         <div class="row  mt-15">
-                                            <div class="col-lg-8">
+                                            <div class="col-lg-7">
                                                 <div class="primary_input">
                                                     <label class="primary_input_label" for="">@lang('exam.number_of_options')
                                                         <span class="text-danger"> *</span></label>
@@ -265,6 +322,8 @@
                                                         type="number" min="2" name="number_of_option"
                                                         autocomplete="off" id="number_of_option"
                                                         value="{{ isset($bank) ? $bank->number_of_option : '' }}">
+
+
                                                     @if ($errors->has('number_of_option'))
                                                         <span class="text-danger">
                                                             {{ $errors->first('number_of_option') }}
@@ -272,7 +331,7 @@
                                                     @endif
                                                 </div>
                                             </div>
-                                            <div class="col-lg-2 mt-35">
+                                            <div class="col-lg-5 mt-35">
                                                 <button type="button" class="primary-btn small fix-gr-bg"
                                                     id="create-option">@lang('common.create')</button>
                                             </div>
@@ -301,23 +360,25 @@
                                                 }
                                             }
                                         @endphp
+
                                         @foreach ($multiple_options as $multiple_option)
                                             @php $i++; @endphp
-                                            <div class='row  mt-15'>
-                                                <div class='col-lg-10'>
+                                            <div class='row align-items-center mt-15'>
+                                                <div class='col-8 col-sm-10 col-xl-10'>
                                                     <div class='primary_input'>
                                                         <label class="primary_input_label"
                                                             for="">@lang('exam.option') {{ $i }}</label>
                                                         <input class='primary_input_field form-control' type='text'
                                                             name='option[]' autocomplete='off' required
                                                             value="{{ $multiple_option->title }}">
+
+
                                                     </div>
                                                 </div>
-                                                <div class='col-lg-2'>
+                                                <div class='col-4 col-sm-2 col-xl-2 p-0'>
                                                     <input type="checkbox" id="option_check_{{ $i }}"
                                                         class="common-checkbox" name="option_check_{{ $i }}"
-                                                        value="1"
-                                                        @if ($multiple_option->status == 1) checked @endif>
+                                                        value="1" @if ($multiple_option->status == 1) checked @endif>
                                                     <label for="option_check_{{ $i }}"></label>
                                                 </div>
                                             </div>
@@ -375,6 +436,8 @@
                                                         <span class="text-danger"> *</span></label>
                                                     <textarea class="primary_input_field form-control{{ $errors->has('suitable_words') ? ' is-invalid' : '' }}"
                                                         cols="0" rows="5" name="suitable_words">{{ isset($bank) ? $bank->suitable_words : '' }}</textarea>
+
+
                                                     @if ($errors->has('suitable_words'))
                                                         <span class="text-danger invalid-select" role="alert">
                                                             {{ $errors->first('suitable_words') }}
@@ -384,6 +447,7 @@
                                             </div>
                                         </div>
                                     </div>
+
                                     {{-- Start Multiple Images Question --}}
                                     @php
                                         if (!isset($bank)) {
@@ -398,6 +462,7 @@
                                     @endphp
                                     <div class="multiple-image-section mt-20"
                                         id="{{ isset($multiple_image) ? $multiple_image : 'multiple-image-section' }}">
+
                                         <div class="row mt-15 mb-20">
                                             <div class="col-lg-12">
                                                 <label class="primary_input_label" for="">
@@ -458,6 +523,7 @@
                                                 border: #8432FA;
                                             }
                                         </style>
+
                                         <div class="row  mt-15">
                                             <div class="col-lg-8">
                                                 <div class="primary_input">
@@ -468,6 +534,8 @@
                                                         type="number" min="2" name="number_of_optionImg"
                                                         autocomplete="off" id="number_of_image_option"
                                                         value="{{ isset($bank) ? $bank->number_of_option : '' }}">
+
+
                                                     @if ($errors->has('number_of_option'))
                                                         <span class="text-danger">
                                                             {{ $errors->first('number_of_option') }}
@@ -480,6 +548,7 @@
                                                     id="create-image-option">@lang('common.create')</button>
                                             </div>
                                         </div>
+
                                         <div class="multiple-images" id="multiple-images">
                                             @php
                                                 $i = 0;
@@ -491,6 +560,7 @@
                                                     }
                                                 }
                                             @endphp
+
                                             @foreach ($multiple_options as $multiple_option)
                                                 @php $i++; @endphp
                                                 <div class='row  mt-15'>
@@ -521,8 +591,10 @@
                                             @endforeach
                                         </div>
                                     </div>
+
                                     {{-- End Multiple Images Question --}}
                                     {{ Form::close() }}
+
                                     @php
                                         $tooltip = '';
                                         if (userPermission('question-bank-store') || userPermission('question-bank-edit')) {
@@ -551,91 +623,101 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="col-lg-8">
-                    <div class="row">
-                        <div class="col-lg-4 no-gutters">
-                            <div class="main-title">
-                                <h3 class="mb-0">@lang('exam.question_bank_list')</h3>
+                    <div class="white-box">
+                        <div class="row">
+                            <div class="col-lg-4 no-gutters">
+                                <div class="main-title">
+                                    <h3 class="mb-15">@lang('exam.question_bank_list')</h3>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <x-table>
-                                <table id="table_id" class="table" cellspacing="0" width="100%">
-                                    <thead>
-                                        <tr>
-                                            <th>@lang('exam.group')</th>
-                                            <th>@lang('common.class_Sec')</th>
-                                            <th>@lang('exam.question')</th>
-                                            <th>@lang('common.type')</th>
-                                            <th>@lang('common.action')</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($banks as $bank)
+    
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <x-table>
+                                    <table id="table_id" class="table" cellspacing="0" width="100%">
+                                        <thead>
                                             <tr>
-                                                <td>{{ $bank->questionGroup != '' ? $bank->questionGroup->title : '' }}
-                                                </td>
-                                                <td>{{ $bank->class != '' ? $bank->class->class_name : '' }}
-                                                    ({{ $bank->section != '' ? $bank->section->section_name : '' }})
-                                                </td>
-                                                <td>{{ $bank->question }}</td>
-                                                <td>
-                                                    @if ($bank->type == 'M')
-                                                        {{ 'Multiple Choice' }}
-                                                    @elseif($bank->type == 'T')
-                                                        {{ 'True False' }}
-                                                    @elseif($bank->type == 'MI')
-                                                        {{ 'Multiple Image Choice' }}
-                                                    @else
-                                                        {{ 'Fill in the blank' }}
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    <x-drop-down>
-                                                        @if (userPermission('question-bank-edit'))
-                                                            <a class="dropdown-item"
-                                                                href="{{ route('question-bank-edit', [$bank->id]) }}">@lang('common.edit')</a>
-                                                        @endif
-                                                        @if (userPermission('question-bank-delete'))
-                                                            <a class="dropdown-item" data-toggle="modal"
-                                                                data-target="#deleteQuestionBankModal{{ $bank->id }}"
-                                                                href="#">@lang('common.delete')</a>
-                                                        @endif
-                                                    </x-drop-down>
-                                                </td>
+                                                <th>@lang('exam.group')</th>
+                                                @if(moduleStatusCheck('University'))
+                                                    <th> @lang('university::un.semester_label') (@lang('common.section'))</th>
+                                                @else
+                                                    <th>@lang('common.class_Sec')</th>
+                                                @endif
+                                                <th>@lang('exam.question')</th>
+                                                <th>@lang('common.type')</th>
+                                                <th>@lang('common.action')</th>
                                             </tr>
-                                            {{-- <input type="file"> --}}
-                                            <div class="modal fade admin-query"
-                                                id="deleteQuestionBankModal{{ $bank->id }}">
-                                                <div class="modal-dialog modal-dialog-centered">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h4 class="modal-title">@lang('exam.delete_question_bank')</h4>
-                                                            <button type="button" class="close"
-                                                                data-dismiss="modal">&times;</button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <div class="text-center">
-                                                                <h4>@lang('common.are_you_sure_to_delete')</h4>
+                                        </thead>
+    
+                                        <tbody>
+                                            @foreach ($banks as $bank)
+                                                <tr>
+                                                    <td>{{ $bank->questionGroup != '' ? $bank->questionGroup->title : '' }}</td>
+                                                    @if(moduleStatusCheck('University'))
+                                                        <td>{{ $bank->unSemesterLabel != '' ? $bank->unSemesterLabel->name : '' }} ({{ $bank->section != '' ? $bank->section->section_name : '' }})</td>
+                                                    @else
+                                                        <td>{{ $bank->class != '' ? $bank->class->class_name : '' }} ({{ $bank->section != '' ? $bank->section->section_name : '' }})</td>
+                                                    @endif
+                                                    <td>{{ $bank->question }}</td>
+                                                    <td>
+                                                        @if ($bank->type == 'M')
+                                                            {{ 'Multiple Choice' }}
+                                                        @elseif($bank->type == 'T')
+                                                            {{ 'True False' }}
+                                                        @elseif($bank->type == 'MI')
+                                                            {{ 'Multiple Image Choice' }}
+                                                        @else
+                                                            {{ 'Fill in the blank' }}
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        <x-drop-down>
+                                                            @if (userPermission('question-bank-edit'))
+                                                                <a class="dropdown-item"
+                                                                    href="{{ route('question-bank-edit', [$bank->id]) }}">@lang('common.edit')</a>
+                                                            @endif
+                                                            @if (userPermission('question-bank-delete'))
+                                                                <a class="dropdown-item" data-toggle="modal"
+                                                                    data-target="#deleteQuestionBankModal{{ $bank->id }}"
+                                                                    href="#">@lang('common.delete')</a>
+                                                            @endif
+                                                        </x-drop-down>
+                                                    </td>
+                                                </tr>
+                                                <div class="modal fade admin-query"
+                                                    id="deleteQuestionBankModal{{ $bank->id }}">
+                                                    <div class="modal-dialog modal-dialog-centered">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h4 class="modal-title">@lang('exam.delete_question_bank')</h4>
+                                                                <button type="button" class="close"
+                                                                    data-dismiss="modal">&times;</button>
                                                             </div>
-                                                            <div class="mt-40 d-flex justify-content-between">
-                                                                <button type="button" class="primary-btn tr-bg"
-                                                                    data-dismiss="modal">@lang('common.cancel')</button>
-                                                                {{ Form::open(['route' => ['question-bank-delete', $bank->id], 'method' => 'DELETE', 'enctype' => 'multipart/form-data']) }}
-                                                                <button class="primary-btn fix-gr-bg"
-                                                                    type="submit">@lang('common.delete')</button>
-                                                                {{ Form::close() }}
+    
+                                                            <div class="modal-body">
+                                                                <div class="text-center">
+                                                                    <h4>@lang('common.are_you_sure_to_delete')</h4>
+                                                                </div>
+                                                                <div class="mt-40 d-flex justify-content-between">
+                                                                    <button type="button" class="primary-btn tr-bg"
+                                                                        data-dismiss="modal">@lang('common.cancel')</button>
+                                                                    {{ Form::open(['route' => ['question-bank-delete', $bank->id], 'method' => 'DELETE', 'enctype' => 'multipart/form-data']) }}
+                                                                    <button class="primary-btn fix-gr-bg"
+                                                                        type="submit">@lang('common.delete')</button>
+                                                                    {{ Form::close() }}
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </x-table>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </x-table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -664,7 +746,9 @@
             if (file) {
                 if (file.type == "image/jpeg" || file.type == "image/png" || file.type == "image/jpg") {
                     var img = new Image();
+
                     img.src = window.URL.createObjectURL(file);
+
                     img.onload = function() {
                         var width = img.naturalWidth,
                             height = img.naturalHeight;
@@ -683,14 +767,14 @@
             }
         }
     </script>
+
     <script>
         $('#question_bank_submit').click(function(e) {
             e.preventDefault();
-            console.log(e);
             var ck_box = $('.multiple-images input[type="checkbox"]:checked').length;
             var answer_type = $("#answer_type").val();
             var question_type = $("#question-type").val();
-            console.log(answer_type);
+
             if (ck_box > 0) {
                 if ($("input[name='images[]']").val() == "") { // alert for "address_" input
                     toastr.warning('Please Select Valid Option Images', 'Warning', {
@@ -706,6 +790,7 @@
                     }
                 }
             } else {
+
                 if (question_type != 'MI') {
                     $('#question_bank').submit();
                 } else {
@@ -716,6 +801,7 @@
                 }
             }
         });
+
         $(document).on('click', '.common-checkbox', function() {
             var answer_type = $("#answer_type").val();
             if (answer_type == 'radio') {

@@ -9,9 +9,9 @@
                     <p>{!! pagesetting('counter_description') !!}</p>
                 </div>
                 <div class="cta_area_inner">
-                    <a href="{{ pagesetting('view_course_link') }}" class="boxed_btn"><i
+                    <a href="#" class="boxed_btn"><i
                             class="fa fa-plus-circle"></i>{{ pagesetting('view_course_button') }}</a>
-                    <a href="{{ pagesetting('contact_us_link') }}" class="boxed_btn"><i
+                    <a href="#" class="boxed_btn"><i
                             class="fa fa-user-plus"></i>{{ pagesetting('contact_us_button') }}</a>
                 </div>
             </div>

@@ -13,13 +13,8 @@ class SmNotification extends Model
     {
         $user = Auth()->user();
         if ($user) {
-            return $user->allNotifications->where('is_read', 0);
+            return $user->allNotifications->where('user_id', $user->id)->where('role_id', $user->role_id)->where('is_read', 0);
         }
 
-    }
-
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'user_id','id');
     }
 }

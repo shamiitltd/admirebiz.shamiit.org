@@ -12,7 +12,7 @@ class SmHeaderMenuManager extends Model
     protected $guarded = ['id'];
 
     public function childs(){
-        return $this->hasMany(SmHeaderMenuManager::class,'parent_id','id')->orderBy('position');
+        return $this->hasMany(SmHeaderMenuManager::class,'parent_id','id')->with('childs')->orderBy('position');
     }
 
 }

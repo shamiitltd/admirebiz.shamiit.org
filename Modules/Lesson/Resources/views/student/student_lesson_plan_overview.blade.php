@@ -5,7 +5,7 @@
 @section('mainContent')
 
 
-    <section class="sms-breadcrumb mb-40 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('lesson::lesson.lesson_plan_overview')</h1>
@@ -51,9 +51,9 @@
                         @foreach ($records as $key => $record)
                             <div role="tabpanel" class="tab-pane fade  @if ($key == 0) active show @endif"
                                 id="tab{{ $key }}">
-                                <div class="container-fluid p-0 mt-40">
-                                    <div class="white-box ">                                      
-                                        <div class="row">
+                                <div class="container-fluid p-0 mt-10">
+                                    <div class="white-box mt-10">                                      
+                                        <div class="row mt-40">
                                             <div class="col-lg-12">
                                                 <x-table>
                                                 <table id="table_id" class="table" cellspacing="0" width="100%">

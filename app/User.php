@@ -45,15 +45,18 @@ class User extends Authenticatable
         'school_id' => 'integer',
         'rtl_ltl' => 'integer',
         'student_id' => 'integer',
+        'school_id' => 'integer',
         'active_status' => 'integer',
         'style_id' => 'integer',
         'selected_session' => 'integer',
-        'created_by' => 'integer',
-        'updated_by' => 'integer',
         'access_status' => 'integer',
+        'is_registered' =>'integer',
         'wallet_balance' => 'integer',
-        'is_registered'  => 'integer'
+        'created_by' => 'integer',
+        'updated_by' => 'integer'
     ];
+
+   
     // protected $with=['staff','student','parent'];
 
     public function getFirstNameAttribute()

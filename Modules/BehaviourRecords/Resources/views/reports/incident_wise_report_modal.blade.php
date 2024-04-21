@@ -3,7 +3,7 @@
     @lang('behaviourRecords.incident_wise_report')
 @endsection
 @section('mainContent')
-    <section class="sms-breadcrumb mb-0 white-box">
+    <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('behaviourRecords.incident_wise_report')</h1>

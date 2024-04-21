@@ -85,52 +85,56 @@ class SeatPlanSettingController extends Controller
     {
         return view('examplan::create');
     }
-
-
-    public function seatplanSearch(Request $request)
+    function universitySeatPlanSearch($request)
     {
+
         $input = $request->all();
         $validator = Validator::make($input, [
-            'exam' => 'required',
-            'class' => 'required',
+            'un_session_id' => 'required',
+            'un_faculty_id' => 'required',
+            'un_department_id' => 'required',
+            'un_academic_id' => 'required',
+            'un_semester_id' => 'required',
+            'un_semester_label_id' => 'required',
+            'un_section_id' => 'required',
+            'exam_type' => 'required',
+        ], [
+            'un_session_id.required' => 'The session field is required',
+            'un_faculty_id.required' => 'The faculty field is required',
+            'un_department_id.required' => 'The department field is required',
+            'un_academic_id.required' => 'The academic field is required',
+            'un_semester_id.required' => 'The semester field is required',
+            'un_semester_label_id.required' => 'The semester label field is required',
+            'un_section_id.required' => 'The section field is required',
+            'exam_type.required' => 'The exam type field is required',
         ]);
         if ($validator->fails()) {
             return redirect()->route('examplan.seatplan.index')
                 ->withErrors($validator)
                 ->withInput();
         }
+        // dd($request->all());
         try {
-            $input = $request->all();
-            $validator = Validator::make($input, [
-                'exam' => 'required',
-                'class' => 'required',
-                'section' => 'required',
-            ]);
-            if ($validator->fails()) {
-                return redirect()->back()
-                    ->withErrors($validator)
-                    ->withInput();
-            }
 
             $exam = SmExamSchedule::query();
-            $exam_id = $request->exam;
-            $class_id = $request->class;
-            $exam->where('school_id', auth()->user()->school_id)->where('academic_id', getAcademicId());
+            $exam_id = $request->exam_type;
+            // $class_id = $request->class;
+            $exam->where('school_id', auth()->user()->school_id)->where('un_academic_id', getAcademicId());
             if ($request->exam != "") {
-                $exam->where('exam_term_id', $request->exam);
+                $exam->where('exam_term_id', $request->exam_type);
             }
-            if ($request->class != "") {
-                $exam->where('class_id', $request->class);
+            if ($request->un_semester_label_id != "") {
+                $exam->where('un_semester_label_id', $request->un_semester_label_id);
             }
-            if ($request->section != "") {
-                $exam->where('section_id', $request->section);
+            if ($request->un_section_id != "") {
+                $exam->where('un_section_id', $request->un_section_id);
             }
             $exam_routine = $exam->get();
             if ($exam_routine) {
 
-                $seat_plans = SeatPlan::where('exam_type_id', $request->exam)
+                $seat_plans = SeatPlan::where('exam_type_id', $request->exam_type)
                     ->where('school_id', Auth::user()->school_id)
-                    ->where('academic_id', getAcademicId())
+                    ->where('un_academic_id', getAcademicId())
                     ->get(['student_record_id']);
 
                 $seat_plan_ids = [];
@@ -140,28 +144,20 @@ class SeatPlanSettingController extends Controller
                 $student_records = StudentRecord::query();
 
                 $student_records->where('school_id', auth()->user()->school_id)
-                    ->where('academic_id', getAcademicId())
+                    ->where('un_academic_id', getAcademicId())
                     ->where('is_promote', 0)
                     ->whereHas('student', function ($q) {
                         $q->where('active_status', 1);
                     });
-                if ($request->class != "") {
-                    $student_records->where('class_id', $request->class);
+                if ($request->un_semester_label_id != "") {
+                    $student_records->where('un_semester_label_id', $request->un_semester_label_id);
                 }
-                if ($request->section != "") {
-                    $student_records->where('section_id', $request->section);
+                if ($request->un_section_id != "") {
+                    $student_records->where('un_section_id', $request->un_section_id);
                 }
 
                 $records = $student_records->get();
-
-                $exams = SmExamType::where('active_status', 1)
-                    ->where('academic_id', getAcademicId())
-                    ->where('school_id', Auth::user()->school_id)
-                    ->get();
-                $classes = SmClass::where('academic_id', getAcademicId())
-                    ->where('school_id', auth()->user()->school_id)
-                    ->get();
-                return view('examplan::seatPlan', compact('exams', 'classes', 'records', 'exam_id', 'class_id', 'seat_plan_ids'));
+                return view('examplan::seatPlan', compact('records', 'seat_plan_ids', 'exam_id'));
             } else {
                 Toastr::warning('Exam shedule is not ready', 'warning');
                 return redirect()->back();
@@ -172,14 +168,94 @@ class SeatPlanSettingController extends Controller
         }
     }
 
+    public function seatplanSearch(Request $request)
+    {
+        if (moduleStatusCheck('University')) {
+            return $this->universitySeatPlanSearch($request);
+        } else {
+
+            try {
+                $input = $request->all();
+                $validator = Validator::make($input, [
+                    'exam' => 'required',
+                    'class' => 'required',
+                    'section' => 'required',
+                ]);
+                if ($validator->fails()) {
+                    return redirect()->route('examplan.seatplan.index')
+                        ->withErrors($validator)
+                        ->withInput();
+                }
+
+                $exam = SmExamSchedule::query();
+                $exam_id = $request->exam;
+                $class_id = $request->class;
+                $exam->where('school_id', auth()->user()->school_id)->where('academic_id', getAcademicId());
+                if ($request->exam != "") {
+                    $exam->where('exam_term_id', $request->exam);
+                }
+                if ($request->class != "") {
+                    $exam->where('class_id', $request->class);
+                }
+                if ($request->section != "") {
+                    $exam->where('section_id', $request->section);
+                }
+                $exam_routine = $exam->get();
+                if ($exam_routine) {
+
+                    $seat_plans = SeatPlan::where('exam_type_id', $request->exam)
+                        ->where('school_id', Auth::user()->school_id)
+                        ->where('academic_id', getAcademicId())
+                        ->get(['student_record_id']);
+
+                    $seat_plan_ids = [];
+                    foreach ($seat_plans as $seatPlan) {
+                        $seat_plan_ids[] =  $seatPlan->student_record_id;
+                    }
+                    $student_records = StudentRecord::query();
+
+                    $student_records->where('school_id', auth()->user()->school_id)
+                        ->where('academic_id', getAcademicId())
+                        ->where('is_promote', 0)
+                        ->whereHas('student', function ($q) {
+                            $q->where('active_status', 1);
+                        });
+                    if ($request->class != "") {
+                        $student_records->where('class_id', $request->class);
+                    }
+                    if ($request->section != "") {
+                        $student_records->where('section_id', $request->section);
+                    }
+
+                    $records = $student_records->get();
+
+                    $exams = SmExamType::where('active_status', 1)
+                        ->where('academic_id', getAcademicId())
+                        ->where('school_id', Auth::user()->school_id)
+                        ->get();
+                    $classes = SmClass::where('academic_id', getAcademicId())
+                        ->where('school_id', auth()->user()->school_id)
+                        ->get();
+                    return view('examplan::seatPlan', compact('exams', 'classes', 'records', 'exam_id', 'class_id', 'seat_plan_ids'));
+                } else {
+                    Toastr::warning('Exam shedule is not ready', 'warning');
+                    return redirect()->back();
+                }
+            } catch (\Exception $e) {
+                Toastr::error('Operation Failed', 'Error');
+                return redirect()->back();
+            }
+        }
+    }
+
     public function show($id)
     {
         return view('examplan::show');
     }
 
-    public function seatplanGenerate(Request $request)
+    function universitySeatPlanGenerate($request)
     {
-
+        // dd($request->all());
         try {
             $student_records = [];
             $studentRecord = null;
@@ -198,12 +274,12 @@ class SeatPlanSettingController extends Controller
                         $new_seat->exam_type_id = $request->exam_type_id;
                         $new_seat->created_by = Auth::id();
                         $new_seat->school_id = Auth::user()->school_id;
-                        $new_seat->academic_id = getAcademicId();
+                        $new_seat->un_academic_id = getAcademicId();
                         $new_seat->save();
 
-                        $data['class_id'] = $new_seat->studentRecord->class_id;
-                        $data['section_id'] = $new_seat->studentRecord->section_id;
-                        $records = $this->studentRecordInfo($data['class_id'], $data['section_id'])->pluck('studentDetail.user_id');
+                        $data['un_semester_label_id'] = $new_seat->studentRecord->un_semester_label_id;
+                        $data['un_section_id'] = $new_seat->studentRecord->un_section_id;
+                        $records = $this->unStudentRecordInfo($data['un_semester_label_id'], $data['un_section_id'])->pluck('studentDetail.user_id');
                         $this->sent_notifications('Exam_Seat_Plan', $records, $data, ['Student', 'Parent']);
 
                         $student_id = StudentRecord::find($record)->student_id;
@@ -211,13 +287,13 @@ class SeatPlanSettingController extends Controller
                         $exam_type = SmExamType::find($request->exam_type_id);
                     }
                 }
-                $seat_plans = SeatPlan::with('studentRecord.studentDetail')->where('exam_type_id', $request->exam_type_id)->where('school_id', Auth::user()->school_id)->where('academic_id', getAcademicId())->whereIn('student_record_id', $student_records)->get();
+                $seat_plans = SeatPlan::with('studentRecord.studentDetail')->where('exam_type_id', $request->exam_type_id)->where('school_id', Auth::user()->school_id)->where('un_academic_id', getAcademicId())->whereIn('student_record_id', $student_records)->get();
 
-                $setting = SeatPlanSetting::where('school_id', Auth::user()->school_id)->where('academic_id', getAcademicId())->first();
+                $setting = SeatPlanSetting::where('school_id', Auth::user()->school_id)->where('un_academic_id', getAcademicId())->first();
                 if (!$setting) {
                     $oldSetting = SeatPlanSetting::where('school_id', Auth::user()->school_id)->latest()->first();
                     $setting = $oldSetting->replicate();
-                    $setting->academic_id = getAcademicId();
+                    $setting->un_academic_id = getAcademicId();
                     $setting->save();
                 }
 
@@ -226,6 +302,62 @@ class SeatPlanSettingController extends Controller
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Error');
             return redirect()->back();
+        }
+    }
+
+    public function seatplanGenerate(Request $request)
+    {
+        if (moduleStatusCheck('University')) {
+            return $this->universitySeatPlanGenerate($request);
+        } else {
+
+            try {
+                $student_records = [];
+                $studentRecord = null;
+                if ($request->data) {
+                    foreach ($request->data as $key => $data) {
+                        if (count($data) == 2) {
+                            $student_records[] = $data['student_record_id'];
+                        }
+                    }
+                    foreach ($student_records as $record) {
+                        $seat_plan = SeatPlan::where('student_record_id', $record)->where('exam_type_id', $request->exam_type_id)->first();
+                        $studentRecord = StudentRecord::find($record);
+                        if (!$seat_plan) {
+                            $new_seat = new SeatPlan();
+                            $new_seat->student_record_id = $record;
+                            $new_seat->exam_type_id = $request->exam_type_id;
+                            $new_seat->created_by = Auth::id();
+                            $new_seat->school_id = Auth::user()->school_id;
+                            $new_seat->academic_id = getAcademicId();
+                            $new_seat->save();
+
+                            $data['class_id'] = $new_seat->studentRecord->class_id;
+                            $data['section_id'] = $new_seat->studentRecord->section_id;
+                            $records = $this->studentRecordInfo($data['class_id'], $data['section_id'])->pluck('studentDetail.user_id');
+                            $this->sent_notifications('Exam_Seat_Plan', $records, $data, ['Student', 'Parent']);
+
+                            $student_id = StudentRecord::find($record)->student_id;
+                            $student = SmStudent::find($student_id);
+                            $exam_type = SmExamType::find($request->exam_type_id);
+                        }
+                    }
+                    $seat_plans = SeatPlan::with('studentRecord.studentDetail')->where('exam_type_id', $request->exam_type_id)->where('school_id', Auth::user()->school_id)->where('academic_id', getAcademicId())->whereIn('student_record_id', $student_records)->get();
+
+                    $setting = SeatPlanSetting::where('school_id', Auth::user()->school_id)->where('academic_id', getAcademicId())->first();
+                    if (!$setting) {
+                        $oldSetting = SeatPlanSetting::where('school_id', Auth::user()->school_id)->latest()->first();
+                        $setting = $oldSetting->replicate();
+                        $setting->academic_id = getAcademicId();
+                        $setting->save();
+                    }
+
+                    return view('examplan::seatplanPrint', compact('setting', 'seat_plans'));
+                }
+            } catch (\Exception $e) {
+                Toastr::error('Operation Failed', 'Error');
+                return redirect()->back();
+            }
         }
     }
 }

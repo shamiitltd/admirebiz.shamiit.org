@@ -4,7 +4,7 @@
 @endsection
 @section('mainContent')
 
-    <section class="sms-breadcrumb mb-40 white-box up_breadcrumb">
+    <section class="sms-breadcrumb mb-20 up_breadcrumb">
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>@lang('style.background_settings')</h1>
@@ -23,11 +23,6 @@
                 <div class="col-lg-3">
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="main-title">
-                                <h3 class="mb-30">
-                                    @lang('style.add_style')
-                                </h3>
-                            </div>
                             @if(isset($visitor))
                                 {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'background-settings-update',
                                 'method' => 'POST', 'enctype' => 'multipart/form-data']) }}
@@ -38,6 +33,11 @@
                                 @endif
                             @endif
                             <div class="white-box">
+                                <div class="main-title">
+                                    <h3 class="mb-15">
+                                        @lang('style.add_style')
+                                    </h3>
+                                </div>
                                 <div class="add-visitor">
 
                                     <div class="row">
@@ -103,10 +103,10 @@
                                                     <input class="primary_input_field" id="placeholderInput" type="text" placeholder="{{isset($visitor)? (@$visitor->file != ""? getFilePath3(@$visitor->file): trans('style.background_image').' *'): trans('style.background_image').' *'}}"
                                                     readonly>
                                                     <button class="" type="button">
-                                                        <label class="primary-btn small fix-gr-bg" for="browseFile"><span
+                                                        <label class="primary-btn small fix-gr-bg" for="addBackgroundImage"><span
                                                                 class="ripple rippleEffect"
                                                                 style="width: 56.8125px; height: 56.8125px; top: -16.4062px; left: 10.4219px;"></span>@lang('common.browse')</label>
-                                                                <input type="file" class="d-none" id="browseFile" name="image">
+                                                                <input type="file" class="d-none" id="addBackgroundImage" name="image">
                                                     </button>
                                                 </div>
                                             
@@ -116,6 +116,11 @@
                                                 </span>
                                                 @endif
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div class="row  mt-15">
+                                        <div class="col-lg-12">
+                                            <img class="d-none previewImageSize" src="" alt="" id="backgroundImageShow" height="100%" width="100%">
                                         </div>
                                     </div>
 
@@ -150,116 +155,118 @@
                 </div>
 
                 <div class="col-lg-9">
-                    <div class="row">
-                        <div class="col-lg-4 no-gutters">
-                            <div class="main-title">
-                                <h3 class="mb-0">@lang('common.view')</h3>
+                    <div class="white-box">
+                        <div class="row">
+                            <div class="col-lg-4 no-gutters">
+                                <div class="main-title">
+                                    <h3 class="mb-15">@lang('common.view')</h3>
+                                </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <x-table>
-                            <table id="table_id" class="table" cellspacing="0" width="100%">
-
-                                <thead>
-                              
-                                <tr>
-                                    <th>@lang('common.title')</th>
-                                    <th>@lang('common.type')</th>
-                                    <th>@lang('common.image')</th> 
-                                    <th>@lang('common.status')</th>
-                                    <th>@lang('common.action')</th>
-                                </tr>
-                                </thead>
-
-                                <tbody>
-                                    @foreach($background_settings as $background_setting)
+    
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <x-table>
+                                <table id="table_id" class="table" cellspacing="0" width="100%">
+    
+                                    <thead>
+                                  
                                     <tr>
-                                        <td>{{@$background_setting->title}}</td>
-                                        <td><p class="primary-btn small tr-bg">{{@$background_setting->type}}</p></td>
-                                        <td>
-                                            @if(@$background_setting->type == 'image')
-                                            <img src="{{asset($background_setting->image)}}" width="200px" height="100px">
-                                            @else
-                                             <div style="width: 200px; height: 100px; background-color:{{@$background_setting->color}} "></div>
-                                            @endif
-                                        </td> 
-                                        <td>
-                                            <div class="col-md-12">
-                                            
-                                            @if(@$background_setting->is_default==1) 
-                                                <a  class="primary-btn small fix-gr-bg " href="{{route('background_setting-status',@$background_setting->id)}}"> @lang('style.activated') </a> 
-                                            @else
-                                            @if(Illuminate\Support\Facades\Config::get('app.app_sync'))
-                                            <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Disabled For Demo "> 
-                                                @if(userPermission("background_setting-status"))
-                                                <a  class="primary-btn small tr-bg" href="#"> @lang('style.make_default')</a> 
-                                                </span>
+                                        <th>@lang('common.title')</th>
+                                        <th>@lang('common.type')</th>
+                                        <th>@lang('common.image')</th> 
+                                        <th>@lang('common.status')</th>
+                                        <th>@lang('common.action')</th>
+                                    </tr>
+                                    </thead>
+    
+                                    <tbody>
+                                        @foreach($background_settings as $background_setting)
+                                        <tr>
+                                            <td>{{@$background_setting->title}}</td>
+                                            <td><p class="primary-btn small tr-bg">{{@$background_setting->type}}</p></td>
+                                            <td>
+                                                @if(@$background_setting->type == 'image')
+                                                <img src="{{asset($background_setting->image)}}" width="200px" height="100px">
+                                                @else
+                                                 <div style="width: 200px; height: 100px; background-color:{{@$background_setting->color}} "></div>
                                                 @endif
-                                            @else
-                                            @if(userPermission('background_setting-status'))
-                                            <a  class="primary-btn small tr-bg" href="{{route('background_setting-status',@$background_setting->id)}}"> @lang('style.make_default')</a> 
-                                           
-                                            @endif
-                                            @endif
-                                           
-
-                                            @endif
-                                        </div>
-                                        </td>
-
-                                        <td>
-                                            @if(@$background_setting->id==1)
-                                            <p class="primary-btn small tr-bg">@lang('common.disable')</p>
-                                            @else
-
-                                            <x-drop-down>
-                                                    @if(userPermission('background-setting-delete'))
-                                                    <a class="dropdown-item" data-toggle="modal"
-                                                       data-target="#deletebackground_settingModal{{@$background_setting->id}}"
-                                                       href="#">@lang('common.delete')</a>
+                                            </td> 
+                                            <td>
+                                                <div class="col-md-12">
+                                                
+                                                @if(@$background_setting->is_default==1) 
+                                                    <a  class="primary-btn small fix-gr-bg " href="{{route('background_setting-status',@$background_setting->id)}}"> @lang('style.activated') </a> 
+                                                @else
+                                                @if(Illuminate\Support\Facades\Config::get('app.app_sync'))
+                                                <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Disabled For Demo "> 
+                                                    @if(userPermission("background_setting-status"))
+                                                    <a  class="primary-btn small tr-bg" href="#"> @lang('style.make_default')</a> 
+                                                    </span>
                                                     @endif
-                                            </x-drop-down>
-                                            
-                                            @endif
-                                        </td>
-                                        <div class="modal fade admin-query" id="deletebackground_settingModal{{@$background_setting->id}}">
-                                            <div class="modal-dialog modal-dialog-centered">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h4 class="modal-title">@lang('common.delete')</h4>
-                                                        <button type="button" class="close" data-dismiss="modal">&times;
-                                                        </button>
-                                                    </div>
-
-                                                    <div class="modal-body">
-                                                        <div class="text-center">
-                                                            <h4>@lang('common.are_you_sure_to_delete')</h4>
-                                                        </div>
-
-                                                        <div class="mt-15 d-flex justify-content-between">
-                                                            <button type="button" class="primary-btn tr-bg"
-                                                                    data-dismiss="modal">@lang('common.cancel')
+                                                @else
+                                                @if(userPermission('background_setting-status'))
+                                                <a  class="primary-btn small tr-bg" href="{{route('background_setting-status',@$background_setting->id)}}"> @lang('style.make_default')</a> 
+                                               
+                                                @endif
+                                                @endif
+                                               
+    
+                                                @endif
+                                            </div>
+                                            </td>
+    
+                                            <td>
+                                                @if(@$background_setting->id==1)
+                                                <p class="primary-btn small tr-bg">@lang('common.disable')</p>
+                                                @else
+    
+                                                <x-drop-down>
+                                                        @if(userPermission('background-setting-delete'))
+                                                        <a class="dropdown-item" data-toggle="modal"
+                                                           data-target="#deletebackground_settingModal{{@$background_setting->id}}"
+                                                           href="#">@lang('common.delete')</a>
+                                                        @endif
+                                                </x-drop-down>
+                                                
+                                                @endif
+                                            </td>
+                                            <div class="modal fade admin-query" id="deletebackground_settingModal{{@$background_setting->id}}">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title">@lang('common.delete')</h4>
+                                                            <button type="button" class="close" data-dismiss="modal">&times;
                                                             </button>
-
-                                                            <a href="{{route('background-setting-delete',@$background_setting->id)}}"
-                                                               class="primary-btn fix-gr-bg">@lang('common.delete')</a>
-
                                                         </div>
+    
+                                                        <div class="modal-body">
+                                                            <div class="text-center">
+                                                                <h4>@lang('common.are_you_sure_to_delete')</h4>
+                                                            </div>
+    
+                                                            <div class="mt-15 d-flex justify-content-between">
+                                                                <button type="button" class="primary-btn tr-bg"
+                                                                        data-dismiss="modal">@lang('common.cancel')
+                                                                </button>
+    
+                                                                <a href="{{route('background-setting-delete',@$background_setting->id)}}"
+                                                                   class="primary-btn fix-gr-bg">@lang('common.delete')</a>
+    
+                                                            </div>
+                                                        </div>
+    
                                                     </div>
-
                                                 </div>
                                             </div>
-                                        </div>
-                                    </tr>
-                                    @endforeach
-
-
-                                </tbody>
-                            </table>
-                            </x-table>
+                                        </tr>
+                                        @endforeach
+    
+    
+                                    </tbody>
+                                </table>
+                                </x-table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -268,3 +275,12 @@
     </section>
 @endsection
 @include('backEnd.partials.data_table_js')
+@section('script')
+    <script>
+        $(document).on('change', '#addBackgroundImage', function(event) {
+            $('#backgroundImageShow').removeClass('d-none');
+            getFileName($(this).val(), '#placeholderInput');
+            imageChangeWithFile($(this)[0], '#backgroundImageShow');
+        });
+    </script>
+@endsection

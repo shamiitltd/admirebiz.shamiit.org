@@ -163,7 +163,7 @@
             }
         </style>
     @endif
-<section class="sms-breadcrumb mb-40 white-box">
+<section class="sms-breadcrumb mb-20">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('reports.progress_card_report_100_percent')</h1>
@@ -302,10 +302,10 @@
                                                             </div>
                                                             <div class="col-lg-8 text-center">
                                                                 <h3 class="text-white" style="font-size: 30px; margin-bottom: 0px;">
-                                                                    {{isset(generalSetting()->school_name)?generalSetting()->school_name:'Infix School Management ERP'}}
+                                                                    {{isset(generalSetting()->school_name)?generalSetting()->school_name:'SHAMIIT School Management ERP'}}
                                                                 </h3>
                                                                 <p class="text-white mb-0" style="font-size: 16px;">
-                                                                    {{isset(generalSetting()->address)?generalSetting()->address:'Infix School Address'}}
+                                                                    {{isset(generalSetting()->address)?generalSetting()->address:'SHAMIIT School Address'}}
                                                                 </p>
                                                                 <p class="text-white mb-0"  style="font-size: 16px;">
                                                                     @lang('common.email'):  {{isset(generalSetting()->email)?generalSetting()->email:'admin@demo.com'}},   @lang('common.phone'):  {{isset(generalSetting()->phone)?generalSetting()->phone:'+8801841412141'}}
@@ -414,6 +414,9 @@
                                                             $all_exam_type_full_mark=0;
                                                             $total_additional_subject_gpa=0;
                                                             $totalavgMarkAddition=0;
+                                                            $totalavgMarkAddition=0;
+                                                            $temp_grade=[];
+                                                            $temp_gpa=0;
                                                         @endphp
                                                         @foreach($subjects as $data)
                                                             <tr class="text-center">
@@ -486,7 +489,13 @@
                                                                         $totalavgMarkAddition += number_format($totalSumSub / count($assinged_exam_types), 2);
                                                                     @endphp
                                                                 </td>
-                                                                <td>{{getGrade(number_format($totalSumSub / count($assinged_exam_types), 2))}}</td>
+                                                                <td>
+                                                                    @php
+                                                                        $temp_grade[]=getGrade(number_format($totalSumSub / count($assinged_exam_types), 2));
+                                                                        $temp_gpa +=markGpa(number_format($totalSumSub / count($assinged_exam_types), 2))->gpa;
+                                                                        echo getGrade(number_format($totalSumSub / count($assinged_exam_types), 2));
+                                                                    @endphp
+                                                                </td>
                                                                 @php
                                                                     if($totalSubjectFail > 0){
                                                                     }else{
@@ -600,10 +609,19 @@
                                                                         {{gradeName(number_format($with_percent_average_gpa,2,'.',''))}}
                                                                     </td>
                                                                 @else
-                                                                    <td colspan="{{$colspan / $col_for_result + 9}}"
-
-                                                                        style="padding:10px; font-weight:bold">
-                                                                        {{markGpa(number_format($totalavgMarkAddition / $op_subject_count))->gpa}}
+                                                                    <td colspan="{{$colspan / $col_for_result + 9}}" style="padding:10px; font-weight:bold">
+                                                                        @php
+                                                                            if(in_array($failgpaname->grade_name,$temp_grade)){
+                                                                                echo $failgpaname->gpa;
+                                                                            }else{
+                                                                                $ttl = $temp_gpa / count($subjects);
+                                                                                if($max_gpa < $ttl){
+                                                                                    echo number_format($max_gpa,2,'.','');
+                                                                                }else{
+                                                                                    echo number_format($ttl,2,'.','');
+                                                                                }
+                                                                            }
+                                                                        @endphp
                                                                     </td>
                                                                 @endif
                                                             </tr>
@@ -619,16 +637,26 @@
                                                                         {{number_format($with_percent_average_gpa,2,'.','')}}
                                                                     </td>
                                                                 @else
-                                                                    <td colspan="{{$colspan / $col_for_result + 9}}"
-                                                                        style="padding:10px;">
-                                                                        {{getGrade(number_format($totalavgMarkAddition / $op_subject_count))}}
+                                                                    <td colspan="{{$colspan / $col_for_result + 9}}" style="padding:10px;">
+                                                                        @php
+                                                                            if(in_array($failgpaname->grade_name,$temp_grade)){
+                                                                                echo $failgpaname->grade_name;
+                                                                            }else{
+                                                                                $ttl = $temp_gpa / count($subjects);
+                                                                                if($max_gpa < $ttl){
+                                                                                    echo $maxgpaname->grade_name;
+                                                                                }else{
+                                                                                    echo getGradeUpdate($temp_gpa / count($subjects))->grade_name;
+                                                                                }
+                                                                            }
+                                                                        @endphp
                                                                     </td>
                                                                 @endif
 
                                                             </tr>
                                                             {{-- Total Gpa End --}}
                                                             {{-- Remark Start --}}
-                                                            <tr>
+                                                            {{-- <tr>
                                                                 @if($optional_subject_setup!='' && $student_optional_subject!='')
                                                                     <td colspan="{{$colspan / $col_for_result - 1}}">@lang('reports.position')</td>
                                                                     <td colspan="{{$colspan / $col_for_result + 4}}" style="padding:10px; font-weight:bold">
@@ -640,7 +668,7 @@
                                                                         {{getStudentAllExamMeritPosition($class_id, $section_id, $studentDetails->id)}}
                                                                     </td>
                                                                 @endif
-                                                            </tr>
+                                                            </tr> --}}
                                                             <tr>
                                                                 @if($optional_subject_setup!='' && $student_optional_subject!='')
                                                                     <td colspan="{{$colspan / $col_for_result - 1}}">

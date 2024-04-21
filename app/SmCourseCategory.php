@@ -9,4 +9,8 @@ class SmCourseCategory extends Model
 {
     protected $guarded = ['id'];
     use HasFactory;
+    public function courses()
+    {
+        return $this->hasMany('App\SmCourse', 'category_id');
+    }
 }

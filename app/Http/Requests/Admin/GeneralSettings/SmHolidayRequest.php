@@ -29,7 +29,7 @@ class SmHolidayRequest extends FormRequest
             'from_date' => 'required|before_or_equal:to_date',
             'to_date' => 'required',
             'details' => "required",
-            'upload_file_name' => "sometimes|nullable|mimes:pdf,doc,docx,jpg,jpeg,png|max:".$maxFileSize,
+            'upload_file_name' => "nullable|mimes:pdf,doc,docx,jpg,jpeg,png,txt|max:".$maxFileSize,
         ];
     }
 }

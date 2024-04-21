@@ -19,15 +19,9 @@
       @if(moduleStatusCheck('University'))
         @includeIf('university::common.session_faculty_depart_academic_semester_level',
         ['required' => 
-            ['USN', 'UD', 'UA', 'US', 'USL'],
+            ['USN', 'UD', 'UA', 'US', 'USL','USUB'],
             'div'=>'col-lg-12','row'=>1,'mt'=>'mt-0' ,'subject'=>true, 
         ])
-
-      {{-- <label class="mt-30">@lang('university::un.select_subject') <span class="text-danger"> *</span></label>
-      <div class="row" id="universityExamSubejct"></div>
-          <div class="text-center loader loader_style" id="unSubjectLoader">
-              <img src="{{asset('public/backEnd/img/demo_wait.gif')}}" alt="loader" height="60px" width="60px">
-          </div> --}}
       @else 
       <div class="row mt-25">
           <div class="col-lg-12">

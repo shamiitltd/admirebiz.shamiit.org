@@ -14,57 +14,15 @@ return new class extends Migration
     {
         Schema::create('sm_expert_teachers', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('designation');
-            $table->string('image');
+            $table->tinyInteger('staff_id');
+            $table->tinyInteger('created_by')->nullable();
+            $table->tinyInteger('updated_by')->nullable();
             $table->timestamps();
 
             $table->integer('school_id')->nullable()->default(1)->unsigned();
             $table->foreign('school_id')->references('id')->on('sm_schools')->onDelete('cascade');
+            $table->integer('position')->default(0);
         });
-
-        DB::table('sm_expert_teachers')->insert([
-            [
-                'name' => "Teacher 1",
-                'designation' => "Designation",
-                'image' => "public/uploads/expert_teacher/teacher-1.jpg",
-            ],
-            [
-                'name' => "Teacher 2",
-                'designation' => "Designation",
-                'image' => "public/uploads/expert_teacher/teacher-1.jpg",
-            ],
-            [
-                'name' => "Teacher 3",
-                'designation' => "Designation",
-                'image' => "public/uploads/expert_teacher/teacher-1.jpg",
-            ],
-            [
-                'name' => "Teacher 4",
-                'designation' => "Designation",
-                'image' => "public/uploads/expert_teacher/teacher-1.jpg",
-            ],
-            [
-                'name' => "Teacher 5",
-                'designation' => "Designation",
-                'image' => "public/uploads/expert_teacher/teacher-1.jpg",
-            ],
-            [
-                'name' => "Teacher 6",
-                'designation' => "Designation",
-                'image' => "public/uploads/expert_teacher/teacher-1.jpg",
-            ],
-            [
-                'name' => "Teacher 7",
-                'designation' => "Designation",
-                'image' => "public/uploads/expert_teacher/teacher-1.jpg",
-            ],
-            [
-                'name' => "Teacher 8",
-                'designation' => "Designation",
-                'image' => "public/uploads/expert_teacher/teacher-1.jpg",
-            ],
-        ]);
     }
 
     /**

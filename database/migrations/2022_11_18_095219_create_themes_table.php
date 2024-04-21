@@ -49,8 +49,9 @@ class CreateThemesTable extends Migration
                 $theme->path_infix_style = 'infix.css';
                 $theme->is_default = $key == 0 ? 1: 0;
                 $theme->color_mode = "gradient";
-                $theme->background_type = "image";
-                $theme->background_image = 'public/backEnd/img/body-bg.jpg';
+                $theme->background_type = "color";
+                // $theme->background_image = 'public/backEnd/img/body-bg.jpg';
+                $theme->background_color = "#FAFAFA";
                 $theme->is_system = true;
                 $theme->created_by = 1;
                 $theme->school_id = $school->id;

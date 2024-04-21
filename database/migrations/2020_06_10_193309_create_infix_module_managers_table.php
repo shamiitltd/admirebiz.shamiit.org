@@ -268,7 +268,7 @@ class CreateInfixModuleManagersTable extends Migration
             $s->save();
 
             // Jitsi
-
+           
             $name = 'Jitsi';
             $s = new InfixModuleManager();
             $s->name = 'Jitsi';
@@ -283,7 +283,7 @@ class CreateInfixModuleManagersTable extends Migration
             $s->save();
 
             // Saas
-
+           
             $name = 'Saas';
             $s = new InfixModuleManager();
             $s->name = 'Saas';
@@ -291,7 +291,7 @@ class CreateInfixModuleManagersTable extends Migration
             $s->notes = "This is Saas module for manage multiple school or institutes.Every school managed by individual admin. Thanks for using.";
             $s->version = "1.1";
             $s->update_url = "https://spondonit.com/contact";
-            $s->is_default = 0;
+            $s->is_default = 0;           
             $s->addon_url = "mailto:support@spondonit.com";
             $s->installed_domain = url('/');
             $s->activated_date = date('Y-m-d');
@@ -340,21 +340,21 @@ class CreateInfixModuleManagersTable extends Migration
             $XenditPayment->activated_date = date('Y-m-d');
             $XenditPayment->save();
 
-            // AppSlider
-            $XenditPayment = 'AppSlider';
-            $XenditPayment = new InfixModuleManager();
-            $XenditPayment->name = 'AppSlider';
-            $XenditPayment->email = 'support@spondonit.com';
-            $XenditPayment->notes = "This is for school affiliate banner for mobile app. Thanks for using.";
-            $XenditPayment->version = "1.0";
-            $XenditPayment->update_url = "https://spondonit.com/contact";
-            $XenditPayment->is_default = 0;
-            $XenditPayment->addon_url = "mailto:support@spondonit.com";
-            $XenditPayment->installed_domain = url('/');
-            $XenditPayment->activated_date = date('Y-m-d');
-            $XenditPayment->save();
+             // AppSlider
+             $XenditPayment = 'AppSlider';
+             $XenditPayment = new InfixModuleManager();
+             $XenditPayment->name = 'AppSlider';
+             $XenditPayment->email = 'support@spondonit.com';
+             $XenditPayment->notes = "This is for school affiliate banner for mobile app. Thanks for using.";
+             $XenditPayment->version = "1.0";
+             $XenditPayment->update_url = "https://spondonit.com/contact";
+             $XenditPayment->is_default = 0;
+             $XenditPayment->addon_url = "mailto:support@spondonit.com";
+             $XenditPayment->installed_domain = url('/');
+             $XenditPayment->activated_date = date('Y-m-d');
+             $XenditPayment->save();
 
-            //KhaltiPayment
+             //KhaltiPayment
             $s = new InfixModuleManager();
             $s->name = "KhaltiPayment";
             $s->email = 'support@spondonit.com';
@@ -380,7 +380,7 @@ class CreateInfixModuleManagersTable extends Migration
             $s->activated_date = date('Y-m-d');
             $s->save();
 
-            // Wallet
+             // Wallet
             $dataPath = 'Modules/Wallet/Wallet.json';
             $name = 'Wallet';
             $strJsonFileContents = file_get_contents($dataPath);
@@ -402,7 +402,7 @@ class CreateInfixModuleManagersTable extends Migration
             $s->activated_date = date('Y-m-d');
             $s->save();
 
-            // Fees
+             // Fees
             $dataPath = 'Modules/Fees/Fees.json';
             $name = 'Fees';
             $strJsonFileContents = file_get_contents($dataPath);
@@ -450,32 +450,32 @@ class CreateInfixModuleManagersTable extends Migration
             $s->activated_date = date('Y-m-d');
             $s->save();
 
-            //Gmeet 
-            $s = new InfixModuleManager();
-            $s->name = "Gmeet";
-            $s->email = 'support@spondonit.com';
-            $s->notes = "This is Gmeet module for live virtual class and meeting in this system at a time. Thanks for using.";
-            $s->version = "1.0";
-            $s->update_url = "https://spondonit.com/contact";
-            $s->is_default = 0;
-            $s->addon_url = "https://codecanyon.net/item/google-meet-module-for-infixedu-gmeet-live-class/42463761";
-            $s->installed_domain = url('/');
-            $s->activated_date = date('Y-m-d');
-            $s->save();
+             //Gmeet 
+             $s = new InfixModuleManager();
+             $s->name = "Gmeet";
+             $s->email = 'support@spondonit.com';
+             $s->notes = "This is Gmeet module for live virtual class and meeting in this system at a time. Thanks for using.";
+             $s->version = "1.0";
+             $s->update_url = "https://spondonit.com/contact";
+             $s->is_default = 0;
+             $s->addon_url = "https://codecanyon.net/item/google-meet-module-for-infixedu-gmeet-live-class/42463761";
+             $s->installed_domain = url('/');
+             $s->activated_date = date('Y-m-d');
+             $s->save();
 
 
-            //Phonepay 
-            $s = new InfixModuleManager();
-            $s->name = "PhonePay";
-            $s->email = 'support@spondonit.com';
-            $s->notes = "This is PhonePay module for manage Phonepe  online payment gateway . Thanks for using.";
-            $s->version = "1.0";
-            $s->update_url = "https://spondonit.com/contact";
-            $s->is_default = 0;
-            $s->addon_url = "https://spondonit.com/contact";
-            $s->installed_domain = url('/');
-            $s->activated_date = date('Y-m-d');
-            $s->save();
+             //Phonepay 
+             $s = new InfixModuleManager();
+             $s->name = "PhonePay";
+             $s->email = 'support@spondonit.com';
+             $s->notes = "This is PhonePay module for manage Phonepe  online payment gateway . Thanks for using.";
+             $s->version = "1.0";
+             $s->update_url = "https://spondonit.com/contact";
+             $s->is_default = 0;
+             $s->addon_url = "https://spondonit.com/contact";
+             $s->installed_domain = url('/');
+             $s->activated_date = date('Y-m-d');
+             $s->save();
 
             //BehaviourRecords 
             $s = new InfixModuleManager();
@@ -505,6 +505,20 @@ class CreateInfixModuleManagersTable extends Migration
             $s->activated_date = date('Y-m-d');
             $s->save();
 
+            //  //DownloadCenter 
+            //  $s = new InfixModuleManager();
+            //  $s->name = "DownloadCenter";
+            //  $s->email = 'support@spondonit.com';
+            //  $s->notes = "This Module is named Download Center for managing study materials more efficiently. Thanks for using.";
+            //  $s->version = "1.0";
+            //  $s->update_url = "https://spondonit.com/contact";
+            //  $s->is_default = 0;
+            //  $s->purchase_code = time();
+            //  $s->addon_url = "https://codecanyon.net/item/google-meet-module-for-infixedu-gmeet-live-class/42463761";
+            //  $s->installed_domain = url('/');
+            //  $s->activated_date = date('Y-m-d');
+            //  $s->save();
+        
 
             //TwoFactorAuth 
             $s = new InfixModuleManager();
@@ -548,19 +562,6 @@ class CreateInfixModuleManagersTable extends Migration
             $s->activated_date = date('Y-m-d');
             $s->save();
 
-            //PhonePay 
-            $s = new InfixModuleManager();
-            $s->name = "PhonePay";
-            $s->email = 'support@spondonit.com';
-            $s->notes = "This PhonePay Module For InfixEdu . Manage online payment for fees & wallet.";
-            $s->version = "1.0";
-            $s->update_url = "https://spondonit.com/contact";
-            $s->is_default = 0;
-            $s->addon_url = "maito:support@spondonit.com";
-            $s->installed_domain = url('/');
-            $s->activated_date = date('Y-m-d');
-            $s->save();
-
             //AiContent 
             $s = new InfixModuleManager();
             $s->name = "AiContent";
@@ -579,6 +580,33 @@ class CreateInfixModuleManagersTable extends Migration
             $s->name = "WhatsappSupport";
             $s->email = 'support@spondonit.com';
             $s->notes = "This is WhatsApp Support module. Send message via WhatsApp.";
+            $s->version = "1.0";
+            $s->update_url = "https://spondonit.com/contact";
+            $s->is_default = 0;
+            $s->addon_url = "maito:support@spondonit.com";
+            $s->installed_domain = url('/');
+            $s->activated_date = date('Y-m-d');
+            $s->save();
+
+
+        // Certificate
+            $s = new InfixModuleManager();
+            $s->name = 'Certificate';
+            $s->email = 'support@spondonit.com';
+            $s->notes = "This is the module to generate Certificate's for students and employees.";
+            $s->is_default = 0;
+            $s->version = '1.0' ;
+            $s->update_url = "maito:support@spondonit.com";
+            $s->purchase_code = null;
+            $s->installed_domain = null;
+            $s->activated_date = null;
+            $s->save();
+
+            //InAppLiveClass 
+            $s = new InfixModuleManager();
+            $s->name = "InAppLiveClass";
+            $s->email = 'support@spondonit.com';
+            $s->notes = "This InAppLiveClass Module For InfixEdu . Manage Online Class and Meeting Reports.";
             $s->version = "1.0";
             $s->update_url = "https://spondonit.com/contact";
             $s->is_default = 0;

@@ -49,7 +49,7 @@
         $currency = '$'; 
     } 
 @endphp
-<section class="sms-breadcrumb mb-40 white-box">
+<section class="sms-breadcrumb mb-20">
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h1>@lang('fees.fees_master')</h1>
@@ -331,7 +331,7 @@
                                                                     
                                                             </div>
                                                         </td>
-                                                        <td class="border-top-0" style="width:45%">
+                                                        <td class="border-top-0" style="width:40%">
                                                             <input type="hidden" name="url" id="url" value="{{URL::to('/')}}">
                                                             <div class="row no-gutters input-right-icon">
                                                                 <div class="col">
@@ -355,7 +355,7 @@
                                                                 </div>
                                                             </div>
                                                         </td>
-                                                        <td class="border-top-0" style="width: 15%">
+                                                        <td class="border-top-0" style="width: 25%">
                                                             <div class="primary_input">
                                                                
                                                                 <input oninput="numberCheck(this)" class="primary_input_field form-control{{ $errors->has('unPercentage') ? ' is-invalid' : '' }} unPercentage"
