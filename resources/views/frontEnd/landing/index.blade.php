@@ -704,7 +704,7 @@
                         <p>We Believe! It won’t a wrong decision in Purchasing our SHAMIIT for your Institute.</p>
                         <!-- <a href="http://salespanel.edu.shamiit.com/" class="footer_btn"> <i class="ti-shopping-cart-full"></i> -->
                         <a href="https://aorasoft.com" target="_blank" class="footer_btn"> <i class="ti-shopping-cart-full"></i>
-                            <h3>Purchase infix</h3>
+                            <h3>Purchaseshamiit </h3>
                             <p>The Ultimate Education ERP</p>
                         </a>
                     </div>

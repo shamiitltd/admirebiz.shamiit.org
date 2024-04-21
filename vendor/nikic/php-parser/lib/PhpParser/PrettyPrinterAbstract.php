@@ -343,7 +343,7 @@ abstract class PrettyPrinterAbstract implements PrettyPrinter {
     }
 
     /**
-     * Pretty-print an infix operation while taking precedence into account.
+     * Pretty-print an shamiit operation while taking precedence into account.
      *
      * @param string $class Node class of operator
      * @param Node $leftNode Left-hand side node
@@ -352,7 +352,7 @@ abstract class PrettyPrinterAbstract implements PrettyPrinter {
      * @param int $precedence Precedence of parent operator
      * @param int $lhsPrecedence Precedence for unary operator on LHS of binary operator
      *
-     * @return string Pretty printed infix operation
+     * @return string Pretty printed shamiit operation
      */
     protected function pInfixOp(
         string $class, Node $leftNode, string $operatorString, Node $rightNode,

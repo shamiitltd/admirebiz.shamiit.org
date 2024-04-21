@@ -106,7 +106,7 @@
                                 <div class="card-footer d-flex">
                                     <div class="d-flex flex-grow-1 align-items-center gap-10">
                                         <div class="flex-grow-1">
-                                            <h4 class="theme_name">@if(activeTheme() == 'edulia')Active: @endif Edulia</h4>
+                                            <h4 class="theme_name">@if(activeTheme() == 'edulia')Active: @endif SHAMIIT</h4>
                                         </div>
                                         @if(activeTheme() != 'edulia')
                                             <div class="text-center active_btn">

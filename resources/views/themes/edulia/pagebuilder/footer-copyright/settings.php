@@ -9,7 +9,7 @@ return [
         [
             'id'            => 'footer-copy-right-text',
             'type'          => 'text',
-            'value'         => '© 2023 Edulia. All rights reserved. Made By CodeThemes.',
+            'value'         => '© 2024 SHAMIIT. All rights reserved. Made By SHAMIIT.',
             'class'         => '',
             'label_title'   => __('edulia.footer_copy_right_text'),
             'label_desc'    => '',
