@@ -138,7 +138,7 @@ class CreateSmGeneralSettingsTable extends Migration
 
         DB::table('sm_general_settings')->insert([
             [
-                'copyright_text' => 'Copyright &copy; 2020 All rights reserved | This application is made by Codethemes',
+                'copyright_text' => 'Copyright &copy; 2024 All rights reserved | This application is made by SHAMIIT',
                 'logo' => 'public/uploads/settings/logo.png',
                 'favicon' => 'public/uploads/settings/favicon.png',
                 'phone' => '+8801841412141',
@@ -147,8 +147,8 @@ class CreateSmGeneralSettingsTable extends Migration
                 'address' => '89/2 Panthapath, Dhaka 1215, Bangladesh',
                 'currency' => 'USD',
                 'currency_symbol' => '$',
-                'school_name' => 'Infix Edu',
-                'site_title' => 'Infix Education software',
+                'school_name' => 'EDU SHAMIIT',
+                'site_title' => 'SHAMIIT Education software',
                 'session_id' => 1,
                 'week_start_id' => 3,
                 'time_zone_id' => 51,

@@ -3,7 +3,7 @@
     if(isset($setting->copyright_text)){
     $copyright_text = $setting->copyright_text;
     }else{
-    $copyright_text = 'Copyright 2019 All rights reserved by Codethemes';
+    $copyright_text = 'Copyright 2019 All rights reserved by SHAMIIT';
     }
 @endphp
 

@@ -685,7 +685,7 @@
 
                                                 @else
 
-                                                Copyright 2019 All rights reserved by Codethemes
+                                                Copyright 2019 All rights reserved by SHAMIIT
                                                 @endif
                                             </div>
                                         </div>

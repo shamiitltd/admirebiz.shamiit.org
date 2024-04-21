@@ -1,6 +1,6 @@
 {
     "name": "spondonit/school-service",
-    "description": "'Service Provider for Infix School application'",
+    "description": "'Service Provider for SHAMIIT School application'",
     "type": "library",
     "require": {
         "spondonit/service": "dev-master"

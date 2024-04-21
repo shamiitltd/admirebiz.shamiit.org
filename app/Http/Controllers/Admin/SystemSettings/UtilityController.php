@@ -111,7 +111,7 @@ class UtilityController extends Controller
 				'campaign' => $gateway->himalayasms_campaign,
 				'routeid' => $gateway->himalayasms_routeId ,
 				'contacts' => "+9779865383233",
-				'msg' => "Hello I am from infixedu, It Is test example sms",
+				'msg' => "Hello I am from edu shamiit, It Is test example sms",
 				'type' => "text"
 			],
 			'http_errors' => false

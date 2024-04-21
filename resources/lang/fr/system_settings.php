@@ -662,9 +662,9 @@ return [
 
 "expaire_date" => "Date d'expiration",
 
-"infix_edu" => "Infix Edu",
+"infix_edu" => "EDU SHAMIIT",
 
-"infix_clasified" => "Infix classifié",
+"infix_clasified" => "SHAMIIT classifié",
 
 "purchase_list" => "Liste d'achats",
 

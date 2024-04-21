@@ -17,7 +17,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="{{ asset($setting->favicon) }}" type="image/png" />
     <link rel="stylesheet" href="{{ asset('public/backEnd/vendors/font_awesome/css/all.min.css') }}" />
-    <title>{{ $setting->site_title ? $setting->site_title : 'Infix Edu ERP' }}</title>
+    <title>{{ $setting->site_title ? $setting->site_title : 'EDU SHAMIIT ERP' }}</title>
     <meta name="_token" content="{!! csrf_token() !!}" />
     <style>
         .footer-list ul {
@@ -96,7 +96,7 @@
                     <a class="navbar-brand" href="{{ url('/') }}/home">
                         <img class="w-75"
                             src="{{ asset($setting->logo ? $setting->logo : 'public/uploads/settings/logo.png') }}"
-                            alt="Infix Logo" style="max-width: 150px;">
+                            alt="SHAMIIT Logo" style="max-width: 150px;">
                     </a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse"
                         data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -441,7 +441,7 @@
                         @if ($setting->copyright_text)
                             <p>{!! $setting->copyright_text !!}</p>
                         @else
-                            Copyright © 2019 All rights reserved | This application is made with by Codethemes
+                            Copyright © 2019 All rights reserved | This application is made with by SHAMIIT
                         @endif
                     </div>
                 </div>
