@@ -17,7 +17,7 @@ class SmHrPayrollGeneratesTableSeeder extends Seeder
      */
     public function run($school_id, $academic_id)
     {
-        $faker = Faker::create();
+        $faker = Faker::create('en_US');
         $increment = 100;
 
         $staffs = SmStaff::where('active_status', 1)->whereIn('role_id',[4,5,6,7,8,9])->where('school_id', 1)->get(['id','user_id']);

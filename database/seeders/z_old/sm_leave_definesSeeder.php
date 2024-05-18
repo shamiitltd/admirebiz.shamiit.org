@@ -18,7 +18,7 @@ class sm_leave_definesSeeder extends Seeder
      */
     public function run()
     {
-        $faker = Faker::create();
+        $faker = Faker::create('en_US');
 
         $roles = InfixRole::where('active_status', '=', '1')->where('id', '!=', 1)/* ->where('id', '!=', 2) */->where('id', '!=', 3)->where('id', '!=', 10)->get();
         foreach ($roles as $key => $value) {

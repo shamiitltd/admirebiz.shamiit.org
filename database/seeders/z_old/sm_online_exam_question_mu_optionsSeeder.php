@@ -15,7 +15,7 @@ class sm_online_exam_question_mu_optionsSeeder extends Seeder
      */
     public function run()
     {
-        $faker = Faker::create();
+        $faker = Faker::create('en_US');
         for($i=1; $i<=5; $i++){
             $store= new SmOnlineExamQuestionMuOption();
             $store->online_exam_question_id=$i;

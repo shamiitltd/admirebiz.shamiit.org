@@ -21,7 +21,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        $faker = Faker::create();
+        $faker = Faker::create('en_US');
 
         $datas = [
             "Principal's Speech",

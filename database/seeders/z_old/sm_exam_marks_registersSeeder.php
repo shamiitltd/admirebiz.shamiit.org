@@ -17,7 +17,7 @@ class sm_exam_marks_registersSeeder extends Seeder
      */
     public function run()
     {
-        $faker = Faker::create();
+        $faker = Faker::create('en_US');
         $students = SmStudent::where('class_id', 1)->get();
         foreach ($students as $student) {
 

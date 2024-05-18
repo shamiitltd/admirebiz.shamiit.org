@@ -31,7 +31,7 @@ class CreateFmFeesInvoiceSettingsTable extends Migration
             $store = new FmFeesInvoiceSettings();
             $store->invoice_positions = '[{"id":"prefix","text":"prefix"},{"id":"admission_no","text":"Admission No"},{"id":"class","text":"Class"},{"id":"section","text":"Section"}]';
             $store->uniq_id_start = "0011";
-            $store->prefix = 'infixEdu';
+            $store->prefix = 'EduShamiit';
             $store->class_limit = 3;
             $store->section_limit = 1;
             $store->admission_limit = 3;

@@ -33,7 +33,7 @@ class CreateSmCoursesTable extends Migration
             $table->foreign('school_id')->references('id')->on('sm_schools')->onDelete('cascade');
         });
 
-        $faker = Faker::create();
+        $faker = Faker::create('en_US');
 
         for ($i = 1; $i <= 5; $i++) {
             $new = new SmCourse();

@@ -20,7 +20,7 @@ class sm_vehiclesSeeder extends Seeder
      */
     public function run()
     {
-        $faker = Faker::create();
+        $faker = Faker::create('en_US');
         $drivers = SmStaff::where('role_id',9)->where('active_status',1)->get();
         foreach ($drivers as $driver) { 
             $s = new SmVehicle();

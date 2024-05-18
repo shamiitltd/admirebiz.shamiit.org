@@ -18,7 +18,7 @@ class SmHomeworkStudentsTableSeeder extends Seeder
      */
     public function run($school_id, $academic_id, $count=5)
     {
-        $faker = Faker::create();
+        $faker = Faker::create('en_US');
         $class = SmClass::where('school_id', $school_id)->where('academic_id', $academic_id)->value('id');
         $students = StudentRecord::where('class_id', 1)->where('school_id', $school_id)->get();
         foreach ($students as $record) {

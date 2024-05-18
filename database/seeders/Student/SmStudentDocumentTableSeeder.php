@@ -17,7 +17,7 @@ class SmStudentDocumentTableSeeder extends Seeder
      */
     public function run($school_id, $academic_id, $count=1)
     {
-        $faker = Faker::create();
+        $faker = Faker::create('en_US');
       
         $classSection = SmClassSection::where('school_id',$school_id)->where('academic_id', $academic_id)->first();
         $students = StudentRecord::where('class_id', $classSection->class_id)

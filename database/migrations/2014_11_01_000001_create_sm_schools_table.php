@@ -38,7 +38,7 @@ class CreateSmSchoolsTable extends Migration
 
         DB::table('sm_schools')->insert([
             [
-                'school_name' => 'InfixEdu',
+                'school_name' => 'EduShamiit',
                 'created_by' => 1,
                 'updated_by' => 1,
                 'active_status' => 1,

@@ -20,7 +20,7 @@ class SmExamMarksRegistersTableSeeder extends Seeder
      */
     public function run($school_id, $academic_id)
     {
-        $faker = Faker::create();
+        $faker = Faker::create('en_US');
 
         $classSection = SmClassSection::where('school_id',$school_id)->where('academic_id', $academic_id)->first();
         $students = StudentRecord::where('class_id', $classSection->class_id)->where('section_id', $classSection->section_id)->where('school_id',$school_id)->where('academic_id', $academic_id)->get();
