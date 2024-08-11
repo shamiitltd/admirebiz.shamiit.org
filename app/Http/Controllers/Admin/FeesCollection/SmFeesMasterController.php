@@ -422,9 +422,9 @@ class SmFeesMasterController extends Controller
                 $validator = Validator::make($input, [
                 'class' => 'required',
             ]);
-        }
-        if ($validator->fails()) {
-            return redirect()->route('fees_assign', $request->fees_group_id)->withErrors($validator)->withInput();
+            if ($validator->fails()) {
+                return redirect()->route('fees_assign', $request->fees_group_id)->withErrors($validator)->withInput();
+            }
         }
 
         try {

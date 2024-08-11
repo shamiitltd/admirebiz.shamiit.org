@@ -17,6 +17,19 @@ class SmTeacherUploadContent extends Model
         static::addGlobalScope(new GlobalAcademicScope);
     }
 
+    protected $casts = [
+        'id' => 'integer',
+        'content_title' => 'string',
+        'upload_date' => 'string',
+        'content_type' => 'string',
+        'upload_file' => 'string',
+        'description' => 'string',
+        'available_for_admin' => 'integer',
+        'available_for_all_classes' => 'integer',
+        'class' => 'integer',
+        'section' => 'integer',
+    ];
+
     public function contentTypes()
     {
         return $this->belongsTo('App\SmContentType', 'content_type', 'id');

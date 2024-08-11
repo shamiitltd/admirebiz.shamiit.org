@@ -27,8 +27,8 @@ class UserFactory extends Factory
         $i=$this->i++;
         return [ 
             'full_name' => $this->faker->firstNameMale ?? $this->faker->firstNameFemale, 
-            'email'=>'user_'.$i.'@edu.shamiit.com', 
-            'username'=>'user_'.$i.'@edu.shamiit.com', 
+            'email'=>'user_'.$i.'@infixedu.com', 
+            'username'=>'user_'.$i.'@infixedu.com', 
             'role_id'   => $this->faker->numberBetween(4, 9) ?? 4,         
             'is_administrator'     => 'no',            
             'password' => Hash::make('123456'),      

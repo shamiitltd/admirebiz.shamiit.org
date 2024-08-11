@@ -31,7 +31,10 @@ use Modules\RolePermission\Entities\InfixModuleStudentParentInfo;
 use App\Http\Controllers\Admin\FrontSettings\ThemeManageController;
 use App\Http\Controllers\Admin\FeesCollection\SmFeesCarryForwardController;
 use App\Http\Controllers\Admin\FeesCollection\DueFeesLoginPermissionController;
+use Illuminate\Support\Facades\Auth;
 
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 Route::get('checkForeignKey', 'HomeController@checkForeignKey')->name('checkForeignKey');
 
 //ADMIN
@@ -40,7 +43,6 @@ Route::post('logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('reg', function () {
     dd('hello');
 });
-
 
 Route::group(['middleware' => ['XSS', 'subscriptionAccessUrl']], function () {
 
@@ -330,10 +332,10 @@ Route::group(['middleware' => ['XSS', 'subscriptionAccessUrl']], function () {
 
         Route::get('admission-query-edit/{id}', ['as' => 'admission_query_edit', 'uses' => 'Admin\AdminSection\SmAdmissionQueryController@edit'])->middleware('userRolePermission:admission_query_edit');
         Route::post('admission-query-update', ['as' => 'admission_query_update', 'uses' => 'Admin\AdminSection\SmAdmissionQueryController@update']);
-        Route::get('add-query/{id}', ['as' => 'add_query', 'uses' => 'Admin\AdminSection\SmAdmissionQueryController@addQuery'])->middleware('userRolePermission:add_query');
+        Route::get('add-query/{id}', ['as' => 'add_query', 'uses' => 'Admin\AdminSection\SmAdmissionQueryController@addQuery']);
         Route::post('query-followup-store', ['as' => 'query_followup_store', 'uses' => 'Admin\AdminSection\SmAdmissionQueryController@queryFollowupStore']);
         Route::get('delete-follow-up/{id}', ['as' => 'delete_follow_up', 'uses' => 'Admin\AdminSection\SmAdmissionQueryController@deleteFollowUp']);
-        Route::post('admission-query-delete', ['as' => 'admission_query_delete', 'uses' => 'Admin\AdminSection\SmAdmissionQueryController@delete'])->middleware('userRolePermission:15');
+        Route::post('admission-query-delete', ['as' => 'admission_query_delete', 'uses' => 'Admin\AdminSection\SmAdmissionQueryController@delete'])->middleware('userRolePermission:admission_query_delete');
 
         Route::post('admission-query-search', 'Admin\AdminSection\SmAdmissionQueryController@admissionQuerySearch')->name('admission-query-search');
         Route::get('admission-query-search', 'Admin\AdminSection\SmAdmissionQueryController@index');
@@ -425,7 +427,7 @@ Route::group(['middleware' => ['XSS', 'subscriptionAccessUrl']], function () {
 
         // Collect Fees
         Route::get('collect-fees', ['as' => 'collect_fees', 'uses' => 'Admin\FeesCollection\SmFeesCollectController@index'])->middleware('userRolePermission:collect_fees');
-        Route::get('fees-collect-student-wise/{id}', ['as' => 'fees_collect_student_wise', 'uses' => 'Admin\FeesCollection\SmFeesCollectController@collectFeesStudent'])->where('id', '[0-9]+')->middleware('userRolePermission:110');
+        Route::get('fees-collect-student-wise/{id}', ['as' => 'fees_collect_student_wise', 'uses' => 'Admin\FeesCollection\SmFeesCollectController@collectFeesStudent'])->where('id', '[0-9]+')->middleware('userRolePermission:fees_collect_student_wise');
 
         Route::post('collect-fees', ['as' => 'collect_fees_search', 'uses' => 'Admin\FeesCollection\SmFeesCollectController@search']);
 
@@ -653,7 +655,7 @@ Route::group(['middleware' => ['XSS', 'subscriptionAccessUrl']], function () {
         //Dormitory List
         // Route::resource('dormitory-list', 'Admin\Dormitory\SmDormitoryListController')->middleware('userRolePermission:367');
         Route::get('dormitory-list', 'Admin\Dormitory\SmDormitoryListController@index')->name('dormitory-list-index')->middleware('userRolePermission:dormitory-list-index');
-        Route::post('dormitory-list', 'Admin\Dormitory\SmDormitoryListController@store')->name('dormitory-list-store');
+        Route::post('dormitory-list', 'Admin\Dormitory\SmDormitoryListController@store')->name('dormitory-list-store')->middleware('userRolePermission:dormitory-list-store');
         Route::get('dormitory-list/{id}', 'Admin\Dormitory\SmDormitoryListController@show')->name('dormitory-list-edit');
         Route::put('dormitory-list/{id}', 'Admin\Dormitory\SmDormitoryListController@update')->name('dormitory-list-update');
         Route::delete('dormitory-list/{id}', 'Admin\Dormitory\SmDormitoryListController@destroy')->name('dormitory-list-delete');
@@ -707,9 +709,9 @@ Route::group(['middleware' => ['XSS', 'subscriptionAccessUrl']], function () {
         // Route::resource('transport-route', 'Admin\Transport\SmRouteController')->middleware('userRolePermission:349');
         Route::get('transport-route', 'Admin\Transport\SmRouteController@index')->name('transport-route-index')->middleware('userRolePermission:transport-route-index');
         Route::post('transport-route', 'Admin\Transport\SmRouteController@store')->name('transport-route-store');
-        Route::get('transport-route/{id}', 'Admin\Transport\SmRouteController@show')->name('transport-route-edit');
+        Route::get('transport-route/{id}', 'Admin\Transport\SmRouteController@show')->name('transport-route-edit')->middleware('userRolePermission:transport-route-edit');
         Route::put('transport-route/{id}', 'Admin\Transport\SmRouteController@update')->name('transport-route-update');
-        Route::delete('transport-route/{id}', 'Admin\Transport\SmRouteController@destroy')->name('transport-route-delete');
+        Route::delete('transport-route/{id}', 'Admin\Transport\SmRouteController@destroy')->name('transport-route-delete')->middleware('userRolePermission:transport-route-delete');
 
         //// Examination
         // instruction Routes
@@ -788,7 +790,7 @@ Route::group(['middleware' => ['XSS', 'subscriptionAccessUrl']], function () {
 
 
         //Exam Schedule create
-        Route::get('exam-schedule-create', ['as' => 'exam_schedule_create', 'uses' => 'Admin\Examination\SmExamRoutineController@examScheduleCreate'])->middleware('userRolePermission:exam_schedule_store');
+        Route::get('exam-schedule-create', ['as' => 'exam_schedule_create', 'uses' => 'Admin\Examination\SmExamRoutineController@examScheduleCreate'])->middleware('userRolePermission:exam_schedule_create');
 
         Route::post('exam-schedule-create', ['as' => 'exam_schedule_create_store', 'uses' => 'Admin\Examination\SmExamRoutineController@examScheduleSearch'])->middleware('userRolePermission:exam_schedule_store');
 
@@ -815,12 +817,12 @@ Route::group(['middleware' => ['XSS', 'subscriptionAccessUrl']], function () {
 
         Route::post('marks-register-create', ['as' => 'marks_register_create_search', 'uses' => 'Admin\Examination\SmExamMarkRegisterController@search']);
 
-        Route::post('marks_register_store', ['as' => 'marks_register_store', 'uses' => 'Admin\Examination\SmExamMarkRegisterController@store']);
+        Route::post('marks_register_store', ['as' => 'marks_register_store', 'uses' => 'Admin\Examination\SmExamMarkRegisterController@store']); 
 
         Route::get('exam-settings', ['as' => 'exam-settings', 'uses' => 'Admin\Examination\SmExamFormatSettingsController@index'])->middleware('userRolePermission:exam-settings');
         Route::post('save-exam-content', ['as' => 'save-exam-content', 'uses' => 'Admin\Examination\SmExamFormatSettingsController@store'])->middleware('userRolePermission:save-exam-content');
-        Route::get('edit-exam-settings/{id}', ['as' => 'edit-exam-settings', 'uses' => 'Admin\Examination\SmExamFormatSettingsController@edit']);
-        Route::post('update-exam-content', ['as' => 'update-exam-content', 'uses' => 'Admin\Examination\SmExamFormatSettingsController@update'])->middleware('userRolePermission:708');
+        Route::get('edit-exam-settings/{id}', ['as' => 'edit-exam-settings', 'uses' => 'Admin\Examination\SmExamFormatSettingsController@edit'])->middleware('userRolePermission:edit-exam-settings');
+        Route::post('update-exam-content', ['as' => 'update-exam-content', 'uses' => 'Admin\Examination\SmExamFormatSettingsController@update'])->middleware('userRolePermission:update-exam-content');
 
         Route::get('delete-content/{id}', ['as' => 'delete-content', 'uses' => 'Admin\Examination\SmExamFormatSettingsController@delete'])->middleware('userRolePermission:delete-content');
 
@@ -967,7 +969,7 @@ Route::group(['middleware' => ['XSS', 'subscriptionAccessUrl']], function () {
         Route::put('bank-account/{id}', 'Admin\Accounts\SmBankAccountController@update')->name('bank-account-update');
         Route::get('bank-transaction/{id}', 'Admin\Accounts\SmBankAccountController@bankTransaction')->name('bank-transaction')->middleware('userRolePermission:bank-transaction');
         Route::delete('bank-account-delete', 'Admin\Accounts\SmBankAccountController@destroy')->name('bank-account-delete')->middleware('userRolePermission:bank-account-delete');
-        Route::get('bank-account-datatable', 'Admin\Accounts\SmBankAccountController@bankAccountDatatable')->name('bank-account-datatable')->middleware('userRolePermission:bank-account-datatable');
+        Route::get('bank-account-datatable', 'Admin\Accounts\SmBankAccountController@bankAccountDatatable')->name('bank-account-datatable');
 
         // Expense head
         // Route::resource('expense-head', 'SmExpenseHeadController');   //not used 
@@ -1010,7 +1012,7 @@ Route::group(['middleware' => ['XSS', 'subscriptionAccessUrl']], function () {
         Route::post('btn-assign-fees-group', 'Admin\FeesCollection\SmFeesMasterController@feesAssignStore');
         Route::post('unssign-all-fees-group', 'Admin\FeesCollection\SmFeesMasterController@feesUnassignAll');
 
-        Route::get('fees-assign-datatable', 'Admin\FeesCollection\SmFeesMasterController@feesAssignDatatable')->name('fees-assign-datatable')->middleware('userRolePermission:fees-assign-datatable');
+        Route::get('fees-assign-datatable', 'Admin\FeesCollection\SmFeesMasterController@feesAssignDatatable')->name('fees-assign-datatable');
 
         //installment
         Route::post('fees-installment-update', 'Admin\FeesCollection\SmFeesMasterController@feesInstallmentUpdate')->name('feesInstallmentUpdate');
@@ -1045,9 +1047,9 @@ Route::group(['middleware' => ['XSS', 'subscriptionAccessUrl']], function () {
         // Route::resource('postal-receive', 'SmPostalReceiveController');
         Route::get('postal-receive', 'Admin\AdminSection\SmPostalReceiveController@index')->name('postal-receive')->middleware('userRolePermission:postal-receive');
         Route::post('postal-receive', 'Admin\AdminSection\SmPostalReceiveController@store')->name('postal-receive-store')->middleware('userRolePermission:postal-receive-store');
-        Route::get('postal-receive/{id}', 'Admin\AdminSection\SmPostalReceiveController@show')->name('postal-receive_edit')->middleware('userRolePermission:postal-receive-edit');
-        Route::put('postal-receive/{id}', 'Admin\AdminSection\SmPostalReceiveController@update')->name('postal-receive_update')->middleware('userRolePermission:postal-receive-edit');
-        Route::post('postal-receive-delete', 'Admin\AdminSection\SmPostalReceiveController@destroy')->name('postal-receive_delete')->middleware('userRolePermission:postal-receive-delete');
+        Route::get('postal-receive/{id}', 'Admin\AdminSection\SmPostalReceiveController@show')->name('postal-receive_edit')->middleware('userRolePermission:postal-receive_edit');
+        Route::put('postal-receive/{id}', 'Admin\AdminSection\SmPostalReceiveController@update')->name('postal-receive_update')->middleware('userRolePermission:postal-receive_edit');
+        Route::post('postal-receive-delete', 'Admin\AdminSection\SmPostalReceiveController@destroy')->name('postal-receive_delete')->middleware('userRolePermission:postal-receive_delete');
 
         Route::get('postal-receive-document/{file_name}', function ($file_name = null) {
             $file = public_path() . '/uploads/postal/' . $file_name;
@@ -1057,7 +1059,7 @@ Route::group(['middleware' => ['XSS', 'subscriptionAccessUrl']], function () {
         })->name('postal-receive-document')->middleware('userRolePermission:postal-receive-document');
 
 
-        Route::get('postal-receive-datatable', 'Admin\AdminSection\SmPostalReceiveController@postalReceiveDatatable')->name('postal-receive-datatable')->middleware('userRolePermission:postal-receive-datatable');
+        Route::get('postal-receive-datatable', 'Admin\AdminSection\SmPostalReceiveController@postalReceiveDatatable')->name('postal-receive-datatable');
 
         // Postal Dispatch
         // Route::resource('postal-dispatch', 'SmPostalDispatchController');
@@ -1077,7 +1079,7 @@ Route::group(['middleware' => ['XSS', 'subscriptionAccessUrl']], function () {
             }
         })->name('postal-dispatch-document')->middleware('userRolePermission:postal-dispatch-document');
 
-        Route::get('postal-dispatch-datatable', 'Admin\AdminSection\SmPostalDispatchController@postalDispatchDatatable')->name('postal_dispatch_datatable')->middleware('userRolePermission:postal-dispatch-datatable');
+        Route::get('postal-dispatch-datatable', 'Admin\AdminSection\SmPostalDispatchController@postalDispatchDatatable')->name('postal_dispatch_datatable');
 
         // Phone Call Log
         // Route::resource('phone-call', 'SmPhoneCallLogController');
@@ -1730,7 +1732,7 @@ Route::group(['middleware' => ['XSS', 'subscriptionAccessUrl']], function () {
         Route::get('suppliers/{id}', 'Admin\Inventory\SmSupplierController@edit')->name('suppliers-edit')->middleware('userRolePermission:suppliers-edit');
         Route::put('suppliers/{id}', 'Admin\Inventory\SmSupplierController@update')->name('suppliers-update')->middleware('userRolePermission:suppliers-edit');
         Route::get('delete-supplier-view/{id}', 'Admin\Inventory\SmSupplierController@deleteSupplierView')->name('delete-supplier-view')->middleware('userRolePermission:suppliers-delete');
-        Route::get('delete-supplier/{id}', 'Admin\Inventory\SmSupplierController@deleteSupplier')->name('delete-supplier')->middleware('userRolePermission:delete-supplier-view');
+        Route::get('delete-supplier/{id}', 'Admin\Inventory\SmSupplierController@deleteSupplier')->name('delete-supplier')->middleware('userRolePermission:delete-supplier');
 
 
         Route::get('view-sell-payments/{id}', 'Admin\Inventory\SmItemSellController@viewSellPayments')->name('view-sell-payments')->middleware('userRolePermission:view-sell-payments');

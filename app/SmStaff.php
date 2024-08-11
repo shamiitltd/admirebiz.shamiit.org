@@ -11,6 +11,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class SmStaff extends Model
 {
     use HasFactory;
+    protected $casts = [
+        'id'            => 'integer',
+        'full_name'     => 'string',
+        'user_id'       => 'integer'
+    ];
+    
     protected static function boot()
     {
         parent::boot();

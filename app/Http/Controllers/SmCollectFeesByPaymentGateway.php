@@ -59,6 +59,8 @@ class SmCollectFeesByPaymentGateway extends Controller
     public function payByPaypal(Request $request)
     { 
         try{
+            $real_amount = $request->real_amount/100;
+            
             if(moduleStatusCheck('University')){ 
                 $installment = UnFeesInstallmentAssign::find($request->installment_id);
                 $description = $installment->installment->title ?? 'Fees Payment' ;
@@ -70,7 +72,7 @@ class SmCollectFeesByPaymentGateway extends Controller
             $user = Auth::user();
             $fees_payment = new SmFeesPayment();
             $fees_payment->student_id = $request->student_id;
-            $fees_payment->amount = $request->real_amount;
+            $fees_payment->amount = $real_amount;
             $fees_payment->assign_id = $request->assign_id;
             $fees_payment->payment_date = date('Y-m-d');
             $fees_payment->payment_mode = 'PayPal';
@@ -96,8 +98,8 @@ class SmCollectFeesByPaymentGateway extends Controller
     
             $data = [];
             $data['payment_method'] = "PayPal";
-            $data['amount'] = $request->real_amount;
-            $data['service_charge'] = chargeAmount("PayPal", $request->real_amount);
+            $data['amount'] = $real_amount;
+            $data['service_charge'] = chargeAmount("PayPal", $real_amount);
             $data['fees_payment_id'] = $fees_payment->id;
             $data['type'] = "old_fees";
             $classMap = config('paymentGateway.' . $data['payment_method']);
@@ -242,7 +244,7 @@ class SmCollectFeesByPaymentGateway extends Controller
 
             Stripe\Stripe::setApiKey($stripeDetails->stripe_api_secret_key);
             $charge = Stripe\Charge::create([
-                "amount" => $request->real_amount * 100,
+                "amount" => $real_amount * 100,
                 "currency" => $system_currency,
                 "source" => $request->stripeToken,
                 "description" => "Student Fees payment"
@@ -252,7 +254,7 @@ class SmCollectFeesByPaymentGateway extends Controller
                 $fees_payment = new SmFeesPayment();
                 $fees_payment->student_id = $request->student_id;
                 $fees_payment->fees_type_id = $request->fees_type_id;
-                $fees_payment->amount = $request->real_amount;
+                $fees_payment->amount = $real_amount;
                 $fees_payment->payment_date = date('Y-m-d');
                 $fees_payment->payment_mode = 'Stripe';
                 $fees_payment->created_by = $user->id;

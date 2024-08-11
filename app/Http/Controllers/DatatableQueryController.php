@@ -648,97 +648,94 @@ class DatatableQueryController extends Controller
 
     public function bankPaymentSlipAjax(Request $request)
     {
-        $bank_slips = SmBankPaymentSlip::query();
-        if(moduleStatusCheck('University')){
-            $bank_slips->where('un_academic_id', getAcademicId());
-            if ($request->un_semester_label_id != "") {
-                $bank_slips->where('un_semester_label_id', $request->un_semester_label_id);
+        try {
+            $bank_slips = SmBankPaymentSlip::query();
+            if (moduleStatusCheck('University')) {
+                $bank_slips->where('un_academic_id', getAcademicId());
+                if ($request->un_semester_label_id != "") {
+                    $bank_slips->where('un_semester_label_id', $request->un_semester_label_id);
+                }
+            } else {
+                $bank_slips->where('academic_id', getAcademicId());
+                if ($request->class != "") {
+                    $bank_slips->where('class_id', $request->class);
+                }
+                if ($request->section != "") {
+                    $bank_slips->where('section_id', $request->section);
+                }
+                if ($request->payment_date != "") {
+                    $date = strtotime($request->payment_date);
+                    $new_format = date('Y-m-d', $date);
+                    $bank_slips->where('date', $new_format);
+                }
             }
-        }else{
-            $bank_slips->where('academic_id', getAcademicId());
-            if ($request->class != "") {
-                $bank_slips->where('class_id', $request->class);
+
+            if ($request->approve_status != "") {
+                $bank_slips->where('approve_status', $request->approve_status);
             }
-            if ($request->section != "") {
-                $bank_slips->where('section_id', $request->section);
-            }
-            if ($request->payment_date != "") {
-                $date = strtotime($request->payment_date);
-                $new_format = date('Y-m-d', $date);
-                $bank_slips->where('date', $new_format);
-            }
+            $bank_slips = $bank_slips->with('studentInfo', 'installmentAssign.installment', 'feesType')
+                ->where('school_id', Auth::user()->school_id)
+                ->where('approve_status', 0)
+                ->orderBy('id', 'desc');
+            // return $bank_slips->get();
+            return Datatables::of($bank_slips)
+                ->addIndexColumn()
+                ->addColumn('date', function ($row) {
+                    $date = dateConvert(@$row->created_at);
+                    return $date;
+                })
+                ->rawColumns(['date'])
+                ->addColumn('status', function ($row) {
+                    if ($row->approve_status == 0) {
+                        $btn = '<button class="primary-btn small bg-warning text-white border-0">' . app('translator')->get('common.pending') . '</button>';
+                    } elseif ($row->approve_status == 1) {
+                        $btn = '<button class="primary-btn small bg-success text-white border-0  tr-bg">' . app('translator')->get('common.approved') . '</button>';
+                    } elseif ($row->approve_status == 2) {
+                        $btn = '<button class="primary-btn small bg-danger text-white border-0  tr-bg">' . app('translator')->get('common.rejected') . '</button>';
+                    }
+                    return $btn;
+                })
+                ->addColumn('p_amount', function ($row) {
+                    return generalSetting()->currency_symbol . ' ' . $row->amount;
+                })
+                ->addColumn('slip', function ($row) {
+                    if (!empty($row->slip)) {
+                        $btn = '<a class="text-color" data-toggle="modal" data-target="#showCertificateModal(' . $row->id . ');" href="#">' . app('translator')->get('common.approve') . '</a>';
+                    } else {
+                        if ($row->approve_status == 0) {
+                            $btn = '<div class="dropdown CRM_dropdown">
+                                        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">' . app('translator')->get('common.select') . '</button>
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                                <a onclick="enableId(' . $row->id . ');" class="dropdown-item" href="#" data-toggle="modal" data-target="#enableStudentModal" data-id="' . $row->id . '"  >' . app('translator')->get('common.approve') . '</a>' .
+                                                '<a onclick="rejectPayment(' . $row->id . ');" class="dropdown-item" href="#" data-toggle="modal" data-id="' . $row->id . '"  >' . app('translator')->get('common.reject') . '</a>' .
+                                        '</div>
+                                    </div>';
+                        } elseif ($row->approve_status == 1) {
+                            $btn = '<div class="dropdown">
+                                        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">' . app('translator')->get('common.select') . '</button>
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                                <a class="dropdown-item" href="#">' . app('translator')->get('common.approved') . '</a>' .
+                                        '</div>
+                                    </div>';
+                        } elseif ($row->approve_status == 2) {
+                            $btn = '<div class="dropdown">
+                                        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">' . app('translator')->get('common.select') . '</button>
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                                <a onclick="viewReason(' . $row->id . ');" class="dropdown-item ' . "reason" . $row->id . '" href="#" data-reason="' . $row->reason . '"  >' . app('translator')->get('common.view') . '</a>' .
+                                        '</div>
+                                    </div>';
+                        }
+                    }
+                    return $btn;
+                })
+                
+                ->rawColumns(['status', 'action', 'slip'])
+                ->make(true);
+        } catch (\Throwable $th) {
+            dd($th);
         }
-       
-        if ($request->approve_status != "") {
-            $bank_slips->where('approve_status', $request->approve_status);
-        }
-        $bank_slips = $bank_slips->with('studentInfo','installmentAssign.installment','feesType')
-        ->where('school_id',Auth::user()->school_id)
-        ->where('approve_status',0)
-        ->orderBy('id', 'desc');
-
-        return Datatables::of($bank_slips)
-            ->addIndexColumn()
-            ->addColumn('date', function ($row) {
-                $date = dateConvert(@$row->created_at);
-                return $date;
-            })
-            ->rawColumns(['date'])
-            ->addColumn('status', function ($row) {
-                if ($row->approve_status == 0) {
-                    $btn = '<button class="primary-btn small bg-warning text-white border-0">' . app('translator')->get('common.pending') . '</button>';
-                } elseif ($row->approve_status == 1) {
-                    $btn = '<button class="primary-btn small bg-success text-white border-0  tr-bg">' . app('translator')->get('common.approved') . '</button>';
-                } elseif ($row->approve_status == 2) {
-                    $btn = '<button class="primary-btn small bg-danger text-white border-0  tr-bg">' . app('translator')->get('common.rejected') . '</button>';
-                }
-                return $btn;
-            })
-            ->addColumn('p_amount' , function ($row){
-                return generalSetting()->currency_symbol.' '.$row->amount ;
-            })
-            ->addColumn('slip', function ($row) {
-                if ((!empty($row->slip))) {
-                    $btn = '<a class="text-color" data-toggle="modal" data-target="#showCertificateModal(' . $row->id . ');" href="#">' . app('translator')->get('common.approve') . '</a>';
-                } else {
-                    $btn = "";
-                }
-                return $btn;
-            })
-            ->addColumn('action', function ($row) {
-                if ($row->approve_status == 0) {
-                    $btn = '<div class="dropdown CRM_dropdown">
-                                <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">' . app('translator')->get('common.select') . '</button>
-
-                                <div class="dropdown-menu dropdown-menu-right">
-                                        <a onclick="enableId(' . $row->id . ');" class="dropdown-item" href="#" data-toggle="modal" data-target="#enableStudentModal" data-id="' . $row->id . '"  >' . app('translator')->get('common.approve') . '</a>' .
-                        '<a onclick="rejectPayment(' . $row->id . ');" class="dropdown-item" href="#" data-toggle="modal" data-id="' . $row->id . '"  >' . app('translator')->get('common.reject') . '</a>' .
-                        '</div>
-                                </div>';
-                } elseif ($row->approve_status == 1) {
-                    $btn = '<div class="dropdown">
-                                <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">' . app('translator')->get('common.select') . '</button>
-
-                                <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="#">' . app('translator')->get('common.approved') . '</a>' .
-                        '</div>
-                                </div>';
-                } elseif ($row->approve_status == 2) {
-                    $btn = '<div class="dropdown">
-                                <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">' . app('translator')->get('common.select') . '</button>
-
-                                <div class="dropdown-menu dropdown-menu-right">
-                                        <a onclick="viewReason(' . $row->id . ');" class="dropdown-item ' . "reason" . $row->id . '" href="#" data-reason="' . $row->reason . '"  >' . app('translator')->get('common.view') . '</a>' .
-                        '</div>
-                                </div>';
-                }
-
-                return $btn;
-            })
-            ->rawColumns(['status', 'action', 'slip'])
-            ->make(true);
-
     }
+
 
 
     public function assignmentList()

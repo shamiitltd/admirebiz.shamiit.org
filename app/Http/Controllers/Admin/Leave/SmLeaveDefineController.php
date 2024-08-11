@@ -8,6 +8,7 @@ use App\SmStaff;
 use App\SmStudent;
 use App\SmLeaveType;
 use App\SmLeaveDefine;
+use App\GlobalVariable;
 use Illuminate\Http\Request;
 use App\Models\StudentRecord;
 use Illuminate\Support\Facades\DB;
@@ -33,7 +34,7 @@ class SmLeaveDefineController extends Controller
     {
         try {
             $leave_types = SmLeaveType::where('active_status', 1)->get();
-            $roles = InfixRole::where('active_status', '=', '1')->where('id', '!=', 1)->where('id', '!=', 3)->where('id', '!=', 10)->where(function ($q) {
+            $roles = InfixRole::where('active_status', '=', '1')->where('id', '!=', 1)->where('id', '!=', 3)->where('id', '!=', GlobalVariable::isAlumni())->where(function ($q) {
                 $q->where('school_id', Auth::user()->school_id)->orWhere('type', 'System');
             })->get();
             $classes = SmClass::get(['id', 'class_name']);
@@ -68,7 +69,6 @@ class SmLeaveDefineController extends Controller
                     } else {
                         $leave_define->academic_id = getAcademicId();
                     }
-                    $leave_define->academic_id = getAcademicId();
                     if (is_numeric($request->student)) {
                         $leave_define->user_id = $request->student;
                     } elseif (is_numeric($request->staff)) {

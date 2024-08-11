@@ -11,6 +11,11 @@ use Illuminate\Database\Eloquent\Model;
 class SmRoute extends Model
 {
     use HasFactory;
+    protected $casts = [
+        'id'    => 'integer',
+        'title' => 'string',
+        'far' => 'float'
+    ];
     protected static function boot()
     {
         parent::boot();

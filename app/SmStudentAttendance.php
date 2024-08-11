@@ -11,6 +11,11 @@ class SmStudentAttendance extends Model
     use HasFactory;
     protected $table = "sm_student_attendances";
     
+    protected $casts = [
+        'attendance_type' => 'string',
+        'attendance_date' => 'string',
+    ];
+    
     protected static function boot()
     {
         parent::boot();

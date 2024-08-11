@@ -12,6 +12,11 @@ class SmExamType extends Model
     use HasFactory;
     protected $fillable = ['percentage'];
 
+    protected $casts = [
+        'id' => 'integer',
+        'title' => 'string',
+    ];
+
     protected static function boot(){
         parent::boot();
         static::addGlobalScope(new StatusAcademicSchoolScope);

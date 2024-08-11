@@ -25,7 +25,8 @@ class InitRepository {
             'spondonit.user_model' => \App\User::class,
             'spondonit.settings_table' => 'sm_general_settings',
             'spondonit.database_file' => 'infix_edu.sql',
-            'spondonit.support_multi_connection' => true
+            'spondonit.support_multi_connection' => true,
+            'spondonit.php_version' => '8.2.0',
         ]);
     }
 

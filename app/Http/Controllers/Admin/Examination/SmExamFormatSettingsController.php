@@ -154,7 +154,6 @@ class SmExamFormatSettingsController extends Controller
     }
 
     function universityExamReportPositionStore($request){
-        dd($request->all());
         $request->validate([
             'exam' => 'required',
             'un_semester_label_id' => 'required',
@@ -348,7 +347,6 @@ class SmExamFormatSettingsController extends Controller
 
             if ($studenInfos) {
                 $students = StudentRecord::whereIn('id', $studenInfos)->get();
-
                 ExamMeritPosition::where('class_id', $class)
                     ->where('section_id', $section)
                     ->where('exam_term_id', $exam)
@@ -373,7 +371,6 @@ class SmExamFormatSettingsController extends Controller
                     } else {
                         $gpaData = $gpa;
                     }
-
 
                     $data = new ExamMeritPosition();
                     $data->class_id = $class;

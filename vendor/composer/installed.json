@@ -8684,7 +8684,7 @@
             "version_normalized": "dev-main",
             "source": {
                 "type": "git",
-                "url": "git@gitlab.com:spn4/laravel-fcm-notification.git",
+                "url": "https://gitlab.com/spn4/laravel-fcm-notification.git",
                 "reference": "b53c95ccfb061a77c15a7ae9d35d274dbc8e544e"
             },
             "dist": {
@@ -8705,7 +8705,7 @@
                 "mockery/mockery": "~1.0",
                 "phpunit/phpunit": "~6.0"
             },
-            "time": "2023-06-13T08:11:53+00:00",
+            "time": "2023-06-13T14:11:53+00:00",
             "default-branch": true,
             "type": "library",
             "extra": {
@@ -8738,6 +8738,10 @@
                 "laravel",
                 "notifications"
             ],
+            "support": {
+                "issues": "https://gitlab.com/spn4/laravel-fcm-notification/-/issues",
+                "source": "https://gitlab.com/spn4/laravel-fcm-notification/-/tree/main"
+            },
             "install-path": "../spondonit/laravel-fcm-notification"
         },
         {
@@ -8841,7 +8845,7 @@
                     "email": "hello@spondonit.com"
                 }
             ],
-            "description": "'Service Provider for SHAMIIT School application'",
+            "description": "'Service Provider for Infix School application'",
             "install-path": "../spondonit/school-service"
         },
         {

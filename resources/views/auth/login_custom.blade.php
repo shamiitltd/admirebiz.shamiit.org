@@ -1,6 +1,6 @@
 <?php
 $setting = App\SmGeneralSettings::where('school_id', Auth::user()->school_id)->first();
-if(isset($setting->copyright_text)){ generalSetting()->copyright_text = $setting->copyright_text; }else{ generalSetting()->copyright_text = 'Copyright © 2024 All rights reserved | This application is made with by SHAMIIT'; }
+if(isset($setting->copyright_text)){ generalSetting()->copyright_text = $setting->copyright_text; }else{ generalSetting()->copyright_text = 'Copyright © 2020 All rights reserved | This application is made with by Codethemes'; }
 if(isset($setting->logo)) { generalSetting()->logo = $setting->logo; } else{ generalSetting()->logo = 'public/uploads/settings/logo.png'; }
 
 if(isset($setting->favicon)) { generalSetting()->favicon = $setting->favicon; } else{ generalSetting()->favicon = 'public/backEnd/img/favicon.png'; }

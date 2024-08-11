@@ -797,6 +797,13 @@ class SmStudentPanelController extends Controller
                 ->first();
             $siblings = SmStudent::where('parent_id', $student_detail->parent_id)->where('school_id', $user->school_id)->get();
             $fees_assigneds = $student_detail->feesAssign;
+            
+            $old_fees = 0;
+            foreach ($fees_assigneds as $fees_assigned) {
+                $fees_assigned->amount = $fees_assigned->fees_amount;
+                $old_fees += $fees_assigned->fees_amount;
+            }
+
             $fees_discounts = $student_detail->feesAssignDiscount;
             $documents = SmStudentDocument::where('student_staff_id', $student_detail->id)
                 ->where('type', 'stu')
@@ -902,9 +909,6 @@ class SmStudentPanelController extends Controller
                 #->whereJsonContains('role_ids', "2")
                 ->get();
             
-            
-            #dd($events);
-
             $student_detail = SmStudent::where('user_id', $user->id)->first();
             $sm_weekends = SmWeekend::orderBy('order', 'ASC')
                 ->where('active_status', 1)
@@ -947,7 +951,25 @@ class SmStudentPanelController extends Controller
                 
             $academicCalendar = new SmAcademicCalendarController();
             $events = $academicCalendar->calenderData();
-            return view('backEnd.studentPanel.studentProfile', compact('events','totalSubjects', 'totalNotices', 'online_exams', 'teachers', 'issueBooks', 'homeworkLists', 'attendances', 'driver', 'student_detail', 'fees_assigneds', 'fees_discounts', 'exams', 'documents', 'timelines', 'siblings', 'grades', 'events', 'holidays', 'sm_weekends', 'records', 'student_records', 'routineDashboard', 'my_leaves', 'attendance', 'year', 'month', 'days', 'subjectAttendance', 'complaints'), $data);
+
+            $due_amount = 0;
+            $total_amount = 0;
+            $paid_amount = 0;
+            if(moduleStatusCheck('University')) {
+                if (generalSetting()->fees_status == 0) {
+                    $un_fees_assign = UnFeesInstallmentAssign::where('student_id', $student_detail->id)->where('un_academic_id',getAcademicId())->get();
+                    foreach ($un_fees_assign as $assign) {
+                        $total_amount += $assign->amount;
+                        $paid_amount +=  $assign->paid_amount;
+                    }
+        
+                    $due_amount = $total_amount - $paid_amount;
+                } else {
+                    
+                }
+            }
+
+            return view('backEnd.studentPanel.studentProfile', compact('due_amount','events','totalSubjects', 'totalNotices', 'online_exams', 'teachers', 'issueBooks', 'homeworkLists', 'attendances', 'driver', 'student_detail', 'fees_assigneds', 'fees_discounts', 'exams', 'documents', 'timelines', 'siblings', 'grades', 'events', 'holidays', 'sm_weekends', 'records', 'student_records', 'routineDashboard', 'my_leaves', 'attendance', 'year', 'month', 'days', 'subjectAttendance', 'complaints','old_fees'), $data);
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();

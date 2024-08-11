@@ -544,7 +544,7 @@ class ApiSmHomeWorkController extends Controller
 
             foreach ($homeworkLists as $s_homework) {
 
-              return  $student_result = $record->homework->where('homework_id', $s_homework->id)->first();
+                $student_result = $record->homework->where('homework_id', $s_homework->id)->first();
                 $uploadedContent = $student_detail->homeworkContents->where('homework_id', $s_homework->id)->first();
                 
 
@@ -942,7 +942,7 @@ class ApiSmHomeWorkController extends Controller
 
                 if ($user->notificationToken != '') {
 
-                    //echo 'EDU SHAMIIT';
+                    //echo 'Infix Edu';
                     define('API_ACCESS_KEY', 'AAAAFyQhhks:APA91bGJqDLCpuPgjodspo7Wvp1S4yl3jYwzzSxet_sYQH9Q6t13CtdB_EiwD6xlVhNBa6RcHQbBKCHJ2vE452bMAbmdABsdPriJy_Pr9YvaM90yEeOCQ6VF7JEQ501Prhnu_2bGCPNp');
                     //   $registrationIds = ;
                     #prep the bundle

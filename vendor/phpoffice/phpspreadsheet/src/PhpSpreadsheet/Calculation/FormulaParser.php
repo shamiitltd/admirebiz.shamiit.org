@@ -370,7 +370,7 @@ class FormulaParser
                 }
             }
 
-            // standard shamiit operators
+            // standard infix operators
             if (strpos(self::OPERATORS_INFIX, $this->formula[$index]) !== false) {
                 if (strlen($value) > 0) {
                     $tokens1[] = new FormulaToken($value, FormulaToken::TOKEN_TYPE_OPERAND);
@@ -516,8 +516,8 @@ class FormulaParser
             $tokens2[] = new FormulaToken($value, FormulaToken::TOKEN_TYPE_OPERATORINFIX, FormulaToken::TOKEN_SUBTYPE_INTERSECTION);
         }
 
-        // move tokens to final list, switching shamiit "-" operators to prefix when appropriate, switching shamiit "+" operators
-        // to noop when appropriate, identifying operand andshamiit -operator subtypes, and pulling "@" from function names
+        // move tokens to final list, switching infix "-" operators to prefix when appropriate, switching infix "+" operators
+        // to noop when appropriate, identifying operand and infix-operator subtypes, and pulling "@" from function names
         $this->tokens = [];
 
         $tokenCount = count($tokens2);

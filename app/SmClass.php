@@ -22,6 +22,11 @@ class SmClass extends Model
         static::addGlobalScope(new GlobalAcademicScope);
     }
 
+    protected $casts = [
+        'id'            => 'integer',
+        'class_name'    => 'string',
+    ];
+
 
     public function classSection()
     {

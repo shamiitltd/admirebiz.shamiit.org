@@ -70,6 +70,7 @@ class SmUploadContentController extends Controller
     public function store(Request $request)
     {
         $maxFileSize = generalSetting()->file_size*1024;
+        
         $rules = [];
         if($request->status != 'lmsStudyMaterial'){
             if(!moduleStatusCheck('University')){
@@ -354,7 +355,6 @@ class SmUploadContentController extends Controller
                 return redirect()->back();
             }
         } catch (\Exception $e) {
-           
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();
         }

@@ -10,6 +10,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class SmPaymentMethhod extends Model
 {
     use HasFactory;
+
+    protected $casts = [
+        'id' => 'integer',
+        'method' => 'string',
+    ];
+
+    
     protected Static function boot(){
         parent::boot();
         static::addGlobalScope(new ActiveStatusSchoolScope);

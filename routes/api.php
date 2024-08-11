@@ -319,9 +319,9 @@ Route::group(['middleware' => ['XSS', 'auth:api', 'json.response'], 'as' => 'api
     Route::get('school/{school_id}/fees-group-store', ['as' => 'saas_fees_group_store', 'uses' => 'api\ApiSmFeesGroupController@saas_fees_group_store']);
     Route::get('fees-group-edit/{id}', ['as' => 'fees_group_edit', 'uses' => 'api\ApiSmFeesGroupController@fees_group_edit']);
     Route::get('school/{school_id}/fees-group-edit/{id}', ['as' => 'saas_fees_group_edit', 'uses' => 'api\ApiSmFeesGroupController@saas_fees_group_edit']);
-    Route::get('fees-group-update', ['as' => 'fees_group_update', 'uses' => 'api\ApiSmFeesGroupController@fees_group_update']);
+    Route::get('sm-fees-group-update', ['as' => 'fees_group_update', 'uses' => 'api\ApiSmFeesGroupController@fees_group_update']);
     Route::get('school/{school_id}/fees-group-update', ['as' => 'saas_fees_group_update', 'uses' => 'api\ApiSmFeesGroupController@saas_fees_group_update']);
-    Route::post('fees-group-delete', ['as' => 'fees_group_delete', 'uses' => 'api\ApiSmFeesGroupController@fees_group_delete']);
+    Route::post('sm-fees-group-delete', ['as' => 'fees_group_delete', 'uses' => 'api\ApiSmFeesGroupController@fees_group_delete']);
     Route::post('school/{school_id}/fees-group-delete', ['as' => 'saas_fees_group_delete', 'uses' => 'api\ApiSmFeesGroupController@saas_fees_group_delete']);
 
     // Fees type routes
@@ -1028,10 +1028,10 @@ Route::group(['middleware' => ['XSS', 'auth:api', 'json.response'], 'as' => 'api
 
     Route::any('search-student', 'api\ApiSmStudentController@searchStudent');
     Route::any('school/{school_id}/search-student', 'api\ApiSmStudentController@saas_searchStudent');
-    // https://edu.shamiit.com/api/search-student?class=2
-    // https://edu.shamiit.com/api/search-student?section=1&class=2
-    // https://edu.shamiit.com/api/search-student?name=Conner Stamm
-    // https://edu.shamiit.com/api/search-student?roll_no=28229
+    // https://infixedu.com/api/search-student?class=2
+    // https://infixedu.com/api/search-student?section=1&class=2
+    // https://infixedu.com/api/search-student?name=Conner Stamm
+    // https://infixedu.com/api/search-student?roll_no=28229
     Route::get('my-routine/{user_id}', 'api\ApiSmClassRoutineController@teacherClassRoutine');
     Route::get('school/{school_id}/my-routine/{id}', 'api\ApiSmClassRoutineController@sassTeacherClassRoutine');
     Route::get('section-routine/{user_id}/{class}/{section}', 'api\ApiSmClassRoutineController@sectionRoutine');
@@ -1093,7 +1093,7 @@ Route::group(['middleware' => ['XSS', 'auth:api', 'json.response'], 'as' => 'api
 
     Route::get('group-token', 'SmApiController@groupToken');
     Route::get('school/{school_id}/group-token', 'SmApiController@saas_groupToken');
-    //edu.shamiit.com/android/api/group-token?id=2&body=Notification body&title=Notification title
+    //infixedu.com/android/api/group-token?id=2&body=Notification body&title=Notification title
     // Route::get('notification-api', 'SmSystemSettingController@notificationApi');
 
     Route::get('flutter-group-token', 'SmApiController@flutterGroupToken');

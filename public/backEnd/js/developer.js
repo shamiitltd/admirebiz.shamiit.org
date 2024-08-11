@@ -694,7 +694,7 @@
 
                 $("#select_student").find("option").not(":first").remove();
                 $("#select_student_div ul").find("li").not(":first").remove();
-                $("#member_type_hidden").addValue("");
+                //$("#member_type_hidden").addValue("");
 
                 var url = $("#url").val();
                 var formData = {

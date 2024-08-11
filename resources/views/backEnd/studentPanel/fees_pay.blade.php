@@ -208,6 +208,7 @@
                                                                <!-- End Khalti Payment  -->
 
                                                                    @if($already_add=="" && $balance_amount !=0)
+                                                                   @php $balance_amount = $balance_amount*100;@endphp
                                                                        @if(@$data['bank_info']->active_status == 1 || @$data['cheque_info']->active_status == 1 )
                                                                            <a class="dropdown-item modalLink" data-modal-size="modal-lg" title="{{$fees_assigned->feesGroupMaster->feesGroups->name.': '. $fees_assigned->feesGroupMaster->feesTypes->name}}"
                                                                                href="{{route('fees-generate-modal-child', [@$balance_amount, $fees_assigned->student_id, $fees_assigned->feesGroupMaster->fees_type_id,$fees_assigned->id,$fees_assigned->record_id])}}">
@@ -216,6 +217,7 @@
                                                                        @endif
                                                                    @else
                                                                        @if($balance_amount !=0)
+                                                                            @php $balance_amount = $balance_amount*100;@endphp
                                                                            <a class="dropdown-item modalLink" data-modal-size="modal-lg"
                                                                                title="{{$fees_assigned->feesGroupMaster->feesGroups->name.': '. $fees_assigned->feesGroupMaster->feesTypes->name}}"
                                                                                href="{{route('fees-generate-modal-child', [@$balance_amount, $fees_assigned->student_id, $fees_assigned->feesGroupMaster->fees_type_id,$fees_assigned->id, $fees_assigned->record_id])}}">

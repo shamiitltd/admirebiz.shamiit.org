@@ -1469,7 +1469,7 @@ class SmApiController extends Controller
     }
 
 
-     public function mobileLogin(Request $request)
+    public function mobileLogin(Request $request)
     {
         $input = $request->all();
         $validator = Validator::make($input, [
@@ -1508,20 +1508,24 @@ class SmApiController extends Controller
                     }
                 }
 
-
-                if($match_user && count($match_user) > 1){
+                if ($match_user && count($match_user) > 1) {
                     $school_ids = $match_user->pluck('school_id')->unique();
                     $schools = SmSchool::whereIn('id', $school_ids)->pluck('school_name', 'id')->toArray();
-                    $response_schools = [];
-                    foreach($schools as $id => $name){
-                        $response_schools[] = [
-                            'id' => $id, 'name' => $name
-                        ];
+                    
+                    if (count($schools) === 1) {
+                        $user = $match_user->first();
+                    } else {
+                        $response_schools = [];
+                        foreach ($schools as $id => $name) {
+                            $response_schools[] = [
+                                'id' => $id, 
+                                'name' => $name
+                            ];
+                        }
+                        $data = ['multiple_school' => true, 'schools' => $response_schools];
+                        return ApiBaseMethod::sendResponse($data, 'Please Select a school first');
                     }
-                    $data = ['multiple_school' => true, 'schools' => $response_schools];
-
-                    return ApiBaseMethod::sendResponse($data, 'Please Select a school first');
-                } else{
+                } else {
                     $user = $match_user->first();
                 }
             } else{
@@ -18666,7 +18670,7 @@ class SmApiController extends Controller
 
                 if ($user->notificationToken != '') {
 
-                    //echo 'EDU SHAMIIT';
+                    //echo 'Infix Edu';
                     define('API_ACCESS_KEY', 'AAAA5ZKAL1I:APA91bFSF0aIpn2uayU2SJ7Ov8Krc3xlQVqwEBYt0FOyDxswMgDVOq7hKoOkRVm5gGd_YxWzwe_kl-POUQE13twf65yxpd3dRffEjNqaXTdl7x-lCCkIY7YYOD4pVjaHWNazHJSgB6xp');
                     //   $registrationIds = ;
                     #prep the bundle
@@ -18723,7 +18727,7 @@ class SmApiController extends Controller
 
                 if ($user->notificationToken != '') {
 
-                    //echo 'EDU SHAMIIT';
+                    //echo 'Infix Edu';
                     define('API_ACCESS_KEY', 'AAAAFyQhhks:APA91bGJqDLCpuPgjodspo7Wvp1S4yl3jYwzzSxet_sYQH9Q6t13CtdB_EiwD6xlVhNBa6RcHQbBKCHJ2vE452bMAbmdABsdPriJy_Pr9YvaM90yEeOCQ6VF7JEQ501Prhnu_2bGCPNp');
                     //   $registrationIds = ;
                     #prep the bundle

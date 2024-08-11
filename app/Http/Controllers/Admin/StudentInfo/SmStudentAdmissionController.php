@@ -7,6 +7,7 @@ use App\SmClass;
 use App\SmRoute;
 use App\SmStaff;
 use App\SmParent;
+use App\SmLeaveType;
 use App\SmSchool;
 use App\SmStudent;
 use App\SmVehicle;
@@ -72,6 +73,7 @@ use Modules\University\Repositories\Interfaces\UnSubjectRepositoryInterface;
 use Modules\University\Repositories\Interfaces\UnDepartmentRepositoryInterface;
 use Modules\University\Repositories\Interfaces\UnSemesterLabelRepositoryInterface;
 use App\Rules\FileValidationRule;
+use App\SmLeaveDefine;
 
 class SmStudentAdmissionController extends Controller
 {
@@ -374,6 +376,40 @@ class SmStudentAdmissionController extends Controller
             //end lead convert to student
             $student->save();
 
+            // instert into student define leave
+            $st_role_id = 2; 
+            $school_id = Auth::user()->school_id; 
+            $academic_id = getAcademicId(); 
+            $user_id = $user_stu->id; 
+
+            $existingLeaveDefines = SmLeaveDefine::where('role_id', $st_role_id)
+                ->where('school_id', $school_id)
+                ->where('academic_id', $academic_id)
+                ->get();
+
+            $existingTypes = [];
+
+            foreach ($existingLeaveDefines as $leaveDefine) {
+                if (!isset($existingTypes[$leaveDefine->type_id])) {
+                    $leaveDefineInstance = new SmLeaveDefine();
+                    $leaveDefineInstance->role_id = $st_role_id;
+                    $leaveDefineInstance->type_id = $leaveDefine->type_id;
+                    $leaveDefineInstance->days = $leaveDefine->days;
+                    $leaveDefineInstance->school_id = $school_id;
+                    $leaveDefineInstance->user_id = $user_id;
+
+                    if (moduleStatusCheck('University')) {
+                        $leaveDefineInstance->un_academic_id = $academic_id;
+                    } else {
+                        $leaveDefineInstance->academic_id = $academic_id;
+                    }
+                    $leaveDefineInstance->save();
+                    $existingTypes[$leaveDefine->type_id] = true;
+                }
+            }
+
+            
+      
             if (!empty($request->route) && !empty($request->vehicle)) {
                 $data['route'] = $student->route->title;
                 $data['vehicle_no'] = $student->vehicle->vehicle_no;

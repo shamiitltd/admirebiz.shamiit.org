@@ -9,6 +9,13 @@ use Illuminate\Database\Eloquent\Model;
 class SmRoomType extends Model
 {
     use HasFactory;
+
+    protected $casts = [
+        'id' => 'integer',
+        'type' => 'string',
+    ];
+
+
     protected static function boot()
     {
         parent::boot();

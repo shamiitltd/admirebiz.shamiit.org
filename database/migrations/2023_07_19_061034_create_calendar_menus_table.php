@@ -308,12 +308,12 @@ return new class extends Migration
                                                     <p
                                                         style="margin:0;font-size:12px;line-height:1.2;text-align:center;margin-top:0;margin-bottom:0;">
                                                         <span style="font-size:14px;color:rgb(255,255,255);font-family:Arial;">
-                                                            © 2024 SHAMIIT Education software|
+                                                            © 2020 Infix Education software|
                                                         </span>
                                                         <span style="background-color:transparent;text-align:left;">
                                                             <font color="#ffffff">
-                                                                Copyright &copy; 2024 All rights reserved | This application is
-                                                                made by SHAMIIT
+                                                                Copyright &copy; 2020 All rights reserved | This application is
+                                                                made by Codethemes
                                                             </font>
                                                         </span>
                                                         <br>
@@ -420,12 +420,12 @@ return new class extends Migration
                                                         <p
                                                             style="margin:0;font-size:12px;line-height:1.2;text-align:center;margin-top:0;margin-bottom:0;">
                                                             <span style="font-size:14px;color:rgb(255,255,255);font-family:Arial;">
-                                                                © 2024 SHAMIIT Education software|
+                                                                © 2020 Infix Education software|
                                                             </span>
                                                             <span style="background-color:transparent;text-align:left;">
                                                                 <font color="#ffffff">
-                                                                    Copyright &copy; 2024 All rights reserved | This application is
-                                                                    made by SHAMIIT
+                                                                    Copyright &copy; 2020 All rights reserved | This application is
+                                                                    made by Codethemes
                                                                 </font>
                                                             </span>
                                                             <br>

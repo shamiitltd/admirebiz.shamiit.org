@@ -8,7 +8,7 @@ window.paymentMethodValue = $('#paymentMethodName').val();
 window.paymentValue = $('#paymentMethodAddFees').val();
     $(document).ready(function() {
         // Select Class Wise Student
-            $("#selectClass").on("change", function() {
+            $("#selectClass, #select_class").on("change", function() {
                 let url = $("#url").val();
                 let i = 0;
                 let classId = $(this).val();

@@ -22,8 +22,28 @@ class SmHomework extends Model
     protected $appends=['HomeworkPercentage'];
 
     protected $casts = [
-        'active_status' => 'integer',
-        'marks' => 'double'        
+        'id'                => 'integer',
+        'homework_date'     => 'string',
+        'submission_date'   => 'string',
+        'evaluation_date'   => 'string',
+        'file'              => 'string',
+        'marks'             => 'double',
+        'description'       => 'string',
+        'active_status'     => 'integer',
+        'created_at'        => 'string',
+        'updated_at'        => 'string',
+        'evaluated_by'      => 'integer',
+        'class_id'          => 'integer',
+        'record_id'         => 'integer',
+        'section_id'        => 'integer',
+        'subject_id'        => 'integer',
+        'created_by'        => 'integer',
+        'updated_by'        => 'integer',
+        'school_id'         => 'integer',
+        'academic_id'       => 'integer',
+        'course_id'         => 'integer',
+        'lesson_id'         => 'integer',
+        'chapter_id'        => 'integer',
     ];
 
     protected static function boot(){

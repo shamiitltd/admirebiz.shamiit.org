@@ -625,7 +625,7 @@ if (!function_exists('getTempleteDetails')) {
 
 if (!function_exists('send_mail')) {
     function send_mail($reciver_email, $receiver_name, $purpose, $data = [])
-    {   
+    {
         if (!$reciver_email) {
             return;
         }
@@ -664,7 +664,7 @@ if (!function_exists('send_mail')) {
                         ->first();
 
                     if ($config) {
-                        Config::set('mail.mailers.smtp.transport', 'smtp');
+                        Config::set('mail.default', 'smtp');
                         Config::set('mail.from.from', $config->mail_username);
                         Config::set('mail.from.name', $config->from_name);
                         Config::set('mail.mailers.smtp.host', $config->mail_host);

@@ -10,6 +10,13 @@ use Illuminate\Database\Eloquent\Model;
 class SmDormitoryList extends Model
 {
     use HasFactory;
+
+    protected $casts = [
+        'id' => 'integer',
+        'dormitory_name' => 'string',
+    ];
+
+    
     protected static function boot()
     {
         parent::boot();

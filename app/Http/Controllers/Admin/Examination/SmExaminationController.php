@@ -2162,7 +2162,7 @@ class SmExaminationController extends Controller
                 return $common->meritListReport((object)$request->all());
             } else {
                 $iid = time();
-               // DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+                DB::statement('SET FOREIGN_KEY_CHECKS=0;');
                 if ($request->method() == 'POST') {
                     $InputClassId = $request->class;
                     $InputExamId = $request->exam;

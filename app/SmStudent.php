@@ -774,7 +774,7 @@ class SmStudent extends Model
     }
     public function recordClass()
     {
-        return $this->hasOne(StudentRecord::class, 'student_id')->where('is_promote', 0)->where('class_id', request()->class)->where('academic_id', getAcademicId())->where('school_id', app('school')->id);
+        return $this->hasOne(StudentRecord::class, 'student_id')->where('is_promote', 0)->where('class_id', request()->class)->where('academic_id', getAcademicId())->where('school_id', Auth::user()->school_id);
     }
 
     public function recordClassSaas()

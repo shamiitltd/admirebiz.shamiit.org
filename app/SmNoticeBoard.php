@@ -10,6 +10,17 @@ use Modules\RolePermission\Entities\InfixRole;
 class SmNoticeBoard extends Model
 {
     use HasFactory;
+
+    protected $casts = [
+        'id'                => 'integer',
+        'notice_title'      => 'string',
+        'notice_message'    => 'string',
+        'notice_date'       => 'string',
+        'publish_on'       => 'string',
+    ];
+
+
+    
     protected static function boot()
     {
         parent::boot();

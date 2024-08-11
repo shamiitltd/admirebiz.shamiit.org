@@ -38,6 +38,8 @@ use App\Models\DirectFeesSetting;
 use App\Models\DireFeesInstallmentChildPayment;
 use App\Models\FeesInvoice;
 use Modules\University\Entities\UnFeesInstallAssignChildPayment;
+use Modules\BulkPrint\Entities\InvoiceSetting;
+
 
 class SmFeesController extends Controller
 {
@@ -53,6 +55,7 @@ class SmFeesController extends Controller
     public function feesGenerateModal(Request $request, $amount, $student_id, $type,$master,$assign_id, $record_id)
     {
         try {
+            $amount = $amount/100;
             $amount = $amount;
             $master = $master;
             $fees_type_id = $type;
@@ -94,7 +97,7 @@ class SmFeesController extends Controller
     public function feesGenerateModalChild(Request $request, $amount, $student_id, $type)
     {
         try {
-            $amount = $amount;
+            $amount = $amount/100;
             $fees_type_id = $type;
             $student_id = $student_id;
             $discounts = SmFeesAssignDiscount::where('student_id', $student_id)->where('school_id',Auth::user()->school_id)->get();
@@ -877,7 +880,9 @@ class SmFeesController extends Controller
                 ->where('record_id',$student->id)
                 ->where('school_id',Auth::user()->school_id)
                 ->sum('unapplied_amount');
-            return view('backEnd.feesCollection.fees_payment_invoice_print')->with(['fees_assigneds' => $fees_assigneds, 'student' => $student,'unapplied_discount_amount'=>$unapplied_discount_amount, 'parent' => $parent,'id'=>$id]);
+            $invoiceSettings=InvoiceSetting::where('academic_id', getAcademicId())->where('school_id', Auth::user()->school_id)->first();
+
+            return view('backEnd.feesCollection.fees_payment_invoice_print')->with(['invoiceSettings'=> $invoiceSettings ,'fees_assigneds' => $fees_assigneds, 'student' => $student,'unapplied_discount_amount'=>$unapplied_discount_amount, 'parent' => $parent,'id'=>$id]);
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();

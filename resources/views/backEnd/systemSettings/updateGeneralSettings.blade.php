@@ -19,7 +19,7 @@
         @if(Illuminate\Support\Facades\Config::get('app.app_sync'))
             {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'admin-dashboard', 'method' => 'GET', 'enctype' => 'multipart/form-data']) }}
         @else
-            @if(userPermission(409))
+            @if(userPermission('update-general-settings-data'))
                 {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'update-general-settings-data', 'method' => 'POST', 'enctype' => 'multipart/form-data']) }}
             @endif
         @endif
@@ -610,7 +610,7 @@
                             @if(env('APP_SYNC')==TRUE)
                                 <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Disabled For Demo "> <button class="primary-btn small fix-gr-bg  demo_view" style="pointer-events: none;" type="button" > @lang('common.update')</button></span>
                             @else
-                                @if(userPermission(409))
+                                @if(userPermission('update-general-settings-data'))
                                     <button type="submit" class="primary-btn fix-gr-bg submit">
                                         <span class="ti-check"></span>
                                         @lang('common.update')

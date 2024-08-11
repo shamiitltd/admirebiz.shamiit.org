@@ -38,20 +38,17 @@ class SmFeesTypeController extends Controller
     }
     public function store(SmFeesTypeRequest $request)
     {
-
-        // if ($validator->fails()) {
-        //     if (ApiBaseMethod::checkUrl($request->fullUrl())) {
-        //         return ApiBaseMethod::sendError('Validation Error.', $validator->errors());
-        //     }
-
-        // }
         try{
             $fees_type = new SmFeesType();
             $fees_type->name = $request->name;
             $fees_type->fees_group_id = $request->fees_group;
             $fees_type->description = $request->description;
             $fees_type->school_id = Auth::user()->school_id;
-            $fees_type->academic_id = getAcademicId();
+            if(moduleStatusCheck('University')){
+                $fees_type->un_academic_id = getAcademicId();
+            }else {
+                $fees_type->academic_id = getAcademicId();
+            }
             $result = $fees_type->save();
 
             Toastr::success('Operation successful', 'Success');

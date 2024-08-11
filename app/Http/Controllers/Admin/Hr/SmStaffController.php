@@ -35,6 +35,7 @@ use Modules\MultiBranch\Entities\Branch;
 use CreateSmStaffRegistrationFieldsTable;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\Admin\Hr\staffRequest;
+use App\SmLeaveDefine;
 use Illuminate\Validation\ValidationException;
 use Modules\RolePermission\Entities\InfixRole;
 
@@ -225,8 +226,6 @@ class SmStaffController extends Controller
                     $this->assignChatGroup($user);
                 }
 
-
-
                 $basic_salary = !empty($request->basic_salary) ? $request->basic_salary : 0;
 
                 $staff = new SmStaff();
@@ -292,8 +291,43 @@ class SmStaffController extends Controller
                     $staff->custom_field = json_encode($dataImage, true);
                 }
                 //Custom Field End
+
+                // leaver define data  insert for staff
                 $results = $staff->save();
                 $staff->toArray();
+
+                $st_role_id = $request->role_id; 
+                $school_id = Auth::user()->school_id; 
+                $academic_id = getAcademicId(); 
+                $user_id = $user->id; 
+
+                $existingLeaveDefines = SmLeaveDefine::where('role_id', $st_role_id)
+                    ->where('school_id', $school_id)
+                    ->where('academic_id', $academic_id)
+                    ->get();
+
+                $existingTypes = [];
+
+                foreach ($existingLeaveDefines as $leaveDefine) {
+                    if (!isset($existingTypes[$leaveDefine->type_id])) {
+                        $leaveDefineInstance = new SmLeaveDefine();
+                        $leaveDefineInstance->role_id = $st_role_id;
+                        $leaveDefineInstance->type_id = $leaveDefine->type_id;
+                        $leaveDefineInstance->days = $leaveDefine->days;
+                        $leaveDefineInstance->school_id = $school_id;
+                        $leaveDefineInstance->user_id = $user_id;
+
+                        if (moduleStatusCheck('University')) {
+                            $leaveDefineInstance->un_academic_id = $academic_id;
+                        } else {
+                            $leaveDefineInstance->academic_id = $academic_id;
+                        }
+                        $leaveDefineInstance->save();
+                        $existingTypes[$leaveDefine->type_id] = true;
+                    }
+                }
+
+            
                 DB::commit();
                 //Expert Staff Start
                 if($request->show_public == 1){

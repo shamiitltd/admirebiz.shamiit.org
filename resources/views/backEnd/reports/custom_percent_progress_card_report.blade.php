@@ -302,10 +302,10 @@
                                                             </div>
                                                             <div class="col-lg-8 text-center">
                                                                 <h3 class="text-white" style="font-size: 30px; margin-bottom: 0px;">
-                                                                    {{isset(generalSetting()->school_name)?generalSetting()->school_name:'SHAMIIT School Management ERP'}}
+                                                                    {{isset(generalSetting()->school_name)?generalSetting()->school_name:'Infix School Management ERP'}}
                                                                 </h3>
                                                                 <p class="text-white mb-0" style="font-size: 16px;">
-                                                                    {{isset(generalSetting()->address)?generalSetting()->address:'SHAMIIT School Address'}}
+                                                                    {{isset(generalSetting()->address)?generalSetting()->address:'Infix School Address'}}
                                                                 </p>
                                                                 <p class="text-white mb-0"  style="font-size: 16px;">
                                                                     @lang('common.email'):  {{isset(generalSetting()->email)?generalSetting()->email:'admin@demo.com'}},   @lang('common.phone'):  {{isset(generalSetting()->phone)?generalSetting()->phone:'+8801841412141'}}
@@ -464,7 +464,9 @@
                                                                                 $totalSumSub += $totalMark;
                                                                                 $total_marks += $totalMark;
                                                                             }else{
-                                                                                echo subjectPercentageMark(@$final_results->total_marks, $subject_full_mark);
+                                                                                //echo subjectPercentageMark(@$final_results->total_marks, $subject_full_mark);
+                                                                                $mark_each = subjectPercentageMark( @$final_results->total_marks, $subject_full_mark);
+                                                                                echo number_format($mark_each,2);
                                                                                 $totalSumSub += subjectPercentageMark(@$final_results->total_marks, $subject_full_mark);
                                                                                 $total_marks += subjectPercentageMark(@$final_results->total_marks, $subject_full_mark);
                                                                             }
@@ -482,7 +484,7 @@
                                                                         }
                                                                     }
                                                                 ?>
-                                                                <td>{{ $totalSumSub }}</td>
+                                                                <td>{{ number_format($totalSumSub,2) }}</td>
                                                                 <td>
                                                                     {{ number_format($totalSumSub / count($assinged_exam_types), 2)}}
                                                                     @php
@@ -565,9 +567,9 @@
                                                         <tr>
                                                             <td colspan="{{$colspan / $col_for_result - 1}}" >@lang('exam.total_marks')</td>
                                                             @if ($optional_subject_setup!='' && $student_optional_subject!='')
-                                                                <td colspan="{{$colspan / $col_for_result + 7}}" style="padding:10px; font-weight:bold">{{$total_marks}} @lang('reports.out_of') {{$all_exam_type_full_mark}}</td>
-                                                            @else
-                                                                <td colspan="{{$colspan / $col_for_result + 9}}" style="padding:10px; font-weight:bold">{{$total_marks}} @lang('reports.out_of') {{$all_exam_type_full_mark}}</td>
+                                                                <td colspan="{{$colspan / $col_for_result + 7}}" style="padding:10px; font-weight:bold">{{number_format($total_marks,2)}} @lang('reports.out_of') {{$all_exam_type_full_mark}}</td>
+                                                                @else
+                                                                <td colspan="{{$colspan / $col_for_result + 9}}" style="padding:10px; font-weight:bold">{{number_format($total_marks,2)}} @lang('reports.out_of') {{$all_exam_type_full_mark}}</td>
                                                             @endif
                                                         </tr>
                                                         {{-- Total Marks End --}}

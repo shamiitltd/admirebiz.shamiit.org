@@ -461,4 +461,5 @@ return [
     "PDF Exam Result" => "Resultado del examen PDF",
     "Pdf Exam" => "Examen Pdf",
     "Pdf Exam Result" => "Resultado del examen pdf",
+    'weekend-store' => 'Weekend Store',
     ];

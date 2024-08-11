@@ -460,4 +460,5 @@ return array('Dashboard' => 'Dashboard',
     'Upload Recorded Video'=>'Upload Recorded Video',
     'G-Meet'=>'G-Meet',
     'Join Meeting'=>'Join Meeting',
+    'weekend-store' => 'Weekend Store',
     );

@@ -74,7 +74,6 @@ class SmSystemSettingController extends Controller
         }
     }
 
-
     public function sendTestMail()
     {
         $e = SmEmailSetting::where('active_status',1)->where('school_id', Auth::user()->school_id)->first();
@@ -93,7 +92,7 @@ class SmSystemSettingController extends Controller
             return redirect()->back();
         }
         try {
-            $reciver_email = 'spn106@gmail.com';
+            $reciver_email = Auth::user()->email ?? User::find(1)->email;
             $receiver_name = Auth::user()->full_name;
             $compact['user_name'] = $receiver_name;
 
@@ -139,7 +138,7 @@ class SmSystemSettingController extends Controller
         try {
             $user = User::where('id', $request->id)->first();
             if ($user->notificationToken != '') {
-                //echo 'EDU SHAMIIT';
+                //echo 'Infix Edu';
                 define('API_ACCESS_KEY', 'AAAAFyQhhks:APA91bGJqDLCpuPgjodspo7Wvp1S4yl3jYwzzSxet_sYQH9Q6t13CtdB_EiwD6xlVhNBa6RcHQbBKCHJ2vE452bMAbmdABsdPriJy_Pr9YvaM90yEeOCQ6VF7JEQ501Prhnu_2bGCPNp');
                 //   $registrationIds = ;
                 #prep the bundle

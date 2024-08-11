@@ -20721,7 +20721,7 @@ class SmApiController extends Controller
 
                 if ($user->notificationToken != '') {
 
-                    //echo 'EDU SHAMIIT';
+                    //echo 'Infix Edu';
                     define('API_ACCESS_KEY', 'AAAA5ZKAL1I:APA91bFSF0aIpn2uayU2SJ7Ov8Krc3xlQVqwEBYt0FOyDxswMgDVOq7hKoOkRVm5gGd_YxWzwe_kl-POUQE13twf65yxpd3dRffEjNqaXTdl7x-lCCkIY7YYOD4pVjaHWNazHJSgB6xp');
                     //   $registrationIds = ;
                     #prep the bundle
@@ -20777,7 +20777,7 @@ class SmApiController extends Controller
 
                 if ($user->notificationToken != '') {
 
-                    //echo 'EDU SHAMIIT';
+                    //echo 'Infix Edu';
                     define('API_ACCESS_KEY', 'AAAAFyQhhks:APA91bGJqDLCpuPgjodspo7Wvp1S4yl3jYwzzSxet_sYQH9Q6t13CtdB_EiwD6xlVhNBa6RcHQbBKCHJ2vE452bMAbmdABsdPriJy_Pr9YvaM90yEeOCQ6VF7JEQ501Prhnu_2bGCPNp');
                     //   $registrationIds = ;
                     #prep the bundle
@@ -20834,7 +20834,7 @@ class SmApiController extends Controller
 
                 if ($user->notificationToken != '') {
 
-                    //echo 'EDU SHAMIIT';
+                    //echo 'Infix Edu';
                     define('API_ACCESS_KEY', 'AAAAFyQhhks:APA91bGJqDLCpuPgjodspo7Wvp1S4yl3jYwzzSxet_sYQH9Q6t13CtdB_EiwD6xlVhNBa6RcHQbBKCHJ2vE452bMAbmdABsdPriJy_Pr9YvaM90yEeOCQ6VF7JEQ501Prhnu_2bGCPNp');
                     //   $registrationIds = ;
                     #prep the bundle

@@ -36,7 +36,6 @@ class InitRepository {
                 if($c){
                     abort(403, 'Access denied for user. Please check your database username and password.');
                 }
-
             }
         }
 

@@ -16,6 +16,13 @@ class FmFeesInvoice extends Model
         static::addGlobalScope(new AcademicSchoolScope);
     }
 
+    protected $casts = [
+        'id' => 'integer',
+        'full_name' => 'string',
+        // 'class' => 'string',
+        // 'section' => 'string',
+    ];
+
     protected $fillable = [];
     
     protected static function newFactory()

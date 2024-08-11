@@ -11,6 +11,12 @@ class SmSubjectAttendance extends Model
 
     protected $guarded = ['id'];
 
+    protected $casts = [
+        'subject_id' => 'integer',
+        'attendance_type' => 'string',
+        'attendance_date' => 'string',
+    ];
+
     public function student()
     {
         return $this->belongsTo('App\SmStudent', 'student_id', 'id');

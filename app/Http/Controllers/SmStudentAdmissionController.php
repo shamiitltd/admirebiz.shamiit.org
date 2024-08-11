@@ -1444,9 +1444,6 @@ class SmStudentAdmissionController extends Controller
         }
     }
 
-
-
-
     public function studentDelete(Request $request)
     {
         try {
@@ -1483,7 +1480,6 @@ class SmStudentAdmissionController extends Controller
                         $parent->active_status = 0;
                         $parent->save();
                     }
-
 
                     $compact['slug'] = 'parent';
                     $compact['user_email'] = @$parent->guardians_email;

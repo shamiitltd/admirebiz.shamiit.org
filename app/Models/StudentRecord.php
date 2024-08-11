@@ -49,7 +49,6 @@ class StudentRecord extends Model
         'class_id' => 'integer',
         'section_id' => 'integer',
         'student_id' => 'integer',
-        'student_id' => 'integer',
         'academic_id' => 'integer',
         'is_default' => 'integer',
         'is_promote' => 'integer',

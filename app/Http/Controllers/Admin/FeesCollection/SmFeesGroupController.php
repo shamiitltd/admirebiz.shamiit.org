@@ -52,7 +52,11 @@ class SmFeesGroupController extends Controller
             $fees_group->name = $request->name;
             $fees_group->description = $request->description;
             $fees_group->school_id = Auth::user()->school_id;
-            $fees_group->academic_id = getAcademicId();
+            if(moduleStatusCheck('University')){
+                $fees_group->un_academic_id = getAcademicId();
+            }else {
+                $fees_group->academic_id = getAcademicId();
+            }
             $result = $fees_group->save();
 
             if (ApiBaseMethod::checkUrl($request->fullUrl())) {
@@ -92,22 +96,16 @@ class SmFeesGroupController extends Controller
     }
     public function update(SmFeesGroupRequest $request)
     {
-      
-
-        // if ($validator->fails()) {
-        //     if (ApiBaseMethod::checkUrl($request->fullUrl())) {
-        //         return ApiBaseMethod::sendError('Validation Error.', $validator->errors());
-        //     }
-
-        // }
-
-
         try{
            
             $fees_group = SmFeesGroup::find($request->id);
             $fees_group->name = $request->name;
             $fees_group->description = $request->description;
-            $fees_group->academic_id = getAcademicId();
+            if(moduleStatusCheck('University')){
+                $fees_group->un_academic_id = getAcademicId();
+            }else {
+                $fees_group->academic_id = getAcademicId();
+            }
             $result = $fees_group->save();
 
             if (ApiBaseMethod::checkUrl($request->fullUrl())) {

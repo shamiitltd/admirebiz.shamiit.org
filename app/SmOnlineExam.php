@@ -14,8 +14,8 @@ class SmOnlineExam extends Model
         parent::boot();
         static::addGlobalScope(new StatusAcademicSchoolScope);
     }
- 
-    
+
+
     public function studentInfo()
     {
         return $this->belongsTo('App\SmStudent', 'id', 'student_id');
@@ -33,8 +33,8 @@ class SmOnlineExam extends Model
         } else {
             return $this->belongsTo('App\SmSection', 'section_id', 'id');
         }
-        
-       
+
+
     }
 
     public function subject()
@@ -62,14 +62,14 @@ class SmOnlineExam extends Model
         try {
             if (moduleStatusCheck('OnlineExam')==true) {
                 $marks = InfixStudentTakeOnlineExam::select('status', 'student_done', 'total_marks')
-                ->where('online_exam_id', $exam_id)->where('student_id', $student_id)
-                ->where('student_record_id', $record_id)
-                ->first();
+                    ->where('online_exam_id', $exam_id)->where('student_id', $student_id)
+                    ->where('student_record_id', $record_id)
+                    ->first();
             } else {
                 $marks = SmStudentTakeOnlineExam::select('status', 'total_marks')
-                ->where('online_exam_id', $exam_id)
-                ->where('student_id', $student_id)
-                ->first();
+                    ->where('online_exam_id', $exam_id)
+                    ->where('student_id', $student_id)
+                    ->first();
             }
             return $marks;
         } catch (\Exception $e) {
@@ -78,8 +78,14 @@ class SmOnlineExam extends Model
         }
     }
 
+    public function studentAttend()
+    {
+        return $this->hasOne('App\SmStudentTakeOnlineExam', 'online_exam_id', 'id');
+    }
+
     public function smStudentTakeOnlineExam()
     {
         return $this->hasMany('App\SmStudentTakeOnlineExam', 'online_exam_id', 'id');
     }
+
 }

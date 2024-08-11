@@ -4111,7 +4111,7 @@ class Calculation
         '>' => 0, '<' => 0, '=' => 0, '>=' => 0, '<=' => 0, '<>' => 0, //    Comparison
     ];
 
-    // Convert shamiit to postfix notation
+    // Convert infix to postfix notation
 
     /**
      * @param string $formula

@@ -1214,9 +1214,9 @@ class FeesController extends Controller
 
             //Notification
             $student = SmStudent::with('parents')->find($transcation->student_id);
-            sendNotification("Approve Bank Payment", null, 1, 1);
-            sendNotification("Approve Bank Payment", null, $student->user_id, 2);
-            sendNotification("Approve Bank Payment", null, $student->parents->user_id, 3);
+            sendNotification("Reject Bank Payment", null, 1, 1);
+            sendNotification("Reject Bank Payment", null, $student->user_id, 2);
+            sendNotification("Reject Bank Payment", null, $student->parents->user_id, 3);
 
             Toastr::success('Save Successful', 'Success');
             return redirect()->back();
@@ -1334,6 +1334,10 @@ class FeesController extends Controller
                         $btn = '<a href="' . route('fees.fees-invoice-view', ['id' => $row->id, 'state' => 'view']) . 'target="_blank">' .@$row->studentInfo->full_name . '</a>';
                         return $btn;
                     })
+                    ->addColumn('admission_no', function($row){
+                        $admission_no = $row->studentInfo->admission_no;
+                        return $admission_no;
+                    })
                     ->addColumn('amount', function($row){
                         $amount = $row->Tamount;
                         return $amount;
@@ -1375,6 +1379,11 @@ class FeesController extends Controller
                         }
                         return $btn;
                     })
+                    ->filterColumn('admission_no', function ($query, $keyword) {
+                        $query->whereHas('studentInfo', function ($query) use ($keyword) {
+                            $query->where('admission_no', 'like', '%' . $keyword . '%');
+                        });
+                    })
                     ->addColumn('created_date', function($row){
                         $btn = dateConvert($row->create_date);
                         return $btn;
@@ -1389,7 +1398,7 @@ class FeesController extends Controller
                         $view = view('fees::__allFeesListAction', compact('row', 'balance', 'paid_amount', 'role'));
                         return (string)$view;
                     })
-                    ->rawColumns(['student_name', 'status', 'action', 'date'])
+                    ->rawColumns(['student_name','admission_no','status', 'action', 'date'])
                     ->make(true);
         }
     }

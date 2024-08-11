@@ -317,10 +317,35 @@ class SmFeesDiscountController extends Controller
 
     public function feesDiscountAssignStore(Request $request)
     {
-        if(!$request->checkAll){
-            Toastr::error('Please Select Student', 'Failed');
+
+        $request->validate([
+            'fees_discount_id'      => 'required|integer',
+            'data'                  => 'required|array',
+            'data.*.class_id'       => 'required|integer',
+            'data.*.section_id'     => 'required|integer',
+            'data.*.record_id'      => 'required|integer',
+            'data.*.student_id'     => 'required|integer',
+            'data.*.fees_master_id' => 'nullable|integer',
+        ]);
+        
+        $hasSelectedItem = false;
+        foreach ($request->input('data') as $item) {
+            if (isset($item['checked']) && $item['checked'] == '1') {
+                $hasSelectedItem = true;
+                break;
+            }
+        }
+        
+        $checkAllSelected = $request->input('checkAll') == 'on';
+        
+        if (!$hasSelectedItem && !$checkAllSelected) {
+            Toastr::error('Operation Failed', 'Failed');
             return redirect()->route('fees_discount_assign', $request->fees_discount_id);
         }
+        // if(!$request->checkAll){
+        //     Toastr::error('Please Select Student', 'Failed');
+        //     return redirect()->route('fees_discount_assign', $request->fees_discount_id);
+        // }
         $datas= collect($request->data);
         try{
             $discount_id=intval($request->fees_discount_id);
@@ -455,24 +480,22 @@ class SmFeesDiscountController extends Controller
 
     public function directFeesDiscountAssignStore(Request $request)
     {
-        $datas= collect($request->data);
+        $datas = collect($request->data);
         $fees_discount_id = $request->fees_discount_id;
-        try{
+        try {
             foreach ($datas as $data) {
-                $studentId= gv($data,'student_id');
-                $recordId= gv($data,'record_id');
-                if(gbv($data, 'checked')){
-                    $this->assignFeesDiscount($fees_discount_id,$recordId);
+                $studentId = gv($data, 'student_id');
+                $recordId = gv($data, 'record_id');
+                if (gbv($data, 'checked')) {
+                    $this->assignFeesDiscount($fees_discount_id, $recordId);
                 }
             }
             Toastr::success('Operation Successfull', 'Success');
-            return redirect()->route('fees_discount_assign',$fees_discount_id);
-        }
-        catch (\Exception $e) {
+            return redirect()->route('fees_discount_assign', $fees_discount_id);
+        } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();
         }
-
     }
 
    

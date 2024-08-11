@@ -22,6 +22,13 @@ class SmAssignSubject extends Model
         static::addGlobalScope(new StatusAcademicSchoolScope);
     }
     use HasFactory;
+    protected $casts = [
+        'class_id' => 'integer',
+        'section_id' => 'integer',
+        'active_status' => 'integer',
+        'subject_id' => 'integer',
+    ];
+    
     public function subject()
     {
         return $this->belongsTo('App\SmSubject', 'subject_id', 'id')->withoutGlobalScope(GlobalAcademicScope::class)->withoutGlobalScope(StatusAcademicSchoolScope::class)->withDefault();

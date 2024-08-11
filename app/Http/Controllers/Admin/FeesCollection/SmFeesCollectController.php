@@ -147,7 +147,7 @@ class SmFeesCollectController extends Controller
 
             $data['student'] = $student;
             $data['invoice_settings'] = FeesInvoice::where('school_id', auth()->user()->school_id)->first(['prefix', 'start_form']);
-            $data['fees_assigneds'] = $student->fees;;
+            $data['fees_assigneds'] = $student->fees;
             $data['fees_discounts'] = $fees_discounts;
             $data['applied_discount'] = $applied_discount;
             if (moduleStatusCheck('University')) {

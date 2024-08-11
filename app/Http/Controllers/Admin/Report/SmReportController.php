@@ -76,13 +76,6 @@ class SmReportController extends Controller
                         ->where('school_id', Auth::user()->school_id)
                         ->first();
 
-                    $exam_content = SmExamSetting::where('exam_type', $exam_term_id)
-                        ->where('active_status', 1)
-                        ->where('academic_id', getAcademicId())
-                        ->where('school_id', Auth::user()->school_id)
-                        ->first();
-
-
                     $exam_types = SmExamType::where('active_status', 1)
                         ->where('academic_id', getAcademicId())
                         ->where('school_id', Auth::user()->school_id)

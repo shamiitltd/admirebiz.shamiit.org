@@ -83,7 +83,6 @@
 
 
     $(document).ready(function() {
-        // alert('yes');
         var default_postion = $('#default_position').val();
         document.getElementsByTagName("html")[0].style.visibility = "visible";
         if (default_postion != 0) {
@@ -672,7 +671,6 @@
                 $(".sibling_required_error").append(
                     "<div class='alert alert-danger'>No sibling Selected</div>"
                 );
-                // alert('ok');
                 return false;
             } else {
                 $(".sibling_required_error div").remove();

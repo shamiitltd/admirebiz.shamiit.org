@@ -9,6 +9,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class LibrarySubject extends Model
 {
     use HasFactory;
+    
+    protected $casts = [
+        'id'            => 'integer',
+        'subject_name'  => 'string',
+    ];
     protected static function boot(){
         parent::boot();
         static::addGlobalScope(new StatusAcademicSchoolScope);

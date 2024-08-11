@@ -175,10 +175,9 @@ class ApiSmFeesGroupController extends Controller
     {
         $input = $request->all();
         $validator = Validator::make($input, [
-            'name' => "required|max:200|unique:sm_fees_groups,name," . $request->id,
-
+            'name' => "required|max:200|unique:sm_fees_groups,name," . $request->id_,
         ]);
-
+    
         if ($validator->fails()) {
             if (ApiBaseMethod::checkUrl($request->fullUrl())) {
                 return ApiBaseMethod::sendError('Validation Error.', $validator->errors());
@@ -187,13 +186,19 @@ class ApiSmFeesGroupController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         }
-
+    
         try {
-            $visitor = SmFeesGroup::find($request->id);
+            $visitor = SmFeesGroup::withoutGlobalScope(AcademicSchoolScope::class)->find($request->id_);
+    
+            if (!$visitor) {
+                return ApiBaseMethod::sendError('Fees Group not found.');
+            }
+    
             $visitor->name = $request->name;
             $visitor->description = $request->description;
+    
             $result = $visitor->save();
-
+    
             if (ApiBaseMethod::checkUrl($request->fullUrl())) {
                 if ($result) {
                     return ApiBaseMethod::sendResponse(null, 'Fees Group has been updated successfully.');
@@ -209,9 +214,11 @@ class ApiSmFeesGroupController extends Controller
                     return redirect()->back();
                 }
             }
-        } catch (\Exception$e) {
+        } catch (\Exception $e) {
             return ApiBaseMethod::sendError('Error.', $e->getMessage());
         }
+    
+        
     }
     public function saas_fees_group_update(Request $request, $school_id)
     {
@@ -251,7 +258,7 @@ class ApiSmFeesGroupController extends Controller
                     Toastr::error('Operation Failed', 'Failed');
                     return redirect()->back();
                 }
-            }
+                }
         } catch (\Exception$e) {
             return ApiBaseMethod::sendError('Error.', $e->getMessage());
         }

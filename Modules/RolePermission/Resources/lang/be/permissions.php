@@ -469,4 +469,5 @@ return array('Dashboard' => 'Dashboard',
     'Enable'=>'Enable',
     'My Wallet'=>'My Wallet',
     'Start'=>'Start',
+    'weekend-store' => 'Weekend Store',
     );

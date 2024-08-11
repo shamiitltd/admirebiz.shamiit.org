@@ -210,31 +210,35 @@ class FeesController extends Controller
 
     public function feesInvoiceList()
     {
-        $studentInvoices = FmFeesInvoice::where('type','fees')
-                            ->where('school_id',auth()->user()->school_id)
-                            ->where('academic_id',getAcademicId())
-                            ->get()->map(function ($value) {
-                                $amount = $value->Tamount;
-                                $weaver = $value->Tweaver;
-                                $fine = $value->Tfine;
-                                $paid_amount = $value->Tpaidamount;
-                                $sub_total = $value->Tsubtotal;
-                                $balance = ($amount + $fine) - ($paid_amount + $weaver);
-                                return [
-                                    'id' => $value->id,
-                                    'amount' => $amount,
-                                    'weaver' => $weaver,
-                                    'fine' => $fine,
-                                    'paid_amount' => $paid_amount,
-                                    'sub_total' => $sub_total,
-                                    'balance' => $balance,
-                                    'student' => $value->studentInfo->full_name ? $value->studentInfo->full_name : '',
-                                    'class' => $value->recordDetail->class->class_name ? $value->recordDetail->class->class_name : '',
-                                    'section' => $value->recordDetail->section->section_name ? $value->recordDetail->section->section_name : '',
-                                    'status' => $balance == 0 ? 'paid' : ($value->Tpaidamount > 0 ? 'partial': 'unpaid'),
-                                    'date' => dateConvert($value->create_date),
-                                ];
-                            });
+        $studentInvoices = FmFeesInvoice::where('type', 'fees')
+            ->where('school_id', auth()->user()->school_id)
+            ->where('academic_id', getAcademicId())
+            ->with(['studentInfo', 'recordDetail.class', 'recordDetail.section'])
+            ->get()
+            ->map(function ($value) {
+                $amount = $value->Tamount ?? 0;
+                $weaver = $value->Tweaver ?? 0;
+                $fine = $value->Tfine ?? 0;
+                $paid_amount = $value->Tpaidamount ?? 0;
+                $sub_total = $value->Tsubtotal ?? 0;
+                $balance = ($amount + $fine) - ($paid_amount + $weaver);
+    
+                return [
+                    'id' => $value->id,
+                    'amount' => $amount,
+                    'weaver' => $weaver,
+                    'fine' => $fine,
+                    'paid_amount' => $paid_amount,
+                    'sub_total' => $sub_total,
+                    'balance' => $balance,
+                    'student' => $value->studentInfo->full_name ?? '',
+                    'class' => $value->recordDetail->class->class_name ?? '',
+                    'section' => $value->recordDetail->section->section_name ?? '',
+                    'status' => $balance == 0 ? 'paid' : ($paid_amount > 0 ? 'partial' : 'unpaid'),
+                    'date' => $value->create_date ? dateConvert($value->create_date) : '',
+                ];
+            });
+    
         return response()->json(compact('studentInvoices'));
     }
 

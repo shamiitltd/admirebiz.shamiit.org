@@ -45,7 +45,6 @@ class User extends Authenticatable
         'school_id' => 'integer',
         'rtl_ltl' => 'integer',
         'student_id' => 'integer',
-        'school_id' => 'integer',
         'active_status' => 'integer',
         'style_id' => 'integer',
         'selected_session' => 'integer',

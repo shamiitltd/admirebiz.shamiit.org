@@ -565,4 +565,5 @@ return array(
     'Record' => 'Record',
     'Subject List' => 'Subject List',
     'Request Subject' => 'Request Subject',
+    'weekend-store' => 'Weekend Store',
 );

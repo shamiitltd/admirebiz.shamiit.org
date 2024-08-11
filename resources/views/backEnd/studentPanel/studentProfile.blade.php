@@ -221,7 +221,7 @@
                             $fine = $studentInvoice->Tfine;
                             $paid_amount = $studentInvoice->Tpaidamount;
                             $sub_total = $studentInvoice->Tsubtotal;
-                            $feesDue = $amount + $fine - ($paid_amount + $weaver);
+                            $feesDue += $amount + $fine - ($paid_amount + $weaver);
                         }
                         foreach ($record->directFeesInstallments as $feesInstallment) {
                             $balance_fees += discount_fees($feesInstallment->amount, $feesInstallment->discount_amount) - $feesInstallment->paid_amount;
@@ -240,10 +240,25 @@
                                     <p class="mb-0">@lang('student.total_due_fees')</p>
                                 </div>
                                 <h1 class="gradient-color2">
-                                    @if (generalSetting()->fees_status == 0)
-                                        {{ $currency }}{{ $balance_fees }}
-                                    @elseif (isset($feesDue))
-                                        {{ $currency }}{{ $feesDue }}
+                                    @if(!moduleStatusCheck('University'))
+                                        @if (generalSetting()->fees_status == 0)
+                                            @if (directFees())
+                                                {{ $currency }}{{ $balance_fees }}
+                                            @else
+                                                {{ $currency }}{{ $old_fees }}
+                                            @endif
+                                        @elseif (isset($feesDue))
+                                            {{ $currency }}{{ $feesDue }}
+                                        @endif
+                                    @else
+                                        @if (generalSetting()->fees_status == 1)
+                                            {{ $currency }}{{ $feesDue }}
+
+                                        @else 
+                                            @if (isset($due_amount))
+                                                {{ $currency }}{{ $due_amount }}
+                                            @endif
+                                        @endif
                                     @endif
                                 </h1>
                             </div>

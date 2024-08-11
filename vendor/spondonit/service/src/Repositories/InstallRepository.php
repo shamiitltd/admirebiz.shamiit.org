@@ -2,7 +2,6 @@
 
 namespace SpondonIt\Service\Repositories;
 
-ini_set('max_execution_time', -1);
 
 use Carbon\Carbon;
 use Exception;
@@ -97,7 +96,7 @@ class InstallRepository
         }
 
         $server[] = $this->check((dirname($_SERVER['REQUEST_URI']) != '/' && str_replace('\\', '/', dirname($_SERVER['REQUEST_URI'])) != '/'), 'Installation directory is valid.', 'Please use root directory or point your sub directory to domain/subdomain to install.', true);
-        $server[] = $this->check($this->my_version_compare(phpversion(), config('spondonit.php_version', '7.2.0'), '>='), sprintf('Min PHP version ' . config('spondonit.php_version', '7.2.0') . ' (%s)', 'Current Version ' . phpversion()), 'Current Version ' . phpversion(), true);
+        $server[] = $this->check($this->my_version_compare(phpversion(), config('spondonit.php_version', '7.2.0'), '>='),'Current Version ' . phpversion(), sprintf('Min PHP version ' . config('spondonit.php_version', '7.2.0') . ' (%s)', 'Current PHP Version ' . phpversion()), true);
         $server[] = $this->check(extension_loaded('fileinfo'), 'Fileinfo PHP extension enabled.', 'Install and enable Fileinfo extension.', true);
         $server[] = $this->check(extension_loaded('ctype'), 'Ctype PHP extension enabled.', 'Install and enable Ctype extension.', true);
         $server[] = $this->check(extension_loaded('json'), 'JSON PHP extension enabled.', 'Install and enable JSON extension.', true);
@@ -108,7 +107,6 @@ class InstallRepository
         $server[] = $this->check(class_exists('finfo'), 'Finfo is installed.', 'Install Finfo (mandatory for read or write file).', true);
         $server[] = $this->check(class_exists('PDO'), 'PDO is installed.', 'Install PDO (mandatory for Eloquent).', true);
         $server[] = $this->check(extension_loaded('curl'), 'CURL is installed.', 'Install and enable CURL.', true);
-        $server[] = $this->check(ini_get('allow_url_fopen'), 'allow_url_fopen is on.', 'Turn on allow_url_fopen.', true);
         $server[] = $this->check(ini_get('allow_url_fopen'), 'allow_url_fopen is on.', 'Turn on allow_url_fopen.', true);
         $server[] = $this->check($this->compareInt($this->getIniSize('post_max_size'), $this->convertToInt($post_max_size)),  'Current Post Max Size ' . ini_get('post_max_size'), sprintf('Min Post Max Size ' . $post_max_size . ' (%s)', 'Current size ' . ini_get('post_max_size')),true);
         $server[] = $this->check($this->compareInt($this->getIniSize('memory_limit'), $this->convertToInt($memory_limit)), 'Current Memory Limit ' . ini_get('memory_limit'), sprintf('Min Memory Limit ' . $memory_limit . ' (%s)', 'Current limit ' . ini_get('memory_limit')),true);

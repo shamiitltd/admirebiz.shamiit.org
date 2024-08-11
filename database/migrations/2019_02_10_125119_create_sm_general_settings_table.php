@@ -29,7 +29,7 @@ class CreateSmGeneralSettingsTable extends Migration
             $table->integer('promotionSetting')->nullable()->default(0);
             $table->string('logo')->nullable();
             $table->string('favicon')->nullable();
-            $table->string('system_version')->nullable()->default('8.2.0');
+            $table->string('system_version')->nullable()->default('8.2.2');
             $table->integer('active_status')->nullable()->default(1);
             $table->string('currency_code')->nullable()->default('USD');
             $table->string('language_name')->nullable()->default('en');
@@ -138,7 +138,7 @@ class CreateSmGeneralSettingsTable extends Migration
 
         DB::table('sm_general_settings')->insert([
             [
-                'copyright_text' => 'Copyright &copy; 2024 All rights reserved | This application is made by SHAMIIT',
+                'copyright_text' => 'Copyright &copy; 2020 All rights reserved | This application is made by Codethemes',
                 'logo' => 'public/uploads/settings/logo.png',
                 'favicon' => 'public/uploads/settings/favicon.png',
                 'phone' => '+8801841412141',
@@ -147,12 +147,12 @@ class CreateSmGeneralSettingsTable extends Migration
                 'address' => '89/2 Panthapath, Dhaka 1215, Bangladesh',
                 'currency' => 'USD',
                 'currency_symbol' => '$',
-                'school_name' => 'EDU SHAMIIT',
-                'site_title' => 'SHAMIIT Education software',
+                'school_name' => 'Infix Edu',
+                'site_title' => 'Infix Education software',
                 'session_id' => 1,
                 'week_start_id' => 3,
                 'time_zone_id' => 51,
-                'software_version' => '8.2.0',
+                'software_version' => '8.2.2',
                 'system_activated_date' => date('Y-m-d'),
                 'last_update' => date('Y-m-d'),
                 'system_domain' => url('/'),

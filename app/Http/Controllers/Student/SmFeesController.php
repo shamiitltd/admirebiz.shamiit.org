@@ -335,7 +335,7 @@ class SmFeesController extends Controller
     public function feesGenerateModalChild(Request $request, $amount, $student_id, $type,$assign_id, $record_id)
     {
         try {
-            $amount = $amount;
+            $amount = $amount/100;
             $fees_type_id = $type;
             $std_info = StudentRecord::where('id',$record_id)->where('student_id',$student_id)->select('class_id','section_id')->first();
             

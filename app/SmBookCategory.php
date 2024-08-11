@@ -11,6 +11,11 @@ class SmBookCategory extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'id'            => 'integer',
+        'category_name' => 'string'
+    ];
+
     protected static function boot(){
         parent::boot();
         static::addGlobalScope(new AcademicSchoolScope);
