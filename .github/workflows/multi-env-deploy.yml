@@ -61,15 +61,20 @@ jobs:
           sed -i "s/DB_DATABASE=.*/DB_DATABASE=${{ secrets.DB_DATABASE }}/" .env
           sed -i "s/DB_USERNAME=.*/DB_USERNAME=${{ secrets.DB_USERNAME }}/" .env
           sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=${{ secrets.DB_PASSWORD }}/" .env
+
+      - name: Directory Permissions
+        run: |
+            mkdir -p storage/framework/cache
+            chmod -R 777 storage bootstrap/cache
+            chmod -R 775 storage
+            chown -R www-data:www-data storage
+            php artisan cache:clear
           
       - name: Generate key
         run: php artisan key:generate
 
       - name: Generate storage link
         run: php artisan storage:link
-
-      - name: Directory Permissions
-        run: chmod -R 777 storage bootstrap/cache
 
 
       - name: Zip Repository
