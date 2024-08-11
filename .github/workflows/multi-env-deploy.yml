@@ -64,9 +64,7 @@ jobs:
 
       - name: Directory Permissions
         run: |
-            mkdir -p storage/framework/cache
             chmod -R 777 storage bootstrap/cache
-            chmod -R 775 storage
             chown -R www-data:www-data storage
             php artisan cache:clear
           
