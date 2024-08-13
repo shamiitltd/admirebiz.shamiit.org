@@ -100,6 +100,7 @@ jobs:
 
             php artisan key:generate
             chmod -R 777 storage bootstrap/cache
+            chmod 664 modules_statuses.json
           EOF
           
       - name: Remove the 'release' directory and .zip
