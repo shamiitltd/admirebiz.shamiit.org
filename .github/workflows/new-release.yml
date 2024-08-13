@@ -2,7 +2,7 @@ name: New Server Clean, Build, Deploy, Migrate
 
 on:
   push:
-    branches: [ "deploy" ]
+    branches: [ "deploy", "master-release-aug" ]
   pull_request:
     branches: [ "deploy" ]
   workflow_dispatch: # to manually run this workflow
@@ -100,7 +100,7 @@ jobs:
 
             php artisan key:generate
             chmod -R 777 storage bootstrap/cache
-            chmod 664 modules_statuses.json
+            chmod 664 modules_statuses.json .env
           EOF
           
       - name: Remove the 'release' directory and .zip
