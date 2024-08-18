@@ -25,6 +25,7 @@ jobs:
         run: |
           sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no "${{ secrets.SSH_USER }}" << 'EOF'
             cd "htdocs/${{ secrets.FTP_SERVER }}"
+            chmod -R 777 storage bootstrap/cache
             [ "$(basename "$(pwd)")" = "${{ secrets.FTP_SERVER }}" ] && rm -rf ./*
           EOF
 
