@@ -16,7 +16,7 @@ class sm_admission_query_followupsSeeder extends Seeder
     public function run()
     {
         // SmAdmissionQueryFollowup::query()->truncate();
-        $faker = Faker::create();
+        $faker = Faker::create('en_US');
         for ($i = 1; $i <= 3; $i++) {
             $s = new SmAdmissionQueryFollowup();
             $s->admission_query_id = $i;

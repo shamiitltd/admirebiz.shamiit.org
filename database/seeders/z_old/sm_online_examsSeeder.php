@@ -16,7 +16,7 @@ class SmOnlineExamTableSeeder extends Seeder
      */
     public function run($school_id, $academic_id, $count=5)
     {
-        $faker = Faker::create();
+        $faker = Faker::create('en_US');
         $i = 1;
 
         $question_details = SmAssignSubject::where('school_id', $school_id)->where('academic_id', $academic_id)->get();

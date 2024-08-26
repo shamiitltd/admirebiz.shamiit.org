@@ -16,7 +16,7 @@ class sm_complaintsSeeder extends Seeder
     public function run()
     {
         // SmComplaint::query()->truncate();
-        $faker = Faker::create();
+        $faker = Faker::create('en_US');
         for ($i = 1; $i <= 3; $i++) {
             $j=11;
             $store = new SmComplaint();

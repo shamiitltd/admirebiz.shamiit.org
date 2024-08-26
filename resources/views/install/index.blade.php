@@ -50,13 +50,13 @@
 
             <div class="single-report-admit">
                 <div class="card-header">
-                    <h2 class="text-center text-uppercase" style="color: whitesmoke">Welcome to Infixedu </h2>
+                    <h2 class="text-center text-uppercase" style="color: whitesmoke">Welcome to EduShamiit </h2>
                 
                 </div>
             </div>
 
             <div class="card-body">
-                  <p style="text-align: center">Thank you for choosing Infixedu for your school administration. Please follow the steps to complete EDU SHAMIIT installation!</p>
+                  <p style="text-align: center">Thank you for choosing EduShamiit for your school administration. Please follow the steps to complete EDU SHAMIIT installation!</p>
 
                <a href="{{url('/check-purchase-verification')}}"  class="offset-3 col-sm-6 primary-btn fix-gr-bg mt-40 mb-20"  >  Start </a>
             </div>

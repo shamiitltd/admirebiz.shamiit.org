@@ -15,7 +15,7 @@ class sm_contact_messagesSeeder extends Seeder
      */
     public function run()
     { 
-        // $faker = Faker::create();
+        // $faker = Faker::create('en_US');
         // for ($i=1; $i<10; $i++){
         //     $s = new SmContactMessage();
         //     $s->name = $faker->name;

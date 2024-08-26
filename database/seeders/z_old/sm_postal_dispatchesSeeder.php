@@ -15,7 +15,7 @@ class sm_postal_dispatchesSeeder extends Seeder
      */
     public function run()
     {
-        $faker = Faker::create();
+        $faker = Faker::create('en_US');
         for ($i = 1; $i <= 5; $i++) {
             $store = new SmPostalDispatch();
 

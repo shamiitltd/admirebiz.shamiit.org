@@ -16,7 +16,7 @@ class sm_library_membersSeeder extends Seeder
      */
     public function run()
     {
-        $faker = Faker::create();
+        $faker = Faker::create('en_US');
       
         $studentList = SmStudent::where('class_id', 1)->get();
         foreach($studentList as $student){

@@ -18,7 +18,7 @@ class sm_room_listsSeeder extends Seeder
     public function run()
     {
 
-        $faker = Faker::create();
+        $faker = Faker::create('en_US');
         $dormitories = SmDormitoryList::take(3)->get(); //7
         $rooms = SmRoomType::take(3)->get(); //6
 

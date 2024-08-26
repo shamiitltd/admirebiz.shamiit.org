@@ -15,7 +15,7 @@ class sm_to_dosSeeder extends Seeder
      */
     public function run()
     {
-        $faker = Faker::create();
+        $faker = Faker::create('en_US');
         for ($i = 1; $i <= 5; $i++) {
             $store = new SmToDo();
             $store->todo_title = $faker->realText($maxNbChars = 30, $indexSize = 1);

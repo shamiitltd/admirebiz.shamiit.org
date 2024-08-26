@@ -204,7 +204,7 @@ class CreateInfixModuleManagersTable extends Migration
             $s->version = "1.0";
             $s->update_url = "https://spondonit.com/contact";
             $s->is_default = 0;
-            $s->addon_url = "https://codecanyon.net/item/infixedu-zoom-live-class/27623128?s_rank=12";
+            $s->addon_url = "https://codecanyon.net/item/EduShamiit-zoom-live-class/27623128?s_rank=12";
             $s->installed_domain = url('/');
             $s->activated_date = date('Y-m-d');
             $s->save();
@@ -248,7 +248,7 @@ class CreateInfixModuleManagersTable extends Migration
             $s->version = "1.0";
             $s->update_url = "https://spondonit.com/contact";
             $s->is_default = 0;
-            $s->addon_url = "https://codecanyon.net/item/razorpay-payment-gateway-for-infixedu/27721206?s_rank=11";
+            $s->addon_url = "https://codecanyon.net/item/razorpay-payment-gateway-for-EduShamiit/27721206?s_rank=11";
             $s->installed_domain = url('/');
             $s->activated_date = date('Y-m-d');
             $s->save();
@@ -307,7 +307,7 @@ class CreateInfixModuleManagersTable extends Migration
             $bulk_print->version = "1.0";
             $bulk_print->update_url = "https://spondonit.com/contact";
             $bulk_print->is_default = 1;
-            $bulk_print->addon_url = "https://codecanyon.net/item/infixedu-zoom-live-class/27623128?s_rank=12";
+            $bulk_print->addon_url = "https://codecanyon.net/item/EduShamiit-zoom-live-class/27623128?s_rank=12";
             $bulk_print->installed_domain = url('/');
             $bulk_print->activated_date = date('Y-m-d');
             $bulk_print->save();
@@ -445,7 +445,7 @@ class CreateInfixModuleManagersTable extends Migration
             $s->version = "1.0";
             $s->update_url = "https://spondonit.com/contact";
             $s->is_default = 0;
-            $s->addon_url = "https://codecanyon.net/item/infixedu-zoom-live-class/27623128?s_rank=12";
+            $s->addon_url = "https://codecanyon.net/item/EduShamiit-zoom-live-class/27623128?s_rank=12";
             $s->installed_domain = url('/');
             $s->activated_date = date('Y-m-d');
             $s->save();
@@ -458,7 +458,7 @@ class CreateInfixModuleManagersTable extends Migration
              $s->version = "1.0";
              $s->update_url = "https://spondonit.com/contact";
              $s->is_default = 0;
-             $s->addon_url = "https://codecanyon.net/item/google-meet-module-for-infixedu-gmeet-live-class/42463761";
+             $s->addon_url = "https://codecanyon.net/item/google-meet-module-for-EduShamiit-gmeet-live-class/42463761";
              $s->installed_domain = url('/');
              $s->activated_date = date('Y-m-d');
              $s->save();
@@ -486,7 +486,7 @@ class CreateInfixModuleManagersTable extends Migration
             $s->update_url = "https://spondonit.com/contact";
             $s->is_default = 1;
             $s->purchase_code = time();
-            $s->addon_url = "https://codecanyon.net/item/google-meet-module-for-infixedu-gmeet-live-class/42463761";
+            $s->addon_url = "https://codecanyon.net/item/google-meet-module-for-EduShamiit-gmeet-live-class/42463761";
             $s->installed_domain = url('/');
             $s->activated_date = date('Y-m-d');
             $s->save();
@@ -500,7 +500,7 @@ class CreateInfixModuleManagersTable extends Migration
             $s->update_url = "https://spondonit.com/contact";
             $s->is_default = 1;
             $s->purchase_code = time();
-            $s->addon_url = "https://codecanyon.net/item/google-meet-module-for-infixedu-gmeet-live-class/42463761";
+            $s->addon_url = "https://codecanyon.net/item/google-meet-module-for-EduShamiit-gmeet-live-class/42463761";
             $s->installed_domain = url('/');
             $s->activated_date = date('Y-m-d');
             $s->save();
@@ -514,7 +514,7 @@ class CreateInfixModuleManagersTable extends Migration
             //  $s->update_url = "https://spondonit.com/contact";
             //  $s->is_default = 0;
             //  $s->purchase_code = time();
-            //  $s->addon_url = "https://codecanyon.net/item/google-meet-module-for-infixedu-gmeet-live-class/42463761";
+            //  $s->addon_url = "https://codecanyon.net/item/google-meet-module-for-EduShamiit-gmeet-live-class/42463761";
             //  $s->installed_domain = url('/');
             //  $s->activated_date = date('Y-m-d');
             //  $s->save();
@@ -529,7 +529,7 @@ class CreateInfixModuleManagersTable extends Migration
             $s->update_url = "https://spondonit.com/contact";
             $s->is_default = 1;
             $s->purchase_code = time();
-            $s->addon_url = "https://codecanyon.net/item/google-meet-module-for-infixedu-gmeet-live-class/42463761";
+            $s->addon_url = "https://codecanyon.net/item/google-meet-module-for-EduShamiit-gmeet-live-class/42463761";
             $s->installed_domain = url('/');
             $s->activated_date = date('Y-m-d');
             $s->save();
@@ -553,7 +553,7 @@ class CreateInfixModuleManagersTable extends Migration
             $s = new InfixModuleManager();
             $s->name = "CcAveune";
             $s->email = 'support@spondonit.com';
-            $s->notes = "This CcAveune Module For InfixEdu . Manage online payment for fees & wallet.";
+            $s->notes = "This CcAveune Module For EduShamiit . Manage online payment for fees & wallet.";
             $s->version = "1.0";
             $s->update_url = "https://spondonit.com/contact";
             $s->is_default = 0;
@@ -606,7 +606,7 @@ class CreateInfixModuleManagersTable extends Migration
             $s = new InfixModuleManager();
             $s->name = "InAppLiveClass";
             $s->email = 'support@spondonit.com';
-            $s->notes = "This InAppLiveClass Module For InfixEdu . Manage Online Class and Meeting Reports.";
+            $s->notes = "This InAppLiveClass Module For EduShamiit . Manage Online Class and Meeting Reports.";
             $s->version = "1.0";
             $s->update_url = "https://spondonit.com/contact";
             $s->is_default = 0;

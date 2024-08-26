@@ -15,7 +15,7 @@ class sm_question_bank_mu_optionsSeeder extends Seeder
      */
     public function run()
     {
-        // $faker = Faker::create();
+        // $faker = Faker::create('en_US');
         // for($i=1; $i<=5; $i++){
         //     $store= new SmQuestionBankMuOption();
         //     $store->question_bank_id=$i;

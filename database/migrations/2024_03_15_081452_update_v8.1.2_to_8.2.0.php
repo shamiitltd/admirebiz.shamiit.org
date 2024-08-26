@@ -24,7 +24,7 @@ return new class extends Migration
             $s->version = "1.0";
             $s->update_url = "https://spondonit.com/contact";
             $s->is_default = 0;
-            $s->addon_url = "https://codecanyon.net/item/infixedu-zoom-live-class/27623128?s_rank=12";
+            $s->addon_url = "https://codecanyon.net/item/EduShamiit-zoom-live-class/27623128?s_rank=12";
             $s->installed_domain = url('/');
             $s->activated_date = date('Y-m-d');
             $s->save();

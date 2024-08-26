@@ -441,7 +441,7 @@
                                     id="mark">
                                     <div class="white-box">
                                         @foreach ($records as $record)
-                                            @includeIf('backend.studentInformation.inc.finalMarkSheet')
+                                            @includeIf('backEnd.studentInformation.inc.finalMarkSheet')
                                         @endforeach
                                     </div>
                                 </div>

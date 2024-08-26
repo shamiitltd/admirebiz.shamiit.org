@@ -16,7 +16,7 @@ right button text ac ext
 
 2. arrow hide card with button
 
-http://localhost/infixedu/lms-design -->
+http://localhost/EduShamiit/lms-design -->
 
 <!-- lms design here -->
 <section class="admin-visitor-area up_st_admin_visitor">
